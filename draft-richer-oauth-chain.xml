@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="std" docName="draft-richer-oauth-chain" ipr="trust200902">
+  <front>
+    <title abbrev="oauth2-chain">A Method of Bearer Token Redelegation and
+    Chaining for OAuth 2</title>
+
+    <author fullname="Justin Richer" initials="J." surname="Richer">
+      <organization>The MITRE Corporation</organization>
+
+      <address>
+        <postal>
+          <street>202 Burlington Rd.</street>
+
+          <city>Bedford</city>
+
+          <code>01821</code>
+
+          <region>Massachusetts</region>
+
+          <country>USA</country>
+        </postal>
+
+        <phone>+1-781-271-8176</phone>
+
+        <facsimile></facsimile>
+
+        <email>jricher@mitre.org</email>
+      </address>
+    </author>
+
+    <date day="07" month="September" year="2012" />
+
+    <keyword>Draft</keyword>
+
+    <abstract>
+      <t>This document provides a method for a resource server to present a
+      token that it has received from a client back to its authorization
+      server for the purposes of receiving a derivative token for use on
+      another resource server in order to chain together service requests.</t>
+    </abstract>
+
+    <note title="Requirements Language">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119">RFC 2119</xref>.</t>
+    </note>
+  </front>
+
+  <middle>
+    <section title="Service Chaining">
+      <t>The OAuth2 Authorization protocol provides methods for clients to
+      request tokens from authorization servers on behalf of resource owners
+      for use at resource servers. However, there are no provisions for a
+      resource server to act as a client itself for another resource server, a
+      practice known generally as service chaining. Typically, the services
+      involved in the chain are within a single security domain, and with
+      OAuth they would be using a single Authorization Server.</t>
+
+      <t>For services using the OAuth2 Bearer token profile, it is possible
+      for anyone holding the token to call any other service that accepts the
+      token. While this is functional, it is bad practice since the token is
+      knowingly being re-used by someone other than the client to which it was
+      issued. Since the same token is used in each step, this approach also
+      does not allow for attenuation of rights as the chain progresses.</t>
+
+      <t>Using a new form of grant_type, this specification presents such
+      chained resource servers with an alternative approach that takes
+      advantage of the simplicity and structure of the OAuth protocol by
+      providing a means for any resource server to present the token it has
+      been accessed with back to the authorization server in order to exchange
+      it for a token of equal or lesser strength for use with another resource
+      server. In this way, the original access token which has been delegated
+      to the client can be redelegated to a secondary service.</t>
+
+      <t>This approach differs slightly from the Refresh Token described in
+      the OAuth 2 Core. With a Refresh Token, the Client presents the token to
+      the authorization server to get a new Access Token without involving the
+      Resource Owner. With a redelegated Access Token, as described in this
+      document, the Resource Server presents the Access Token which was
+      provided to it by a Client in order to get a secondary Access Token.</t>
+
+      <section title="Abbreviations Used In This Document">
+        <t><list style="hanging">
+            <t hangText="AS">Authorization Server</t>
+
+            <t hangText="C">Client</t>
+
+            <t hangText="RO">Resource Owner</t>
+
+            <t hangText="RS1">Primary Resource Server, initially called by C
+            on behalf of RO</t>
+
+            <t hangText="RS2">Chained Resource Server, called by RS1 to
+            fulfill request from C</t>
+
+            <t hangText="AT1">Bearer Access Token granted by AS to C to access
+            RS1 on behalf of RO</t>
+
+            <t hangText="AT2">Bearer Access Token granted by AS to RS1 to
+            access RS2 on behalf of RO</t>
+          </list></t>
+      </section>
+    </section>
+
+    <section title="Protocol Description">
+      <t>The process begins with any standard OAuth2 protocol flow, where the
+      client obtains AT1 from the AS.</t>
+
+      <figure>
+        <preamble>The beginning of the process is standard OAuth2 &sect;1.2
+        using any legal OAuth2 grant type to obtain the AT1.</preamble>
+
+        <artwork><![CDATA[
+  +--------+       +-------------+
+  |        |--(A)->|  Resource   |
+  |        |       |   Owner     |
+  |        |<-(B)--|   (RO)      |
+  |        |       +-------------+
+  |        |
+  |        |                             +---------------+
+  |        |--(C)----------------------->| Authorization |
+  | Client |                             |     Server    |
+  |        |<-(D)------------------------|      (AS)     |
+  |        |                             |               |
+  |        |                             |               |
+  |        |       +-------------+       |               |
+  |        |--(E)->|  Primary    |--(F)->|               |
+  |        |       |  Resource   |       |               |
+  |        |       |   Server    |<-(G)--|               |
+  |        |       |   (RS1)     |       +---------------+
+  |        |       |             |
+  |        |       |             |       +---------------+
+  |        |       |             |--(H)->|   Chained     |
+  |        |       |             |       |   Resource    |
+  |        |       |             |       |    Server     |
+  |        |       |             |<-(I)--|    (RS2)      |
+  |        |<-(J)--|             |       +---------------+
+  +--------+       +-------------+
+
+ 
+]]></artwork>
+      </figure>
+
+      <t><list style="hanging">
+          <t hangText="(A)">Client requests authorization from Resource
+          Owner</t>
+
+          <t hangText="(B)">Client receives authorization from the Resource
+          Owner using any valid OAuth2 grant type</t>
+
+          <t hangText="(C)">Client requests AT1 from the AS by authenticating
+          with the AS and presenting the authorization grant obtained in
+          (B)</t>
+
+          <t hangText="(D)">AS authenticates the Client and issues access
+          token AT1 for use at RS1</t>
+
+          <t hangText="(E)">Client presents access token AT1 to RS1 to access
+          a protected resource</t>
+
+          <t hangText="(F)">RS1 needs to access RS2 to fulfill this request,
+          makes a call to the Token Endpoint on the AS using the redelegate
+          grant_type</t>
+
+          <t hangText="(G)">AS validates AT1 and issues a token AT2 for use by
+          RS1 against RS2, where the rights assigned to AT2 are a subset of
+          those assigned to AT1</t>
+
+          <t hangText="(H)">RS1 presents AT2 to RS2 to access a protected
+          resource</t>
+
+          <t hangText="(I)">RS2 validates token AT2 and returns the protected
+          resource to RS1</t>
+
+          <t hangText="(J)">Client receives protected resource from RS1,
+          including information sourced from RS2</t>
+        </list>Steps A-E and J are standard OAuth2 and OAuth2 Bearer tokens
+      involving token AT1. As such, the Client MAY make use of any OAuth2
+      grant type, such as authorization_code, implicit, client_credentials,
+      password, assertion, or even the redelegation protocol defined in this
+      document. Steps F-G are described in section 3 of this document. Steps
+      H-I are standard OAuth2 Bearer token usage, but using the delegated
+      token AT2.</t>
+
+      <t>The means by which the Resource Servers validate the Access Tokens is
+      out of scope of this specification. At the time of this writing, there
+      are two main approaches found in practice: token introspection and
+      structured tokens.</t>
+    </section>
+
+    <section title="Redelegation Grant Type">
+      <t>The Resource Server RS1 makes a request using the Access Token that
+      was presented to it in order to obtain a new Access Token.</t>
+
+      <section title="Redelegate Request">
+        <t>To access RS2, RS1 makes a POST request to the Authorization
+        Server's Token Endpoint with the following parameters:</t>
+
+        <t><list style="hanging">
+            <t hangText="grant_type">REQUIRED. Value MUST be set to
+            "urn:ietf:params:oauth:grant_type:redelegate".</t>
+
+            <t hangText="token">REQUIRED The token that was presented to the
+            resource server by the client, referred to as AT1 in the protocol
+            flow, an OAuth2 Bearer token</t>
+
+            <t hangText="scope">OPTIONAL a space-separated list of strings as
+            described in OAuth 2. If present, this scope list MUST be equal to
+            or lesser than the scopes incorporated in AT1. The AS MUST issue a
+            token of equal or lesser scope than the token above.</t>
+          </list>The Authorization Server MAY require RS1 to have registered
+        as a client on its own behalf. In this case, RS1 MUST present its
+        client credentials as described in OAuth2 Core.</t>
+      </section>
+
+      <section title="Access Token Response">
+        <t>If the request is valid and authorized, the AS issues an access
+        token, referred to as AT2 in the protocol flow, as described in OAuth2
+        Core. As this access token is bound to an existing access token, the
+        authorization server MUST NOT issue a refresh token. If the request
+        failed, the authorization server returns an error response as
+        described in OAuth2 Core.</t>
+
+        <figure>
+          <artwork><![CDATA[
+     HTTP/1.1 200 OK
+     Content-Type: application/json;charset=UTF-8
+     Cache-Control: no-store
+     Pragma: no-cache
+
+     {
+       "access_token":"2YotnFZFEjr1zCsicMWpAA",
+       "token_type":"example",
+       "expires_in":3600,
+       "example_parameter":"example_value"
+     }
+
+]]></artwork>
+        </figure>
+      </section>
+
+      <section title="Error Response">
+        <t>If the token request is not valid, such as the access token
+        presented does not allow for redelegation, the AS returns an error
+        response as described in OAuth2 Core.</t>
+      </section>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>[Registration into the OAuth registry for
+      urn:ietf:params:oauth:grant_type:redelegate]</t>
+
+      <t>Note to RFC Editor: this section may be removed on publication as an
+      RFC.</t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>A resource server engaging in service chaining and token redelegation
+      SHOULD request a redelegated token with only the minimum set of scopes
+      necessary for calling downstream services.</t>
+
+      <t>A resource server MUST indicate in service documentation the full set
+      of scopes required for accessing the full service chain. A redelegation
+      request MUST NOT request escalated privileges without involving the
+      resource owner in a new authorization grant.</t>
+    </section>
+
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>This work has grown from discussions with Paul Nguyen and Stephen
+      Moore, both of MITRE.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include="reference.RFC.2119"?>
+    </references>
+
+    <references title="Informative References">
+      <reference anchor="InfRef">
+        <front>
+          <title></title>
+
+          <author>
+            <organization></organization>
+          </author>
+
+          <date year="2004" />
+        </front>
+      </reference>
+    </references>
+
+    <section title="Standardization of Scopes">
+      <t>The OAuth2 specification explicitly leaves the definition of scopes
+      to the Authorization Server and Protected Resource to agree upon.
+      However, in the course of redelegation, it is sometimes desirable to
+      have a scope value related to the redelegation permission itself. It is
+      RECOMMENDED to use a scope value of "redelegate" if possible.</t>
+    </section>
+  </back>
+</rfc>
