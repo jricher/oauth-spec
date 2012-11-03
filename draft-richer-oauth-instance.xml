@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="exp" docName="draft-richer-oauth-instance-00" ipr="trust200902">
+  <front>
+    <title abbrev="oauth-instance">OAuth Client Instance Extension</title>
+
+    <author fullname="Justin Richer" initials="J." role="editor"
+            surname="Richer">
+      <organization>The MITRE Corporation</organization>
+    </author>
+
+    <date day="24" month="September" year="2010" />
+
+    <abstract>
+      <t>This specification defines two client instance extension parameters
+      for OAuth 2.0 user authorization requests.</t>
+    </abstract>
+
+    <note title="Requirements Language">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119">RFC 2119</xref>.</t>
+    </note>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>This extension to the <xref target="oauth2">OAuth 2</xref> protocol
+      defines two additional parameters that a client can include in requests
+      to the user authorization endpoint which can be used to identify an
+      instance of a given client and distinguish it from other instances of
+      the same client that a user may authorize. These are intended to aid in
+      the user experience and to be used in addition to the client identifier
+      as defined in <xref target="oauth2">OAuth 2</xref>. </t>
+
+      <t>This extension is an adaptation of the Google-deployed <xref
+      target="google_oauth">xoauth_display_name</xref> OAuth 1.0 extension
+      parameter. </t>
+
+      <section title="Multiple Copies of One Client">
+        <t>A given client identifier may represent more than one access grant
+        for a given user within a system protected by OAuth. For example, a
+        user may authorize the same installed client on both a laptop and a
+        desktop computer. Each of these would have the same client identifier
+        but be issued different tokens and will have been granted access
+        separately. This extension is intended to allow the two client
+        instances to identify themselves to the authorization server in a way
+        that the user could later differentiate which tokens belonged to which
+        copy of the client.</t>
+      </section>
+
+      <section title="Proxied Client Access">
+        <t>An OAuth client capable of using the web-server flow could allow
+        the user to interact with it through another means such as email or
+        SMS. In this case, the OAuth client is a single entity with a single
+        client ID which in turn could have multiple distinct grants per user.
+        For example, in an email-proxied system, a user could grant access to
+        the email proxy using multiple separate email addresses. In each of
+        these, the client is the proxy itself, but the grant is being made on
+        behalf of a particular email account. This extension is intended to
+        allow the proxy client to identify to the authorization server which
+        address is being requested.</t>
+      </section>
+
+      <section title="Dynamic, Anonymous, or Unregistered Clients">
+        <t>An authorization server can allow unregistered or anonymous clients
+        to access its protected resources. In these cases, the client
+        credentials generally act as a user-agent string, providing a
+        machine-identifiable string claimed by the client itself. This
+        extension is intended to allow such clients to present identifying
+        information to the end-user through the authorization endpoint. See
+        the security considerations section for more information.</t>
+      </section>
+    </section>
+
+    <section title="Parameters">
+      <t hangText="instance_name"><list hangIndent="6" style="hanging">
+          <t hangText="instance_name"><vspace blankLines="0" />OPTIONAL A
+          short, human-readable name that the server SHOULD display to the
+          end-user along with the client name. </t>
+
+          <t hangText="instance_description"><vspace blankLines="0" />OPTIONAL
+          A longer, human-readable description that the server MAY display to
+          the end-user along with the client name. If a client presents the
+          instance_description, it MUST also present an instance_name.</t>
+        </list>The server MUST NOT assume any format or structure to either of
+      the parameters. </t>
+
+      <t>If present, the authorization server SHOULD [MAY?] store this
+      information along with its associated access grant in order to present
+      it to the user at a future time. The authorization server MAY allow the
+      end-user to edit or augment the client-presented information prior to
+      storage. The authorization server MAY impose size limitations on either
+      or both parameters, and such limitations SHOULD be documented as part of
+      the the authorization server's API.</t>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This document makes no request of IANA.</t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>The instance_name and instance_description parameters MUST be treated
+      as self-asserted information and MUST NOT be treated as a replacement
+      for a client credential as defined in <xref target="oauth2">OAuth
+      2</xref>. Instead, the instance parameters MUST be treated with a level
+      of trust appropriate to the end client.</t>
+
+      <t>When this information is displayed to the user, the authorization
+      server MUST present it in such a way as to make clear to the end user
+      that the instance information is self-asserted by the client and has not
+      been validated. The authorization server MUST NOT display the instance
+      information in lieu of a pre-registered display name, if available, but
+      SHOULD display the instance information in addition to a pre-registered
+      display name, if available. </t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include="reference.RFC.2119"?>
+    </references>
+
+    <references title="Other References">
+      <reference anchor="oauth2"
+                 target="http://tools.ietf.org/id/draft-ietf-oauth-v2-10.xml">
+        <front>
+          <title>OAuth 2 Draft 10</title>
+
+          <author>
+            <organization></organization>
+          </author>
+
+          <date />
+        </front>
+      </reference>
+
+      <reference anchor="google_oauth"
+                 target="http://code.google.com/apis/accounts/docs/OAuth_ref.html">
+        <front>
+          <title>Google OAuth API Documentation</title>
+
+          <author>
+            <organization></organization>
+          </author>
+
+          <date />
+        </front>
+      </reference>
+    </references>
+  </back>
+</rfc>
