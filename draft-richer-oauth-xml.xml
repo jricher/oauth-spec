@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="exp" docName="draft-richer-oauth-xml-00" ipr="trust200902">
+  <front>
+    <title abbrev="oauth-xml">XML Encoding for OAuth 2</title>
+
+    <author fullname="Justin Richer" initials="J." role="editor"
+            surname="Richer">
+      <organization>The MITRE Corporation</organization>
+
+      <address>
+        <email>jricher@mitre.org</email>
+      </address>
+    </author>
+
+    <date day="7" month="October" year="2010" />
+
+    <abstract>
+      <t>This document describes a method of translating JSON structured
+      values to XML structured values in the context of the OAuth 2
+      protocol.</t>
+    </abstract>
+
+    <note title="Requirements Language">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119">RFC 2119</xref>.</t>
+    </note>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>The <xref target="I-D.ietf-oauth-v2">OAuth 2 Protocol</xref> makes
+      use of <xref target="RFC4627">JSON</xref> encoding for its structured
+      return values, as defined by section 4.2 of the OAuth specification.
+      JSON encoding is not always desirable, particularly when OAuth is being
+      used as part of an <xref target="W3C.CR-xml11-20021015">XML</xref>
+      stream. This extension describes a method for the token endpoint to
+      encode its return values as XML documents as opposed to JSON objects.
+      </t>
+    </section>
+
+    <section title="Transport">
+      <t>To select XML encoding, the client sends the following OPTIONAL
+      parameter</t>
+
+      <t><list hangIndent="6" style="hanging">
+          <t hangText="format"><vspace />OPTIONAL. The format parameter
+          specifies the client's desired format for responses from the token
+          endpoint. Valid values are "json" and "xml". If omitted, the
+          parameter value defaults to "json". </t>
+        </list>The server SHALL respond to a valid access grant containing an
+      XML format request with an HTTP 200 response and content type of
+      "application/xml".</t>
+    </section>
+
+    <section anchor="encoding" title="Encoding">
+      <t>This section defines encodings for different parts of the JSON data
+      model in XML equivalents. </t>
+
+      <section anchor="objects_members" title="Objects and Members">
+        <t>JSON objects SHALL be encoded by using XML Elements. The object
+        itself SHALL be represented by the root elment of an XML subtree. All
+        members of the object SHALL be represented by sub-elements of the root
+        element. The key of the member pair SHALL be the node name of the XML
+        Element, and the value of the member pair SHALL be encoded as the
+        content of the XML Element. The root element of the overall JSON
+        object</t>
+      </section>
+
+      <section anchor="root_element" title="Root Element">
+        <t>The token endpoint SHALL use the root element with a node name
+        <spanx style="code">oauth</spanx> to represent the anonymous root JSON
+        object specified in the OAuth specification.</t>
+      </section>
+
+      <section anchor="types" title="Type Identifiers">
+        <t>All elements MAY have an OPTIONAL "type" attribute, which has a
+        valid value of "object", "string", "number", or "array". </t>
+      </section>
+
+      <section anchor="strings_numbers" title="Strings and Numbers">
+        <t>Strings and numbers SHALL be encoded as CDATA within their
+        enclosing element. These values MUST be properly escaped XML CDATA,
+        and MAY be represented using the &lt;[CDATA[ ... ]]&gt; encoding. </t>
+      </section>
+
+      <section anchor="arrays" title="Arrays">
+        <t>Arrays SHALL be represented using repeated, sibling XML Element
+        nodes (nodes with the same node name). The order of the array is
+        encoded using document order of the array elements. Note that there is
+        no viable distinction between a single-element list and a raw value
+        using this encoding.</t>
+      </section>
+
+      <section title="Namespace">
+        <t>This extension does not define a required namespace for the OAuth
+        XML encoding.</t>
+      </section>
+    </section>
+
+    <section title="Examples">
+      <t>Below are examples of encoding different OAuth JSON objects with
+      XML.</t>
+
+      <section title="Standard OAuth Token">
+        <figure>
+          <preamble>A standard OAuth JSON-encoded token response:</preamble>
+
+          <artwork><![CDATA[
+            
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+  Cache-Control: no-store
+
+  {
+    "access_token":"SlAV32hkKG",
+    "expires_in":3600,
+    "refresh_token":"8xLOxBtZp8"
+  }
+
+          ]]></artwork>
+        </figure>
+
+        <figure>
+          <preamble>Can be encoded in as the following XML response
+          document:</preamble>
+
+          <artwork><![CDATA[
+            
+  HTTP/1.1 200 OK
+  Content-Type: application/xml
+  Cache-Control: no-store
+
+  <oauth>
+    <access_token>SlAV32hkKG</access_token>
+    <expires_in>3600</expires_in>
+    <refresh_token>8xLOxBtZp8</refresh_token>
+  </oauth>
+
+          ]]></artwork>
+        </figure>
+
+        <figure>
+          <preamble>Or, with optional <xref target="types">type
+          attributes</xref> in place:</preamble>
+
+          <artwork><![CDATA[
+            
+  HTTP/1.1 200 OK
+  Content-Type: application/xml
+  Cache-Control: no-store
+
+  <oauth type="object">
+    <access_token type="string">SlAV32hkKG</access_token>
+    <expires_in type="number">3600</expires_in>
+    <refresh_token type="string">8xLOxBtZp8</refresh_token>
+  </oauth>
+
+
+    ]]></artwork>
+        </figure>
+      </section>
+
+      <section title="Extensions">
+        <t>Extensions to the OAuth protocol may make use of JSON's extensible
+        data representation capabilities, including both objects and arrays.
+        Using the <xref target="encoding">encoding rules</xref> recursively,
+        one can represent the same structures in XML.</t>
+
+        <figure>
+          <preamble>This example uses both objects and arrays to support a
+          complicated, fictional example extension to the OAuth
+          protocol:</preamble>
+
+          <artwork><![CDATA[
+            
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+  Cache-Control: no-store
+
+  {
+    "access_token":"SlAV32hkKG",
+    "expires_in":3600,
+    "refresh_token":"8xLOxBtZp8",
+    "ext_value": "extension",
+    "ext_list": [ 1, 2, "three" ],
+    "ext_object": {
+          "member1": "value1",
+          "memberlist": [ "A", "B", "C"],
+          "member3": 3,
+          "memberobj": {
+              "a": "first",
+              "b": "second",
+              "c": "third"
+          }
+    }
+  }
+
+          ]]></artwork>
+        </figure>
+
+        <figure>
+          <preamble>The above is encoded into XML as follows (without using
+          type attributes):</preamble>
+
+          <artwork><![CDATA[
+            
+  HTTP/1.1 200 OK
+  Content-Type: application/xml
+  Cache-Control: no-store
+
+  <oauth>
+    <access_token>SlAV32hkKG</access_token>
+    <expires_in>3600</expires_in>
+    <refresh_token>8xLOxBtZp8"</refresh_token>
+    <ext_value>extension</ext_value>
+    <ext_list>1</ext_list>
+    <ext_list>2</ext_list>
+    <ext_list>three</ext_list>
+    <ext_object>
+          <member1>value1</member>
+          <memberlist>A</memberlist>
+          <memberlist>B</memberlist>
+          <memberlist>C</memberlist>
+          <member3>3</member3>
+          <memberobj>
+              <a>first</a>
+              <b>second</b>
+              <c>third</c>
+          </memberobj>
+    </ext_object>
+  </oauth>
+
+          ]]></artwork>
+        </figure>
+      </section>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This document makes no request of IANA.</t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>There are no additional security considerations.</t>
+    </section>
+
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t></t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml4/reference.W3C.CR-xml11-20021015.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-v2-10.xml'?>
+    </references>
+  </back>
+</rfc>
