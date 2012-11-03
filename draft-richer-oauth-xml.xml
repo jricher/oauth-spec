@@ -23,7 +23,7 @@
       </address>
     </author>
 
-    <date day="7" month="October" year="2010" />
+    <date day="7" month="November" year="2010" />
 
     <abstract>
       <t>This document describes a method of translating JSON structured
@@ -44,10 +44,13 @@
       <t>The <xref target="I-D.ietf-oauth-v2">OAuth 2 Protocol</xref> makes
       use of <xref target="RFC4627">JSON</xref> encoding for its structured
       return values, as defined by section 4.2 of the OAuth specification.
-      JSON encoding is not always desirable, particularly when OAuth is being
-      used as part of an <xref target="W3C.CR-xml11-20021015">XML</xref>
-      stream. This extension describes a method for the token endpoint to
-      encode its return values as XML documents as opposed to JSON objects.
+      However, JSON encoding is not always desirable, particularly when OAuth
+      is being used as part of an <xref
+      target="W3C.CR-xml11-20021015">XML</xref> API. </t>
+
+      <t>This extension describes a means for the client to request a
+      particular format and a method for the token endpoint to encode its
+      return values as XML documents as opposed to the default JSON objects.
       </t>
     </section>
 
@@ -58,8 +61,10 @@
       <t><list hangIndent="6" style="hanging">
           <t hangText="format"><vspace />OPTIONAL. The format parameter
           specifies the client's desired format for responses from the token
-          endpoint. Valid values are "json" and "xml". If omitted, the
-          parameter value defaults to "json". </t>
+          endpoint. Valid values are "json" and "xml", though other extensions
+          MAY define other valid values. If omitted, the parameter value
+          defaults to "json" and behavior is as defined in <xref
+          target="I-D.ietf-oauth-v2">OAuth 2</xref>.</t>
         </list>The server SHALL respond to a valid access grant containing an
       XML format request with an HTTP 200 response and content type of <spanx
       style="verb">application/xml</spanx>.</t>
@@ -67,7 +72,7 @@
 
     <section anchor="encoding" title="Encoding">
       <t>This section defines encodings for different parts of the JSON data
-      model in XML equivalents. </t>
+      model in XML equivalents.</t>
 
       <section anchor="objects_members" title="Objects and Members">
         <t>JSON objects SHALL be encoded by using XML Elements. The object
@@ -87,30 +92,50 @@
 
       <section anchor="types" title="Type Identifiers">
         <t>All elements MAY have an OPTIONAL "type" attribute, which has a
-        valid value of "object", "string", "number", or "array". </t>
+        valid value of "object", "string", "number", or "array". These
+        attributes can be used to differentiate between otherwise <xref
+        target="info_loss">potentially ambiguous encodings</xref>, though the
+        most common cases will not need them.</t>
       </section>
 
       <section anchor="strings_numbers" title="Strings and Numbers">
         <t>Strings and numbers SHALL be encoded as CDATA within their
         enclosing element. These values MUST be properly escaped XML CDATA,
-        and MAY be represented using the &lt;[CDATA[ ... ]]&gt; encoding. </t>
+        and MAY be represented using &lt;[CDATA[ ... ]]&gt; encoding. </t>
       </section>
 
       <section anchor="arrays" title="Arrays">
         <t>Arrays SHALL be represented using repeated, sibling XML Element
         nodes (nodes with the same node name). The order of the array is
-        encoded using document order of the array elements. Note that there is
-        no viable distinction between a single-element list and a raw value
-        using this encoding.</t>
+        encoded using document order of the array elements. </t>
       </section>
 
-      <section title="Namespace">
+      <section anchor="namespace" title="Namespace">
         <t>This extension does not define a required namespace for the OAuth
         XML encoding.</t>
       </section>
+
+      <section anchor="info_loss" title="Information Loss">
+        <t>This encoding scheme is intended to give a clear an intuitive
+        mapping between OAuth and XML data structures. However, the mapping
+        between the two formats is not exact and some information loss may
+        occur, and round-trip translation between the two formats MUST NOT be
+        depended upon.<list style="numbers">
+            <t>Both <xref target="strings_numbers">strings and numbers</xref>
+            in JSON are represented as CDATA in XML. Without <xref
+            target="types">type identifiers</xref> there is no clear way to
+            differentiate between the two in the XML encoding. </t>
+
+            <t><xref target="arrays">Arrays</xref> in JSON are represented by
+            repeated elements in XML. There is therefore no reliable way to
+            distinguish between a single-element array and a standalone string
+            or number value in the XML encoding, as both would be encoded the
+            same way. </t>
+          </list></t>
+      </section>
     </section>
 
-    <section title="Examples">
+    <section anchor="examples" title="Examples">
       <t>Below are examples of encoding different OAuth JSON objects with
       XML.</t>
 
@@ -174,10 +199,11 @@
       </section>
 
       <section title="Extensions">
-        <t>Extensions to the OAuth protocol could make use of JSON's
-        extensible data representation capabilities, including both objects
-        and arrays. Using the <xref target="encoding">encoding rules</xref>
-        recursively, one can represent the same structures in XML.</t>
+        <t>Extensions to the OAuth protocol MAY make use of JSON's extensible
+        data representation capabilities, including both objects and arrays,
+        to extend the data returned with the token. Using the <xref
+        target="encoding">encoding rules</xref> recursively, one can represent
+        the same structures in XML.</t>
 
         <figure>
           <preamble>This example uses both objects and arrays to support a
@@ -224,7 +250,7 @@
   <oauth>
     <access_token>SlAV32hkKG</access_token>
     <expires_in>3600</expires_in>
-    <refresh_token>8xLOxBtZp8"</refresh_token>
+    <refresh_token>8xLOxBtZp8</refresh_token>
     <ext_value>extension</ext_value>
     <ext_list>1</ext_list>
     <ext_list>2</ext_list>
@@ -257,7 +283,8 @@
     </section>
 
     <section anchor="Acknowledgements" title="Acknowledgements">
-      <t></t>
+      <t>Thanks to Eve Maler, Joseph Holsten, and the OAuth Working Group for
+      feedback.</t>
     </section>
   </middle>
 
