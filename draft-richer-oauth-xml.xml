@@ -61,8 +61,8 @@
           endpoint. Valid values are "json" and "xml". If omitted, the
           parameter value defaults to "json". </t>
         </list>The server SHALL respond to a valid access grant containing an
-      XML format request with an HTTP 200 response and content type of
-      "application/xml".</t>
+      XML format request with an HTTP 200 response and content type of <spanx
+      style="verb">application/xml</spanx>.</t>
     </section>
 
     <section anchor="encoding" title="Encoding">
@@ -81,7 +81,7 @@
 
       <section anchor="root_element" title="Root Element">
         <t>The token endpoint SHALL use the root element with a node name
-        <spanx style="code">oauth</spanx> to represent the anonymous root JSON
+        <spanx style="verb">oauth</spanx> to represent the anonymous root JSON
         object specified in the OAuth specification.</t>
       </section>
 
@@ -174,10 +174,10 @@
       </section>
 
       <section title="Extensions">
-        <t>Extensions to the OAuth protocol may make use of JSON's extensible
-        data representation capabilities, including both objects and arrays.
-        Using the <xref target="encoding">encoding rules</xref> recursively,
-        one can represent the same structures in XML.</t>
+        <t>Extensions to the OAuth protocol could make use of JSON's
+        extensible data representation capabilities, including both objects
+        and arrays. Using the <xref target="encoding">encoding rules</xref>
+        recursively, one can represent the same structures in XML.</t>
 
         <figure>
           <preamble>This example uses both objects and arrays to support a
