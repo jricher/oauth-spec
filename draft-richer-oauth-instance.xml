@@ -17,9 +17,11 @@
     <author fullname="Justin Richer" initials="J." role="editor"
             surname="Richer">
       <organization>The MITRE Corporation</organization>
+
+      <address></address>
     </author>
 
-    <date day="24" month="September" year="2010" />
+    <date day="7" month="October" year="2010" />
 
     <abstract>
       <t>This specification defines two client instance extension parameters
@@ -35,18 +37,15 @@
   </front>
 
   <middle>
-    <section title="Introduction">
-      <t>This extension to the <xref target="oauth2">OAuth 2</xref> protocol
-      defines two additional parameters that a client can include in requests
-      to the user authorization endpoint which can be used to identify an
-      instance of a given client and distinguish it from other instances of
-      the same client that a user may authorize. These are intended to aid in
-      the user experience and to be used in addition to the client identifier
-      as defined in <xref target="oauth2">OAuth 2</xref>. </t>
-
-      <t>This extension is an adaptation of the Google-deployed <xref
-      target="google_oauth">xoauth_display_name</xref> OAuth 1.0 extension
-      parameter. </t>
+    <section anchor="introduction" title="Introduction">
+      <t>This extension to the <xref target="I-D.ietf-oauth-v2">OAuth 2</xref>
+      protocol defines two additional parameters that a client can include in
+      requests to the user authorization endpoint which can be used to
+      identify an instance of a given client and distinguish it from other
+      instances of the same client that a user may authorize. These are
+      intended to aid in the user experience and to be used in addition to the
+      client identifier as defined in <xref target="I-D.ietf-oauth-v2">OAuth
+      2</xref>.</t>
 
       <section title="Multiple Copies of One Client">
         <t>A given client identifier may represent more than one access grant
@@ -88,14 +87,14 @@
       <t hangText="instance_name"><list hangIndent="6" style="hanging">
           <t hangText="instance_name"><vspace blankLines="0" />OPTIONAL A
           short, human-readable name that the server SHOULD display to the
-          end-user along with the client name. </t>
+          end-user along with the client name.</t>
 
           <t hangText="instance_description"><vspace blankLines="0" />OPTIONAL
           A longer, human-readable description that the server MAY display to
           the end-user along with the client name. If a client presents the
           instance_description, it MUST also present an instance_name.</t>
         </list>The server MUST NOT assume any format or structure to either of
-      the parameters. </t>
+      the parameters.</t>
 
       <t>If present, the authorization server SHOULD [MAY?] store this
       information along with its associated access grant in order to present
@@ -113,9 +112,10 @@
     <section anchor="Security" title="Security Considerations">
       <t>The instance_name and instance_description parameters MUST be treated
       as self-asserted information and MUST NOT be treated as a replacement
-      for a client credential as defined in <xref target="oauth2">OAuth
-      2</xref>. Instead, the instance parameters MUST be treated with a level
-      of trust appropriate to the end client.</t>
+      for a client credential as defined in <xref
+      target="I-D.ietf-oauth-v2">OAuth 2</xref>. Instead, the instance
+      parameters MUST be treated with a level of trust appropriate to the end
+      client.</t>
 
       <t>When this information is displayed to the user, the authorization
       server MUST present it in such a way as to make clear to the end user
@@ -123,29 +123,31 @@
       been validated. The authorization server MUST NOT display the instance
       information in lieu of a pre-registered display name, if available, but
       SHOULD display the instance information in addition to a pre-registered
-      display name, if available. </t>
+      display name, if available.</t>
+    </section>
+
+    <section title="History">
+      <t>This extension is a continuation of the concepts proposed by the
+      <xref target="google_oauth">x_oauth_display_name</xref> parameter as
+      deployed by Google. Google has used this extension parameter to allow
+      for unregistered clients using the consumer key and secret of
+      anonymous/anonymous to identify themselves to the system. In this
+      deployment, as far as the Authorization Server is concerned, all
+      unregistered apps are different instances of the anonymous/anonymous
+      client. As dicussed <xref target="introduction">above</xref>, this
+      extension seeks to standardize use for unregistered, proxied, and
+      multi-instance clients alike.</t>
     </section>
   </middle>
 
   <back>
     <references title="Normative References">
-      <?rfc include="reference.RFC.2119"?>
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-v2-10.xml'?>
     </references>
 
     <references title="Other References">
-      <reference anchor="oauth2"
-                 target="http://tools.ietf.org/id/draft-ietf-oauth-v2-10.xml">
-        <front>
-          <title>OAuth 2 Draft 10</title>
-
-          <author>
-            <organization></organization>
-          </author>
-
-          <date />
-        </front>
-      </reference>
-
       <reference anchor="google_oauth"
                  target="http://code.google.com/apis/accounts/docs/OAuth_ref.html">
         <front>
