@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="exp" docName="draft-richer-oauth-instance-00" ipr="trust200902">
+<rfc category="exp" docName="draft-richer-oauth-instance-01" ipr="trust200902">
   <front>
     <title abbrev="oauth-instance">OAuth Client Instance Extension</title>
 
@@ -115,10 +115,10 @@
     <section anchor="Security" title="Security Considerations">
       <t>The instance_name and instance_description parameters MUST be treated
       as self-asserted information from the client and MUST NOT be treated as
-      a replacement for a client credential as defined in <xref
+      a replacement for a client credential or client_id as defined in <xref
       target="I-D.ietf-oauth-v2">OAuth 2</xref>. Instead, the instance
       parameters MUST be treated with a level of trust appropriate to the end
-      client.</t>
+      client, whether public or private.</t>
 
       <t>When this information is displayed to the user, the authorization
       server MUST present it in such a way as to make clear to the end user
