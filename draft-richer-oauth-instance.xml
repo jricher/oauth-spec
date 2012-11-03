@@ -18,10 +18,12 @@
             surname="Richer">
       <organization>The MITRE Corporation</organization>
 
-      <address></address>
+      <address>
+        <email>jricher@mitre.org</email>
+      </address>
     </author>
 
-    <date day="7" month="October" year="2010" />
+    <date day="7" month="November" year="2010" />
 
     <abstract>
       <t>This specification defines two client instance extension parameters
@@ -75,11 +77,12 @@
       <section title="Dynamic, Anonymous, or Unregistered Clients">
         <t>An authorization server can allow unregistered or anonymous clients
         to access its protected resources. In these cases, the client
-        credentials generally act as a user-agent string, providing a
+        credentials could act as a user-agent string, providing a
         machine-identifiable string claimed by the client itself. This
         extension is intended to allow such clients to present identifying
         information to the end-user through the authorization endpoint. See
-        the security considerations section for more information.</t>
+        the <xref target="Security">security considerations</xref> section for
+        more information.</t>
       </section>
     </section>
 
@@ -96,13 +99,13 @@
         </list>The server MUST NOT assume any format or structure to either of
       the parameters.</t>
 
-      <t>If present, the authorization server SHOULD [MAY?] store this
-      information along with its associated access grant in order to present
-      it to the user at a future time. The authorization server MAY allow the
-      end-user to edit or augment the client-presented information prior to
-      storage. The authorization server MAY impose size limitations on either
-      or both parameters, and such limitations SHOULD be documented as part of
-      the the authorization server's API.</t>
+      <t>If present, the authorization server SHOULD store this information
+      along with its associated access grant in order to present it to the
+      user at a future time. The authorization server MAY allow the end-user
+      to edit or augment the client-presented information prior to storage.
+      The authorization server MAY impose size limitations on either or both
+      parameters, and such limitations SHOULD be documented as part of the the
+      authorization server's API.</t>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -111,8 +114,8 @@
 
     <section anchor="Security" title="Security Considerations">
       <t>The instance_name and instance_description parameters MUST be treated
-      as self-asserted information and MUST NOT be treated as a replacement
-      for a client credential as defined in <xref
+      as self-asserted information from the client and MUST NOT be treated as
+      a replacement for a client credential as defined in <xref
       target="I-D.ietf-oauth-v2">OAuth 2</xref>. Instead, the instance
       parameters MUST be treated with a level of trust appropriate to the end
       client.</t>
@@ -138,6 +141,11 @@
       extension seeks to standardize use for unregistered, proxied, and
       multi-instance clients alike.</t>
     </section>
+
+    <section title="Acknowledgements">
+      <t>Thanks to Marius Scurtescu and the OAuth Working Group for
+      feedback.</t>
+    </section>
   </middle>
 
   <back>
@@ -154,7 +162,7 @@
           <title>Google OAuth API Documentation</title>
 
           <author>
-            <organization></organization>
+            <organization>Google</organization>
           </author>
 
           <date />
