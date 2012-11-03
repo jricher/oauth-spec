@@ -10,9 +10,10 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="exp" docName="draft-richer-oauth-xml-00" ipr="trust200902">
+<rfc category="exp" docName="draft-richer-oauth-xml-01" ipr="trust200902">
   <front>
-    <title abbrev="oauth-xml">XML Encoding for OAuth 2</title>
+    <title abbrev="oauth-xml">Alternate Encoding for OAuth 2 Token
+    Responses</title>
 
     <author fullname="Justin Richer" initials="J." role="editor"
             surname="Richer">
@@ -23,12 +24,12 @@
       </address>
     </author>
 
-    <date day="7" month="November" year="2010" />
+    <date day="23" month="April" year="2012" />
 
     <abstract>
-      <t>This document describes a method of translating JSON structured
-      values to XML structured values in the context of the OAuth 2
-      protocol.</t>
+      <t>This document describes a method of representing the JSON structured
+      responses from the OAuth 2 Token Endpoint into XML and form encoded
+      responses.</t>
     </abstract>
 
     <note title="Requirements Language">
@@ -41,38 +42,215 @@
 
   <middle>
     <section title="Introduction">
-      <t>The <xref target="I-D.ietf-oauth-v2">OAuth 2 Protocol</xref> makes
-      use of <xref target="RFC4627">JSON</xref> encoding for its structured
-      return values, as defined by section 4.2 of the OAuth specification.
-      However, JSON encoding is not always desirable, particularly when OAuth
-      is being used as part of an <xref
-      target="W3C.CR-xml11-20021015">XML</xref> API.</t>
+      <t>The <xref target="I-D.ietf-oauth-v2">OAuth 2 Protocol</xref> defines
+      a standard <xref target="RFC4627">JSON</xref> encoding for structured
+      return values from the Token Endpoint in section 5.1 of the
+      specification when used with most flows. Additionally, the OAuth 2
+      specification defines a URI fragment encoding for tokens issued from the
+      Authorization Endpoint in the Implicit Grant flow using <spanx
+      style="verb">application/x-www-form-url-encoded</spanx> encoding in
+      section 4.2.2.</t>
 
-      <t>This extension describes a means for the client to request a
-      particular format and a method for the token endpoint to encode its
-      return values as XML documents as opposed to the default JSON
-      objects.</t>
+      <t>When OAuth is being used as part of an API that is built around
+      different encoding technologies, such as <xref
+      target="W3C.CR-xml11-20021015">XML</xref>, it is not desirable for
+      application developers to have to parse JSON encoded objects just to
+      handle authorization step. This extension describes a means for the
+      client to request an alternative format for respones from the Token
+      Endpoint and methods for the Token Endpoint to encode its responses as
+      XML documents and form-encoded parameters. This extension makes no claim
+      on responses from the Authorization Endpoint or other endpoints defined
+      in OAuth2, its extensions, or profiles.</t>
     </section>
 
-    <section title="Transport">
-      <t>To select XML encoding, the client sends the following OPTIONAL
-      parameter</t>
+    <section title="Content Negotiation">
+      <t>To request an alternate encoding from the OAuth 2 Token Endpoint, the
+      client indicates the desired encoding through one of the following
+      methods. Authorization Servers SHOULD support all methods but MUST
+      support at least one so that supporting clients can be configured to
+      request the right format. Particular formats available from a given
+      Authorization Server MUST be documented and MAY be discoverable through
+      some other means.</t>
 
-      <t><list hangIndent="6" style="hanging">
-          <t hangText="format"><vspace />OPTIONAL. The format parameter
-          specifies the client's desired format for responses from the token
-          endpoint. Valid values are "json" and "xml", though other extensions
-          MAY define other valid values. If omitted, the parameter value
-          defaults to "json" and behavior is as defined in <xref
-          target="I-D.ietf-oauth-v2">OAuth 2</xref>.</t>
-        </list>The server SHALL respond to a valid access grant containing an
-      XML format request with an HTTP 200 response and content type of <spanx
-      style="verb">application/xml</spanx>.</t>
+      <section title="Form Parameter">
+        <t>In this method, the client sends the following OPTIONAL form
+        parameter in any request to the Token Endpoint to indicate its
+        encoding preference.</t>
+
+        <t><list hangIndent="6" style="hanging">
+            <t hangText="format"><vspace />OPTIONAL. The format parameter
+            specifies the client's desired format for responses from the token
+            endpoint. Valid values are "json", "xml", and "form", though other
+            extensions MAY define other valid values.</t>
+          </list>If the value of the parameter is set to "xml" and the
+        authorization server supports XML encoding, the authorization server
+        MUST respond to a valid token request with an HTTP 200 response, a
+        content type of <spanx style="verb">application/xml</spanx>, and HTTP
+        body content as described in Section 3.1.</t>
+
+        <t>If the value of the parameter is set to "form" and the
+        authorization server supports form encoding, the authorization server
+        MUST respond to a valid token request with an HTTP 200 response, a
+        content type of <spanx style="verb">application/x-www-form-encoded</spanx>,
+        and an HTTP body content as described in Section 3.2.</t>
+
+        <t>If the value of this parameter is "json" or the parameter is
+        omitted entirely, the authorization server MUST respond to a valid
+        token reqeust as defined in <xref target="I-D.ietf-oauth-v2">OAuth
+        2</xref>.</t>
+      </section>
+
+      <section title="Accept Header">
+        <t>In this method, the client sends an HTTP <spanx style="verb">Accept</spanx>
+        header to indicate to the Authorization Server what encodings it
+        prefers as described in the HTTP specification [REF].</t>
+
+        <t>If the value of the header includes <spanx style="verb">application/xml</spanx>
+        and the authorization server supports XML encoding, the authorization
+        server MUST respond to a valid token request with an HTTP 200
+        response, a content type of <spanx style="verb">application/xml</spanx>,
+        and HTTP body content as described in Section 3.1.</t>
+
+        <t>If the value of the header includes <spanx style="verb">application/x-www-form-encoded</spanx>
+        and the authorization server supports form encoding, the authorization
+        server MUST respond to a valid token request with an HTTP 200
+        response, a content type of <spanx style="verb">application/x-www-form-url-encoded</spanx>,
+        and an HTTP body content as described in Section 3.2.</t>
+
+        <t>If the value of the header is <spanx style="verb">application/json</spanx>
+        or no accept preference is otherwise given, the authorization server
+        MUST respond to a valid token reqeust as defined in <xref
+        target="I-D.ietf-oauth-v2">OAuth 2</xref>.</t>
+      </section>
     </section>
 
-    <section anchor="encoding" title="Encoding">
-      <t>This section defines encodings for different parts of the JSON data
-      model in XML equivalents.</t>
+    <section title="Encoding">
+      <t>All alternate forms of encoding MUST account for all elements of a
+      token as specified in OAuth2.</t>
+
+      <section title="XML">
+        <t>For a full description of the transformation rules, see <xref
+        target="xmlencoding">Appendix A</xref>.</t>
+
+        <t>The response MUST use a single XML root element with a node name of
+        <spanx style="verb">oauth</spanx> to represent the anonymous root JSON
+        object specified in the OAuth JSON response.</t>
+
+        <t>The response SHOULD NOT include a default namespace.</t>
+
+        <t>All elements of the JSON object MUST be encoded as XML elements,
+        with values encoded as CDATA within each element.</t>
+      </section>
+
+      <section title="Form Encoding">
+        <t>For a full description of the transformation rules, see <xref
+        target="formencoding">Appendix B</xref>.</t>
+
+        <t>The form encoding MUST follow the same encoding rules as defined in
+        Section 4.2.2 of OAuth2.</t>
+
+        <t>All values of the JSON response MUST be encoded as key-value
+        pairs.</t>
+      </section>
+    </section>
+
+    <section anchor="examples" title="Examples">
+      <t>Below are examples of encoding different OAuth JSON objects with XML.
+      All line breaks are for display purposes only.</t>
+
+      <section title="Standard OAuth Token">
+        <figure>
+          <preamble>A standard OAuth JSON-encoded token response (example from
+          OAuth2 Core):</preamble>
+
+          <artwork><![CDATA[
+     HTTP/1.1 200 OK
+     Content-Type: application/json;charset=UTF-8
+     Cache-Control: no-store
+     Pragma: no-cache
+
+     {
+       "access_token":"2YotnFZFEjr1zCsicMWpAA",
+       "token_type":"example",
+       "expires_in":3600,
+       "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
+       "example_parameter":"example_value"
+     }
+          ]]></artwork>
+        </figure>
+
+        <figure>
+          <preamble>Can be encoded in as the following XML response
+          document:</preamble>
+
+          <artwork><![CDATA[
+            
+  HTTP/1.1 200 OK
+  Content-Type: application/xml
+  Cache-Control: no-store
+
+  <oauth>
+    <access_token>2YotnFZFEjr1zCsicMWpAA</access_token>
+    <token_type>example</token_type>
+    <expires_in>3600</expires_in>
+    <refresh_token>tGzv3JOkF0XG5Qx2TlKWIA</refresh_token>
+    <example_parameter>example_value</example_parameter>
+  </oauth>
+
+          ]]></artwork>
+        </figure>
+
+        <figure>
+          <preamble>The same response can be encoded in form encoding a
+          follows:</preamble>
+
+          <artwork><![CDATA[
+
+  HTTP/1.2 200 OK
+  Content-Type: application/x-www-form-encoded
+  Cache-Control: no-store
+
+  access_token=2YotnFZFEjr1zCsicMWpAA&token_type=example&
+  expires_in=3600&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA&
+  example_parameter=example_value
+
+  ]]></artwork>
+        </figure>
+      </section>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This document makes no request of IANA.</t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>There are no additional security considerations.</t>
+    </section>
+
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>Thanks to Eve Maler, Joseph Holsten, Tim Brody, and the OAuth Working
+      Group for feedback.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml4/reference.W3C.CR-xml11-20021015.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-v2-23.xml'?>
+    </references>
+
+    <section anchor="xmlencoding" title="General XML Encoding Rules">
+      <t>This Appendix defines encodings for different parts of the JSON data
+      model in XML equivalents to facilitate structured extensions to the
+      OAuth2 JSON token response. Since this JSON response MAY include
+      elements such as JSON objects or arrays, a server wishing to support
+      such extended responses and XML encoding MUST use these encoding rules
+      to translate them.</t>
 
       <section anchor="objects_members" title="Objects and Members">
         <t>JSON objects SHALL be encoded by using XML Elements. The object
@@ -80,14 +258,7 @@
         members of the object SHALL be represented by sub-elements of the root
         element. The key of the member pair SHALL be the node name of the XML
         Element, and the value of the member pair SHALL be encoded as the
-        content of the XML Element. The root element of the overall JSON
-        object</t>
-      </section>
-
-      <section anchor="root_element" title="Root Element">
-        <t>The token endpoint SHALL use the root element with a node name
-        <spanx style="verb">oauth</spanx> to represent the anonymous root JSON
-        object specified in the OAuth specification.</t>
+        content of the XML Element.</t>
       </section>
 
       <section anchor="types" title="Type Identifiers">
@@ -112,12 +283,12 @@
 
       <section anchor="namespace" title="Namespace">
         <t>This extension does not define a required namespace for the OAuth
-        XML encoding.</t>
+        XML encoding, and a supporting server SHOULD not use a namespace.</t>
       </section>
 
       <section anchor="info_loss" title="Information Loss">
         <t>This encoding scheme is intended to give a clear an intuitive
-        mapping between OAuth and XML data structures. However, the mapping
+        mapping between JSON and XML data structures. However, the mapping
         between the two formats is not exact and some information loss may
         occur, and round-trip translation between the two formats MUST NOT be
         depended upon.<list style="numbers">
@@ -133,52 +304,12 @@
             same way.</t>
           </list></t>
       </section>
-    </section>
 
-    <section anchor="examples" title="Examples">
-      <t>Below are examples of encoding different OAuth JSON objects with
-      XML.</t>
-
-      <section title="Standard OAuth Token">
-        <figure>
-          <preamble>A standard OAuth JSON-encoded token response:</preamble>
-
-          <artwork><![CDATA[
-            
-  HTTP/1.1 200 OK
-  Content-Type: application/json
-  Cache-Control: no-store
-
-  {
-    "access_token":"SlAV32hkKG",
-    "expires_in":3600,
-    "refresh_token":"8xLOxBtZp8"
-  }
-
-          ]]></artwork>
-        </figure>
+      <section title="Examples">
+        <t>Line breaks are for display purposes only.</t>
 
         <figure>
-          <preamble>Can be encoded in as the following XML response
-          document:</preamble>
-
-          <artwork><![CDATA[
-            
-  HTTP/1.1 200 OK
-  Content-Type: application/xml
-  Cache-Control: no-store
-
-  <oauth>
-    <access_token>SlAV32hkKG</access_token>
-    <expires_in>3600</expires_in>
-    <refresh_token>8xLOxBtZp8</refresh_token>
-  </oauth>
-
-          ]]></artwork>
-        </figure>
-
-        <figure>
-          <preamble>Or, with optional <xref target="types">type
+          <preamble>The example above, with <xref target="types">type
           attributes</xref> in place:</preamble>
 
           <artwork><![CDATA[
@@ -186,24 +317,17 @@
   HTTP/1.1 200 OK
   Content-Type: application/xml
   Cache-Control: no-store
-
+  
   <oauth type="object">
-    <access_token type="string">SlAV32hkKG</access_token>
+    <access_token type="string">2YotnFZFEjr1zCsicMWpAA</access_token>
+    <token_type type="string">example</token_type>
     <expires_in type="number">3600</expires_in>
-    <refresh_token type="string">8xLOxBtZp8</refresh_token>
+    <refresh_token type="string">tGzv3JOkF0XG5Qx2TlKWIA</refresh_token>
+    <example_parameter type="string">example_value</example_paramter>
   </oauth>
-
-
-    ]]></artwork>
+  
+   ]]></artwork>
         </figure>
-      </section>
-
-      <section title="Extensions">
-        <t>Extensions to the OAuth protocol MAY make use of JSON's extensible
-        data representation capabilities, including both objects and arrays,
-        to extend the data returned with the token. Using the <xref
-        target="encoding">encoding rules</xref> recursively, one can represent
-        the same structures in XML.</t>
 
         <figure>
           <preamble>This example uses both objects and arrays to support a
@@ -217,9 +341,10 @@
   Cache-Control: no-store
 
   {
-    "access_token":"SlAV32hkKG",
+    "access_token":"2YotnFZFEjr1zCsicMWpAA",
+    "token_type":"example",
     "expires_in":3600,
-    "refresh_token":"8xLOxBtZp8",
+    "refresh_token":"tGzv3JOkF0XG5Qx2TlKWIA",
     "ext_value": "extension",
     "ext_list": [ 1, 2, "three" ],
     "ext_object": {
@@ -248,9 +373,10 @@
   Cache-Control: no-store
 
   <oauth>
-    <access_token>SlAV32hkKG</access_token>
+    <access_token>2YotnFZFEjr1zCsicMWpAA</access_token>
+    <token_type>example</token_type>
     <expires_in>3600</expires_in>
-    <refresh_token>8xLOxBtZp8</refresh_token>
+    <refresh_token>tGzv3JOkF0XG5Qx2TlKWIA</refresh_token>
     <ext_value>extension</ext_value>
     <ext_list>1</ext_list>
     <ext_list>2</ext_list>
@@ -274,29 +400,75 @@
       </section>
     </section>
 
-    <section anchor="IANA" title="IANA Considerations">
-      <t>This document makes no request of IANA.</t>
+    <section anchor="formencoding" title="General Form Encoding Rules">
+      <t>This Appendix defines encodings for different parts of the JSON data
+      model in form encoded equivalents to facilitate structured extensions to
+      the OAuth2 JSON token response. Since this JSON response MAY include
+      elements such as JSON objects or arrays, a server wishing to support
+      such extended responses and form encoding MUST use these encoding rules
+      to translate them. These encoding rules MAY be used to extend the
+      response of the Authorization Endpoint in the Implicit flow.</t>
+
+      <section anchor="fobjects" title="Objects and Members">
+        <t>JSON objects SHALL be represented by encoding all members as
+        separate form parameters. Sub-objects SHALL be encoded by a
+        dot-notation syntax, with the member name of a sub-object being
+        appended to the name of its containing object member, separated by a
+        single period.</t>
+      </section>
+
+      <section anchor="fstrings" title="Strings and Numbers">
+        <t>All String and Number values SHALL be encoded as simple string
+        values.</t>
+      </section>
+
+      <section anchor="farrays" title="Arrays">
+        <t>Arrays SHALL be encoded by repeating the member name for each value
+        in the array. The order of the array is encoded by the presentation
+        order of the values in the response.</t>
+      </section>
+
+      <section anchor="floss" title="Information Loss">
+        <t>This encoding scheme is intended to give a clear an intuitive
+        mapping between JSON and form encoded data structures. However, the
+        mapping between the two formats is not exact and some information loss
+        may occur, and round-trip translation between the two formats MUST NOT
+        be depended upon.<list style="numbers">
+            <t>Both <xref target="fstrings">strings and numbers</xref> in JSON
+            are represented as strings in the form encoding, and there is no
+            clear way to differentiate between the two in the form
+            encoding.</t>
+
+            <t><xref target="farrays">Arrays</xref> in JSON are represented by
+            repeated elements in the form encoding. There is therefore no
+            reliable way to distinguish between a single-element array and a
+            standalone string or number value in the form encoding, as both
+            would be encoded the same way.</t>
+          </list></t>
+      </section>
+
+      <section title="Examples">
+        <figure>
+          <preamble>This example encodes the fictionally extended OAuth token
+          response above. Line breaks are for display purposes
+          only.</preamble>
+
+          <artwork><![CDATA[
+            
+  HTTP/1.1 200 OK
+  Content-Type: application/x-www-form-encoded
+  Cache-Control: no-store
+
+  access_token=2YotnFZFEjr1zCsicMWpAA&token_type=example&
+  expires_in=3600&refresh_token=tGzv3JOkF0XG5Qx2TlKWIA&
+  ext_value=extension&ext_list=1&ext_list=2&ext_list=three&
+  ext_object.member1=value1&ext_object.memberlist=A&
+  ext_object.memberlist=B&ext_object.memberlist=C&
+  ext_object.member3=3&ext_object.memberobj.a=first&
+  ext_object.memberobj.b=second&ext_object.memberobj.c=third
+          ]]></artwork>
+        </figure>
+      </section>
     </section>
-
-    <section anchor="Security" title="Security Considerations">
-      <t>There are no additional security considerations.</t>
-    </section>
-
-    <section anchor="Acknowledgements" title="Acknowledgements">
-      <t>Thanks to Eve Maler, Joseph Holsten, and the OAuth Working Group for
-      feedback.</t>
-    </section>
-  </middle>
-
-  <back>
-    <references title="Normative References">
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
-
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
-
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml4/reference.W3C.CR-xml11-20021015.xml'?>
-
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-v2-22.xml'?>
-    </references>
   </back>
 </rfc>
