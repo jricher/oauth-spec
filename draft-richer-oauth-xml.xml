@@ -46,12 +46,12 @@
       return values, as defined by section 4.2 of the OAuth specification.
       However, JSON encoding is not always desirable, particularly when OAuth
       is being used as part of an <xref
-      target="W3C.CR-xml11-20021015">XML</xref> API. </t>
+      target="W3C.CR-xml11-20021015">XML</xref> API.</t>
 
       <t>This extension describes a means for the client to request a
       particular format and a method for the token endpoint to encode its
-      return values as XML documents as opposed to the default JSON objects.
-      </t>
+      return values as XML documents as opposed to the default JSON
+      objects.</t>
     </section>
 
     <section title="Transport">
@@ -101,13 +101,13 @@
       <section anchor="strings_numbers" title="Strings and Numbers">
         <t>Strings and numbers SHALL be encoded as CDATA within their
         enclosing element. These values MUST be properly escaped XML CDATA,
-        and MAY be represented using &lt;[CDATA[ ... ]]&gt; encoding. </t>
+        and MAY be represented using &lt;[CDATA[ ... ]]&gt; encoding.</t>
       </section>
 
       <section anchor="arrays" title="Arrays">
         <t>Arrays SHALL be represented using repeated, sibling XML Element
         nodes (nodes with the same node name). The order of the array is
-        encoded using document order of the array elements. </t>
+        encoded using document order of the array elements.</t>
       </section>
 
       <section anchor="namespace" title="Namespace">
@@ -124,13 +124,13 @@
             <t>Both <xref target="strings_numbers">strings and numbers</xref>
             in JSON are represented as CDATA in XML. Without <xref
             target="types">type identifiers</xref> there is no clear way to
-            differentiate between the two in the XML encoding. </t>
+            differentiate between the two in the XML encoding.</t>
 
             <t><xref target="arrays">Arrays</xref> in JSON are represented by
             repeated elements in XML. There is therefore no reliable way to
             distinguish between a single-element array and a standalone string
             or number value in the XML encoding, as both would be encoded the
-            same way. </t>
+            same way.</t>
           </list></t>
       </section>
     </section>
@@ -296,7 +296,7 @@
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml4/reference.W3C.CR-xml11-20021015.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-v2-10.xml'?>
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-v2-22.xml'?>
     </references>
   </back>
 </rfc>
