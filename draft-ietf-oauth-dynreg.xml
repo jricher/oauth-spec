@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-hardjono-oauth-dynreg-03" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dynreg" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -23,11 +23,37 @@
   <?rfc notedraftinprogress='yes' ?>
 
   <front>
-    <title abbrev="OAuth Dynamic Client Registration">OAuth Dynamic Client
-    Registration Protocol</title>
+    <title abbrev="oauth-dynreg">OAuth Dynamic Client Registration
+    Protocol</title>
 
-    <author fullname="Thomas Hardjono" initials="T" role="editor"
-            surname="Hardjono">
+    <author fullname="Justin Richer" initials="J" role="editor"
+            surname="Richer">
+      <organization>The MITRE Corporation</organization>
+
+      <address>
+        <postal>
+          <street></street>
+
+          <city></city>
+
+          <region></region>
+
+          <code></code>
+
+          <country></country>
+        </postal>
+
+        <phone></phone>
+
+        <facsimile></facsimile>
+
+        <email>jricher@mitre.org</email>
+
+        <uri></uri>
+      </address>
+    </author>
+
+    <author fullname="Thomas Hardjono" initials="T" surname="Hardjono">
       <organization>MIT</organization>
 
       <address>
@@ -99,7 +125,7 @@
       </address>
     </author>
 
-    <date day="26" month="April" year="2012" />
+    <date day="3" month="November" year="2012" />
 
     <abstract>
       <t>This specification proposes an OAuth Dynamic Client Registration
@@ -109,37 +135,26 @@
 
   <middle>
     <section title="Introduction">
-      <t>This draft discusses a number of requirements for and approaches to
-      automatic registration of clients with an OAuth authorization server,
-      with special emphasis on the needs of the OAuth-based User-Managed
-      Access protocol <xref target="UMA-Core"></xref>. This draft also
-      proposes a dynamic registration protocol for an OAuth authorization
-      server.</t>
-
-      <t>In some use-case scenarios it is desirable or necessary to allow
+      <t>In some use-case scenarios, it is desirable or necessary to allow
       OAuth clients to obtain authorization from an OAuth authorization server
       without the two parties having previously interacted. Nevertheless, in
       order for the authorization server to accurately represent to end-users
       which client is seeking authorization to access the end-user's
       resources, a method for automatic and unique registration of clients is
-      needed.</t>
+      needed.The OAuth2 authorization framework does not define how the
+      relationship between the Client and the Authorization Server is
+      initialized, or how a given client is assigned a unique Client
+      Identifier. Historically, this has happened out-of-band from the OAuth
+      protocol. This draft provides a mechanism for a client to register
+      itself with the Authorization Server, which can be used to dynamically
+      provision a Client Identifier, and optionally a Client Secret.</t>
 
-      <t>The goal of this proposed registration protocol is for an
-      authorization server to provide a client with a client identifier and
-      optionally a client secret in a dynamic fashion. To accomplish this, the
-      authorization server must first be provided with information about the
-      client, with the client-name being the minimal information provided. In
-      practice, additional information will need to be furnished to the
-      authorization server, such as the client's homepage, icon, description,
-      and so on.</t>
-
-      <t>The dynamic registration protocol proposed here is envisioned to be
-      an additional task to be performed by the OAuth authorization server,
-      namely registration of a new client identifier and optional secret and
-      the issuance of this information to the client. This task would occur
-      prior to the point at which the client wields its identifier and secret
-      at the authorization server in order to obtain an access token in normal
-      OAuth fashion.</t>
+      <t>As part of the registration process, this specification also defines
+      a mechanism for the client to present the Authorization Server with a
+      set of meta information, such as a display name and icon tho be
+      presented to the user during the authorization step. This draft provides
+      a method for the client to register and update this information over
+      time.</t>
 
       <section title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -151,70 +166,14 @@
         are case sensitive.</t>
       </section>
 
-      <section title="Terminology">
-        <t><list hangIndent="6" style="hanging">
-            <t hangText="resource server"><vspace /> A server capable of
-            accepting and responding to protected resource requests.</t>
-
-            <t hangText="resource owner"><vspace /> An entity capable of
-            granting access to a protected resource.</t>
-
-            <t hangText="client"><vspace /> An application obtaining
-            authorization and making protected resource requests.</t>
-
-            <t hangText="authorization server"><vspace /> A server capable of
-            issuing tokens after successfully authenticating the resource
-            owner and obtaining authorization. The authorization server may be
-            the same server as the resource server, or a separate entity.</t>
-
-            <t hangText="authorization manager"><vspace /> An UMA-defined
-            variant of an authorization server that carries out an authorizing
-            user's policies governing access to a protected resource.</t>
-
-            <t hangText="end-user authorization endpoint"><vspace /> The
-            authorization server's HTTP endpoint capable of authenticating the
-            end-user and obtaining authorization.</t>
-
-            <t hangText="token endpoint"><vspace /> The authorization server's
-            HTTP endpoint capable of issuing tokens and refreshing expired
-            tokens.</t>
-
-            <t hangText="client identifier"><vspace /> An unique identifier
-            issued to the client to identify itself to the authorization
-            server. Client identifiers may have a matching secret.</t>
-
-            <t hangText="client registration endpoint">The authorization
-            server's HTTP endpoint capable of issuing client identifiers and
-            optional client secrets.</t>
-          </list></t>
+      <section anchor="terminology" title="Terminology">
+        <t>This specification uses the terms "Access Token", "Refresh Token",
+        "Authorization Code", "Authorization Grant", "Authorization Server",
+        "Authorization Endpoint", "Client", "Client Identifier", "Client
+        Secret", "Protected Resource", "Resource Owner", "Resource Server",
+        and "Token Endpoint" defined by <xref target="OAuth2.0">OAuth
+        2.0</xref>. It defines no additional terms.</t>
       </section>
-    </section>
-
-    <section title="Use Cases">
-      <t>The UMA protocol involves two instances of OAuth flows. In the first,
-      an end-user introduces a host (essentially an enhanced OAuth resource
-      server) to an authorization manager (an enhanced OAuth authorization
-      server) as a client of it, possibly without that host having obtained
-      client identification information from that server previously. In the
-      second, a requester (an enhanced OAuth client) approaches a host and
-      authorization manager to get and use an access token in approximately
-      the normal OAuth fashion, again possibly without that client having
-      obtained client identification information from that server previously.
-      Both the host-as-client and the requester-as-client thus may need
-      dynamic client registration in order for the UMA protocol flow to
-      proceed.</t>
-
-      <t>The needs for inter-party trust vary in different UMA use cases. In
-      lightweight Web circumstances such as person-to-person calendar sharing,
-      dynamic registration is entirely appropriate. In cases where
-      high-sensitivity information is being protected or where a regulatory
-      environment puts constraints on the building of trust relationships,
-      such as sharing health records with medical professionals or giving
-      access to tax records to outsourced bookkeeping staff, static means of
-      provisioning client identifiers may be imposed.</t>
-
-      <t>More information about UMA use cases is available at <xref
-      target="UMA-UC"></xref>.</t>
     </section>
 
     <section title="Requirements">
@@ -280,532 +239,324 @@
 
         <t></t>
       </section>
-
-      <section title="Use of standardized discovery protocol">
-        <t>Regardless of flow option, the client needs to discover the
-        authorization server's client registration endpoint. The client MUST
-        use the <xref target="RFC5785"></xref> and <xref
-        target="hostmeta"></xref> discovery mechanisms to learn the URI of the
-        client registration endpoint at the authorization server. The
-        authorization server MUST provide a host-meta document that clearly
-        defines the registration end-point at the server.</t>
-
-        <t></t>
-      </section>
-
-      <section title="UMA design principles and requirements">
-        <t>In addition to general requirements for dynamic client
-        registration, UMA seeks to optimize for the design principles and
-        requirements found in the UMA Requirements document <xref
-        target="UMA-Reqs"></xref>, most particularly: <list style="symbols">
-            <t>DP1: Simple to understand, implement in an interoperable
-            fashion, and deploy on an Internet-wide scale</t>
-
-            <t>DP6: Able to be combined and extended to support a variety of
-            use cases and emerging application functionality</t>
-
-            <t>DP8: Avoid adding crypto requirements beyond what existing web
-            app implementations do today</t>
-
-            <t>DP10: Complexity should be borne by the authorization endpoint
-            vs. other endpoints</t>
-          </list></t>
-      </section>
     </section>
 
-    <section title="Analysis of Registration Flow Options">
-      <t>This section analyzes some options for exchanging client metadata for
-      a client identifier and optional secret.</t>
+    <section title="Client Registration Endpoint">
+      <t>The Client Registration Endpoint is an OAuth 2.0 Protected Resource
+      that returns registration information for the Client to configure itself
+      for the Authorization Server. The Authorization Server may require an
+      Access Token that is provisioned out-of-band (in a manner that is out of
+      scope for this specification) in order to restrict registration requests
+      to only authorized Clients.</t>
 
-      <t>It currently seems impossible to specify a single registration flow
-      that will satisfy all requirements, deployment needs, and client types.
-      This document, therefore, presents as small a variety of options as
-      possible. If it is possible to construct a single unified flow in the
-      ultimate design, all other things being equal this would be
-      preferred.</t>
+      <t>In order to support open registration, the Client Registration
+      Endpoint SHOULD accept requests without OAuth 2.0 Access Tokens. If an
+      Access Token is required for Client registration, the Client
+      Registration Endpoint MUST be able to accept Access Tokens in the manner
+      described in the <xref target="OAuth.Bearer">OAuth 2.0 Bearer
+      Tokens</xref> specification.</t>
 
-      <t><list hangIndent="6" style="hanging">
-          <t hangText="Client provides metadata on every request"><vspace />
-          In this approach, the client passes all necessary metadata such as
-          its name and icon on every request to the authorization server, and
-          the client doesn't wield a client identifier as such. This option
-          makes it more difficult (though not impossible) to meet the first
-          and second requirements since different clients could theoretically
-          represent themselves to an authorization server with the same
-          metadata and the same client could represent itself on subsequent
-          visits with different metadata. Also, today's OAuth protocol
-          requires the use of a client identifier. Because of the UMA
-          simplicity principle we do not recommend this flow option and and
-          have not provided a candidate solution.</t>
+      <section title="Client Registration and Client Update Request">
+        <t>Client Update Requests replace all previous paramaters set for a
+        <spanx style="verb">client_id</spanx>.</t>
 
-          <t hangText="Client pushes metadata"><vspace /> In this approach,
-          the client discovers the registration endpoint of the authorization
-          server and sends its metadata directly to that endpoint in a
-          standard format. The authorization server answers with a client
-          identifier and optional secret in the response. This approach may be
-          necessary in cases where the client is behind a firewall, but strong
-          authentication of the client metadata may be more difficult or
-          costly with this approach than with a "pull" approach, discussed
-          just below. Further, this approach is problematic in the case of
-          applications that can't function as POST-capable web servers. A
-          proposal for "push" is presented in this document.</t>
+        <t>Clients MUST send requests encoded as a POST with the following
+        parameters added to the HTTP request entity-body using
+        "application/x-www-form-urlencoded" format:</t>
 
-          <t
-          hangText="Client pushes URL, server pulls metadata from it"><vspace />
-          In this approach, the client sends only a URL to the authorization
-          server, which then uses that URL to pull metadata about the client
-          in some standard format, returning identification information in the
-          response to the initial request. This approach more easily allows
-          for strong authentication of clients because the metadata can be
-          statically signed. (The message containing the URL could be signed
-          as well.) However, caution should be exercised around the
-          propagation issue if the initial URL push is made to a server
-          different from the one the end-user is interacting with. Further,
-          this approach is problematic in the case of applications that cannot
-          themselves serve as "pull-able" metadata repositories. A proposal
-          for "pull" is presented in this document.</t>
+        <t><list style="hanging">
+            <t hangText="request_type">REQUIRED. Values are <spanx
+            style="verb">client_associate</spanx> (for new registrations),
+            <spanx style="verb">rotate_secret</spanx> to request rotation of
+            the <spanx style="verb">client_secret</spanx>, and <spanx
+            style="verb">client_update</spanx> (for updating parameters of an
+            existing <spanx style="verb">client_id</spanx>). If <spanx
+            style="verb">rotate_secret</spanx> is used no optional parameters
+            other than <spanx style="verb">access_token</spanx> may be
+            included in the request.</t>
 
-          <t
-          hangText="Native-app client collaborates with home-base web app to provide metadata"><vspace />
-          An instance of a native application (for example, on a mobile
-          device) may have difficulty directly conveying trustworthy metadata
-          but may also have difficulty providing a trustworthy third-party
-          source from which a server can pull metadata. This document explores
-          one option for meeting the requirements, but does not present a
-          full-fledged proposal.</t>
-        </list></t>
-    </section>
+            <t hangText="redirect_uris">REQUIRED A space-delimited list of
+            redirect URIs. One of the URL MUST match the Scheme, Host, and
+            Path segments of the <spanx style="verb">redirect_uri</spanx> in
+            the authorization request.</t>
 
-    <section title="Client Registration with Pushed Metadata">
-      <t>This registration flow works as follows:</t>
+            <t hangText="access_token">OPTIONAL. If this is a <spanx
+            style="verb">client_associate</spanx> request this is an Access
+            Token obtained out of band to authorize the registrant. If this is
+            a <spanx style="verb">client_update</spanx> request this is the
+            <spanx style="verb">registration_access_token</spanx> returned in
+            the <spanx style="verb">client_associate</spanx> or <spanx
+            style="verb">rotate_secret</spanx> response. This parameter MUST
+            NOT be sent if the Access Token is sent in the HTTP Authorization
+            header as described in Section 7.1 of <xref
+            target="OAuth2.0">OAuth 2.0</xref>. Access Tokens sent in the
+            authorization header must be <xref target="OAuth.Bearer">OAuth 2.0
+            Bearer Tokens</xref>.</t>
 
-      <t><list style="numbers">
-          <t>The client sends its metadata in JSON form to the client
-          registration endpoint. The client MUST send its name, description,
-          and redirection URI and MAY send a URI for its icon. The client MAY
-          sign the metadata as a JSON Token issuer, using the mechanisms
-          defined in <xref target="OAuth-Sig"></xref>.</t>
+            <t hangText="contacts">OPTIONAL. Space delimited list of email
+            addresses for people allowed to administer the information for
+            this Client. This is used by some providers to enable a web UI to
+            modify the Client information.</t>
 
-          <t>The authorization server checks the data, verifying the signature
-          as necessary, and returns a client identifier and an optional client
-          secret.</t>
-        </list></t>
+            <t hangText="client_name">OPTIONAL. Human-readable name of the
+            Client to be presented to the user.</t>
 
-      <figure anchor="Figure-1"
-              title="Client Registration Flow with Pushed Metadata">
-        <artwork><![CDATA[
-            
-  +--------+                                  +---------------+
-  | Client |--(A)--- Registration Request --->| Authorization |
-  |        |         with Metadata            |     Server    |
-  |        |                                  |               |
-  |        |<-(B)----Registration Response ---|               |
-  |        |         with Client ID Info      |               |
-  +--------+                                  +---------------+
-
-          ]]></artwork>
-      </figure>
-
-      <section title="Client Registration Request">
-        <t>The client sends a JSON formatted document to the client
-        registration endpoint. The client includes the following parameters in
-        the request:</t>
-
-        <t><list hangIndent="6" style="hanging">
-            <t hangText="type"><vspace /> REQUIRED. This parameter must be set
-            to "push".</t>
-
-            <t hangText="client_name"><vspace /> REQUIRED. This field contains
-            a human-readable name of the client.</t>
-
-            <t hangText="client_url"><vspace /> REQUIRED. This field contains
+            <t hangText="client_url"><vspace />OPTIONAL. This field contains
             the URL of the homepage of the client.</t>
 
-            <t hangText="client_description"><vspace /> REQUIRED. This field
-            contains a text description of the client.</t>
+            <t hangText="logo_url">OPTIONAL. A URL that references a logo for
+            the Client application.</t>
 
-            <t hangText="client_icon"><vspace /> OPTIONAL. This field contains
-            a URL for an icon for the client.</t>
+            <t hangText="token_endpoint_auth_type">OPTIONAL. The requested
+            authentication type for the Token Endpoint. The options are <spanx
+            style="verb">client_secret_post</spanx>, <spanx style="verb">client_secret_basic</spanx>,
+            <spanx style="verb">client_secret_jwt</spanx>, and <spanx
+            style="verb">private_key_jwt</spanx>, as described in Section
+            2.2.1 of <xref target="OpenID.Messages">OpenID Connect
+            Messages</xref>. Other Authentication methods may be defined by
+            extension. If unspecified or omitted, the default is <spanx
+            style="verb">client_secret_basic</spanx> HTTP Basic Authentication
+            Scheme as specified in Section 2.3.1 of <xref
+            target="OAuth2.0">OAuth 2.0</xref>.</t>
 
-            <t hangText="redirect_url"><vspace /> REQUIRED. This field
-            contains the URL to which the authorization server should send its
-            response.</t>
+            <t hangText="policy_url">OPTIONAL. A URL location that the Relying
+            Party Client provides to the End-User to read about the how the
+            profile data will be used. The OpenID Provider SHOULD display this
+            URL to the End-User if it is given.</t>
+
+            <t hangText="jwk_url">OPTIONAL. URL for the Client's <xref
+            target="JWK">JSON Web Key</xref> document that is used for signing
+            Token Endpoint Requests and OpenID Request Objects. If <spanx
+            style="verb">jwk_encryption_url</spanx> is not provided it is also
+            used to encrypt the ID Token and User Info Endpoint Responses to
+            the Client. If the Client registers both <spanx style="verb">x509_url</spanx>
+            and <spanx style="verb">jwk_url</spanx>, the keys contained in
+            both formats SHOULD be the same.</t>
+
+            <t hangText="jwk_encryption_url">OPTIONAL. URL for the Client's
+            <xref target="JWK">JSON Web Key</xref> that is used to encrypt the
+            ID Token and User Info Endpoint Responses to the Client. If the
+            Client registers both <spanx style="verb">jwk_encryption_url</spanx>
+            and <spanx style="verb">x509_encryption_url</spanx>, the keys
+            contained in both formats SHOULD be the same.</t>
+
+            <t hangText="x509_url">OPTIONAL. URL for the Client's PEM encoded
+            X.509 Certificate or Certificate chain that is used for signing
+            Token Endpoint Requests and OpenID Request Objects. If <spanx
+            style="verb">x509_encryption_url</spanx> is not provided, <spanx
+            style="verb">x509_url</spanx> it is also used to encrypt the ID
+            Token and User Info Endpoint Responses to the Client. If the
+            Client registers both <spanx style="verb">x509_url</spanx> and
+            <spanx style="verb">jwk_url</spanx>, the keys contained in both
+            formats SHOULD be the same.</t>
+
+            <t hangText="x509_encryption_url">OPTIONAL. URL for the Client's
+            PEM encoded X.509 Certificate or Certificate chain that is used to
+            encrypt the ID Token and User Info Endpoint Responses to the
+            Client. If the Client registers both <spanx style="verb">jwk_encryption_url</spanx>
+            and <spanx style="verb">x509_encryption_url</spanx>, the keys
+            contained in both formats SHOULD be the same.</t>
+
+            <t hangText="sector_identifier_url">OPTIONAL. A HTTPS scheme URL
+            to be used in calculating Pseudonymous Identifiers by the OP. The
+            URL contains a file with a single JSON array of <spanx
+            style="verb">redirect_uri</spanx> values. Please see <xref
+            target="sector.identifier.url.verification"></xref>.</t>
+
+            <t hangText="require_signed_request_object">OPTIONAL. The <xref
+            target="JWS">JWS</xref> <spanx style="verb">alg</spanx> algorithm
+            <xref target="JWA"></xref> that MUST be required by the
+            Authorization Server. The valid values are listed in Section 3.1
+            of <xref target="JWA">JWA</xref>. All OpenID Request Objects from
+            this <spanx style="verb">client_id</spanx> MUST be rejected if not
+            signed by this algorithm. Servers SHOULD support <spanx
+            style="verb">RS256</spanx>.</t>
+
+            <t hangText="default_max_age">OPTIONAL. (default max
+            authentication age): Type: Integer - Specifies that the End-User
+            must be actively authenticated if any present authentication is
+            older than the specified number of seconds. (The <spanx
+            style="verb">max_age</spanx> request parameter corresponds to the
+            OpenID 2.0 PAPE <spanx style="verb">max_auth_age</spanx> request
+            parameter.) The <spanx style="verb">max_age</spanx> claim in the
+            request object overrides this default value.</t>
+
+            <t hangText="default_acr">OPTIONAL. (default authentication
+            context class reference): Type: String - Specifies the default
+            value that the Authorization server must use for processing
+            requests from this client. The <spanx style="verb">acrs_supported</spanx>
+            element of discovery contains a list of the supported <spanx
+            style="verb">acr</spanx> values for this server. The <spanx
+            style="verb">acr</spanx> claim in the request object overrides
+            this default value.</t>
           </list></t>
 
-        <t>The client MAY include additional metadata in the request and the
-        authorization server MAY ignore this additional information.</t>
+        <t>The Client Registration Endpoint is an OAuth 2.0 Protected Resource
+        that may require an Access Token for <spanx style="verb">client_associate</spanx>
+        requests in order to restrict registration requests to only authorized
+        Clients.</t>
 
-        <figure>
-          <preamble>For example, the client might send the following
-          request:</preamble>
+        <t>For <spanx style="verb">client_update</spanx> requests the <spanx
+        style="verb">registration_access_token</spanx> is used as the Access
+        Token to restrict update access to only the registered client.</t>
 
-          <artwork><![CDATA[
-        
-    POST /register HTTP/1.1
-    Host: server.example.com
-    Content-Type: application/json
+        <t>The Client Registration Endpoint MUST accept Access Tokens as <xref
+        target="OAuth.Bearer">OAuth 2.0 Bearer Tokens</xref>.</t>
 
-    {
-      type: "push",
-      client_name: "Online Photo Gallery",
-      client_url:  "http://onlinephotogallery.com",
-      client_description: "Uploading and also editing capabilities!",
-      client_icon: "http://onlinephotogallery.com/icon.png",
-      redirect_url: "https://onlinephotogallery.com/client_reg"
-    }
-        
-         ]]></artwork>
-        </figure>
+        <t><figure>
+            <preamble>Following is a non-normative example request (with line
+            wraps for display purposes only):</preamble>
 
-        <t>The parameters are included in the entity body of the HTTP request
-        using the "application/json" media type as defined by <xref
-        target="JSON"></xref>. The parameters are serialized into a JSON
-        structure by adding each parameter at the highest structure level.
-        Parameter names and string values are included as JSON strings.</t>
+            <artwork><![CDATA[POST /connect/register HTTP/1.1
+Accept: application/x-www-form-urlencoded
+Host: server.example.com
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJ ... fQ.8Gj_-sj ... _X
+
+type=client_associate
+&application_type=web
+&redirect_uris=https://client.example.org/callback
+    %20https://client.example.org/callback2
+&application_name=My%20Example%20
+&application_name%23ja-Hani-JP=    
+&logo_url=https://client.example.org/logo.png
+&user_id_type=pairwise
+&sector_identifier_url=
+    https://othercompany.com/file_of_redirect_uris_for_our_sites.js
+&token_endpoint_auth_type=client_secret_basic
+&jwk_url=https://client.example.org/my_rsa_public_key.jwk
+&userinfo_encrypted_response_alg=RSA1_5
+&userinfo_encrypted_response_enc=A128CBC
+&userinfo_encrypted_response_int=HS256]]></artwork>
+          </figure></t>
       </section>
 
-      <!-- client push request -->
+      <section title="Client Registration Response ">
+        <t>The response is returned as a JSON object with all the parameters
+        as top level elements.</t>
 
-      <section title="Client Registration Response">
-        <t>After receiving and verifying information received from the client,
-        the authorization server issues a client identifier and an optional
-        client secret, and constructs the response by adding the following
-        parameters to the entity body of the HTTP response with a 200 status
-        code (OK): <list hangIndent="6" style="hanging">
-            <t hangText="client_id"><vspace /> REQUIRED.</t>
+        <section title="Client Associate or Rotate Secret Response">
+          <t>If the value of type in the request was <spanx style="verb">client_associate</spanx>
+          or <spanx style="verb">rotate_secret</spanx> then return the
+          following.</t>
 
-            <t hangText="client_secret"><vspace /> OPTIONAL.</t>
+          <t><list style="hanging">
+              <t hangText="client_id">REQUIRED. The unique Client
+              identifier.</t>
 
-            <t hangText="issued_at"><vspace /> OPTIONAL. Specifies the
-            timestamp when the identifier was issued. The timestamp value MUST
-            be a positive integer. The value is expressed in the number of
-            seconds since January 1, 1970 00:00:00 GMT.</t>
+              <t hangText="client_secret">OPTIONAL. The Client secret. This
+              MUST be unique for each <spanx style="verb">client_id</spanx>.
+              This value us used by confidential clients. It is not required
+              for clients selecting a token_endpoint_auth_type of <spanx
+              style="verb">private_key_jwt</spanx></t>
 
-            <t hangText="expires_in"><vspace /> OPTIONAL; if supplied, the
-            <spanx style="verb">issued_at</spanx> parameter is REQUIRED.
-            Specifies the valid lifetime, in seconds, of the identifier. The
-            value is represented in base 10 ASCII.</t>
+              <t hangText="registration_access_token">REQUIRED The Access
+              token used by the client to perform <spanx style="verb">client_update</spanx>
+              requests.</t>
+
+              <t hangText="issued_at"><vspace />OPTIONAL. Specifies the
+              timestamp when the identifier was issued. The timestamp value
+              MUST be a positive integer. The value is expressed in the number
+              of seconds since January 1, 1970 00:00:00 GMT.</t>
+
+              <t hangText="expires_at">OPTIONAL. The number of seconds from
+              1970-01-01T0:0:0Z as measured in UTC that the <spanx
+              style="verb">client_secret</spanx> will expire or <spanx
+              style="verb">0</spanx> if they do not expire. See <xref
+              target="RFC3339">RFC 3339</xref> for details regarding
+              date/times in general and UTC in particular.</t>
+            </list></t>
+
+          <t><figure>
+              <preamble>Following is a non-normative example
+              response:</preamble>
+
+              <artwork><![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+ "client_id":"s6BhdRkqt3",
+ "client_secret":
+  "cf136dc3c1fd9153029bb9c6cc9ecead918bad9887fce6c93f31185e5885805d",
+  "registration_access_token": "this.is.a.access.token.value.ffx83",
+ "expires_at":2893276800
+}]]></artwork>
+            </figure></t>
+        </section>
+
+        <section title="Client Update">
+          <t>If the value of type in the request was <spanx style="verb">client_update</spanx>.</t>
+
+          <t><list style="hanging">
+              <t hangText="client_id">REQUIRED. The unique Client
+              identifier.</t>
+            </list></t>
+
+          <t><figure>
+              <preamble>Following is a non-normative example
+              response:</preamble>
+
+              <artwork><![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+ "client_id":"s6BhdRkqt3"
+}]]></artwork>
+            </figure></t>
+        </section>
+      </section>
+
+      <section title="Client Registration Error Response">
+        <t>When an OAuth error condition occurs, the Client Registration
+        Endpoint returns an Error Response as defined in Section 5.2 of the
+        OAuth 2.0 specification.</t>
+
+        <t>When a registration error condition occurs, the Client Registration
+        Endpoint returns a HTTP 400 status code including a JSON object
+        describing the error in the response body.</t>
+
+        <t>The JSON object contains two members:</t>
+
+        <t><list style="hanging">
+            <t hangText="error">The error code, a single ASCII string.</t>
+
+            <t hangText="error_description">The additional text description of
+            the error for debugging.</t>
           </list></t>
 
-        <t>The parameters are included in the entity body of the HTTP response
-        using the "application/json" media type as defined by <xref
-        target="JSON"></xref>. The parameters are serialized into a JSON
-        structure by adding each parameter at the highest structure level.
-        Parameter names and string values are included as JSON strings.</t>
+        <t>This specification defines the following error codes:</t>
 
-        <t>The authorization server MUST include the HTTP <spanx style="verb">Cache-Control</spanx>
-        response header field with a value of <spanx style="verb">no-store</spanx>
-        in any response containing <spanx style="verb">client_secret</spanx>.</t>
+        <t><list style="hanging">
+            <t hangText="invalid_type">The value of <spanx style="verb">request_type</spanx>
+            is invalid or not supported.</t>
 
-        <figure>
-          <preamble>For example, the authorization server might return the
-          following response:</preamble>
+            <t hangText="invalid_redirect_uri">The value of one or more <spanx
+            style="verb">redirect_uris</spanx> is invalid.</t>
 
-          <artwork><![CDATA[
-            
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-    Cache-Control: no-store
-
-    {
-      client_id: "5UO9XcL4TQTa",
-      client_secret: "WdRKN3zeTc20"
-    }
-
-             ]]></artwork>
-        </figure>
-      </section>
-
-      <!-- client registration response -->
-
-      <section title="Error Response">
-        <t>If the request for registration is invalid or unauthorized, the
-        authorization server constructs the response by adding the following
-        parameters to the entity body of the HTTP response with a 400 status
-        code (Bad Request) using the &ldquo;application/json&rdquo; media
-        type: <list style="symbols">
-            <t><spanx style="verb">error</spanx> (REQUIRED).</t>
-
-            <t><spanx style="verb">error_description</spanx> (OPTIONAL).
-            Human-readable text providing additional information, used to
-            assist in the understanding and resolution of the error
-            occurred.</t>
-
-            <t><spanx style="verb">error_uri</spanx> (OPTIONAL). A URI
-            identifying a human-readable web page with information about the
-            error, used to provide the end-user with additional information
-            about the error.</t>
+            <t hangText="invalid_configuration_parameter">The value of one of
+            the configuration parameters is invalid.</t>
           </list></t>
 
-        <figure>
-          <preamble>An example error response (with line breaks for
-          readability):</preamble>
+        <t><figure>
+            <preamble>Following is a non-normative example of an error
+            response:</preamble>
 
-          <artwork><![CDATA[
-        
-    HTTP/1.1 400 Bad Request
-    Content-Type: application/json
-    Cache-Control: no-store
-
-    {
-    "error": "unauthorized_client",
-    "description": "This client is not on the 
-      white list of this Authorization Server."
-    }
-        
-         ]]></artwork>
-        </figure>
+            <artwork><![CDATA[HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+   
+{
+ "error_code":"invalid_type",
+ "error_description":"The value of the type parameter must be one of client_associate, rotate_secret or client_update."
+}]]></artwork>
+          </figure></t>
       </section>
-
-      <!-- error message -->
     </section>
 
     <!-- push client registration -->
 
-    <section title="Client Registration with Pushed URL and Pulled Metadata">
-      <t>This registration flow works as follows:</t>
-
-      <t><list style="numbers">
-          <t>The client sends its metadata URI to the client registration
-          endpoint. The client MAY sign the metadata as a JSON Token issuer,
-          using the mechanisms defined in <xref
-          target="OAuth-Sig"></xref>.</t>
-
-          <t>The authorization server verifies the signature as necessary, and
-          uses the <xref target="RFC5785"></xref> and <xref
-          target="hostmeta"></xref> discovery mechanisms on this URI to
-          retrieve the host-meta document describing the client. The host-meta
-          document MUST contain the client name, description, and redirection
-          URI, and MAY contain a URI for the client icon.</t>
-        </list></t>
-
-      <figure anchor="Figure-2"
-              title="Client Registration Flow with Pushed URL and Pulled Metadata">
-        <artwork><![CDATA[
-
-  +--------+                                  +---------------+
-  | Client |--(A)--- Registration Request --->| Authorization |
-  |        |         with URL                 |     Server    |
-  |        |                                  |               |
-  |        |<-(B)--- Client Discovery --------|               |
-  |        |                                  |               |
-  |        |--(C)---- Host-Meta Document ---->|               |
-  |        |                                  |               |
-  |        |<-(D)--- Registration Response ---|               |
-  |        |         with Client ID Info      |               |
-  +--------+                                  +---------------+
-
-          ]]></artwork>
-      </figure>
-
-      <section title="Client Registration Request">
-        <t>The client sends a JSON formatted document to the client
-        registration endpoint. The client includes the following parameters in
-        the request:</t>
-
-        <t><list hangIndent="6" style="hanging">
-            <t hangText="type"><vspace /> REQUIRED. This parameter must be set
-            to "pull".</t>
-
-            <t hangText="client_url"><vspace /> REQUIRED. This field contains
-            the URL of the homepage of the client.</t>
-          </list></t>
-
-        <t>The client MUST NOT include other metadata parameters, such as
-        those defined in the pushed-metadata scenario.</t>
-
-        <figure>
-          <preamble>For example, the client might send the following
-          request:</preamble>
-
-          <artwork><![CDATA[
-        
-    POST /register HTTP/1.1
-    Host: server.example.com
-    Content-Type: application/json
-
-    {
-      type: "pull",
-      url: "http://onlinephotogallery.com"
-    }
-
-        
-         ]]></artwork>
-        </figure>
-
-        <t>The parameters are included in the entity body of the HTTP request
-        using the "application/json" media type as defined by <xref
-        target="JSON"></xref>. The parameters are serialized into a JSON
-        structure by adding each parameter at the highest structure level.
-        Parameter names and string values are included as JSON strings.</t>
-      </section>
-
-      <section title="Client Discovery">
-        <t>The authorization server evaluates this request and MAY perform a
-        <xref target="RFC5785"></xref> and <xref target="hostmeta"></xref>
-        discovery mechanism on the provided URL to the host-meta document for
-        the client.</t>
-      </section>
-
-      <!-- client discovery -->
-
-      <section title="Client Registration Response">
-        <t>After receiving and verifying information retrieved from the
-        client, the authorization server issues the client identifier and an
-        optional client secret, and constructs the response by adding the
-        following parameters to the entity body of the HTTP response with a
-        200 status code (OK):</t>
-
-        <t><list style="symbols">
-            <t><spanx style="verb">client_id</spanx> (REQUIRED)</t>
-
-            <t><spanx style="verb">client_secret</spanx> (OPTIONAL)</t>
-          </list></t>
-
-        <t>The parameters are included in the entity body of the HTTP response
-        using the "application/json" media type as defined by <xref
-        target="JSON"></xref>. The parameters are serialized into a JSON
-        structure by adding each parameter at the highest structure level.
-        Parameter names and string values are included as JSON strings.</t>
-
-        <t>The authorization server MUST include the HTTP <spanx style="verb">Cache-Control</spanx>
-        response header field with a value of <spanx style="verb">no-store</spanx>
-        in any response containing the <spanx style="verb">client_secret</spanx>.</t>
-
-        <figure>
-          <preamble>For example the authorization server might return the
-          following response:</preamble>
-
-          <artwork><![CDATA[
-        
-    HTTP/1.1 200 OK
-    Content-Type: application/json
-    Cache-Control: no-store
-
-    {
-      "client_id":"5UO9XcL4TQTa",
-      "client_secret":"WdRKN3zeTc20"
-    }
-        
-         ]]></artwork>
-        </figure>
-      </section>
-
-      <section title="Error Response">
-        <t>If the request for registration is invalid or unauthorized, the
-        authorization server constructs the response by adding the following
-        parameters to the entity body of the HTTP response with a 400 status
-        code (Bad Request) using the &ldquo;application/json&rdquo; media
-        type:</t>
-
-        <t><list style="symbols">
-            <t><spanx style="verb">error</spanx> (REQUIRED). A single error
-            code.</t>
-
-            <t><spanx style="verb">error_description</spanx> (OPTIONAL).
-            Human-readable text providing additional information, used to
-            assist in the understanding and resolution of the error
-            occurred.</t>
-
-            <t><spanx style="verb">error_uri</spanx> (OPTIONAL). A URI
-            identifying a human-readable web page with information about the
-            error, used to provide the end-user with additional information
-            about the error.</t>
-          </list></t>
-
-        <figure>
-          <preamble>An example error response (with line breaks for
-          readability):</preamble>
-
-          <artwork><![CDATA[
-        
-    HTTP/1.1 400 Bad Request
-    Content-Type: application/json
-    Cache-Control: no-store
-
-    {
-    "error": "unauthorized_client",
-    "description": "This client is not on the 
-      white list of this Authorization Server."
-    }
-        
-         ]]></artwork>
-        </figure>
-
-        <t>If the host-meta discovery was not successful, the authorization
-        server MUST use the error code <spanx style="verb">hostmeta_error</spanx>.</t>
-
-        <figure>
-          <preamble>An example error response (with line breaks for
-          readability):</preamble>
-
-          <artwork><![CDATA[
-        
-    HTTP/1.1 404 Not Found
-    Content-Type: application/json
-    Cache-Control: no-store
-
-    {
-    "error": "hostmeta_error",
-    "description": "The hostmeta document could 
-      not be retrieved from the URL."
-    }
-        
-         ]]></artwork>
-        </figure>
-      </section>
-
-      <!-- error message -->
-    </section>
-
     <!-- pull client registration -->
-
-    <section title="Native Application Client Registration">
-      <t>For a native application serving as an UMA host, we anticipate that
-      the need for dynamic client registration to introduce this app to an UMA
-      authorization manager may typically happen only once (or very
-      infrequently), likely to a single authorization manager, and
-      registration could usefully take place at the time the app is
-      provisioned onto a device. By contrast, for a native app serving as an
-      UMA requester, it may need to register at multiple authorization
-      managers over time when seeking access tokens, at moments much later
-      than the original provisioning of the app onto the device.</t>
-
-      <t>When a native application is provisioned on a device, such as through
-      an app store model, often it has an associated "home base" web server
-      application component with which it registers (outside of any
-      UMA-related or OAuth-related interactions). This pairwise relationship
-      can be exploited in a number of ways to allow trustable, unique metadata
-      to be conveyed to an OAuth server and for this instance of the app to
-      receive a client identifier and optional secret. We have discussed
-      "device-initiated" and "home base-initiated" pattern options for OAuth
-      dynamic client registration in these circumstances. Device-initiated
-      flows seem more generically applicable (for example, for both UMA host
-      and UMA requester needs). However, a home base-initiated flow may be
-      preferable in case it is necessary to pre-determine a trust level
-      towards an OAuth server. In this case, the home base server could
-      initiate the registration process if and only if there exists a trust
-      relationship between the two parties.</t>
-
-      <t>Following is one option for a device-initiated flow: <list
-          style="numbers">
-          <t>User provisions native app on device and registers with and
-          authenticates to app's home-base web application.</t>
-
-          <t>Home base provisions native app with home base-signed
-          metadata.</t>
-
-          <t>Whenever user tries to use native app to access a protected
-          resource, native app provides home base-provided metadata to
-          server.</t>
-
-          <t>Server verifies home base signature by pulling public key from
-          home base URL and generates client identifier and secret for native
-          app.</t>
-
-          <t>Server returns client identifier and secret to native app.</t>
-        </list></t>
-    </section>
 
     <section title="Security Considerations">
       <t>Following are some security considerations: <list style="symbols">
