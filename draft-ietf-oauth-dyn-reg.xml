@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dynreg" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -298,7 +298,7 @@
           2.0</xref>. Access Tokens sent in the authorization header must be
           <xref target="OAuth.Bearer">OAuth 2.0 Bearer Tokens</xref>.</t>
         </list>Each operation takes a different parameter set, and all
-      operations are described below. </t>
+      operations are described below.</t>
 
       <t>The Client Registration Endpoint MUST ignore all parameters it does
       not understand. The Endpoint MUST treat all parameters with an empty
@@ -341,7 +341,7 @@
       <t>Clients generally have an array of metadata associated with their
       unique Client Identifier at the Authorization Server. These can range
       from human-facing display strings, such as a client name, to items that
-      impact the security of the protocol, </t>
+      impact the security of the protocol,</t>
 
       <t>Extensions and profiles of this specification MAY expand this
       list.</t>
