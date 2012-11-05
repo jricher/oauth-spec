@@ -18,7 +18,7 @@
 
   <?rfc subcompact='no' ?>
 
-  <?rfc strict='yes' ?>
+  <?rfc strict='no' ?>
 
   <?rfc notedraftinprogress='yes' ?>
 
@@ -332,7 +332,7 @@ operation=client_associate
       <section title="Client Association Response">
         <t>Upon successful association, the Client Registration Endpoint
         returns a JSON document with the following fields as top-level members
-        of the root JSON object. </t>
+        of the root JSON object.</t>
 
         <t><list style="hanging">
             <t hangText="client_id">REQUIRED. The unique Client identifier,
@@ -386,7 +386,7 @@ Cache-Control: no-store
         in this request MUST replace (not augment) the values previously
         associated with this client_identifier. Empty values in Client
         Metadata SHOULD be taken as a request to clear any existing value of
-        that field. </t>
+        that field.</t>
 
         <t><list style="hanging">
             <t hangText="operation">REQUIRED, MUST have the value <spanx
@@ -394,7 +394,7 @@ Cache-Control: no-store
 
             <t hangText="access_token">REQUIRED, The registration_access_token
             that was issued during the client_associate step, or previous
-            client_update or rotate_secret calls. </t>
+            client_update or rotate_secret calls.</t>
 
             <t hangText="[client metadata]">[Insert client metadata stuff
             here]</t>
@@ -468,8 +468,8 @@ Cache-Control: no-store
         Secret, this operation is an error. [[ Editor's note: could this
         request be used to rotate the registration_access_token instead of
         client_update, even when there's not a client_secret? Should something
-        else be used to rotate the token independently? This is an option
-        issue. ]]</t>
+        else be used to rotate the token independently? This is an open issue.
+        ]]</t>
 
         <t><list style="hanging">
             <t hangText="operation">REQUIRED. MUST have the value
@@ -598,7 +598,7 @@ Cache-Control: no-store
 
       <t><list style="hanging">
           <t hangText="redirect_uris"><vspace blankLines="0" />REQUIRED A
-          space-delimited list of redirect URIs. </t>
+          space-delimited list of redirect URIs.</t>
 
           <t hangText="client_name">RECOMMENDED. Human-readable name of the
           Client to be presented to the user.</t>
@@ -618,7 +618,7 @@ Cache-Control: no-store
           <t hangText="tos_url">OPTIONAL. URL that points to a human-readable
           Terms of Service for the Client.</t>
 
-          <t hangText="token_endpoint_auth_type">OPTIONAL. The requested
+          <t hangText="token_endpoint_auth_method">OPTIONAL. The requested
           authentication type for the Token Endpoint. The options are <spanx
           style="verb">client_secret_post</spanx>, <spanx style="verb">client_secret_basic</spanx>,
           <spanx style="verb">client_secret_jwt</spanx>, and <spanx
@@ -667,12 +667,6 @@ Cache-Control: no-store
           If the Client registers both <spanx style="verb">jwk_encryption_url</spanx>
           and <spanx style="verb">x509_encryption_url</spanx>, the keys
           contained in both formats SHOULD be the same.</t>
-
-          <t hangText="sector_identifier_url">OPTIONAL. A HTTPS scheme URL to
-          be used in calculating Pseudonymous Identifiers by the OP. The URL
-          contains a file with a single JSON array of <spanx style="verb">redirect_uri</spanx>
-          values. Please see <xref
-          target="sector.identifier.url.verification"></xref>.</t>
 
           <t hangText="require_signed_request_object">OPTIONAL. The <xref
           target="JWS">JWS</xref> <spanx style="verb">alg</spanx> algorithm
@@ -828,10 +822,6 @@ type=client_associate
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml' ?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5785.xml' ?>
-    </references>
-
-    <references title="Normative References">
-      <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119"?>
 
       <?rfc include="http://xml.resource.org/public/rfc/bibxml/reference.RFC.2246"?>
 
