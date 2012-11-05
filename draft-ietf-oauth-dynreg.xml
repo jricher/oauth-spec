@@ -125,6 +125,31 @@
       </address>
     </author>
 
+    <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
+      <organization abbrev="NRI">Nomura Research Institute,
+      Ltd.</organization>
+
+      <address>
+        <email>n-sakimura@nri.co.jp</email>
+      </address>
+    </author>
+
+    <author fullname="John Bradley" initials="J." surname="Bradley">
+      <organization abbrev="Ping Identity">Ping Identity</organization>
+
+      <address>
+        <email>ve7jtb@ve7jtb.com</email>
+      </address>
+    </author>
+
+    <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+      <organization abbrev="Microsoft">Microsoft</organization>
+
+      <address>
+        <email>mbj@microsoft.com</email>
+      </address>
+    </author>
+
     <date day="3" month="November" year="2012" />
 
     <abstract>
@@ -247,7 +272,7 @@
       for the Authorization Server. The Authorization Server may require an
       Access Token that is provisioned out-of-band (in a manner that is out of
       scope for this specification) in order to restrict registration requests
-      to only authorized Clients.</t>
+      to only authorized Client developers.</t>
 
       <t>In order to support open registration, the Client Registration
       Endpoint SHOULD accept requests without OAuth 2.0 Access Tokens. If an
@@ -256,158 +281,210 @@
       described in the <xref target="OAuth.Bearer">OAuth 2.0 Bearer
       Tokens</xref> specification.</t>
 
-      <section title="Client Registration and Client Update Request">
-        <t>Client Update Requests replace all previous paramaters set for a
-        <spanx style="verb">client_id</spanx>.</t>
+      <t>The Client Registration Endpoint MUST accept HTTP POST messages with
+      request parameters encoded in the entity body using the <spanx>application/x-www-form-urlencoded</spanx>
+      format. The Endpoint defines three operations that a client can take on
+      it, switched by the "operation" parameter.<list style="hanging">
+          <t hangText="operation">REQUIRED. Values are <spanx style="verb">client_associate</spanx>
+          (for new registrations), <spanx style="verb">rotate_secret</spanx>
+          to request rotation of the <spanx style="verb">client_secret</spanx>,
+          and <spanx style="verb">client_update</spanx> (for updating
+          parameters of an existing <spanx style="verb">client_id</spanx>).</t>
 
-        <t>Clients MUST send requests encoded as a POST with the following
-        parameters added to the HTTP request entity-body using
-        "application/x-www-form-urlencoded" format:</t>
+          <t hangText="access_token">OPTIONAL. An OAuth2 Bearer token used to
+          access the Client Registration Endpoint. This parameter MUST NOT be
+          sent if the Access Token is sent in the HTTP Authorization header as
+          described in Section 7.1 of <xref target="OAuth2.0">OAuth
+          2.0</xref>. Access Tokens sent in the authorization header must be
+          <xref target="OAuth.Bearer">OAuth 2.0 Bearer Tokens</xref>.</t>
+        </list>Each operation takes a different parameter set, and all
+      operations are described below. </t>
 
-        <t><list style="hanging">
-            <t hangText="request_type">REQUIRED. Values are <spanx
-            style="verb">client_associate</spanx> (for new registrations),
-            <spanx style="verb">rotate_secret</spanx> to request rotation of
-            the <spanx style="verb">client_secret</spanx>, and <spanx
-            style="verb">client_update</spanx> (for updating parameters of an
-            existing <spanx style="verb">client_id</spanx>). If <spanx
-            style="verb">rotate_secret</spanx> is used no optional parameters
-            other than <spanx style="verb">access_token</spanx> may be
-            included in the request.</t>
+      <t>The Client Registration Endpoint MUST ignore all parameters it does
+      not understand. The Endpoint MUST treat all parameters with an empty
+      value as if they had been omitted from the request.</t>
 
-            <t hangText="redirect_uris">REQUIRED A space-delimited list of
-            redirect URIs. One of the URL MUST match the Scheme, Host, and
-            Path segments of the <spanx style="verb">redirect_uri</spanx> in
-            the authorization request.</t>
+      <section title="Client Association Request">
+        <t>This operation registers a new client to the Authorization Server.
+        The Authorization Server assigns this client a unique Client
+        Identifier, optionally assigns a Client Secret, and associates the
+        metadata given in the request with the issued Client Identifier.</t>
+      </section>
 
-            <t hangText="access_token">OPTIONAL. If this is a <spanx
-            style="verb">client_associate</spanx> request this is an Access
-            Token obtained out of band to authorize the registrant. If this is
-            a <spanx style="verb">client_update</spanx> request this is the
-            <spanx style="verb">registration_access_token</spanx> returned in
-            the <spanx style="verb">client_associate</spanx> or <spanx
-            style="verb">rotate_secret</spanx> response. This parameter MUST
-            NOT be sent if the Access Token is sent in the HTTP Authorization
-            header as described in Section 7.1 of <xref
-            target="OAuth2.0">OAuth 2.0</xref>. Access Tokens sent in the
-            authorization header must be <xref target="OAuth.Bearer">OAuth 2.0
-            Bearer Tokens</xref>.</t>
+      <section title="Client Association Response">
+        <t>Upon successful association, the Client Registration Endpoint
+        returns a JSON document with the following fields as top-level members
+        of the JSON object.</t>
+      </section>
 
-            <t hangText="contacts">OPTIONAL. Space delimited list of email
-            addresses for people allowed to administer the information for
-            this Client. This is used by some providers to enable a web UI to
-            modify the Client information.</t>
+      <section title="Client Update Request">
+        <t>This operation updates a previously-registered client with new
+        metadata at the Authorization Server. This form of request MUST be
+        protected by the Client Registration Authorization Token associated
+        with the Client Identifier.</t>
+      </section>
 
-            <t hangText="client_name">OPTIONAL. Human-readable name of the
-            Client to be presented to the user.</t>
+      <section title="Client Update Response">
+        <t></t>
+      </section>
 
-            <t hangText="client_url"><vspace />OPTIONAL. This field contains
-            the URL of the homepage of the client.</t>
+      <section title="Rotate Secret Request">
+        <t></t>
+      </section>
 
-            <t hangText="logo_url">OPTIONAL. A URL that references a logo for
-            the Client application.</t>
+      <section title="Rotate Secret Response">
+        <t></t>
+      </section>
+    </section>
 
-            <t hangText="token_endpoint_auth_type">OPTIONAL. The requested
-            authentication type for the Token Endpoint. The options are <spanx
-            style="verb">client_secret_post</spanx>, <spanx style="verb">client_secret_basic</spanx>,
-            <spanx style="verb">client_secret_jwt</spanx>, and <spanx
-            style="verb">private_key_jwt</spanx>, as described in Section
-            2.2.1 of <xref target="OpenID.Messages">OpenID Connect
-            Messages</xref>. Other Authentication methods may be defined by
-            extension. If unspecified or omitted, the default is <spanx
-            style="verb">client_secret_basic</spanx> HTTP Basic Authentication
-            Scheme as specified in Section 2.3.1 of <xref
-            target="OAuth2.0">OAuth 2.0</xref>.</t>
+    <section title="Client Metadata">
+      <t>Clients generally have an array of metadata associated with their
+      unique Client Identifier at the Authorization Server. These can range
+      from human-facing display strings, such as a client name, to items that
+      impact the security of the protocol, </t>
 
-            <t hangText="policy_url">OPTIONAL. A URL location that the Relying
-            Party Client provides to the End-User to read about the how the
-            profile data will be used. The OpenID Provider SHOULD display this
-            URL to the End-User if it is given.</t>
+      <t>Extensions and profiles of this specification MAY expand this
+      list.</t>
 
-            <t hangText="jwk_url">OPTIONAL. URL for the Client's <xref
-            target="JWK">JSON Web Key</xref> document that is used for signing
-            Token Endpoint Requests and OpenID Request Objects. If <spanx
-            style="verb">jwk_encryption_url</spanx> is not provided it is also
-            used to encrypt the ID Token and User Info Endpoint Responses to
-            the Client. If the Client registers both <spanx style="verb">x509_url</spanx>
-            and <spanx style="verb">jwk_url</spanx>, the keys contained in
-            both formats SHOULD be the same.</t>
+      <t><list style="hanging">
+          <t hangText="operation">REQUIRED. Values are <spanx style="verb">client_associate</spanx>
+          (for new registrations), <spanx style="verb">rotate_secret</spanx>
+          to request rotation of the <spanx style="verb">client_secret</spanx>,
+          and <spanx style="verb">client_update</spanx> (for updating
+          parameters of an existing <spanx style="verb">client_id</spanx>). If
+          <spanx style="verb">rotate_secret</spanx> is used no optional
+          parameters other than <spanx style="verb">access_token</spanx> may
+          be included in the request.</t>
 
-            <t hangText="jwk_encryption_url">OPTIONAL. URL for the Client's
-            <xref target="JWK">JSON Web Key</xref> that is used to encrypt the
-            ID Token and User Info Endpoint Responses to the Client. If the
-            Client registers both <spanx style="verb">jwk_encryption_url</spanx>
-            and <spanx style="verb">x509_encryption_url</spanx>, the keys
-            contained in both formats SHOULD be the same.</t>
+          <t hangText="redirect_uris">REQUIRED A space-delimited list of
+          redirect URIs. One of the URL MUST match the Scheme, Host, and Path
+          segments of the <spanx style="verb">redirect_uri</spanx> in the
+          authorization request.</t>
 
-            <t hangText="x509_url">OPTIONAL. URL for the Client's PEM encoded
-            X.509 Certificate or Certificate chain that is used for signing
-            Token Endpoint Requests and OpenID Request Objects. If <spanx
-            style="verb">x509_encryption_url</spanx> is not provided, <spanx
-            style="verb">x509_url</spanx> it is also used to encrypt the ID
-            Token and User Info Endpoint Responses to the Client. If the
-            Client registers both <spanx style="verb">x509_url</spanx> and
-            <spanx style="verb">jwk_url</spanx>, the keys contained in both
-            formats SHOULD be the same.</t>
+          <t hangText="access_token">OPTIONAL. If this is a <spanx
+          style="verb">client_associate</spanx> request this is an Access
+          Token obtained out of band to authorize the registrant. If this is a
+          <spanx style="verb">client_update</spanx> request this is the <spanx
+          style="verb">registration_access_token</spanx> returned in the
+          <spanx style="verb">client_associate</spanx> or <spanx style="verb">rotate_secret</spanx>
+          response. This parameter MUST NOT be sent if the Access Token is
+          sent in the HTTP Authorization header as described in Section 7.1 of
+          <xref target="OAuth2.0">OAuth 2.0</xref>. Access Tokens sent in the
+          authorization header must be <xref target="OAuth.Bearer">OAuth 2.0
+          Bearer Tokens</xref>.</t>
 
-            <t hangText="x509_encryption_url">OPTIONAL. URL for the Client's
-            PEM encoded X.509 Certificate or Certificate chain that is used to
-            encrypt the ID Token and User Info Endpoint Responses to the
-            Client. If the Client registers both <spanx style="verb">jwk_encryption_url</spanx>
-            and <spanx style="verb">x509_encryption_url</spanx>, the keys
-            contained in both formats SHOULD be the same.</t>
+          <t hangText="contacts">OPTIONAL. Space delimited list of email
+          addresses for people allowed to administer the information for this
+          Client. This is used by some providers to enable a web UI to modify
+          the Client information.</t>
 
-            <t hangText="sector_identifier_url">OPTIONAL. A HTTPS scheme URL
-            to be used in calculating Pseudonymous Identifiers by the OP. The
-            URL contains a file with a single JSON array of <spanx
-            style="verb">redirect_uri</spanx> values. Please see <xref
-            target="sector.identifier.url.verification"></xref>.</t>
+          <t hangText="client_name">OPTIONAL. Human-readable name of the
+          Client to be presented to the user.</t>
 
-            <t hangText="require_signed_request_object">OPTIONAL. The <xref
-            target="JWS">JWS</xref> <spanx style="verb">alg</spanx> algorithm
-            <xref target="JWA"></xref> that MUST be required by the
-            Authorization Server. The valid values are listed in Section 3.1
-            of <xref target="JWA">JWA</xref>. All OpenID Request Objects from
-            this <spanx style="verb">client_id</spanx> MUST be rejected if not
-            signed by this algorithm. Servers SHOULD support <spanx
-            style="verb">RS256</spanx>.</t>
+          <t hangText="client_url"><vspace />OPTIONAL. This field contains the
+          URL of the homepage of the client.</t>
 
-            <t hangText="default_max_age">OPTIONAL. (default max
-            authentication age): Type: Integer - Specifies that the End-User
-            must be actively authenticated if any present authentication is
-            older than the specified number of seconds. (The <spanx
-            style="verb">max_age</spanx> request parameter corresponds to the
-            OpenID 2.0 PAPE <spanx style="verb">max_auth_age</spanx> request
-            parameter.) The <spanx style="verb">max_age</spanx> claim in the
-            request object overrides this default value.</t>
+          <t hangText="logo_url">OPTIONAL. A URL that references a logo for
+          the Client application.</t>
 
-            <t hangText="default_acr">OPTIONAL. (default authentication
-            context class reference): Type: String - Specifies the default
-            value that the Authorization server must use for processing
-            requests from this client. The <spanx style="verb">acrs_supported</spanx>
-            element of discovery contains a list of the supported <spanx
-            style="verb">acr</spanx> values for this server. The <spanx
-            style="verb">acr</spanx> claim in the request object overrides
-            this default value.</t>
-          </list></t>
+          <t hangText="token_endpoint_auth_type">OPTIONAL. The requested
+          authentication type for the Token Endpoint. The options are <spanx
+          style="verb">client_secret_post</spanx>, <spanx style="verb">client_secret_basic</spanx>,
+          <spanx style="verb">client_secret_jwt</spanx>, and <spanx
+          style="verb">private_key_jwt</spanx>, as described in Section 2.2.1
+          of <xref target="OpenID.Messages">OpenID Connect Messages</xref>.
+          Other Authentication methods may be defined by extension. If
+          unspecified or omitted, the default is <spanx style="verb">client_secret_basic</spanx>
+          HTTP Basic Authentication Scheme as specified in Section 2.3.1 of
+          <xref target="OAuth2.0">OAuth 2.0</xref>.</t>
 
-        <t>The Client Registration Endpoint is an OAuth 2.0 Protected Resource
-        that may require an Access Token for <spanx style="verb">client_associate</spanx>
-        requests in order to restrict registration requests to only authorized
-        Clients.</t>
+          <t hangText="policy_url">OPTIONAL. A URL location that the Relying
+          Party Client provides to the End-User to read about the how the
+          profile data will be used. The OpenID Provider SHOULD display this
+          URL to the End-User if it is given.</t>
 
-        <t>For <spanx style="verb">client_update</spanx> requests the <spanx
-        style="verb">registration_access_token</spanx> is used as the Access
-        Token to restrict update access to only the registered client.</t>
+          <t hangText="jwk_url">OPTIONAL. URL for the Client's <xref
+          target="JWK">JSON Web Key</xref> document that is used for signing
+          Token Endpoint Requests and OpenID Request Objects. If <spanx
+          style="verb">jwk_encryption_url</spanx> is not provided it is also
+          used to encrypt the ID Token and User Info Endpoint Responses to the
+          Client. If the Client registers both <spanx style="verb">x509_url</spanx>
+          and <spanx style="verb">jwk_url</spanx>, the keys contained in both
+          formats SHOULD be the same.</t>
 
-        <t>The Client Registration Endpoint MUST accept Access Tokens as <xref
-        target="OAuth.Bearer">OAuth 2.0 Bearer Tokens</xref>.</t>
+          <t hangText="jwk_encryption_url">OPTIONAL. URL for the Client's
+          <xref target="JWK">JSON Web Key</xref> that is used to encrypt the
+          ID Token and User Info Endpoint Responses to the Client. If the
+          Client registers both <spanx style="verb">jwk_encryption_url</spanx>
+          and <spanx style="verb">x509_encryption_url</spanx>, the keys
+          contained in both formats SHOULD be the same.</t>
 
-        <t><figure>
-            <preamble>Following is a non-normative example request (with line
-            wraps for display purposes only):</preamble>
+          <t hangText="x509_url">OPTIONAL. URL for the Client's PEM encoded
+          X.509 Certificate or Certificate chain that is used for signing
+          Token Endpoint Requests and OpenID Request Objects. If <spanx
+          style="verb">x509_encryption_url</spanx> is not provided, <spanx
+          style="verb">x509_url</spanx> it is also used to encrypt the ID
+          Token and User Info Endpoint Responses to the Client. If the Client
+          registers both <spanx style="verb">x509_url</spanx> and <spanx
+          style="verb">jwk_url</spanx>, the keys contained in both formats
+          SHOULD be the same.</t>
 
-            <artwork><![CDATA[POST /connect/register HTTP/1.1
+          <t hangText="x509_encryption_url">OPTIONAL. URL for the Client's PEM
+          encoded X.509 Certificate or Certificate chain that is used to
+          encrypt the ID Token and User Info Endpoint Responses to the Client.
+          If the Client registers both <spanx style="verb">jwk_encryption_url</spanx>
+          and <spanx style="verb">x509_encryption_url</spanx>, the keys
+          contained in both formats SHOULD be the same.</t>
+
+          <t hangText="sector_identifier_url">OPTIONAL. A HTTPS scheme URL to
+          be used in calculating Pseudonymous Identifiers by the OP. The URL
+          contains a file with a single JSON array of <spanx style="verb">redirect_uri</spanx>
+          values. Please see <xref
+          target="sector.identifier.url.verification"></xref>.</t>
+
+          <t hangText="require_signed_request_object">OPTIONAL. The <xref
+          target="JWS">JWS</xref> <spanx style="verb">alg</spanx> algorithm
+          <xref target="JWA"></xref> that MUST be required by the
+          Authorization Server. The valid values are listed in Section 3.1 of
+          <xref target="JWA">JWA</xref>. All OpenID Request Objects from this
+          <spanx style="verb">client_id</spanx> MUST be rejected if not signed
+          by this algorithm. Servers SHOULD support <spanx style="verb">RS256</spanx>.</t>
+
+          <t hangText="default_max_age">OPTIONAL. (default max authentication
+          age): Type: Integer - Specifies that the End-User must be actively
+          authenticated if any present authentication is older than the
+          specified number of seconds. (The <spanx style="verb">max_age</spanx>
+          request parameter corresponds to the OpenID 2.0 PAPE <spanx
+          style="verb">max_auth_age</spanx> request parameter.) The <spanx
+          style="verb">max_age</spanx> claim in the request object overrides
+          this default value.</t>
+
+          <t hangText="default_acr">OPTIONAL. (default authentication context
+          class reference): Type: String - Specifies the default value that
+          the Authorization server must use for processing requests from this
+          client. The <spanx style="verb">acrs_supported</spanx> element of
+          discovery contains a list of the supported <spanx style="verb">acr</spanx>
+          values for this server. The <spanx style="verb">acr</spanx> claim in
+          the request object overrides this default value.</t>
+        </list></t>
+
+      <t>The Client Registration Endpoint is an OAuth 2.0 Protected Resource
+      that may require an Access Token for <spanx style="verb">client_associate</spanx>
+      requests in order to restrict registration requests to only authorized
+      Clients.</t>
+
+      <t>For <spanx style="verb">client_update</spanx> requests the <spanx
+      style="verb">registration_access_token</spanx> is used as the Access
+      Token to restrict update access to only the registered client.</t>
+
+      <t>The Client Registration Endpoint MUST accept Access Tokens as <xref
+      target="OAuth.Bearer">OAuth 2.0 Bearer Tokens</xref>.</t>
+
+      <t><figure>
+          <preamble>Following is a non-normative example request (with line
+          wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[POST /connect/register HTTP/1.1
 Accept: application/x-www-form-urlencoded
 Host: server.example.com
 Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJ ... fQ.8Gj_-sj ... _X
@@ -427,131 +504,7 @@ type=client_associate
 &userinfo_encrypted_response_alg=RSA1_5
 &userinfo_encrypted_response_enc=A128CBC
 &userinfo_encrypted_response_int=HS256]]></artwork>
-          </figure></t>
-      </section>
-
-      <section title="Client Registration Response ">
-        <t>The response is returned as a JSON object with all the parameters
-        as top level elements.</t>
-
-        <section title="Client Associate or Rotate Secret Response">
-          <t>If the value of type in the request was <spanx style="verb">client_associate</spanx>
-          or <spanx style="verb">rotate_secret</spanx> then return the
-          following.</t>
-
-          <t><list style="hanging">
-              <t hangText="client_id">REQUIRED. The unique Client
-              identifier.</t>
-
-              <t hangText="client_secret">OPTIONAL. The Client secret. This
-              MUST be unique for each <spanx style="verb">client_id</spanx>.
-              This value us used by confidential clients. It is not required
-              for clients selecting a token_endpoint_auth_type of <spanx
-              style="verb">private_key_jwt</spanx></t>
-
-              <t hangText="registration_access_token">REQUIRED The Access
-              token used by the client to perform <spanx style="verb">client_update</spanx>
-              requests.</t>
-
-              <t hangText="issued_at"><vspace />OPTIONAL. Specifies the
-              timestamp when the identifier was issued. The timestamp value
-              MUST be a positive integer. The value is expressed in the number
-              of seconds since January 1, 1970 00:00:00 GMT.</t>
-
-              <t hangText="expires_at">OPTIONAL. The number of seconds from
-              1970-01-01T0:0:0Z as measured in UTC that the <spanx
-              style="verb">client_secret</spanx> will expire or <spanx
-              style="verb">0</spanx> if they do not expire. See <xref
-              target="RFC3339">RFC 3339</xref> for details regarding
-              date/times in general and UTC in particular.</t>
-            </list></t>
-
-          <t><figure>
-              <preamble>Following is a non-normative example
-              response:</preamble>
-
-              <artwork><![CDATA[HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-
-{
- "client_id":"s6BhdRkqt3",
- "client_secret":
-  "cf136dc3c1fd9153029bb9c6cc9ecead918bad9887fce6c93f31185e5885805d",
-  "registration_access_token": "this.is.a.access.token.value.ffx83",
- "expires_at":2893276800
-}]]></artwork>
-            </figure></t>
-        </section>
-
-        <section title="Client Update">
-          <t>If the value of type in the request was <spanx style="verb">client_update</spanx>.</t>
-
-          <t><list style="hanging">
-              <t hangText="client_id">REQUIRED. The unique Client
-              identifier.</t>
-            </list></t>
-
-          <t><figure>
-              <preamble>Following is a non-normative example
-              response:</preamble>
-
-              <artwork><![CDATA[HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-
-{
- "client_id":"s6BhdRkqt3"
-}]]></artwork>
-            </figure></t>
-        </section>
-      </section>
-
-      <section title="Client Registration Error Response">
-        <t>When an OAuth error condition occurs, the Client Registration
-        Endpoint returns an Error Response as defined in Section 5.2 of the
-        OAuth 2.0 specification.</t>
-
-        <t>When a registration error condition occurs, the Client Registration
-        Endpoint returns a HTTP 400 status code including a JSON object
-        describing the error in the response body.</t>
-
-        <t>The JSON object contains two members:</t>
-
-        <t><list style="hanging">
-            <t hangText="error">The error code, a single ASCII string.</t>
-
-            <t hangText="error_description">The additional text description of
-            the error for debugging.</t>
-          </list></t>
-
-        <t>This specification defines the following error codes:</t>
-
-        <t><list style="hanging">
-            <t hangText="invalid_type">The value of <spanx style="verb">request_type</spanx>
-            is invalid or not supported.</t>
-
-            <t hangText="invalid_redirect_uri">The value of one or more <spanx
-            style="verb">redirect_uris</spanx> is invalid.</t>
-
-            <t hangText="invalid_configuration_parameter">The value of one of
-            the configuration parameters is invalid.</t>
-          </list></t>
-
-        <t><figure>
-            <preamble>Following is a non-normative example of an error
-            response:</preamble>
-
-            <artwork><![CDATA[HTTP/1.1 400 Bad Request
-Content-Type: application/json
-Cache-Control: no-store
-   
-{
- "error_code":"invalid_type",
- "error_description":"The value of the type parameter must be one of client_associate, rotate_secret or client_update."
-}]]></artwork>
-          </figure></t>
-      </section>
+        </figure></t>
     </section>
 
     <!-- push client registration -->
@@ -682,5 +635,127 @@ Cache-Control: no-store
         </front>
       </reference>
     </references>
+
+    <section title="Client Registration Response ">
+      <t>The response is returned as a JSON object with all the parameters as
+      top level elements.</t>
+
+      <section title="Client Associate or Rotate Secret Response">
+        <t>If the value of type in the request was <spanx style="verb">client_associate</spanx>
+        or <spanx style="verb">rotate_secret</spanx> then return the
+        following.</t>
+
+        <t><list style="hanging">
+            <t hangText="client_id">REQUIRED. The unique Client
+            identifier.</t>
+
+            <t hangText="client_secret">OPTIONAL. The Client secret. This MUST
+            be unique for each <spanx style="verb">client_id</spanx>. This
+            value us used by confidential clients. It is not required for
+            clients selecting a token_endpoint_auth_type of <spanx
+            style="verb">private_key_jwt</spanx></t>
+
+            <t hangText="registration_access_token">REQUIRED The Access token
+            used by the client to perform <spanx style="verb">client_update</spanx>
+            requests.</t>
+
+            <t hangText="issued_at"><vspace />OPTIONAL. Specifies the
+            timestamp when the identifier was issued. The timestamp value MUST
+            be a positive integer. The value is expressed in the number of
+            seconds since January 1, 1970 00:00:00 GMT.</t>
+
+            <t hangText="expires_at">OPTIONAL. The number of seconds from
+            1970-01-01T0:0:0Z as measured in UTC that the <spanx style="verb">client_secret</spanx>
+            will expire or <spanx style="verb">0</spanx> if they do not
+            expire. See <xref target="RFC3339">RFC 3339</xref> for details
+            regarding date/times in general and UTC in particular.</t>
+          </list></t>
+
+        <t><figure>
+            <preamble>Following is a non-normative example
+            response:</preamble>
+
+            <artwork><![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+ "client_id":"s6BhdRkqt3",
+ "client_secret":
+  "cf136dc3c1fd9153029bb9c6cc9ecead918bad9887fce6c93f31185e5885805d",
+  "registration_access_token": "this.is.a.access.token.value.ffx83",
+ "expires_at":2893276800
+}]]></artwork>
+          </figure></t>
+      </section>
+
+      <section title="Client Update">
+        <t>If the value of type in the request was <spanx style="verb">client_update</spanx>.</t>
+
+        <t><list style="hanging">
+            <t hangText="client_id">REQUIRED. The unique Client
+            identifier.</t>
+          </list></t>
+
+        <t><figure>
+            <preamble>Following is a non-normative example
+            response:</preamble>
+
+            <artwork><![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+ "client_id":"s6BhdRkqt3"
+}]]></artwork>
+          </figure></t>
+      </section>
+    </section>
+
+    <section title="Client Registration Error Response">
+      <t>When an OAuth error condition occurs, the Client Registration
+      Endpoint returns an Error Response as defined in Section 5.2 of the
+      OAuth 2.0 specification.</t>
+
+      <t>When a registration error condition occurs, the Client Registration
+      Endpoint returns a HTTP 400 status code including a JSON object
+      describing the error in the response body.</t>
+
+      <t>The JSON object contains two members:</t>
+
+      <t><list style="hanging">
+          <t hangText="error">The error code, a single ASCII string.</t>
+
+          <t hangText="error_description">The additional text description of
+          the error for debugging.</t>
+        </list></t>
+
+      <t>This specification defines the following error codes:</t>
+
+      <t><list style="hanging">
+          <t hangText="invalid_type">The value of <spanx style="verb">request_type</spanx>
+          is invalid or not supported.</t>
+
+          <t hangText="invalid_redirect_uri">The value of one or more <spanx
+          style="verb">redirect_uris</spanx> is invalid.</t>
+
+          <t hangText="invalid_configuration_parameter">The value of one of
+          the configuration parameters is invalid.</t>
+        </list></t>
+
+      <t><figure>
+          <preamble>Following is a non-normative example of an error
+          response:</preamble>
+
+          <artwork><![CDATA[HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+   
+{
+ "error_code":"invalid_type",
+ "error_description":"The value of the type parameter must be one of client_associate, rotate_secret or client_update."
+}]]></artwork>
+        </figure></t>
+    </section>
   </back>
 </rfc>
