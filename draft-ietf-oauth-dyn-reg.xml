@@ -269,7 +269,14 @@
       the Authorization Server. The Client Registration Endpoint MUST accept
       HTTP POST messages with request parameters encoded in the entity body
       using the <spanx style="verb">application/x-www-form-urlencoded</spanx>
-      format. </t>
+      format. The Client Registration Endpoint MUST be protected by a
+      transport-layer security mechanism when sending requests to the
+      Registration Endpoint. The server MUST support TLS 1.2 <xref
+      target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref
+      target="RFC2246"></xref> and MAY support additional transport-layer
+      mechanisms meeting its security requirements. When using TLS, the Client
+      MUST perform a TLS/SSL server certificate check, per <xref
+      target="RFC6125">RFC 6125</xref>.</t>
 
       <t>The Endpoint defines three operations that a client can take on it,
       switched by the "operation" parameter:</t>
@@ -281,7 +288,7 @@
 
           <t>client_update: update the <xref
           target="client-metadata">metadata</xref> associated with a Client
-          Identifer</t>
+          Identifier</t>
 
           <t>rotate_secret: issue a new Registration Access Token and, if
           applicable, a Client Secret for a Client</t>
@@ -342,13 +349,8 @@
             <t hangText="operation">REQUIRED, MUST have the value <spanx
             style="verb">client_associate</spanx></t>
 
-            <t hangText="access_token">OPTIONAL, The Client Registration
-            Endpoint is an OAuth 2.0 Protected Resource that may require an
-            Access Token for <spanx style="verb">client_associate</spanx>
-            requests in order to restrict registration requests to only
-            authorized Clients. To facilitate open registration and
-            interoperability, the Authorization Server SHOULD accept requests
-            without this parameter.</t>
+            <t hangText="access_token">OPTIONAL, used to restrict new client
+            registration</t>
 
             <t hangText="redirect_uris"><vspace blankLines="0" />REQUIRED </t>
 
@@ -468,7 +470,7 @@ Cache-Control: no-store
 
             <t hangText="access_token">REQUIRED, unless presented in the
             Authorization Header as in <xref target="OAuth.Bearer">OAuth2
-            Bearer</xref>. The registration_access_token that was issued
+            Bearer</xref>. The Registration Access Token that was issued
             during the client_associate step, or previous client_update or
             rotate_secret calls.</t>
 
@@ -551,7 +553,7 @@ Cache-Control: no-store
         <t>This operation allows the client to rotate its current Client
         Secret, if it has one. If the client has not been issued a Client
         Secret, this operation is an error. [[ Editor's note: could this
-        request be used to rotate the registration_access_token, even when
+        request be used to rotate the Registration Access Token, even when
         there's not a client_secret? Should something else be used to rotate
         the token independently? This is an open issue. ]]</t>
 
@@ -559,13 +561,9 @@ Cache-Control: no-store
             <t hangText="operation">REQUIRED. MUST have the value
             rotate_secret</t>
 
-            <t hangText="access_token">REQUIRED. An OAuth2 Bearer token used
-            to access the Client Registration Endpoint, as defined in OAuth2
-            Bearer. This parameter MUST NOT be sent if the Access Token is
-            sent in the HTTP Authorization header as described in Section 7.1
-            of <xref target="OAuth2.0">OAuth 2.0</xref>. Access Tokens sent in
-            the authorization header must be <xref target="OAuth.Bearer">OAuth
-            2.0 Bearer Tokens</xref>.</t>
+            <t hangText="access_token">REQUIRED. The Registration Access Token
+            that was issued during the client_associate step, or previous
+            client_update or rotate_secret calls.</t>
           </list><figure>
             <preamble>Following is a non-normative example request (with line
             wraps for display purposes only):</preamble>
