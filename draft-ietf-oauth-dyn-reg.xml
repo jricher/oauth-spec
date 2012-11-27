@@ -211,17 +211,20 @@
           <t hangText="client_name"><vspace blankLines="0" />RECOMMENDED.
           Human-readable name of the Client to be presented to the user.</t>
 
-          <t hangText="client_url"><vspace />RECOMMENDED. This field contains
-          the URL of the homepage of the client.</t>
+          <t hangText="client_url"><vspace />RECOMMENDED. URL of the homepage
+          of the client. If present, the server SHOULD display this URL to the
+          end user.</t>
 
-          <t hangText="logo_url"><vspace blankLines="0" />OPTIONAL. A URL that
+          <t hangText="logo_url"><vspace blankLines="0" />OPTIONAL. URL that
           references a logo for the Client application. If present, the server
           SHOULD display this image to the end user during approval.</t>
 
           <t hangText="contacts"><vspace blankLines="0" />OPTIONAL. Space
-          delimited list of email addresses for people allowed to administer
-          the information for this Client. This is used by some providers to
-          enable a web UI to modify the Client information.</t>
+          delimited list of email addresses for people responsible for this
+          client. The Authorization Server MAY may these addresses available
+          to end users for support queries. An Authorization Server MAY use
+          these email addresses as identifiers for an administrative page for
+          this client.</t>
 
           <t hangText="tos_url"><vspace blankLines="0" />OPTIONAL. URL that
           points to a human-readable Terms of Service for the Client. The
@@ -230,15 +233,27 @@
 
           <t hangText="token_endpoint_auth_method"><vspace
           blankLines="0" />OPTIONAL. The requested authentication type for the
-          Token Endpoint. The options are <spanx style="verb">client_secret_post</spanx>,
-          <spanx style="verb">client_secret_basic</spanx>, <spanx
-          style="verb">client_secret_jwt</spanx>, and <spanx style="verb">private_key_jwt</spanx>.
-          Other Authentication methods may be defined by extension. If
-          unspecified or omitted, the default is <spanx style="verb">client_secret_basic</spanx>
+          Token Endpoint. Valid values are:<list style="symbols">
+              <t><spanx style="verb">none</spanx> this is a public client as
+              defined in OAuth 2.0 and does not have a client secret</t>
+
+              <t><spanx style="verb">client_secret_post</spanx> the client
+              uses the HTTP POST parameters defined in OAuth2.0 section
+              2.3.1</t>
+
+              <t><spanx style="verb">client_secret_basic</spanx> the client
+              uses HTTP Basic defined in OAuth 2.0 section 2.3.1</t>
+
+              <t><spanx style="verb">client_secret_jwt</spanx> the client uses
+              the JWT Assertion profile with a semetric secret issued by the
+              server</t>
+
+              <t><spanx>private_key_jwt</spanx> the client uses the JWT
+              Assertion profile with its own private key</t>
+            </list>Other Authentication methods may be defined by extension.
+          If unspecified or omitted, the default is <spanx style="verb">client_secret_basic</spanx>
           HTTP Basic Authentication Scheme as specified in Section 2.3.1 of
-          <xref target="RFC6750">OAuth 2.0</xref>. [[ this list of terms needs
-          to be expanded and fully defined, especially in reference to
-          signed-jwt client authentication ]]</t>
+          <xref target="RFC6749">OAuth 2.0</xref>.</t>
 
           <t hangText="policy_url"><vspace blankLines="0" />OPTIONAL. A URL
           location that the Client provides to the End-User to read about the
@@ -275,30 +290,16 @@
           style="verb">jwk_encryption_url</spanx> and <spanx style="verb">x509_encryption_url</spanx>,
           the keys contained in both formats SHOULD be the same.</t>
 
-          <t hangText="require_signed_request_object"><vspace
-          blankLines="0" />OPTIONAL. The <xref target="JWS">JWS</xref> <spanx
-          style="verb">alg</spanx> <xref target="JWA">algorithm</xref> that
-          MUST be required by the Authorization Server. The valid values are
-          listed in Section 3.1 of <xref target="JWA">JWA</xref>. Servers
-          SHOULD support <spanx style="verb">RS256</spanx>.</t>
-
           <t hangText="default_max_age"><vspace blankLines="0" />OPTIONAL.
-          (default max authentication age): Type: Integer - Specifies that the
+          Maximum age of a session in integer seconds. Specifies that the
           End-User must be actively authenticated if any present
-          authentication is older than the specified number of seconds. (The
-          <spanx style="verb">max_age</spanx> request parameter corresponds to
-          the OpenID 2.0 PAPE <spanx style="verb">max_auth_age</spanx> request
-          parameter.) The <spanx style="verb">max_age</spanx> claim in the
-          request object overrides this default value.</t>
+          authentication is older than the specified number of seconds by
+          default.</t>
 
-          <t hangText="default_acr"><vspace blankLines="0" />OPTIONAL.
-          (default authentication context class reference): Type: String -
-          Specifies the default value that the Authorization server must use
-          for processing requests from this client. The <spanx style="verb">acrs_supported</spanx>
-          element of discovery contains a list of the supported <spanx
-          style="verb">acr</spanx> values for this server. The <spanx
-          style="verb">acr</spanx> claim in the request object overrides this
-          default value.</t>
+          <t hangText="default_acr"><vspace blankLines="0" />OPTIONAL. Default
+          Authentication Context class Reference. String that specifies the
+          default authentication context value that the Authorization server
+          must use for processing requests from this client.</t>
         </list></t>
     </section>
 
@@ -330,7 +331,7 @@
           target="client-metadata">metadata</xref> associated with a Client
           Identifier</t>
 
-          <t>client_refresh: issue a new Registration Access Token and, if
+          <t>rotate_secret: issue a new Registration Access Token and, if
           applicable, a Client Secret for a Client</t>
         </list></t>
 
@@ -376,7 +377,7 @@
       <t>The Client Registration Endpoint MUST ignore all parameters it does
       not understand.</t>
 
-      <section title="Client Association Request">
+      <section title="Client Registration Request">
         <t>This operation registers a new client to the Authorization Server.
         The Authorization Server assigns this client a unique Client
         Identifier, optionally assigns a Client Secret, and associates the
@@ -420,8 +421,6 @@
 
             <t hangText="x509_encryption_url">OPTIONAL</t>
 
-            <t hangText="require_signed_request_object">OPTIONAL</t>
-
             <t hangText="default_max_age">OPTIONAL</t>
 
             <t hangText="default_acr">OPTIONAL</t>
@@ -440,7 +439,7 @@ Host: server.example.com
 operation=client_register
 &redirect_uris=https://client.example.org/callback
     %20https://client.example.org/callback2
-&client_name=My%20Example%20
+&client_name=My%20Example%20Client
 &logo_url=https://client.example.org/logo.png
 &token_endpoint_auth_type=client_secret_basic
 &jwk_url=https://client.example.org/my_rsa_public_key.jwk
@@ -453,8 +452,9 @@ operation=client_register
         returns the newly-created Client Identifier and, optionally, a Client
         Secret. The response also contains a Registration Access Token that is
         to be used by the client to perform subsequent operations at this
-        endpoint. These items are returned as a JSON document with the
-        following fields as top-level members of the root JSON object.</t>
+        endpoint, such as client_update and rotate_secret. These items are
+        returned as a JSON document with the following fields as top-level
+        members of the root JSON object.</t>
 
         <t><list style="hanging">
             <t hangText="client_id"><vspace />REQUIRED. The unique Client
@@ -463,17 +463,18 @@ operation=client_register
 
             <t hangText="client_secret"><vspace />OPTIONAL. The Client secret.
             This MUST be unique for each <spanx style="verb">client_id</spanx>.
-            This value is used by confidential clients.</t>
+            This value is used by confidential clients to authenticate to the
+            Token Endpoint as described in OAuth 2.0 Section 2.3.1.</t>
 
-            <t hangText="registration_access_token"><vspace />REQUIRED The
+            <t hangText="registration_access_token"><vspace />REQUIRED. The
             Access token to be used by the client to perform <spanx
             style="verb">client_update</spanx> and <spanx style="verb">rotate_secret</spanx>
             requests.</t>
 
             <t hangText="issued_at"><vspace />OPTIONAL. Specifies the
-            timestamp when the identifier was issued. The timestamp value MUST
-            be a positive integer. The value is expressed in the number of
-            seconds since January 1, 1970 00:00:00 GMT.</t>
+            timestamp when the Client Identifier was issued. The timestamp
+            value MUST be a positive integer. The value is expressed in the
+            number of seconds since January 1, 1970 00:00:00 GMT.</t>
 
             <t hangText="expires_at"><vspace />OPTIONAL. The number of seconds
             from 1970-01-01T0:0:0Z as measured in UTC that the <spanx
@@ -503,13 +504,13 @@ Cache-Control: no-store
       <section title="Client Update Request">
         <t>This operation updates a previously-registered client with new
         metadata at the Authorization Server. This request MUST be protected
-        by the Registration Authorization Token associated with the Client
-        Identifier. This request MAY include any fields described in <xref
+        by the Registration Authorization Token associated with the Client.
+        This request MAY include any fields described in <xref
         target="client-metadata">Client Metadata</xref>. The values of Client
         Metadata fields in this request MUST replace (not augment) the values
-        previously associated with this client_identifier. Empty values in
-        Client Metadata SHOULD be taken as a request to clear any existing
-        value of that field.</t>
+        previously associated with this Client. Empty values in Client
+        Metadata MUST be taken as a request to clear any existing value of
+        that field.</t>
 
         <t><?rfc subcompact="yes"?><list style="hanging">
             <t hangText="operation"><vspace />REQUIRED, MUST have the value
@@ -544,8 +545,6 @@ Cache-Control: no-store
             <t hangText="x509_url">OPTIONAL</t>
 
             <t hangText="x509_encryption_url">OPTIONAL</t>
-
-            <t hangText="require_signed_request_object">OPTIONAL</t>
 
             <t hangText="default_max_age">OPTIONAL</t>
 
@@ -632,16 +631,18 @@ operation=rotate_secret
       </section>
 
       <section title="Rotate Secret Response">
-        <t>Upon successful rotation of the client secret, the Client
-        Registration Endpoint returns a JSON document with the following
-        fields as top-level members of the root JSON object.<list
-            style="hanging">
+        <t>Upon successful rotation of the Registration Access Token and
+        optionally the Client Secret, the Client Registration Endpoint returns
+        a JSON document with the following fields as top-level members of the
+        root JSON object.<list style="hanging">
             <t hangText="client_id"><vspace />REQUIRED. The unique Client
             identifier, MUST match the client_id issued in the original
             client_register request.</t>
 
-            <t hangText="client_secret"><vspace />OPTIONAL. The Client secret.
-            This MUST be unique for each <spanx style="verb">client_id</spanx>.</t>
+            <t hangText="client_secret"><vspace />REQUIRED if the server
+            initially issued this Client a Client Secret, otherwise the server
+            MUST NOT return a value. The value MUST be unique for each <spanx
+            style="verb">client_id</spanx>.</t>
 
             <t hangText="registration_access_token"><vspace />REQUIRED The
             Access token to be used by the client to perform subsequent <spanx
@@ -659,11 +660,12 @@ operation=rotate_secret
             style="verb">0</spanx> if they do not expire. See <xref
             target="RFC3339">RFC 3339</xref> for details regarding date/times
             in general and UTC in particular.</t>
-          </list><figure>
-            <preamble>Following is a non-normative example
-            response:</preamble>
+          </list></t>
 
-            <artwork><![CDATA[HTTP/1.1 200 OK
+        <figure>
+          <preamble>Following is a non-normative example response:</preamble>
+
+          <artwork><![CDATA[HTTP/1.1 200 OK
 Content-Type: application/json
 Cache-Control: no-store
 
@@ -674,7 +676,11 @@ Cache-Control: no-store
   "registration_access_token": "this.is.a.access.token.value.ffx83",
  "expires_at":2893276800
 }]]></artwork>
-          </figure></t>
+        </figure>
+
+        <t>The Authorization Server SHOULD discard and invalidate the Request
+        Access Token and the Client Secret associated with this Client after
+        successful completion of this request.</t>
       </section>
 
       <section title="Client Registration Error Response">
@@ -710,8 +716,6 @@ Cache-Control: no-store
             fields is invalid.</t>
           </list></t>
 
-        <t></t>
-
         <figure>
           <preamble>Following is a non-normative example of an error response
           (with line wraps for display purposes only):</preamble>
@@ -735,21 +739,7 @@ Cache-Control: no-store
 
     <section title="Security Considerations">
       <t>[[ Editor's note: Following are some security considerations taken
-      whole from the UMA and OpenID Connect source drafts. ]] <list
-          style="symbols">
-          <t>No client authentication: The server should treat unsigned pushed
-          client metadata as self-asserted.</t>
-
-          <t>Weak client authentication: The server should treat unsigned
-          pulled client metadata as self-asserted unless the domain of the
-          client matches the client metadata URL and the URL is well-known and
-          trusted.</t>
-
-          <t>Strong client authentication: The server should treat signed
-          client metadata (pushed or pulled) and a signed metadata URL as
-          self-asserted unless it can verify the signature as being from a
-          trusted source.</t>
-        </list></t>
+      whole from the UMA and OpenID Connect source drafts. ]] </t>
 
       <t>Since requests to the Client Registration Endpoint result in the
       transmission of clear-text credentials (in the HTTP request and
@@ -761,18 +751,21 @@ Cache-Control: no-store
       TLS, the Client MUST perform a TLS/SSL server certificate check, per
       <xref target="RFC6125">RFC 6125</xref>.</t>
 
-      <t>Requests to the Registration Endpoint for <spanx style="verb">client_update</spanx>
-      MUST have some rate limiting on failures to prevent the Client secret
-      from being disclosed though repeated access attempts.</t>
+      <t>As this endpoint is an OAuth2 Protected Resource, requests to the
+      Registration Endpoint SHOULD have some rate limiting on failures to
+      prevent the Registration Access Token from being disclosed though
+      repeated access attempts.</t>
 
-      <t>A rogue RP might use the logo for the legitimate RP, which it is
-      trying to impersonate. An IdP needs to take steps to mitigate this
-      phishing risk, since the logo could confuse users into thinking they're
-      logging in to the legitimate RP. An IdP could also warn if the
-      domain/site of the logo doesn't match the domain/site of redirect URIs.
-      An IdP can also make warnings against untrusted RPs in all cases,
-      especially if they're dynamically registered, have not been trusted by
-      any users at the IdP before, and want to use the logo feature.</t>
+      <t>The authorization server MUST treat all client metadata as
+      self-asserted. A rogue Client might use the name and logo for the
+      legitimate Client, which it is trying to impersonate. An Authorization
+      Server needs to take steps to mitigate this phishing risk, since the
+      logo could confuse users into thinking they're logging in to the
+      legitimate Client. For instance, an Authorization Server could warn if
+      the domain/site of the logo doesn't match the domain/site of redirect
+      URIs. An Authorization Server can also make warnings against untrusted
+      Clients in all cases, especially if they're dynamically registered, have
+      not been trusted by any users at the Authorization Server before.</t>
 
       <t>In a situation where the Authorization Server is supporting open
       Client registration, it must be extremely careful with any URL provided
@@ -783,6 +776,16 @@ Cache-Control: no-store
       Authorization Server should check to see if the <spanx style="verb">logo_url</spanx>
       and <spanx style="verb">policy_url</spanx> have the same host as the
       hosts defined in the array of <spanx style="verb">redirect_uris</spanx>.</t>
+
+      <t>While the Client Secret can expire, the Registration Access Token
+      should not expire while a client is still actively registered. If this
+      token were to expire, a Client could be left in a situation where it has
+      no means of updating itself and must register itself anew. As the
+      Registration Access Tokens are long-term credentials, they MUST be
+      protected by the Client as a secret. [[ Editor's note: with the right
+      error codes returned from client_update, the AS could force the Client
+      to call rotate_secret before going forward, lessening the window for
+      abuse of a leaked registration token. ]]</t>
     </section>
 
     <section title="Acknowledgments">
@@ -810,7 +813,10 @@ Cache-Control: no-store
           <t>Changed terminology to "client register" instead of "client
           associate"</t>
 
-          <t>Clarified </t>
+          <t>Specified that client_id must match across all subsequent
+          requests</t>
+
+          <t>Fixed RFC2XML formatting, especially on lists</t>
         </list></t>
 
       <t>- 01</t>
