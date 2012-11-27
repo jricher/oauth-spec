@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="std" docName="draft-richer-oauth-introspection-00"
+     ipr="trust200902">
+  <front>
+    <title abbrev="oauth-instance">OAuth Token Introspection</title>
+
+    <author fullname="Justin Richer" initials="J." role="editor"
+            surname="Richer">
+      <organization>The MITRE Corporation</organization>
+
+      <address>
+        <email>jricher@mitre.org</email>
+      </address>
+    </author>
+
+    <date day="27" month="November" year="2012" />
+
+    <abstract>
+      <t>This specification defines a method for a client or protected
+      resource to query an OAuth authorization server to determine
+      meta-information about an OAuth token. </t>
+    </abstract>
+
+    <note title="Requirements Language">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119">RFC 2119</xref>.</t>
+    </note>
+  </front>
+
+  <middle>
+    <section anchor="introduction" title="Introduction">
+      <t>In OAuth, the contents of tokens are opaque to clients. This means
+      that the client does not need to know anything about the content or
+      structure of the token itself, if there is any. However, there is still
+      a large amount of metadata that may be attached to a token, such as its
+      current validity, approved scopes, and extra information about the
+      authentication context in which the token was issued.</t>
+
+      <t>This specification defines an Introspection Endpoint that allows the
+      holder of a token to query the Authorization Server to discover the set
+      of meta-information for a token.</t>
+    </section>
+
+    <section title="Introspection Endpoint">
+      <t hangText="instance_name">The Introspection Endpoint is an OAuth 2
+      Endpoint that responds to HTTP GET and HTTP POST requests from token
+      holders. The endpoint takes a single parameter representing the token
+      (and optionally further authentication) and returns a JSON document
+      representing the meta information surrounding the token.</t>
+
+      <section title="Introspection Request">
+        <t hangText="instance_name"><list style="hanging">
+            <t hangText="token">the string value of the token.</t>
+          </list>The endpoint SHOULD also require some form of authentication
+        to access this endpoint, such as the Client Authentication as
+        described in <xref target="RFC6749">OAuth 2 Core Specification</xref>
+        or a separate OAuth2 Access Token. The methods of managing and
+        validating these authentication credentials are out of scope of this
+        specification. </t>
+      </section>
+
+      <section title="Introspection Response">
+        <t>The server responds with a JSON object in <spanx style="code">application/json</spanx>
+        format with the following top-level members. Specific implementations
+        MAY extend this structure with their own service-specific pieces of
+        information.</t>
+
+        <t><list style="hanging">
+            <t hangText="valid">REQUIRED. Boolean indicator of whether or not
+            the presented token is valid. </t>
+
+            <t hangText="expires_at">OPTIONAL. Integer timestamp, measured in
+            the number of seconds since January 1 1970 UTC, indicating when
+            this token will expire.</t>
+
+            <t hangText="issued_at">OPTIONAL. Integer timestamp, measured in
+            the number of seconds since January 1 1970 UTC, indicating when
+            this token was originally issued.</t>
+
+            <t hangText="scope">OPTIONAL. Array of strings representing the
+            scopes associated with this token.</t>
+
+            <t hangText="user_id">OPTIONAL. Local identifier of the Resource
+            Owner who authorized this token.</t>
+
+            <t hangText="client_id">OPTIONAL. Client Identifier for the Client
+            that requested this token.</t>
+
+            <t hangText="audience">OPTIONAL. Service-specific string
+            identifier of the intended audience for this token.</t>
+          </list></t>
+      </section>
+
+      <section title="Non-normative Example">
+        <t hangText="instance_name">For example, a Protected Resource accepts
+        a request from a Client carrying an OAuth2 Bearer Token. In order to
+        know how and whether to serve the request, the Protected Resource then
+        makes the following request to the Introspection Endpoint of the
+        Authorization Server.</t>
+
+        <figure>
+          <preamble>Following is a non-normative example request (with line
+          wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[POST /register HTTP/1.1
+Accept: application/x-www-form-urlencoded
+Host: server.example.com
+Authorization: Basic czZCaGRSa3F0Mzo3RmpmcDBaQnIxS3REUmJuZlZkbUl3
+
+token=X3241Affw.4233-99JXJ
+]]></artwork>
+        </figure>
+
+        <t>The Authorization Server validates the client credentials and looks
+        up the information in the token. If the token is valid, it returns the
+        following JSON document.</t>
+
+        <figure>
+          <preamble>Following is a non-normative example request (with line
+          wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+ "valid": true,
+ "client_id":"s6BhdRkqt3",
+ "scope": ["read", "write", "dolphin"],
+ "user_id": "2309fj32kl",
+ "audience": "http://example.org/protected-resource/*"
+}]]></artwork>
+        </figure>
+
+        <t>If the token presented is not valid (but the authentication
+        presented is valid), it returns the following JSON document.</t>
+
+        <figure>
+          <preamble>Following is a non-normative example request (with line
+          wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+ "valid": false
+}]]></artwork>
+        </figure>
+
+        <t>If the credentials are invalid, the Authorization Server responds
+        with the appropriate error response from the OAuth2 Core.</t>
+      </section>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <t>This document makes no request of IANA.</t>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>If left unprotected and un-throttled, the Introspection Endpoint
+      could present a means for an attacker to poll a series of possible token
+      values, fishing for a valid token. Therefore, the Authorization Server
+      SHOULD issue special client credentials to any protected resources or
+      clients that need to access the introspection endpoint. These
+      credentials may be used directly at the endpoint, or they may be
+      exchanged for an OAuth2 Access token scoped specifically for the
+      Introspection Endpoint.</t>
+    </section>
+
+    <section title="Acknowledgements">
+      <t>Thanks to the OAuth Working Group for feedback.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
+    </references>
+  </back>
+</rfc>
