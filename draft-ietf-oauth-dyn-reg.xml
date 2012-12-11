@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-02" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-03" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -811,7 +811,8 @@ Cache-Control: no-store
 
     <section title="Security Considerations">
       <t>[[ Editor's note: Following are some security considerations taken
-      whole from the UMA and OpenID Connect source drafts. ]]</t>
+      from the UMA and OpenID Connect source drafts. These need to be massaged
+      into a properly generic set of considerations. ]]</t>
 
       <t>Since requests to the Client Registration Endpoint result in the
       transmission of clear-text credentials (in the HTTP request and
@@ -835,9 +836,10 @@ Cache-Control: no-store
       logo could confuse users into thinking they're logging in to the
       legitimate Client. For instance, an Authorization Server could warn if
       the domain/site of the logo doesn't match the domain/site of redirect
-      URIs. An Authorization Server can also make warnings against untrusted
-      Clients in all cases, especially if they're dynamically registered, have
-      not been trusted by any users at the Authorization Server before.</t>
+      URIs. An Authorization Server can also present warning messages to end
+      users about untrusted Clients in all cases, especially if such clients
+      have been dynamically registered and have not been trusted by any users
+      at the Authorization Server before.</t>
 
       <t>In a situation where the Authorization Server is supporting open
       Client registration, it must be extremely careful with any URL provided
