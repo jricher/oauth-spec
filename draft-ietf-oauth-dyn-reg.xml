@@ -83,7 +83,7 @@
 
     <abstract>
       <t>This specification defines an endpoint and protocol for dynamic
-      registration of OAuth Clients at an Authorizaiton Server.</t>
+      registration of OAuth Clients at an Authorization Server.</t>
     </abstract>
   </front>
 
@@ -250,7 +250,7 @@
               uses HTTP Basic defined in OAuth 2.0 section 2.3.1</t>
 
               <t><spanx style="verb">client_secret_jwt</spanx>: the client
-              uses the JWT Assertion profile with a semetric secret issued by
+              uses the JWT Assertion profile with a symmetric secret issued by
               the server</t>
 
               <t><spanx style="verb">private_key_jwt</spanx>: the client uses
@@ -265,7 +265,7 @@
           tokens for. If omitted, an Authorization Server MAY register a
           Client with a default set of allowed scopes. </t>
 
-          <t hangText="grant_type"><vspace blankLines="0"/>OPTIOANL. Space
+          <t hangText="grant_type"><vspace blankLines="0"/>OPTIONAL. Space
           separated list of grant types that a client may use. These grant
           types are defined as follows:<list style="symbols">
               <t><spanx style="verb">authorization_code</spanx>: The
@@ -376,10 +376,10 @@
       Bearer Tokens</xref> for these operations.</t>
 
       <t>In order to support open registration and facilitate wider
-      interoperability, the Client Registration Endpoint SHOULD allow
-      client_register requests with no further authentication. These requests
-      MAY be rate-limited to prevent a denial-of-service attack on the Client
-      Registration Endpoint.</t>
+      interoperability, the Client Registration Endpoint SHOULD allow initial
+      <spanx style="verb">client_register</spanx> requests with no further
+      authentication. These requests MAY be rate-limited to prevent a
+      denial-of-service attack on the Client Registration Endpoint.</t>
 
       <t>In addition, the Client Registration Endpoint MAY accept an initial
       authorization credential in the form of an <xref target="RFC6749">OAuth
@@ -425,7 +425,7 @@
             <t hangText="operation"><vspace/>REQUIRED. MUST have the value
             <spanx style="verb">client_register</spanx></t>
 
-            <t hangText="access_token"><vspace/>OPTIONAL. used to restrict new
+            <t hangText="access_token"><vspace/>OPTIONAL. Used to restrict new
             client registration. This parameter MUST NOT be sent if the Access
             Token is sent in the HTTP Authorization header as described in
             Section 7.1 of <xref target="RFC6749">OAuth 2.0</xref>. Access
@@ -742,9 +742,8 @@ Cache-Control: no-store
 
 {
  "client_id":"s6BhdRkqt3",
- "client_secret":
-  "cf136dc3c1fd9153029bb9c6cc9ecead918bad9887fce6c93f31185e5885805d",
-  "registration_access_token": "this.is.a.access.token.value.ffx83",
+ "client_secret": "7fce6c93f31185e5885805d",
+  "registration_access_token": "reg-02348913-oieqer.983421",
  "expires_at":2893276800
 }]]></artwork>
         </figure>
@@ -784,7 +783,9 @@ Cache-Control: no-store
 
             <t hangText="invalid_client_metadata"><vspace/>The value of one of
             the <xref target="client-metadata">client metadata</xref> fields
-            is invalid.</t>
+            is invalid and the server has rejected this request. Note that an
+            Authorization server MAY choose to substitute a valid value for
+            any requested parameter of a client's metadata.</t>
           </list></t>
 
         <figure>
