@@ -369,34 +369,45 @@
           Client</t>
         </list></t>
 
-      <t>In order to facilitate registered clients updating their information,
-      the Client Registration Endpoint issues a request_access_token for
-      clients to securely identify themselves in future connections. As such,
-      the Endpoint MUST accept requests with <xref target="RFC6750">OAuth 2.0
-      Bearer Tokens</xref> for these operations.</t>
+      <t>The Client Registration Endpoint MAY accept an initial authorization
+      credential in the form of an <xref target="RFC6749">OAuth 2.0 </xref>
+      access token in order to limit registration to only previously
+      authorized parties. The method by which this access token is obtained by
+      the registrant is generally out-of-band and is out of scope of this
+      specification.</t>
 
       <t>In order to support open registration and facilitate wider
       interoperability, the Client Registration Endpoint SHOULD allow initial
-      <spanx style="verb">client_register</spanx> requests with no further
-      authentication. These requests MAY be rate-limited to prevent a
-      denial-of-service attack on the Client Registration Endpoint.</t>
+      <spanx style="verb">client_register</spanx> requests with no
+      authentication. These requests MAY be rate-limited or otherwise limited
+      to prevent a denial-of-service attack on the Client Registration
+      Endpoint.</t>
 
-      <t>In addition, the Client Registration Endpoint MAY accept an initial
-      authorization credential in the form of an <xref target="RFC6749">OAuth
-      2.0 </xref> access token in order to limit registration to only
-      previously authorized parties. The method by which this access token is
-      obtained by the registrant is generally out-of-band and is out of scope
-      of this specification.</t>
+      <t>In order to facilitate registered clients updating their information,
+      the Client Registration Endpoint issues a Request Access Token for
+      clients to securely identify themselves in future connections. As such,
+      the Endpoint MUST accept requests with <xref target="RFC6750">OAuth 2.0
+      Bearer Tokens</xref> for these operations, whether or not the initial
+      <spanx style="verb">client_register</spanx> call requires authentication
+      of some form. </t>
 
       <t>These two aspects, operation selection and client authentication, are
       represented by two parameters common to all operations:</t>
 
       <t><list style="hanging">
-          <t hangText="operation"><vspace blankLines="0"/>REQUIRED. Values are
-          <spanx style="verb">client_register</spanx> (for new registrations),
-          <spanx style="verb">rotate_secret</spanx> to request rotation of the
-          <spanx style="verb">client_secret</spanx>, and <spanx style="verb">client_update</spanx>
-          (for updating parameters of an existing <spanx style="verb">client_id</spanx>).</t>
+          <t hangText="operation"><vspace blankLines="0"/>REQUIRED. Values
+          are: <list style="symbols">
+              <t><spanx style="verb">client_register</spanx>: Register a new
+              client, receive a Client Identifier, and associate metadata with
+              it.</t>
+
+              <t><spanx style="verb">rotate_secret</spanx>: Request rotation
+              of the Registration Access Token and, if applicable, the Client
+              Secret</t>
+
+              <t><spanx style="verb">client_update</spanx>: Update the
+              metadata associated with a given Client Identifier.</t>
+            </list></t>
 
           <t hangText="access_token"><vspace blankLines="0"/>OPTIONAL. An
           OAuth2 Bearer token used to access the Client Registration Endpoint,
