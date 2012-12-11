@@ -392,19 +392,19 @@
       represented by two parameters common to all operations:</t>
 
       <t><list style="hanging">
-          <t hangText="operation">REQUIRED. Values are <spanx style="verb">client_register</spanx>
-          (for new registrations), <spanx style="verb">rotate_secret</spanx>
-          to request rotation of the <spanx style="verb">client_secret</spanx>,
-          and <spanx style="verb">client_update</spanx> (for updating
-          parameters of an existing <spanx style="verb">client_id</spanx>).</t>
+          <t hangText="operation"><vspace blankLines="0"/>REQUIRED. Values are
+          <spanx style="verb">client_register</spanx> (for new registrations),
+          <spanx style="verb">rotate_secret</spanx> to request rotation of the
+          <spanx style="verb">client_secret</spanx>, and <spanx style="verb">client_update</spanx>
+          (for updating parameters of an existing <spanx style="verb">client_id</spanx>).</t>
 
-          <t hangText="access_token">OPTIONAL. An OAuth2 Bearer token used to
-          access the Client Registration Endpoint, as defined in OAuth2
-          Bearer. This parameter MUST NOT be sent if the Access Token is sent
-          in the HTTP Authorization header as described in Section 7.1 of
-          <xref target="RFC6749">OAuth 2.0</xref>. Access Tokens sent in the
-          authorization header must be <xref target="RFC6750">OAuth 2.0 Bearer
-          Tokens</xref>.</t>
+          <t hangText="access_token"><vspace blankLines="0"/>OPTIONAL. An
+          OAuth2 Bearer token used to access the Client Registration Endpoint,
+          as defined in OAuth2 Bearer. This parameter MUST NOT be sent if the
+          Access Token is sent in the HTTP Authorization header as described
+          in Section 7.1 of <xref target="RFC6749">OAuth 2.0</xref>. Access
+          Tokens sent in the authorization header must be <xref
+          target="RFC6750">OAuth 2.0 Bearer Tokens</xref>.</t>
         </list>Each operation takes a different parameter set, and all
       operations are described below.</t>
 
@@ -432,7 +432,7 @@
             Tokens sent in the authorization header must be <xref
             target="RFC6750">OAuth 2.0 Bearer Tokens</xref>.</t>
 
-            <t hangText="redirect_uris">REQUIRED</t>
+            <t hangText="redirect_uris">RECOMMENDED</t>
 
             <t hangText="client_name">RECOMMENDED</t>
 
@@ -576,8 +576,9 @@ Cache-Control: no-store
             <t hangText="access_token"><vspace/>REQUIRED, unless presented in
             the Authorization Header as in <xref target="RFC6750">OAuth2
             Bearer</xref>. The Registration Access Token that was issued
-            during the client_register step, or previous client_update or
-            rotate_secret calls.</t>
+            during the <spanx style="verb">client_register</spanx> step, or
+            previous <spanx style="verb">client_update</spanx> or <spanx
+            style="verb">rotate_secret</spanx> calls.</t>
 
             <t hangText="redirect_uris">RECOMMENDED</t>
 
@@ -674,16 +675,15 @@ Cache-Control: no-store
         Access Token as well as its Client Secret, if it has one.</t>
 
         <t><list style="hanging">
-            <t hangText="operation">REQUIRED. MUST have the value
-            rotate_secret</t>
+            <t hangText="operation"><vspace blankLines="0"/>REQUIRED. MUST
+            have the value rotate_secret</t>
 
-            <t hangText="access_token">REQUIRED. The Registration Access Token
-            that was issued during the client_register step, or previous
-            client_update or rotate_secret calls. This parameter MUST NOT be
-            sent if the Access Token is sent in the HTTP Authorization header
-            as described in Section 7.1 of <xref target="RFC6749">OAuth
-            2.0</xref>. Access Tokens sent in the authorization header must be
-            <xref target="RFC6750">OAuth 2.0 Bearer Tokens</xref>.</t>
+            <t hangText="access_token"><vspace/>REQUIRED, unless presented in
+            the Authorization Header as in <xref target="RFC6750">OAuth2
+            Bearer</xref>. The Registration Access Token that was issued
+            during the <spanx style="verb">client_register</spanx> step, or
+            previous <spanx style="verb">client_update</spanx> or <spanx
+            style="verb">rotate_secret</spanx> calls.</t>
           </list></t>
 
         <figure>
