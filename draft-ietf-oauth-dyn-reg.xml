@@ -91,12 +91,12 @@
     <section title="Introduction">
       <t>In some use-case scenarios, it is desirable or necessary to allow
       OAuth clients to obtain authorization from an OAuth authorization server
-      without the two parties having previously interacted. Nevertheless, in
-      order for the authorization server to accurately represent to end-users
-      which client is seeking authorization to access the end-user's
-      resources, a method for automatic and unique registration of clients is
-      needed. The OAuth2 authorization framework does not define how the
-      relationship between the Client and the Authorization Server is
+      without requiring the two parties to interact before hand. Nevertheless,
+      in order for the authorization server to accurately and securely
+      represent to end-users which client is seeking authorization to access
+      the end-user's resources, a method for automatic and unique registration
+      of clients is needed. The OAuth2 authorization framework does not define
+      how the relationship between the Client and the Authorization Server is
       initialized, or how a given client is assigned a unique Client
       Identifier. Historically, this has happened out-of-band from the OAuth
       protocol. This draft provides a mechanism for a client to register
