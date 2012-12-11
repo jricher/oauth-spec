@@ -32,24 +32,24 @@
 
       <address>
         <postal>
-          <street></street>
+          <street/>
 
-          <city></city>
+          <city/>
 
-          <region></region>
+          <region/>
 
-          <code></code>
+          <code/>
 
-          <country></country>
+          <country/>
         </postal>
 
-        <phone></phone>
+        <phone/>
 
-        <facsimile></facsimile>
+        <facsimile/>
 
         <email>jricher@mitre.org</email>
 
-        <uri></uri>
+        <uri/>
       </address>
     </author>
 
@@ -79,7 +79,7 @@
       </address>
     </author>
 
-    <date day="27" month="November" year="2012" />
+    <date day="27" month="November" year="2012"/>
 
     <abstract>
       <t>This specification defines an endpoint and protocol for dynamic
@@ -113,7 +113,7 @@
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
         'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', and 'OPTIONAL' in this
         document are to be interpreted as described in <xref
-        target="RFC2119"></xref>.</t>
+        target="RFC2119"/>.</t>
 
         <t>Unless otherwise noted, all the protocol parameter names and values
         are case sensitive.</t>
@@ -124,7 +124,7 @@
         "Authorization Code", "Authorization Grant", "Authorization Server",
         "Authorization Endpoint", "Client", "Client Identifier", "Client
         Secret", "Protected Resource", "Resource Owner", "Resource Server",
-        and "Token Endpoint" defined by <xref target="RFC6750">OAuth
+        and "Token Endpoint" defined by <xref target="RFC6749">OAuth
         2.0</xref>.</t>
 
         <t>This specification defines the following additional terms:</t>
@@ -205,62 +205,95 @@
       does not understand.</t>
 
       <t><list style="hanging">
-          <t hangText="redirect_uris"><vspace blankLines="0" />REQUIRED A
-          space-delimited list of redirect URIs.</t>
+          <t hangText="redirect_uris"><vspace blankLines="0"/>RECOMMENDED. A
+          space-delimited list of redirect URIs for use in the Authorization
+          Code and Implicit grant types. An Authorization Server SHOULD
+          require registration of valid redirect URIs for all clients to
+          protect against token and credential theft attacks.</t>
 
-          <t hangText="client_name"><vspace blankLines="0" />RECOMMENDED.
-          Human-readable name of the Client to be presented to the user.</t>
+          <t hangText="client_name"><vspace blankLines="0"/>RECOMMENDED.
+          Human-readable name of the Client to be presented to the user. If
+          omitted, the Authorization Server MAY display to the user the raw
+          client_id value instead.</t>
 
-          <t hangText="client_url"><vspace />RECOMMENDED. URL of the homepage
-          of the client. If present, the server SHOULD display this URL to the
-          end user.</t>
+          <t hangText="client_url"><vspace/>RECOMMENDED. URL of the homepage
+          of the Client. If present, the server SHOULD display this URL to the
+          end user in a clickable fashion.</t>
 
-          <t hangText="logo_url"><vspace blankLines="0" />OPTIONAL. URL that
+          <t hangText="logo_url"><vspace blankLines="0"/>OPTIONAL. URL that
           references a logo for the Client application. If present, the server
           SHOULD display this image to the end user during approval.</t>
 
-          <t hangText="contacts"><vspace blankLines="0" />OPTIONAL. Space
+          <t hangText="contacts"><vspace blankLines="0"/>OPTIONAL. Space
           delimited list of email addresses for people responsible for this
           client. The Authorization Server MAY may these addresses available
           to end users for support queries. An Authorization Server MAY use
           these email addresses as identifiers for an administrative page for
           this client.</t>
 
-          <t hangText="tos_url"><vspace blankLines="0" />OPTIONAL. URL that
+          <t hangText="tos_url"><vspace blankLines="0"/>OPTIONAL. URL that
           points to a human-readable Terms of Service for the Client. The
           Authorization Server SHOULD display this URL to the End-User if it
           is given.</t>
 
           <t hangText="token_endpoint_auth_method"><vspace
-          blankLines="0" />OPTIONAL. The requested authentication type for the
+          blankLines="0"/>OPTIONAL. The requested authentication type for the
           Token Endpoint. Valid values are:<list style="symbols">
-              <t><spanx style="verb">none</spanx> this is a public client as
+              <t><spanx style="verb">none</spanx>: this is a public client as
               defined in OAuth 2.0 and does not have a client secret</t>
 
-              <t><spanx style="verb">client_secret_post</spanx> the client
+              <t><spanx style="verb">client_secret_post</spanx>: the client
               uses the HTTP POST parameters defined in OAuth2.0 section
               2.3.1</t>
 
-              <t><spanx style="verb">client_secret_basic</spanx> the client
+              <t><spanx style="verb">client_secret_basic</spanx>: the client
               uses HTTP Basic defined in OAuth 2.0 section 2.3.1</t>
 
-              <t><spanx style="verb">client_secret_jwt</spanx> the client uses
-              the JWT Assertion profile with a semetric secret issued by the
-              server</t>
+              <t><spanx style="verb">client_secret_jwt</spanx>: the client
+              uses the JWT Assertion profile with a semetric secret issued by
+              the server</t>
 
-              <t><spanx>private_key_jwt</spanx> the client uses the JWT
-              Assertion profile with its own private key</t>
+              <t><spanx style="verb">private_key_jwt</spanx>: the client uses
+              the JWT Assertion profile with its own private key</t>
             </list>Other Authentication methods may be defined by extension.
           If unspecified or omitted, the default is <spanx style="verb">client_secret_basic</spanx>
           HTTP Basic Authentication Scheme as specified in Section 2.3.1 of
           <xref target="RFC6749">OAuth 2.0</xref>.</t>
 
-          <t hangText="policy_url"><vspace blankLines="0" />OPTIONAL. A URL
+          <t hangText="scope"><vspace blankLines="0"/>OPTIONAL. Space
+          separated list of scopes that the client is allowed to request
+          tokens for. If omitted, an Authorization Server MAY register a
+          Client with a default set of allowed scopes. </t>
+
+          <t hangText="grant_type"><vspace blankLines="0"/>OPTIOANL. Space
+          separated list of grant types that a client may use. These grant
+          types are defined as follows:<list style="symbols">
+              <t><spanx style="verb">authorization_code</spanx>: The
+              Authorization Code Grant described in OAuth2 Section 4.1.</t>
+
+              <t><spanx style="verb">implicit</spanx>: The Implicit Grant
+              described in OAuth2 Section 4.2.</t>
+
+              <t><spanx style="verb">password</spanx>: The Resource Owner
+              Password Credentials Grant described in OAuth2 Section 4.3</t>
+
+              <t><spanx style="verb">client_credentials</spanx>: The Client
+              Credentials Grant described in OAuth2 Section 4.4</t>
+
+              <t><spanx style="verb">refresh_token</spanx>: The Refresh Token
+              Grant described in OAuth2 Section 6.</t>
+            </list>Authorization Servers MAY allow for other values as defined
+          in grant type extensions to OAuth2. The extension process is
+          described in OAuth2 Section 2.5, and the value of this parameter
+          MUST be the same as the value of the grant_type parameter defined in
+          the extension.</t>
+
+          <t hangText="policy_url"><vspace blankLines="0"/>OPTIONAL. A URL
           location that the Client provides to the End-User to read about the
           how the profile data will be used. The Authorization Server SHOULD
           display this URL to the End-User if it is given.</t>
 
-          <t hangText="jwk_url"><vspace blankLines="0" />OPTIONAL. URL for the
+          <t hangText="jwk_url"><vspace blankLines="0"/>OPTIONAL. URL for the
           Client's <xref target="JWK">JSON Web Key</xref> document that is
           used for signing Token Endpoint Requests. If jwk_encryption_url is
           not provided, the key at jwk_url is also used as the key to encrypt
@@ -268,35 +301,35 @@
           style="verb">x509_url</spanx> and <spanx style="verb">jwk_url</spanx>,
           the keys contained in both formats MUST be the same.</t>
 
-          <t hangText="jwk_encryption_url"><vspace blankLines="0" />OPTIONAL.
+          <t hangText="jwk_encryption_url"><vspace blankLines="0"/>OPTIONAL.
           URL for the Client's <xref target="JWK">JSON Web Key</xref> that is
           used to encrypt any responses to the Client. If the Client registers
           both <spanx style="verb">jwk_encryption_url</spanx> and <spanx
           style="verb">x509_encryption_url</spanx>, the keys contained in both
           formats MUST be the same.</t>
 
-          <t hangText="x509_url"><vspace blankLines="0" />OPTIONAL. URL for
-          the Client's PEM encoded X.509 Certificate or Certificate chain that
-          is used for signing Token Endpoint Requests. If <spanx style="verb">x509_encryption_url</spanx>
+          <t hangText="x509_url"><vspace blankLines="0"/>OPTIONAL. URL for the
+          Client's PEM encoded X.509 Certificate or Certificate chain that is
+          used for signing Token Endpoint Requests. If <spanx style="verb">x509_encryption_url</spanx>
           is not provided, <spanx style="verb">x509_url</spanx> it is also
           used to encrypt responses to the Client. If the Client registers
           both <spanx style="verb">x509_url</spanx> and <spanx style="verb">jwk_url</spanx>,
           the keys contained in both formats MUST be the same.</t>
 
-          <t hangText="x509_encryption_url"><vspace blankLines="0" />OPTIONAL.
+          <t hangText="x509_encryption_url"><vspace blankLines="0"/>OPTIONAL.
           URL for the Client's PEM encoded X.509 Certificate or Certificate
           chain that is used to encrypt the ID Token and User Info Endpoint
           Responses to the Client. If the Client registers both <spanx
           style="verb">jwk_encryption_url</spanx> and <spanx style="verb">x509_encryption_url</spanx>,
           the keys contained in both formats SHOULD be the same.</t>
 
-          <t hangText="default_max_age"><vspace blankLines="0" />OPTIONAL.
+          <t hangText="default_max_age"><vspace blankLines="0"/>OPTIONAL.
           Maximum age of a session in integer seconds. Specifies that the
           End-User must be actively authenticated if any present
           authentication is older than the specified number of seconds by
           default.</t>
 
-          <t hangText="default_acr"><vspace blankLines="0" />OPTIONAL. Default
+          <t hangText="default_acr"><vspace blankLines="0"/>OPTIONAL. Default
           Authentication Context class Reference. String that specifies the
           default authentication context value that the Authorization server
           must use for processing requests from this client.</t>
@@ -312,27 +345,28 @@
       format. The Client Registration Endpoint MUST be protected by a
       transport-layer security mechanism when sending requests to the
       Registration Endpoint. The server MUST support TLS 1.2 <xref
-      target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref
-      target="RFC2246"></xref> and MAY support additional transport-layer
-      mechanisms meeting its security requirements. When using TLS, the Client
-      MUST perform a TLS/SSL server certificate check, per <xref
-      target="RFC6125">RFC 6125</xref>.</t>
+      target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref target="RFC2246"/>
+      and MAY support additional transport-layer mechanisms meeting its
+      security requirements. When using TLS, the Client MUST perform a TLS/SSL
+      server certificate check, per <xref target="RFC6125">RFC
+      6125</xref>.</t>
 
       <t>The Endpoint defines three operations that a client can take on it,
-      switched by the "operation" parameter:</t>
+      switched by the <spanx style="verb">operation</spanx> parameter:</t>
 
       <t><list style="symbols">
-          <t>client_register: request that the Authorization Server generate a
-          new Client Identifier (and optionally a Client Secret) and associate
-          it with the set of presented <xref
-          target="client-metadata">metadata</xref></t>
+          <t><spanx style="verb">client_register</spanx>: request that the
+          Authorization Server generate a new Client Identifier (and
+          optionally a Client Secret) and associate it with the set of
+          presented <xref target="client-metadata">metadata</xref></t>
 
-          <t>client_update: update the <xref
+          <t><spanx style="verb">client_update</spanx>: update the <xref
           target="client-metadata">metadata</xref> associated with a Client
           Identifier</t>
 
-          <t>rotate_secret: issue a new Registration Access Token and, if
-          applicable, a Client Secret for a Client</t>
+          <t><spanx style="verb">rotate_secret</spanx>: issue a new
+          Registration Access Token and, if applicable, a Client Secret for a
+          Client</t>
         </list></t>
 
       <t>In order to facilitate registered clients updating their information,
@@ -384,16 +418,17 @@
         metadata given in the request with the issued Client Identifier. The
         request includes the two parameters described above as well as any
         parameters described in <xref target="client-metadata">Client
-        Metadata</xref>.</t>
+        Metadata</xref>. The Authorization Server MAY provision default values
+        for any items omitted in the Client Metadata.</t>
 
         <t><?rfc subcompact="yes"?><list style="hanging">
-            <t hangText="operation"><vspace />REQUIRED. MUST have the value
+            <t hangText="operation"><vspace/>REQUIRED. MUST have the value
             <spanx style="verb">client_register</spanx></t>
 
-            <t hangText="access_token"><vspace />OPTIONAL. used to restrict
-            new client registration. This parameter MUST NOT be sent if the
-            Access Token is sent in the HTTP Authorization header as described
-            in Section 7.1 of <xref target="RFC6749">OAuth 2.0</xref>. Access
+            <t hangText="access_token"><vspace/>OPTIONAL. used to restrict new
+            client registration. This parameter MUST NOT be sent if the Access
+            Token is sent in the HTTP Authorization header as described in
+            Section 7.1 of <xref target="RFC6749">OAuth 2.0</xref>. Access
             Tokens sent in the authorization header must be <xref
             target="RFC6750">OAuth 2.0 Bearer Tokens</xref>.</t>
 
@@ -412,6 +447,10 @@
             <t hangText="token_endpoint_auth_method">OPTIONAL</t>
 
             <t hangText="policy_url">OPTIONAL</t>
+
+            <t hangText="scope">OPTIONAL</t>
+
+            <t hangText="grant_type">OPTIONAL</t>
 
             <t hangText="jwk_url">OPTIONAL</t>
 
@@ -440,8 +479,9 @@ operation=client_register
 &redirect_uris=https://client.example.org/callback
     %20https://client.example.org/callback2
 &client_name=My%20Example%20Client
+&token_endpoint_auth_method=client_secret_basic%20client_secret_post
+&scope=read%20write%20dolphin
 &logo_url=https://client.example.org/logo.png
-&token_endpoint_auth_type=client_secret_basic
 &jwk_url=https://client.example.org/my_rsa_public_key.jwk
 ]]></artwork>
         </figure>
@@ -449,34 +489,44 @@ operation=client_register
 
       <section title="Client Registration Response">
         <t>Upon successful registration, the Client Registration Endpoint
-        returns the newly-created Client Identifier and, optionally, a Client
-        Secret. The response also contains a Registration Access Token that is
-        to be used by the client to perform subsequent operations at this
-        endpoint, such as client_update and rotate_secret. These items are
-        returned as a JSON document with the following fields as top-level
-        members of the root JSON object.</t>
+        returns the newly-created Client Identifier and, if applicable, a
+        Client Secret, along with all registered <xref
+        target="client-metadata">metadata</xref> about this client, including
+        any fields provisioned by the Authorization Server itself. The
+        Authorization Server MAY reject or replace any of the client's
+        requested field values and substitute them with suitable values. If
+        this happens, the Authorization Server MUST include these fields in
+        the response to the client.</t>
+
+        <t>The response also contains a Registration Access Token that is to
+        be used by the client to perform subsequent operations at this
+        endpoint, such as <spanx style="verb">client_update</spanx> and <spanx
+        style="verb">rotate_secret</spanx>. </t>
+
+        <t>All of the response items are returned as a JSON document with the
+        following fields as top-level members of the root JSON object.</t>
 
         <t><list style="hanging">
-            <t hangText="client_id"><vspace />REQUIRED. The unique Client
+            <t hangText="client_id"><vspace/>REQUIRED. The unique Client
             identifier, MUST NOT be currently valid for any other registered
             Client.</t>
 
-            <t hangText="client_secret"><vspace />OPTIONAL. The Client secret.
+            <t hangText="client_secret"><vspace/>OPTIONAL. The Client secret.
             This MUST be unique for each <spanx style="verb">client_id</spanx>.
             This value is used by confidential clients to authenticate to the
             Token Endpoint as described in OAuth 2.0 Section 2.3.1.</t>
 
-            <t hangText="registration_access_token"><vspace />REQUIRED. The
+            <t hangText="registration_access_token"><vspace/>REQUIRED. The
             Access token to be used by the client to perform <spanx
             style="verb">client_update</spanx> and <spanx style="verb">rotate_secret</spanx>
             requests.</t>
 
-            <t hangText="issued_at"><vspace />OPTIONAL. Specifies the
-            timestamp when the Client Identifier was issued. The timestamp
-            value MUST be a positive integer. The value is expressed in the
-            number of seconds since January 1, 1970 00:00:00 GMT.</t>
+            <t hangText="issued_at"><vspace/>OPTIONAL. Specifies the timestamp
+            when the Client Identifier was issued. The timestamp value MUST be
+            a positive integer. The value is expressed in the number of
+            seconds since January 1, 1970 00:00:00 GMT.</t>
 
-            <t hangText="expires_at"><vspace />OPTIONAL. The number of seconds
+            <t hangText="expires_at"><vspace/>OPTIONAL. The number of seconds
             from 1970-01-01T0:0:0Z as measured in UTC that the <spanx
             style="verb">client_secret</spanx> will expire or <spanx
             style="verb">0</spanx> if they do not expire. See <xref
@@ -493,9 +543,13 @@ Cache-Control: no-store
 
 {
  "client_id":"s6BhdRkqt3",
- "client_secret":
-  "cf136dc3c1fd9153029bb9c6cc9ecead918bad9887fce6c93f31185e5885805d",
-  "registration_access_token": "reg-23410913-abewfq.123483",
+ "client_secret": "cf136dc3c1fc93f31185e5885805d",
+ "scope": "read write dolphin",
+ "grant_type": "authorization_code refresh_token",
+ "token_endpoint_auth_method": "client_secret_basic client_secret_post",
+ "logo_url": "https://client.example.org/logo.png",
+ "jwk_url": "https://client.example.org/my_rsa_public_key.jwk",
+ "registration_access_token": "reg-23410913-abewfq.123483",
  "expires_at":2893276800
 }]]></artwork>
         </figure>
@@ -506,23 +560,26 @@ Cache-Control: no-store
         metadata at the Authorization Server. This request MUST be protected
         by the Registration Authorization Token associated with the Client.
         This request MAY include any fields described in <xref
-        target="client-metadata">Client Metadata</xref>. The values of Client
-        Metadata fields in this request MUST replace (not augment) the values
-        previously associated with this Client. Empty values in Client
-        Metadata MUST be taken as a request to clear any existing value of
-        that field.</t>
+        target="client-metadata">Client Metadata</xref>. If included in the
+        request, valid values of Client Metadata fields in this request MUST
+        replace, not augment, the values previously associated with this
+        Client. Empty values in Client Metadata MUST be taken as a request to
+        clear any existing value of that field. Omitted values in the Client
+        Metadata MUST remain unchanged by the Authorization Server. The
+        Authorization Server MAY replace any invalid values with suitable
+        values.</t>
 
         <t><?rfc subcompact="yes"?><list style="hanging">
-            <t hangText="operation"><vspace />REQUIRED, MUST have the value
+            <t hangText="operation"><vspace/>REQUIRED, MUST have the value
             <spanx style="verb">client_update</spanx></t>
 
-            <t hangText="access_token"><vspace />REQUIRED, unless presented in
+            <t hangText="access_token"><vspace/>REQUIRED, unless presented in
             the Authorization Header as in <xref target="RFC6750">OAuth2
             Bearer</xref>. The Registration Access Token that was issued
             during the client_register step, or previous client_update or
             rotate_secret calls.</t>
 
-            <t hangText="redirect_uris">REQUIRED</t>
+            <t hangText="redirect_uris">RECOMMENDED</t>
 
             <t hangText="client_name">RECOMMENDED</t>
 
@@ -550,8 +607,8 @@ Cache-Control: no-store
 
             <t hangText="default_acr">OPTIONAL</t>
           </list><?rfc subcompact="no"?>For example, a client could send the
-        following registration request to the Client Registration
-        Endpoint:</t>
+        following request to the Client Registration Endpoint to update the
+        client registration in the above example:</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -563,21 +620,30 @@ Host: server.example.com
 Authorization: Bearer reg-23410913-abewfq.123483
 
 operation=client_update
-&redirect_uris=https://client.example.org/callback
+&redirect_uri=https://client.example.org/callback
     %20https://client.example.org/callback2
-&client_name=My%20Example%20
-&logo_url=https://client.example.org/logo.png
-&token_endpoint_auth_type=client_secret_basic
-&jwk_url=https://client.example.org/my_rsa_public_key.jwk
+&client_name=My%20New%20Example%20
+&logo_url=https://client.example.org/newlogo.png
 ]]></artwork>
         </figure>
       </section>
 
       <section title="Client Update Response">
-        <t>Upon successful update, the Client Registration Endpoint returns a
-        JSON document with the following fields as top-level members of the
-        root JSON object.<list style="hanging">
-            <t hangText="client_id"><vspace />REQUIRED. The unique Client
+        <t>Upon successful update, the Client Registration Endpoint returns
+        the Client ID, along with all current registered <xref
+        target="client-metadata">metadata</xref> about this client, including
+        any fields provisioned by the Authorization Server itself. The
+        Authorization Server MAY reject or replace any of the client's
+        requested field values and substitute them suitable values. If this
+        happens, the Authorization Server MUST include these fields in the
+        response to the client. </t>
+
+        <t>The Authorization Server MUST NOT include the Client Secret or
+        Request Access Token in this response.</t>
+
+        <t>These fields are returned as top-level members of the root JSON
+        object.<list style="hanging">
+            <t hangText="client_id"><vspace/>REQUIRED. The unique Client
             identifier, MUST equal the value of the client_id returned in the
             original client_register request.</t>
           </list></t>
@@ -590,18 +656,22 @@ Content-Type: application/json
 Cache-Control: no-store
 
 {
- "client_id":"s6BhdRkqt3",
+ "client_id": "s6BhdRkqt3",
+ "client_name": "My New Example",
+ "redirect_uri": 
+"https://client.example.org/callback https://client.example.org/callback2"
+ "scope": "read write dolphin",
+ "grant_type": "authorization_code refresh_token",
+ "token_endpoint_auth_method": "client_secret_basic client_secret_post",
+ "logo_url": "https://client.example.org/newlogo.png",
+ "jwk_url": "https://client.example.org/my_rsa_public_key.jwk",
 }]]></artwork>
         </figure>
-
-        <t>[[ Editor's note: should this return the entire client data object,
-        for confirmation and review, including any fields that may have been
-        asserted by the AS? ]]</t>
       </section>
 
       <section title="Rotate Secret Request">
         <t>This operation allows the client to rotate its current Registration
-        Access Token as well as its Client Secret, if it has one. </t>
+        Access Token as well as its Client Secret, if it has one.</t>
 
         <t><list style="hanging">
             <t hangText="operation">REQUIRED. MUST have the value
@@ -631,30 +701,31 @@ operation=rotate_secret
       </section>
 
       <section title="Rotate Secret Response">
-        <t>Upon successful rotation of the Registration Access Token and
+        <t>Upon successful rotation of the Registration Access Token, and
         optionally the Client Secret, the Client Registration Endpoint returns
         a JSON document with the following fields as top-level members of the
-        root JSON object.<list style="hanging">
-            <t hangText="client_id"><vspace />REQUIRED. The unique Client
+        root JSON object. This response MUST NOT include any other client
+        metadata.<list style="hanging">
+            <t hangText="client_id"><vspace/>REQUIRED. The unique Client
             identifier, MUST match the client_id issued in the original
             client_register request.</t>
 
-            <t hangText="client_secret"><vspace />REQUIRED if the server
+            <t hangText="client_secret"><vspace/>REQUIRED if the server
             initially issued this Client a Client Secret, otherwise the server
             MUST NOT return a value. The value MUST be unique for each <spanx
             style="verb">client_id</spanx>.</t>
 
-            <t hangText="registration_access_token"><vspace />REQUIRED The
+            <t hangText="registration_access_token"><vspace/>REQUIRED The
             Access token to be used by the client to perform subsequent <spanx
             style="verb">client_update</spanx> and <spanx style="verb">rotate_secret</spanx>
             requests.</t>
 
-            <t hangText="issued_at"><vspace />OPTIONAL. Specifies the
-            timestamp when the identifier was issued. The timestamp value MUST
-            be a positive integer. The value is expressed in the number of
-            seconds since January 1, 1970 00:00:00 GMT.</t>
+            <t hangText="issued_at"><vspace/>OPTIONAL. Specifies the timestamp
+            when the identifier was issued. The timestamp value MUST be a
+            positive integer. The value is expressed in the number of seconds
+            since January 1, 1970 00:00:00 GMT.</t>
 
-            <t hangText="expires_at"><vspace />OPTIONAL. The number of seconds
+            <t hangText="expires_at"><vspace/>OPTIONAL. The number of seconds
             from 1970-01-01T0:0:0Z as measured in UTC that the <spanx
             style="verb">client_secret</spanx> will expire or <spanx
             style="verb">0</spanx> if they do not expire. See <xref
@@ -695,25 +766,25 @@ Cache-Control: no-store
         <t>The JSON object contains two members:</t>
 
         <t><list style="hanging">
-            <t hangText="error"><vspace />The error code, a single ASCII
+            <t hangText="error"><vspace/>The error code, a single ASCII
             string.</t>
 
-            <t hangText="error_description"><vspace />The additional text
+            <t hangText="error_description"><vspace/>The additional text
             description of the error for debugging.</t>
           </list></t>
 
         <t>This specification defines the following error codes:</t>
 
         <t><list style="hanging">
-            <t hangText="invalid_operation"><vspace />The value of <spanx
+            <t hangText="invalid_operation"><vspace/>The value of <spanx
             style="verb">operation</spanx> is invalid or not supported.</t>
 
-            <t hangText="invalid_redirect_uri"><vspace />The value of one or
+            <t hangText="invalid_redirect_uri"><vspace/>The value of one or
             more <spanx style="verb">redirect_uris</spanx> is invalid.</t>
 
-            <t hangText="invalid_client_metadata"><vspace />The value of one
-            of the <xref target="client-metadata">client metadata</xref>
-            fields is invalid.</t>
+            <t hangText="invalid_client_metadata"><vspace/>The value of one of
+            the <xref target="client-metadata">client metadata</xref> fields
+            is invalid.</t>
           </list></t>
 
         <figure>
@@ -739,17 +810,17 @@ Cache-Control: no-store
 
     <section title="Security Considerations">
       <t>[[ Editor's note: Following are some security considerations taken
-      whole from the UMA and OpenID Connect source drafts. ]] </t>
+      whole from the UMA and OpenID Connect source drafts. ]]</t>
 
       <t>Since requests to the Client Registration Endpoint result in the
       transmission of clear-text credentials (in the HTTP request and
       response), the server MUST require the use of a transport-layer security
       mechanism when sending requests to the Registration Endpoint. The server
       MUST support TLS 1.2 <xref target="RFC5246">RFC 5246</xref> and/or TLS
-      1.0 <xref target="RFC2246"></xref> and MAY support additional
-      transport-layer mechanisms meeting its security requirements. When using
-      TLS, the Client MUST perform a TLS/SSL server certificate check, per
-      <xref target="RFC6125">RFC 6125</xref>.</t>
+      1.0 <xref target="RFC2246"/> and MAY support additional transport-layer
+      mechanisms meeting its security requirements. When using TLS, the Client
+      MUST perform a TLS/SSL server certificate check, per <xref
+      target="RFC6125">RFC 6125</xref>.</t>
 
       <t>As this endpoint is an OAuth2 Protected Resource, requests to the
       Registration Endpoint SHOULD have some rate limiting on failures to
@@ -868,11 +939,11 @@ Cache-Control: no-store
             <organization abbrev="Microsoft">Microsoft</organization>
           </author>
 
-          <date day="12" month="May" year="2012" />
+          <date day="12" month="May" year="2012"/>
         </front>
 
         <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms"
-                type="HTML" />
+                type="HTML"/>
       </reference>
 
       <reference anchor="JWT">
@@ -892,11 +963,11 @@ Cache-Control: no-store
             Ltd.</organization>
           </author>
 
-          <date day="22" month="May" year="2012" />
+          <date day="22" month="May" year="2012"/>
         </front>
 
         <format target="http://tools.ietf.org/html/draft-ietf-oauth-json-web-token"
-                type="HTML" />
+                type="HTML"/>
       </reference>
 
       <reference anchor="JWS">
@@ -916,11 +987,11 @@ Cache-Control: no-store
             Ltd.</organization>
           </author>
 
-          <date day="12" month="May" year="2012" />
+          <date day="12" month="May" year="2012"/>
         </front>
 
         <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-signature"
-                type="HTML" />
+                type="HTML"/>
       </reference>
 
       <reference anchor="JWE">
@@ -939,11 +1010,11 @@ Cache-Control: no-store
             <organization>Cisco Systems, Inc.</organization>
           </author>
 
-          <date day="12" month="May" year="2012" />
+          <date day="12" month="May" year="2012"/>
         </front>
 
         <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-encryption"
-                type="HTML" />
+                type="HTML"/>
       </reference>
 
       <reference anchor="JWK">
@@ -954,11 +1025,11 @@ Cache-Control: no-store
             <organization>Microsoft</organization>
           </author>
 
-          <date day="12" month="May" year="2012" />
+          <date day="12" month="May" year="2012"/>
         </front>
 
         <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-key"
-                type="HTML" />
+                type="HTML"/>
       </reference>
     </references>
   </back>
