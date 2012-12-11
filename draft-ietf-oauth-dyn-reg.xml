@@ -79,7 +79,7 @@
       </address>
     </author>
 
-    <date day="27" month="November" year="2012"/>
+    <date day="11" month="December" year="2012"/>
 
     <abstract>
       <t>This specification defines an endpoint and protocol for dynamic
@@ -633,7 +633,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
 
 operation=client_update
 &redirect_uri=https://client.example.org/callback
-    %20https://client.example.org/callback2
+    %20https://client.example.org/alt
 &client_name=My%20New%20Example%20
 &logo_url=https://client.example.org/newlogo.png
 ]]></artwork>
@@ -671,7 +671,7 @@ Cache-Control: no-store
  "client_id": "s6BhdRkqt3",
  "client_name": "My New Example",
  "redirect_uri": 
-"https://client.example.org/callback https://client.example.org/callback2"
+"https://client.example.org/callback https://client.example.org/alt"
  "scope": "read write dolphin",
  "grant_type": "authorization_code refresh_token",
  "token_endpoint_auth_method": "client_secret_basic client_secret_post",
