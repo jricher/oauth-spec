@@ -263,7 +263,7 @@
           <t hangText="scope"><vspace blankLines="0"/>OPTIONAL. Space
           separated list of scopes that the client is allowed to request
           tokens for. If omitted, an Authorization Server MAY register a
-          Client with a default set of allowed scopes. </t>
+          Client with a default set of allowed scopes.</t>
 
           <t hangText="grant_type"><vspace blankLines="0"/>OPTIONAL. Space
           separated list of grant types that a client may use. These grant
@@ -389,7 +389,7 @@
       the Endpoint MUST accept requests with <xref target="RFC6750">OAuth 2.0
       Bearer Tokens</xref> for these operations, whether or not the initial
       <spanx style="verb">client_register</spanx> call requires authentication
-      of some form. </t>
+      of some form.</t>
 
       <t>These two aspects, operation selection and client authentication, are
       represented by two parameters common to all operations:</t>
@@ -512,7 +512,7 @@ operation=client_register
         <t>The response also contains a Registration Access Token that is to
         be used by the client to perform subsequent operations at this
         endpoint, such as <spanx style="verb">client_update</spanx> and <spanx
-        style="verb">rotate_secret</spanx>. </t>
+        style="verb">rotate_secret</spanx>.</t>
 
         <t>All of the response items are returned as a JSON document with the
         following fields as top-level members of the root JSON object.</t>
@@ -648,7 +648,7 @@ operation=client_update
         Authorization Server MAY reject or replace any of the client's
         requested field values and substitute them suitable values. If this
         happens, the Authorization Server MUST include these fields in the
-        response to the client. </t>
+        response to the client.</t>
 
         <t>The Authorization Server MUST NOT include the Client Secret or
         Request Access Token in this response.</t>
@@ -885,6 +885,20 @@ Cache-Control: no-store
 
     <section title="Document History">
       <t>[[ to be removed by RFC editor before publication as an RFC ]]</t>
+
+      <t>- 03</t>
+
+      <t><list style="symbols">
+          <t>added scope and grant_type claims</t>
+
+          <t>fixed various typos and changed wording for better clarity</t>
+
+          <t>endpoint now returns the full set of client information</t>
+
+          <t>operations on client_update allow for three actions on metadata:
+          leave existing value, clear existing value, replace existing value
+          with new value</t>
+        </list></t>
 
       <t>- 02</t>
 
