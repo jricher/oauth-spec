@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-03" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-04" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -256,12 +256,12 @@
               <t><spanx style="verb">private_key_jwt</spanx>: the client uses
               the JWT Assertion profile with its own private key</t>
             </list>Other Authentication methods may be defined by extension.
-          If unspecified or omitted, the default is <spanx style="verb">client_secret_basic</spanx>
-          HTTP Basic Authentication Scheme as specified in Section 2.3.1 of
-          <xref target="RFC6749">OAuth 2.0</xref>.</t>
+          If unspecified or omitted, the default is <spanx style="verb">client_secret_basic</spanx>,
+          denoting HTTP Basic Authentication Scheme as specified in Section
+          2.3.1 of OAuth 2.0.</t>
 
           <t hangText="scope"><vspace blankLines="0"/>OPTIONAL. Space
-          separated list of scopes that the client is allowed to request
+          separated list of scopes that the client will be allowed to request
           tokens for. If omitted, an Authorization Server MAY register a
           Client with a default set of allowed scopes.</t>
 
@@ -295,44 +295,33 @@
 
           <t hangText="jwk_url"><vspace blankLines="0"/>OPTIONAL. URL for the
           Client's <xref target="JWK">JSON Web Key</xref> document that is
-          used for signing Token Endpoint Requests. If jwk_encryption_url is
-          not provided, the key at jwk_url is also used as the key to encrypt
-          responses to the Client. If the Client registers both <spanx
-          style="verb">x509_url</spanx> and <spanx style="verb">jwk_url</spanx>,
-          the keys contained in both formats MUST be the same.</t>
+          used for signing requests, such as requests to the Token Endpoint
+          using the <spanx style="verb">private_key_jwt</spanx> assertion
+          client credential. If the Client registers both <spanx style="verb">x509_url</spanx>
+          and <spanx style="verb">jwk_url</spanx>, the keys contained in both
+          formats MUST be the same.</t>
 
           <t hangText="jwk_encryption_url"><vspace blankLines="0"/>OPTIONAL.
-          URL for the Client's <xref target="JWK">JSON Web Key</xref> that is
-          used to encrypt any responses to the Client. If the Client registers
-          both <spanx style="verb">jwk_encryption_url</spanx> and <spanx
-          style="verb">x509_encryption_url</spanx>, the keys contained in both
-          formats MUST be the same.</t>
+          URL for the Client's <xref target="JWK">JSON Web Key</xref> that the
+          server can use to encrypt responses to the Client. If the Client
+          registers both <spanx style="verb">jwk_encryption_url</spanx> and
+          <spanx style="verb">x509_encryption_url</spanx>, the keys contained
+          in both formats MUST be the same.</t>
 
           <t hangText="x509_url"><vspace blankLines="0"/>OPTIONAL. URL for the
           Client's PEM encoded X.509 Certificate or Certificate chain that is
-          used for signing Token Endpoint Requests. If <spanx style="verb">x509_encryption_url</spanx>
-          is not provided, <spanx style="verb">x509_url</spanx> it is also
-          used to encrypt responses to the Client. If the Client registers
-          both <spanx style="verb">x509_url</spanx> and <spanx style="verb">jwk_url</spanx>,
-          the keys contained in both formats MUST be the same.</t>
+          used for signing requests, such as requests to the Token Endpoint
+          using the <spanx style="verb">private_key_jwt</spanx> assertion
+          client credential. If the Client registers both <spanx style="verb">x509_url</spanx>
+          and <spanx style="verb">jwk_url</spanx>, the keys contained in both
+          formats MUST be the same.</t>
 
           <t hangText="x509_encryption_url"><vspace blankLines="0"/>OPTIONAL.
           URL for the Client's PEM encoded X.509 Certificate or Certificate
-          chain that is used to encrypt the ID Token and User Info Endpoint
-          Responses to the Client. If the Client registers both <spanx
-          style="verb">jwk_encryption_url</spanx> and <spanx style="verb">x509_encryption_url</spanx>,
-          the keys contained in both formats SHOULD be the same.</t>
-
-          <t hangText="default_max_age"><vspace blankLines="0"/>OPTIONAL.
-          Maximum age of a session in integer seconds. Specifies that the
-          End-User must be actively authenticated if any present
-          authentication is older than the specified number of seconds by
-          default.</t>
-
-          <t hangText="default_acr"><vspace blankLines="0"/>OPTIONAL. Default
-          Authentication Context class Reference. String that specifies the
-          default authentication context value that the Authorization server
-          must use for processing requests from this client.</t>
+          chain that the server can use to encrypt responses to the Client. If
+          the Client registers both <spanx style="verb">jwk_encryption_url</spanx>
+          and <spanx style="verb">x509_encryption_url</spanx>, the keys
+          contained in both formats SHOULD be the same.</t>
         </list></t>
     </section>
 
@@ -343,13 +332,12 @@
       HTTP POST messages with request parameters encoded in the entity body
       using the <spanx style="verb">application/x-www-form-urlencoded</spanx>
       format. The Client Registration Endpoint MUST be protected by a
-      transport-layer security mechanism when sending requests to the
-      Registration Endpoint. The server MUST support TLS 1.2 <xref
-      target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref target="RFC2246"/>
-      and MAY support additional transport-layer mechanisms meeting its
-      security requirements. When using TLS, the Client MUST perform a TLS/SSL
-      server certificate check, per <xref target="RFC6125">RFC
-      6125</xref>.</t>
+      transport-layer security mechanism, and the server MUST support TLS 1.2
+      <xref target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref
+      target="RFC2246"/> and MAY support additional transport-layer mechanisms
+      meeting its security requirements. When using TLS, the Client MUST
+      perform a TLS/SSL server certificate check, per <xref
+      target="RFC6125">RFC 6125</xref>.</t>
 
       <t>The Endpoint defines three operations that a client can take on it,
       switched by the <spanx style="verb">operation</spanx> parameter:</t>
@@ -364,7 +352,7 @@
           target="client-metadata">metadata</xref> associated with a Client
           Identifier</t>
 
-          <t><spanx style="verb">rotate_secret</spanx>: issue a new
+          <t><spanx style="verb">rotate_secret</spanx>: requst a new
           Registration Access Token and, if applicable, a Client Secret for a
           Client</t>
         </list></t>
@@ -395,27 +383,19 @@
       represented by two parameters common to all operations:</t>
 
       <t><list style="hanging">
-          <t hangText="operation"><vspace blankLines="0"/>REQUIRED. Values
-          are: <list style="symbols">
-              <t><spanx style="verb">client_register</spanx>: Register a new
-              client, receive a Client Identifier, and associate metadata with
-              it.</t>
-
-              <t><spanx style="verb">rotate_secret</spanx>: Request rotation
-              of the Registration Access Token and, if applicable, the Client
-              Secret</t>
-
-              <t><spanx style="verb">client_update</spanx>: Update the
-              metadata associated with a given Client Identifier.</t>
-            </list></t>
+          <t hangText="operation"><vspace blankLines="0"/>REQUIRED. Valid
+          values are <spanx style="verb">client_register</spanx>, <spanx
+          style="verb">rotate_secret</spanx>, and <spanx style="verb">client_update</spanx>,
+          as described above.</t>
 
           <t hangText="access_token"><vspace blankLines="0"/>OPTIONAL. An
           OAuth2 Bearer token used to access the Client Registration Endpoint,
-          as defined in OAuth2 Bearer. This parameter MUST NOT be sent if the
-          Access Token is sent in the HTTP Authorization header as described
-          in Section 7.1 of <xref target="RFC6749">OAuth 2.0</xref>. Access
-          Tokens sent in the authorization header must be <xref
-          target="RFC6750">OAuth 2.0 Bearer Tokens</xref>.</t>
+          as defined in <xref target="RFC6750">OAuth2 Bearer</xref>. This
+          parameter MUST NOT be sent if the Access Token is sent in the HTTP
+          Authorization header as described in Section 7.1 of <xref
+          target="RFC6749">OAuth 2.0</xref>. Access Tokens sent in the
+          authorization header must be <xref target="RFC6750">OAuth 2.0 Bearer
+          Tokens</xref>.</t>
         </list>Each operation takes a different parameter set, and all
       operations are described below.</t>
 
@@ -436,12 +416,12 @@
             <t hangText="operation"><vspace/>REQUIRED. MUST have the value
             <spanx style="verb">client_register</spanx></t>
 
-            <t hangText="access_token"><vspace/>OPTIONAL. Used to restrict new
-            client registration. This parameter MUST NOT be sent if the Access
-            Token is sent in the HTTP Authorization header as described in
-            Section 7.1 of <xref target="RFC6749">OAuth 2.0</xref>. Access
-            Tokens sent in the authorization header must be <xref
-            target="RFC6750">OAuth 2.0 Bearer Tokens</xref>.</t>
+            <t hangText="access_token"><vspace/>OPTIONAL. OAuth2 Access token
+            used to restrict new client registration. This parameter MUST NOT
+            be sent if the Access Token is sent in the HTTP Authorization
+            header as described in Section 7.1 of <xref target="RFC6749">OAuth
+            2.0</xref>. Access Tokens sent in the authorization header must be
+            <xref target="RFC6750">OAuth 2.0 Bearer Tokens</xref>.</t>
 
             <t hangText="redirect_uris">RECOMMENDED</t>
 
@@ -470,10 +450,6 @@
             <t hangText="x509_url">OPTIONAL</t>
 
             <t hangText="x509_encryption_url">OPTIONAL</t>
-
-            <t hangText="default_max_age">OPTIONAL</t>
-
-            <t hangText="default_acr">OPTIONAL</t>
           </list><?rfc subcompact="no"?>For example, a client could send the
         following registration request to the Client Registration
         Endpoint:</t>
@@ -614,10 +590,6 @@ Cache-Control: no-store
             <t hangText="x509_url">OPTIONAL</t>
 
             <t hangText="x509_encryption_url">OPTIONAL</t>
-
-            <t hangText="default_max_age">OPTIONAL</t>
-
-            <t hangText="default_acr">OPTIONAL</t>
           </list><?rfc subcompact="no"?>For example, a client could send the
         following request to the Client Registration Endpoint to update the
         client registration in the above example:</t>
@@ -885,6 +857,17 @@ Cache-Control: no-store
 
     <section title="Document History">
       <t>[[ to be removed by RFC editor before publication as an RFC ]]</t>
+
+      <t>- 04</t>
+
+      <t><list style="symbols">
+          <t>removed default_acr, too undefined in the general OAuth2 case</t>
+
+          <t>removed default_max_auth_age, since there's no mechanism for
+          supplying a non-default max_auth_age in OAuth2</t>
+
+          <t>clarified signing and encryption URLs</t>
+        </list></t>
 
       <t>- 03</t>
 
