@@ -236,7 +236,7 @@
           Authorization Server SHOULD display this URL to the End-User if it
           is given.</t>
 
-          <t hangText="token_endpoint_auth_method"><vspace
+          <t hangText="token_endpoint_auth_type"><vspace
           blankLines="0"/>OPTIONAL. The requested authentication type for the
           Token Endpoint. Valid values are:<list style="symbols">
               <t><spanx style="verb">none</spanx>: this is a public client as
@@ -435,7 +435,7 @@
 
             <t hangText="tos_url">OPTIONAL</t>
 
-            <t hangText="token_endpoint_auth_method">OPTIONAL</t>
+            <t hangText="token_endpoint_auth_type">OPTIONAL</t>
 
             <t hangText="policy_url">OPTIONAL</t>
 
@@ -466,7 +466,7 @@ operation=client_register
 &redirect_uris=https://client.example.org/callback
     %20https://client.example.org/callback2
 &client_name=My%20Example%20Client
-&token_endpoint_auth_method=client_secret_basic%20client_secret_post
+&token_endpoint_auth_type=client_secret_basic%20client_secret_post
 &scope=read%20write%20dolphin
 &logo_url=https://client.example.org/logo.png
 &jwk_url=https://client.example.org/my_rsa_public_key.jwk
@@ -533,7 +533,7 @@ Cache-Control: no-store
  "client_secret": "cf136dc3c1fc93f31185e5885805d",
  "scope": "read write dolphin",
  "grant_type": "authorization_code refresh_token",
- "token_endpoint_auth_method": "client_secret_basic client_secret_post",
+ "token_endpoint_auth_type": "client_secret_basic client_secret_post",
  "logo_url": "https://client.example.org/logo.png",
  "jwk_url": "https://client.example.org/my_rsa_public_key.jwk",
  "registration_access_token": "reg-23410913-abewfq.123483",
@@ -579,7 +579,7 @@ Cache-Control: no-store
 
             <t hangText="tos_url">OPTIONAL</t>
 
-            <t hangText="token_endpoint_auth_method">OPTIONAL</t>
+            <t hangText="token_endpoint_auth_type">OPTIONAL</t>
 
             <t hangText="policy_url">OPTIONAL</t>
 
@@ -646,7 +646,7 @@ Cache-Control: no-store
 "https://client.example.org/callback https://client.example.org/alt"
  "scope": "read write dolphin",
  "grant_type": "authorization_code refresh_token",
- "token_endpoint_auth_method": "client_secret_basic client_secret_post",
+ "token_endpoint_auth_type": "client_secret_basic client_secret_post",
  "logo_url": "https://client.example.org/newlogo.png",
  "jwk_url": "https://client.example.org/my_rsa_public_key.jwk",
 }]]></artwork>
@@ -867,6 +867,9 @@ Cache-Control: no-store
           supplying a non-default max_auth_age in OAuth2</t>
 
           <t>clarified signing and encryption URLs</t>
+
+          <t>changed token_endpoint_auth_method to token_endpoint_auth_type to
+          match OIDC</t>
         </list></t>
 
       <t>- 03</t>
