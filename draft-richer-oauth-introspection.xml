@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-richer-oauth-introspection-00"
+<rfc category="std" docName="draft-richer-oauth-introspection-01"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-instance">OAuth Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="27" month="November" year="2012"/>
+    <date day="8" month="January" year="2013"/>
 
     <abstract>
       <t>This specification defines a method for a client or protected
@@ -63,13 +63,22 @@
 
       <section title="Introspection Request">
         <t hangText="instance_name"><list style="hanging">
-            <t hangText="token">the string value of the token.</t>
-          </list>The endpoint SHOULD also require some form of authentication
-        to access this endpoint, such as the Client Authentication as
-        described in <xref target="RFC6749">OAuth 2 Core Specification</xref>
-        or a separate OAuth2 Access Token. The methods of managing and
-        validating these authentication credentials are out of scope of this
-        specification.</t>
+            <t hangText="token">REQUIRED. The string value of the token.</t>
+
+            <t hangText="resource_id">OPTIONAL. A service-specific string
+            identifying the resource that the client doing the introspection
+            is asking about.</t>
+          </list></t>
+
+        <t hangText="instance_name">The endpoint MAY allow other parameters to
+        provide context to the query.</t>
+
+        <t hangText="instance_name">The endpoint SHOULD also require some form
+        of authentication to access this endpoint, such as the Client
+        Authentication as described in <xref target="RFC6749">OAuth 2 Core
+        Specification</xref> or a separate OAuth2 Access Token. The methods of
+        managing and validating these authentication credentials are out of
+        scope of this specification.</t>
       </section>
 
       <section title="Introspection Response">
@@ -182,7 +191,8 @@ Cache-Control: no-store
     </section>
 
     <section title="Acknowledgements">
-      <t>Thanks to the OAuth Working Group for feedback.</t>
+      <t>Thanks to the OAuth Working Group and the UMA Working Group for
+      feedback.</t>
     </section>
   </middle>
 
