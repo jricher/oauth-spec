@@ -153,8 +153,8 @@ token=X3241Affw.4233-99JXJ
         following JSON document.</t>
 
         <figure>
-          <preamble>Following is a non-normative example response (with line
-          wraps for display purposes only):</preamble>
+          <preamble>Following is a non-normative example valid token response
+          (with line wraps for display purposes only):</preamble>
 
           <artwork><![CDATA[HTTP/1.1 200 OK
 Content-Type: application/json
@@ -173,8 +173,8 @@ Cache-Control: no-store
         presented is valid), it returns the following JSON document.</t>
 
         <figure>
-          <preamble>Following is a non-normative example response (with line
-          wraps for display purposes only):</preamble>
+          <preamble>Following is a non-normative example invalid response
+          (with line wraps for display purposes only):</preamble>
 
           <artwork><![CDATA[HTTP/1.1 200 OK
 Content-Type: application/json
@@ -185,8 +185,9 @@ Cache-Control: no-store
 }]]></artwork>
         </figure>
 
-        <t>If the credentials are invalid, the Authorization Server responds
-        with the appropriate error response from the OAuth2 Core.</t>
+        <t>If the client credentials are invalid or there is another error,
+        the Authorization Server responds with the appropriate error response
+        from the OAuth2 Core.</t>
       </section>
     </section>
 
