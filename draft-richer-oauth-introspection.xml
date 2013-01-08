@@ -13,7 +13,7 @@
 <rfc category="std" docName="draft-richer-oauth-introspection-01"
      ipr="trust200902">
   <front>
-    <title abbrev="oauth-instance">OAuth Token Introspection</title>
+    <title abbrev="oauth-introspection">OAuth Token Introspection</title>
 
     <author fullname="Justin Richer" initials="J." role="editor"
             surname="Richer">
@@ -47,11 +47,21 @@
       structure of the token itself, if there is any. However, there is still
       a large amount of metadata that may be attached to a token, such as its
       current validity, approved scopes, and extra information about the
-      authentication context in which the token was issued.</t>
+      authentication context in which the token was issued. These pieces of
+      information are often vital to Protected Resources making authorization
+      decisions based on the tokens being presented. Since OAuth2 defines no
+      direct relationship between the Authorization Server and the Protected
+      Resource, only that they must have an agreement on the tokens
+      themselves, there have been many different approaches to bridging this
+      gap. </t>
 
       <t>This specification defines an Introspection Endpoint that allows the
       holder of a token to query the Authorization Server to discover the set
-      of meta-information for a token.</t>
+      of metadata for a token. A Protected Resource may use the mechanism
+      described in this draft to query the Introspection Endpoint in a
+      particular authorization decision context and ascertain the relevant
+      metadata about the token in order to make this authorization decision
+      appropriately. </t>
     </section>
 
     <section title="Introspection Endpoint">
@@ -71,7 +81,9 @@
           </list></t>
 
         <t hangText="instance_name">The endpoint MAY allow other parameters to
-        provide context to the query.</t>
+        provide context to the query. For instance, an authorization service
+        may need to know the IP address of the Client in order to determine
+        the appropriateness of the token being presented. </t>
 
         <t hangText="instance_name">The endpoint SHOULD also require some form
         of authentication to access this endpoint, such as the Client
