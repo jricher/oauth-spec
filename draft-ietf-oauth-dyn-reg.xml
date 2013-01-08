@@ -79,7 +79,7 @@
       </address>
     </author>
 
-    <date day="11" month="December" year="2012"/>
+    <date day="7" month="January" year="2013"/>
 
     <abstract>
       <t>This specification defines an endpoint and protocol for dynamic
@@ -490,8 +490,9 @@ operation=client_register
         endpoint, such as <spanx style="verb">client_update</spanx> and <spanx
         style="verb">rotate_secret</spanx>.</t>
 
-        <t>All of the response items are returned as a JSON document with the
-        following fields as top-level members of the root JSON object.</t>
+        <t>All of the response items are returned as a <xref
+        target="RFC4627">JSON document</xref> with the following fields as
+        top-level members of the root JSON object.</t>
 
         <t><list style="hanging">
             <t hangText="client_id"><vspace/>REQUIRED. The unique Client
@@ -625,8 +626,9 @@ operation=client_update
         <t>The Authorization Server MUST NOT include the Client Secret or
         Request Access Token in this response.</t>
 
-        <t>These fields are returned as top-level members of the root JSON
-        object.<list style="hanging">
+        <t>These fields are returned in a <xref target="RFC4627">JSON
+        Document</xref> as top-level members of the root JSON object.<list
+            style="hanging">
             <t hangText="client_id"><vspace/>REQUIRED. The unique Client
             identifier, MUST equal the value of the client_id returned in the
             original client_register request.</t>
@@ -686,9 +688,9 @@ operation=rotate_secret
       <section title="Rotate Secret Response">
         <t>Upon successful rotation of the Registration Access Token, and
         optionally the Client Secret, the Client Registration Endpoint returns
-        a JSON document with the following fields as top-level members of the
-        root JSON object. This response MUST NOT include any other client
-        metadata.<list style="hanging">
+        a <xref target="RFC4627">JSON document</xref> with the following
+        fields as top-level members of the root JSON object. This response
+        MUST NOT include any other client metadata.<list style="hanging">
             <t hangText="client_id"><vspace/>REQUIRED. The unique Client
             identifier, MUST match the client_id issued in the original
             client_register request.</t>
@@ -742,8 +744,9 @@ Cache-Control: no-store
         OAuth 2.0 specification.</t>
 
         <t>When a registration error condition occurs, the Client Registration
-        Endpoint returns a HTTP 400 status code including a JSON object
-        describing the error in the response body.</t>
+        Endpoint returns a HTTP 400 status code including a <xref
+        target="RFC4627">JSON object</xref> describing the error in the
+        response body.</t>
 
         <t>The JSON object contains two members:</t>
 
@@ -940,92 +943,6 @@ Cache-Control: no-store
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
-
-      <reference anchor="JWA">
-        <front>
-          <title>JSON Web Algorithms</title>
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization abbrev="Microsoft">Microsoft</organization>
-          </author>
-
-          <date day="12" month="May" year="2012"/>
-        </front>
-
-        <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-algorithms"
-                type="HTML"/>
-      </reference>
-
-      <reference anchor="JWT">
-        <front>
-          <title>JSON Web Token</title>
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization abbrev="Microsoft">Microsoft</organization>
-          </author>
-
-          <author fullname="John Bradley" initials="J." surname="Bradley">
-            <organization>Ping Identity</organization>
-          </author>
-
-          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
-            <organization abbrev="NRI">Nomura Research Institute,
-            Ltd.</organization>
-          </author>
-
-          <date day="22" month="May" year="2012"/>
-        </front>
-
-        <format target="http://tools.ietf.org/html/draft-ietf-oauth-json-web-token"
-                type="HTML"/>
-      </reference>
-
-      <reference anchor="JWS">
-        <front>
-          <title>JSON Web Signature</title>
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization abbrev="Microsoft">Microsoft</organization>
-          </author>
-
-          <author fullname="John Bradley" initials="J." surname="Bradley">
-            <organization>Ping Identity</organization>
-          </author>
-
-          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
-            <organization abbrev="NRI">Nomura Research Institute,
-            Ltd.</organization>
-          </author>
-
-          <date day="12" month="May" year="2012"/>
-        </front>
-
-        <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-signature"
-                type="HTML"/>
-      </reference>
-
-      <reference anchor="JWE">
-        <front>
-          <title>JSON Web Encryption (JWE)</title>
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization>Microsoft</organization>
-          </author>
-
-          <author fullname="Eric Rescorla" initials="E." surname="Rescorla">
-            <organization>RTFM, Inc.</organization>
-          </author>
-
-          <author fullname="Joe Hildebrand" initials="J." surname="Hildebrand">
-            <organization>Cisco Systems, Inc.</organization>
-          </author>
-
-          <date day="12" month="May" year="2012"/>
-        </front>
-
-        <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-encryption"
-                type="HTML"/>
-      </reference>
 
       <reference anchor="JWK">
         <front>
