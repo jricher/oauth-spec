@@ -131,7 +131,9 @@
         a request from a Client carrying an OAuth2 Bearer Token. In order to
         know how and whether to serve the request, the Protected Resource then
         makes the following request to the Introspection Endpoint of the
-        Authorization Server.</t>
+        Authorization Server. The Protected Resource is here authenticating
+        with its own Client ID and Client Secret as per <xref
+        target="RFC6749">OAuth2</xref> Section 2.3.1.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
