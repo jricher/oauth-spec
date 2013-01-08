@@ -103,7 +103,7 @@
             <t hangText="scope">OPTIONAL. Array of strings representing the
             scopes associated with this token.</t>
 
-            <t hangText="user_id">OPTIONAL. Local identifier of the Resource
+            <t hangText="subject">OPTIONAL. Local identifier of the Resource
             Owner who authorized this token.</t>
 
             <t hangText="client_id">OPTIONAL. Client Identifier for the Client
@@ -150,7 +150,7 @@ Cache-Control: no-store
  "valid": true,
  "client_id":"s6BhdRkqt3",
  "scope": ["read", "write", "dolphin"],
- "user_id": "2309fj32kl",
+ "subject": "2309fj32kl",
  "audience": "http://example.org/protected-resource/*"
 }]]></artwork>
         </figure>
