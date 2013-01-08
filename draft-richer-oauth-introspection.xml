@@ -82,9 +82,10 @@
       </section>
 
       <section title="Introspection Response">
-        <t>The server responds with a JSON object in <spanx style="code">application/json</spanx>
-        format with the following top-level members. Specific implementations
-        MAY extend this structure with their own service-specific pieces of
+        <t>The server responds with a <xref target="RFC4627">JSON
+        object</xref> in <spanx style="verb">application/json</spanx> format
+        with the following top-level members. Specific implementations MAY
+        extend this structure with their own service-specific pieces of
         information.</t>
 
         <t><list style="hanging">
