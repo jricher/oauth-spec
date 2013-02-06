@@ -193,7 +193,7 @@
           Authorization Server SHOULD display this URL to the End-User if it
           is given.</t>
 
-          <t hangText="token_endpoint_auth_type"><vspace
+          <t hangText="token_endpoint_auth_method"><vspace
           blankLines="0"/>OPTIONAL. The requested authentication type for the
           Token Endpoint. Valid values are:<list style="symbols">
               <t><spanx style="verb">none</spanx>: this is a public client as
@@ -357,7 +357,7 @@
 
             <t hangText="tos_url">OPTIONAL</t>
 
-            <t hangText="token_endpoint_auth_type">OPTIONAL</t>
+            <t hangText="token_endpoint_auth_method">OPTIONAL</t>
 
             <t hangText="policy_url">OPTIONAL</t>
 
@@ -388,7 +388,7 @@ Host: server.example.com
  "redirect_uris":["https://client.example.org/callback",
     "https://client.example.org/callback2"]
  "client_name":"My Example Client",
- "token_endpoint_auth_type":"client_secret_basic",
+ "token_endpoint_auth_method":"client_secret_basic",
  "scope":"read write dolphin",
  "logo_url":"https://client.example.org/logo.png",
  "jwk_url":"https://client.example.org/my_rsa_public_key.jwk"
@@ -485,7 +485,7 @@ Cache-Control: no-store
  "client_secret": "cf136dc3c1fc93f31185e5885805d",
  "scope": "read write dolphin",
  "grant_type": ["authorization_code", "refresh_token"]
- "token_endpoint_auth_type": "client_secret_basic",
+ "token_endpoint_auth_method": "client_secret_basic",
  "logo_url": "https://client.example.org/logo.png",
  "jwk_url": "https://client.example.org/my_rsa_public_key.jwk",
  "registration_access_token": "reg-23410913-abewfq.123483",
@@ -603,7 +603,7 @@ Cache-Control: no-store
 
             <t hangText="tos_url">OPTIONAL</t>
 
-            <t hangText="token_endpoint_auth_type">OPTIONAL</t>
+            <t hangText="token_endpoint_auth_method">OPTIONAL</t>
 
             <t hangText="policy_url">OPTIONAL</t>
 
@@ -714,7 +714,7 @@ Cache-Control: no-store
    "https://client.example.org/alt"]
  "scope": "read write dolphin",
  "grant_type": ["authorization_code", "refresh_token"],
- "token_endpoint_auth_type": "client_secret_basic",
+ "token_endpoint_auth_method": "client_secret_basic",
  "logo_url": "https://client.example.org/newlogo.png",
  "jwk_url": "https://client.example.org/my_rsa_public_key.jwk",
 }]]></artwork>
@@ -777,7 +777,7 @@ Cache-Control: no-store
           wraps for display purposes only):</preamble>
 
           <artwork><![CDATA[POST /register/rotate_secret/s6BhdRkqt3 HTTP/1.1
-Accept: application/x-www-form-urlencoded
+Accept: application/json
 Host: server.example.com
 Authorization: Bearer reg-23410913-abewfq.123483
 
@@ -919,6 +919,8 @@ Cache-Control: no-store
 
           <t>removed operation parameter</t>
 
+          <t>added _links structure</t>
+
           <t>made client update management more RESTful</t>
 
           <t>split endpoint into three parts</t>
@@ -926,6 +928,13 @@ Cache-Control: no-store
           <t>changed input to JSON from form-encoded</t>
 
           <t>added READ and DELETE operations</t>
+
+          <t>removed Requirements section</t>
+
+          <t>changed token_endpoint_auth_type back to
+          token_endpoint_auth_method to match OIDC who changed to match us</t>
+
+          <t/>
         </list></t>
 
       <t>- 04</t>
