@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-richer-oauth-introspection-01"
+<rfc category="std" docName="draft-richer-oauth-introspection-02"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="8" month="January" year="2013"/>
+    <date day="6" month="February" year="2013"/>
 
     <abstract>
       <t>This specification defines a method for a client or protected
@@ -53,7 +53,7 @@
       direct relationship between the Authorization Server and the Protected
       Resource, only that they must have an agreement on the tokens
       themselves, there have been many different approaches to bridging this
-      gap. </t>
+      gap.</t>
 
       <t>This specification defines an Introspection Endpoint that allows the
       holder of a token to query the Authorization Server to discover the set
@@ -61,7 +61,7 @@
       described in this draft to query the Introspection Endpoint in a
       particular authorization decision context and ascertain the relevant
       metadata about the token in order to make this authorization decision
-      appropriately. </t>
+      appropriately.</t>
     </section>
 
     <section title="Introspection Endpoint">
@@ -83,7 +83,7 @@
         <t hangText="instance_name">The endpoint MAY allow other parameters to
         provide context to the query. For instance, an authorization service
         may need to know the IP address of the Client in order to determine
-        the appropriateness of the token being presented. </t>
+        the appropriateness of the token being presented.</t>
 
         <t hangText="instance_name">The endpoint SHOULD also require some form
         of authentication to access this endpoint, such as the Client
@@ -112,17 +112,20 @@
             the number of seconds since January 1 1970 UTC, indicating when
             this token was originally issued.</t>
 
-            <t hangText="scope">OPTIONAL. Array of strings representing the
-            scopes associated with this token.</t>
+            <t hangText="scope">OPTIONAL. A space-separated list of strings
+            representing the scopes associated with this token, in the format
+            described in Section 3.3 of <xref target="RFC6749">OAuth
+            2.0</xref>.</t>
 
-            <t hangText="subject">OPTIONAL. Local identifier of the Resource
-            Owner who authorized this token.</t>
+            <t hangText="client_id">OPTIONAL. Client Identifier for the OAuth
+            Client that requested this token.</t>
 
-            <t hangText="client_id">OPTIONAL. Client Identifier for the Client
-            that requested this token.</t>
+            <t hangText="sub">OPTIONAL. Local identifier of the Resource Owner
+            who authorized this token.</t>
 
-            <t hangText="audience">OPTIONAL. Service-specific string
-            identifier of the intended audience for this token.</t>
+            <t hangText="aud">OPTIONAL. Service-specific string identifier or
+            list of string identifiers representing the intended audience for
+            this token.</t>
           </list></t>
       </section>
 
@@ -163,18 +166,21 @@ Cache-Control: no-store
 {
  "valid": true,
  "client_id":"s6BhdRkqt3",
- "scope": ["read", "write", "dolphin"],
- "subject": "2309fj32kl",
- "audience": "http://example.org/protected-resource/*"
+ "scope": "read write dolphin",
+ "sub": "2309fj32kl",
+ "aud": "http://example.org/protected-resource/*"
 }]]></artwork>
         </figure>
+
+        <t/>
 
         <t>If the token presented is not valid (but the authentication
         presented is valid), it returns the following JSON document.</t>
 
         <figure>
-          <preamble>Following is a non-normative example invalid response
-          (with line wraps for display purposes only):</preamble>
+          <preamble>Following is a non-normative example response to an
+          invalid token (with line wraps for display purposes
+          only):</preamble>
 
           <artwork><![CDATA[HTTP/1.1 200 OK
 Content-Type: application/json
@@ -185,9 +191,11 @@ Cache-Control: no-store
 }]]></artwork>
         </figure>
 
+        <t/>
+
         <t>If the client credentials are invalid or there is another error,
-        the Authorization Server responds with the appropriate error response
-        from the OAuth2 Core.</t>
+        the Authorization Server responds with an HTTP 400 (Bad Request) as
+        described in <xref target="RFC6749">OAuth 2.0 section 5.2</xref>.</t>
       </section>
     </section>
 
