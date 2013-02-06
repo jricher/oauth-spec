@@ -144,7 +144,8 @@
             <t>Registration Access Token: An OAuth 2.0 Bearer Token issued by
             the Authorization Server through the Client Registration Endpoint
             which is used by the Client to authenticate itself during update
-            and secret rotation operations.</t>
+            and secret rotation operations. This token is associated with a
+            particular Client.</t>
           </list></t>
       </section>
     </section>
@@ -161,32 +162,41 @@
       Server MUST ignore any additional parameters sent by the Client that it
       does not understand.</t>
 
+      <t>[[ Editor's note: normative language in the table below is meant to
+      apply to the *client* when sending the request. The paragraph above is
+      meant to say that the server must at least accept all parameters and not
+      fail with an error at an unknown parameter, especially if it's in the
+      list below. Also, extensions need to explicitly call out if they're not
+      going to do something with one of these basic parameters instead of just
+      ignoring their existence. This is meant to be the *minimum set* of
+      parameters for interoperability. ]]</t>
+
       <t><list style="hanging">
           <t hangText="redirect_uris"><vspace blankLines="0"/>RECOMMENDED. A
           list of redirect URIs for use in the Authorization Code and Implicit
           grant types. An Authorization Server SHOULD require registration of
-          valid redirect URIs for all clients to protect against token and
-          credential theft attacks.</t>
+          valid redirect URIs for all clients that use these grant types in
+          order to protect against token and credential theft attacks.</t>
 
           <t hangText="client_name"><vspace blankLines="0"/>RECOMMENDED.
           Human-readable name of the Client to be presented to the user. If
           omitted, the Authorization Server MAY display to the user the raw
-          client_id value instead.</t>
+          <spanx style="verb">client_id</spanx> value instead.</t>
 
           <t hangText="client_url"><vspace/>RECOMMENDED. URL of the homepage
           of the Client. If present, the server SHOULD display this URL to the
           end user in a clickable fashion.</t>
 
           <t hangText="logo_url"><vspace blankLines="0"/>OPTIONAL. URL that
-          references a logo for the Client application. If present, the server
-          SHOULD display this image to the end user during approval.</t>
+          references a logo for the Client. If present, the server SHOULD
+          display this image to the end user during approval.</t>
 
           <t hangText="contacts"><vspace blankLines="0"/>OPTIONAL. List of
-          email addresses for people responsible for this client. The
-          Authorization Server MAY may these addresses available to end users
-          for support queries. An Authorization Server MAY use these email
-          addresses as identifiers for an administrative page for this
-          client.</t>
+          email addresses for people responsible for this Client. The
+          Authorization Server MAY make these addresses available to end users
+          for support requests for the Client. An Authorization Server MAY use
+          these email addresses as identifiers for an administrative page for
+          this client.</t>
 
           <t hangText="tos_url"><vspace blankLines="0"/>OPTIONAL. URL that
           points to a human-readable Terms of Service for the Client. The
@@ -212,7 +222,7 @@
 
               <t><spanx style="verb">private_key_jwt</spanx>: the client uses
               the JWT Assertion profile with its own private key</t>
-            </list>Other Authentication methods may be defined by extension.
+            </list>Other authentication methods may be defined by extension.
           If unspecified or omitted, the default is <spanx style="verb">client_secret_basic</spanx>,
           denoting HTTP Basic Authentication Scheme as specified in Section
           2.3.1 of OAuth 2.0.</t>
@@ -244,8 +254,8 @@
             </list>Authorization Servers MAY allow for other values as defined
           in grant type extensions to OAuth2. The extension process is
           described in OAuth2 Section 2.5, and the value of this parameter
-          MUST be the same as the value of the grant_type parameter defined in
-          the extension.</t>
+          MUST be the same as the value of the <spanx style="verb">grant_type</spanx>
+          parameter defined in the extension.</t>
 
           <t hangText="policy_url"><vspace blankLines="0"/>OPTIONAL. A URL
           location that the Client provides to the End-User to read about the
@@ -280,7 +290,7 @@
           chain that the server can use to encrypt responses to the Client. If
           the Client registers both <spanx style="verb">jwk_encryption_url</spanx>
           and <spanx style="verb">x509_encryption_url</spanx>, the keys
-          contained in both formats SHOULD be the same.</t>
+          contained in both formats MUST be the same.</t>
         </list></t>
     </section>
 
@@ -337,44 +347,8 @@
         with a content type of <spanx style="verb">application/json</spanx>
         and all parameters as top-level members of a JSON object.</t>
 
-        <t><?rfc subcompact="yes"?><list style="hanging">
-            <t hangText="access_token"><vspace/>OPTIONAL. OAuth2 Access token
-            used to restrict new client registration. This parameter MUST NOT
-            be sent if the Access Token is sent in the HTTP Authorization
-            header as described in Section 7.1 of <xref target="RFC6750">OAuth
-            2.0 Bearer</xref>. Access Tokens sent in the authorization header
-            must be <xref target="RFC6750">OAuth 2.0 Bearer Tokens</xref>.</t>
-
-            <t hangText="redirect_uris">RECOMMENDED</t>
-
-            <t hangText="client_name">RECOMMENDED</t>
-
-            <t hangText="client_url">RECOMMENDED</t>
-
-            <t hangText="logo_url">OPTIONAL</t>
-
-            <t hangText="contacts">OPTIONAL</t>
-
-            <t hangText="tos_url">OPTIONAL</t>
-
-            <t hangText="token_endpoint_auth_method">OPTIONAL</t>
-
-            <t hangText="policy_url">OPTIONAL</t>
-
-            <t hangText="scope">OPTIONAL</t>
-
-            <t hangText="grant_type">OPTIONAL</t>
-
-            <t hangText="jwk_url">OPTIONAL</t>
-
-            <t hangText="jwk_encryption_url">OPTIONAL</t>
-
-            <t hangText="x509_url">OPTIONAL</t>
-
-            <t hangText="x509_encryption_url">OPTIONAL</t>
-          </list><?rfc subcompact="no"?>For example, a client could send the
-        following registration request to the Client Registration
-        Endpoint:</t>
+        <t>For example, a client could send the following registration request
+        to the Client Registration Endpoint:</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -400,13 +374,16 @@ Host: server.example.com
       <section title="Client Registration Response">
         <t>Upon successful registration, the Client Registration Endpoint
         returns the newly-created Client Identifier and, if applicable, a
-        Client Secret, along with all registered <xref
-        target="client-metadata">metadata</xref> about this client, including
-        any fields provisioned by the Authorization Server itself. The
-        Authorization Server MAY reject or replace any of the client's
-        requested field values and substitute them with suitable values, and
-        the Authorization Server MUST include such fields in the response to
-        the client.</t>
+        Client Secret.</t>
+
+        <t>Additionally, the Authorization Server SHOULD return all registered
+        <xref target="client-metadata">metadata</xref> about this client,
+        including any fields provisioned by the Authorization Server itself.
+        The Authorization Server MAY reject or replace any of the client's
+        requested metadata values submitted during the registration request
+        and substitute them with suitable values. If the Authorization Server
+        performs any such substitutions to the requested values, it MUST
+        return these values in the response.</t>
 
         <t>The response contains a <spanx style="verb">_links</spanx>
         structure which contains fully qualified URLs to the Client Update
@@ -415,9 +392,10 @@ Host: server.example.com
         to be used by the client to perform subsequent operations at the
         Client Update Endpoint and the Client Secret Rotation Endpoint.</t>
 
-        <t>All of the response items are returned as a <xref
-        target="RFC4627">JSON document</xref> with the following fields as
-        top-level members of the root JSON object.</t>
+        <t>The response is an <spanx style="verb">application/json</spanx>
+        document with the following parameters in addition to any applicable
+        client metadata fields as top-level members of a <xref
+        target="RFC4627">JSON object</xref> .</t>
 
         <t><list style="hanging">
             <t hangText="client_id"><vspace/>REQUIRED. The unique Client
@@ -457,7 +435,7 @@ Host: server.example.com
                 Endpoint with the issued client_id.</t>
 
                 <t hangText="rotate_secret">REQUIRED. A JSON object that
-                contains the member href which contains the cully qualified
+                contains the member href which contains the fully qualified
                 URL of the Client Secret Rotation Endpoint for this client.
                 This MAY be constructed using a URL Template of the Client
                 Registration Endpoint with the issued client_id.</t>
@@ -557,14 +535,18 @@ Cache-Control: no-store
       URL in the _links structure described in section 3 and MUST NOT require
       the client to construct this URL on its own.</t>
 
+      <t>The Authorization Server MUST be able to determine the appropriate
+      client_id from the context of the request without requiring the Client
+      to explicitly send its own <spanx style="verb">client_id</spanx> in the
+      request.</t>
+
       <t>Operations on this endpoint are switched through the use of specific
       HTTP verbs.</t>
 
       <section title="Client Update Request">
         <t>This operation updates a previously-registered client with new
-        metadata at the Authorization Server. This request MUST be protected
-        by the Registration Authorization Token associated with the Client.
-        </t>
+        metadata at the Authorization Server. This request is authenticated by
+        the Registration Access Token issued to the client.</t>
 
         <t>The Client makes an HTTP PUT request to the Client Update Endpoint
         with a content type of <spanx style="verb">application/json</spanx>.
@@ -579,44 +561,9 @@ Cache-Control: no-store
         values with suitable values, and it MUST return any such fields to the
         Client in the response.</t>
 
-        <t><?rfc subcompact="yes"?><list style="hanging">
-            <t hangText="access_token"><vspace/>REQUIRED, unless presented in
-            the Authorization Header as in <xref target="RFC6750">OAuth2
-            Bearer</xref>. The Registration Access Token that was issued
-            during the registration step or in previous calls to the Client
-            Secret Rotation Endpoint.</t>
-
-            <t hangText="client_id">RECOMMENDED. If present, it MUST match the
-            client_id associated with the Registration Access Token used to
-            make this request and the client_id associated with this specific
-            Client Update Endpoint.</t>
-
-            <t hangText="redirect_uris">RECOMMENDED</t>
-
-            <t hangText="client_name">RECOMMENDED</t>
-
-            <t hangText="client_url">RECOMMENDED</t>
-
-            <t hangText="logo_url">OPTIONAL</t>
-
-            <t hangText="contacts">OPTIONAL</t>
-
-            <t hangText="tos_url">OPTIONAL</t>
-
-            <t hangText="token_endpoint_auth_method">OPTIONAL</t>
-
-            <t hangText="policy_url">OPTIONAL</t>
-
-            <t hangText="jwk_url">OPTIONAL</t>
-
-            <t hangText="jwk_encryption_url">OPTIONAL</t>
-
-            <t hangText="x509_url">OPTIONAL</t>
-
-            <t hangText="x509_encryption_url">OPTIONAL</t>
-          </list><?rfc subcompact="no"?>For example, a client could send the
-        following request to the Client Registration Endpoint to update the
-        client registration in the above example:</t>
+        <t>For example, a client could send the following request to the
+        Client Registration Endpoint to update the client registration in the
+        above example:</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -657,20 +604,23 @@ Authorization: Bearer reg-23410913-abewfq.123483
 
       <section title="Client Update or Read Response">
         <t>Upon successful update or read operation, the Client Update
-        Endpoint returns the Client ID, along with all current registered
-        <xref target="client-metadata">metadata</xref> about this client,
-        including any fields provisioned by the Authorization Server itself.
-        The Authorization Server MAY reject or replace any of the client's
-        requested field values and substitute them suitable values. If this
-        happens, the Authorization Server MUST include these fields in the
-        response to the client.</t>
+        Endpoint returns the Client ID. Additionally, the Authorization Server
+        SHOULD return all registered <xref
+        target="client-metadata">metadata</xref> about this client, including
+        any fields provisioned by the Authorization Server itself. </t>
+
+        <t>The Authorization Server MAY reject or replace any of the client's
+        requested metadata values submitted during an update request and
+        substitute them with suitable values. If the Authorization Server
+        performs any such substitutions to the requested values, it MUST
+        return these values in the response.</t>
 
         <t>The Authorization Server MUST NOT include the Client Secret or
         Request Access Token in this response.</t>
 
-        <t>These fields are returned in a <xref target="RFC4627">JSON
-        Document</xref> as top-level members of the root JSON object.<list
-            style="hanging">
+        <t>The response is a <xref target="RFC4627">JSON Document</xref> with
+        the following fields as well as any applicable client metadata as
+        top-level members of a JSON object.<list style="hanging">
             <t hangText="client_id"><vspace/>REQUIRED. The unique Client
             identifier, MUST equal the value of the client_id returned in the
             original client_register request.</t>
@@ -686,7 +636,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
                 Endpoint with the issued client_id.</t>
 
                 <t hangText="rotate_secret">REQUIRED. A JSON object that
-                contains the member href which contains the cully qualified
+                contains the member href which contains the fully qualified
                 URL of the Client Secret Rotation Endpoint for this client.
                 This MAY be constructed using a URL Template of the Client
                 Registration Endpoint with the issued client_id.</t>
@@ -724,7 +674,8 @@ Cache-Control: no-store
       <section title="Client Delete Request">
         <t>In order to deprovision itself on the Authorization Server, the
         Client makes an HTTP DELETE request to the Client Update Endpoint with
-        the Registration Access Token.</t>
+        the Registration Access Token. This request is authenticated by the
+        Registration Access Token issued to the client.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -768,9 +719,17 @@ Cache-Control: no-store
       URL in the _links structure described in section 3, and MUST NOT require
       the Client to construct this URL on its own.</t>
 
+      <t>The Authorization Server MUST be able to determine the appropriate
+      client_id from the context of the request without requiring the Client
+      to explicitly send its own <spanx style="verb">client_id</spanx> in the
+      request.</t>
+
       <section title="Rotate Secret Request">
         <t>This operation allows the client to rotate its current Registration
-        Access Token as well as its Client Secret, if it has one.</t>
+        Access Token as well as its Client Secret, if it has one. The client
+        sends an HTTP POST with its current Registration Access Token. This
+        request is authenticated by the Registration Access Token issued to
+        the client.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -896,6 +855,11 @@ Cache-Control: no-store
       error codes returned from client_update, the AS could force the Client
       to call rotate_secret before going forward, lessening the window for
       abuse of a leaked registration token. ]]</t>
+
+      <t>Since the Registration Access Token is a Bearer token and acts as the
+      sole authentication for use at the Client Update Endpoint, it MUST be
+      protected by the Client as described in <xref target="RFC6750">OAuth 2.0
+      Bearer</xref>.</t>
     </section>
 
     <section title="Acknowledgments">
@@ -933,8 +897,6 @@ Cache-Control: no-store
 
           <t>changed token_endpoint_auth_type back to
           token_endpoint_auth_method to match OIDC who changed to match us</t>
-
-          <t/>
         </list></t>
 
       <t>- 04</t>
