@@ -565,29 +565,15 @@ Cache-Control: no-store
 
       <section anchor="client-info-response"
                title="Client Information Response">
-        <t>Upon successful registration, the Client Registration Endpoint
-        returns the newly-created Client Identifier and, if applicable, a
-        Client Secret.</t>
+        <t>The response contains the following fields:</t>
 
-        <t>Additionally, the Authorization Server SHOULD return all registered
-        <xref target="client-metadata">metadata</xref> about this client,
-        including any fields provisioned by the Authorization Server itself.
-        The Authorization Server MAY reject or replace any of the client's
-        requested metadata values submitted during the registration request
-        and substitute them with suitable values. If the Authorization Server
-        performs any such substitutions to the requested values, it MUST
-        return these values in the response.</t>
-
-        <t>The response contains a the fully qualified URLs to the Client
-        Registration Access Endpoint for this specific client. The response
-        also contains a Registration Access Token that is to be used by the
-        client to perform subsequent operations at the Client Update Endpoint
-        and the Client Secret Rotation Endpoint.</t>
-
-        <t>The response is an <spanx style="verb">application/json</spanx>
-        document with the following parameters in addition to any applicable
-        client metadata fields as top-level members of a <xref
-        target="RFC4627">JSON object</xref> .</t>
+        <t>, as well as a Client Secret if this client is a confidential
+        client. The response also contains the fully qualified URL to the
+        Client Registration Access Endpoint for this specific client that the
+        client may use to obtain and update information about itself. The
+        response also contains a Registration Access Token that is to be used
+        by the client to perform subsequent operations at the Client
+        Registration Access Endpoint.</t>
 
         <t><list style="hanging">
             <t hangText="client_id"><vspace/>REQUIRED. The unique Client
@@ -613,15 +599,27 @@ Cache-Control: no-store
 
             <t hangText="registration_access_token"><vspace/>REQUIRED. The
             Access token to be used by the client to perform actions on the
-            Client Update Endpoint and the Client Secret Rotation
-            Endpoint.</t>
+            Client Registration Access Endpoint.</t>
 
             <t hangText="registration_access_url"><vspace
             blankLines="0"/>REQUIRED. The fully qualified URL of the Client
-            Update Endpoint for this client. This MAY be constructed using a
-            URL Template of the Client Registration Endpoint with the issued
-            client_id.</t>
+            Registration Access Endpoint for this client. The Client MUST use
+            this URL as given when communicating with the Client Registration
+            Access Endpoint.</t>
           </list></t>
+
+        <t>Additionally, the Authorization Server SHOULD return all registered
+        <xref target="client-metadata">metadata</xref> about this client,
+        including any fields provisioned by the Authorization Server itself.
+        The Authorization Server MAY reject or replace any of the client's
+        requested metadata values submitted during the registration or update
+        requests and substitute them with suitable values. If the
+        Authorization Server performs any such substitutions to the requested
+        values, it MUST return these values in the response.</t>
+
+        <t>The response is an <spanx style="verb">application/json</spanx>
+        document with all parameters as top-level members of a <xref
+        target="RFC4627">JSON object</xref> .</t>
 
         <figure>
           <preamble>Following is a non-normative example response:</preamble>
@@ -650,12 +648,14 @@ Cache-Control: no-store
 
       <section anchor="client-registration-error"
                title="Client Registration Error Response">
-        <t>When an OAuth error condition occurs, the Client Registration
-        Endpoint returns an Error Response as defined in Section 5.2 of the
-        OAuth 2.0 specification.</t>
+        <t>When an OAuth error condition occurs, such as the client presenting
+        an invalid Registration Access Token, the Authorization Server returns
+        an Error Response as defined in Section 5.2 of the OAuth 2.0
+        specification.</t>
 
-        <t>When a registration error condition occurs, the Client Registration
-        Endpoint returns a HTTP 400 status code including a <xref
+        <t>When a registration error condition occurs, the Authorization
+        Server returns an HTTP 400 status code with content type <spanx
+        style="verb">application/json</spanx> consisting of a <xref
         target="RFC4627">JSON object</xref> describing the error in the
         response body.</t>
 
