@@ -131,11 +131,15 @@
 
         <t><list style="symbols">
             <t>Client Registration Endpoint: The OAuth 2.0 Endpoint through
-            which a Client can request new registration.</t>
+            which a Client can request new registration. The means of the
+            Client obtaining the URL for this endpoint are out of scope for
+            this specification.</t>
 
-            <t>Client Update Endpoint: The OAuth 2.0 Endpoint through which a
-            specific Client can manage its registration information, provided
-            by the Authorization Server to the Client.</t>
+            <t>Client Registration Management Endpoint: The OAuth 2.0 Endpoint
+            through which a specific Client can manage its registration
+            information, provided by the Authorization Server to the Client.
+            This URL for this endpoint is communicated to the client by the
+            Authorization Server in the Client Information Response.</t>
 
             <t>Registration Access Token: An OAuth 2.0 Bearer Token issued by
             the Authorization Server through the Client Registration Endpoint
@@ -420,16 +424,11 @@ Host: server.example.com
             expire. See <xref target="RFC3339">RFC 3339</xref> for details
             regarding date/times in general and UTC in particular.</t>
 
-            <t hangText="_links"><vspace blankLines="0"/>REQUIRED. A JSON
-            object that contains references to the Client Update Endpoint and
-            Client Secret Rotation Endpoint, via the following members:<list
-                style="hanging">
-                <t hangText="self">REQUIRED. A JSON object that contains the
-                member href which contains the fully qualified URL of the
-                Client Update Endpoint for this client. This MAY be
-                constructed using a URL Template of the Client Registration
-                Endpoint with the issued client_id.</t>
-              </list></t>
+            <t hangText="registration_access_url"><vspace
+            blankLines="0"/>REQUIRED. The fully qualified URL of the Client
+            Update Endpoint for this client. This MAY be constructed using a
+            URL Template of the Client Registration Endpoint with the issued
+            client_id.</t>
           </list></t>
 
         <figure>
@@ -440,23 +439,19 @@ Content-Type: application/json
 Cache-Control: no-store
 
 {
- _links: {
-   "self": {
-     "href": 
-       "https://server.example.com/register/s6BhdRkqt3"
-   }
- },
- "redirect_uris":["https://client.example.org/callback",
-    "https://client.example.org/callback2"]
+ "registration_access_token": "reg-23410913-abewfq.123483",
+ "registration_access_url": 
+       "https://server.example.com/register/s6BhdRkqt3",
  "client_id":"s6BhdRkqt3",
  "client_secret": "cf136dc3c1fc93f31185e5885805d",
+ "expires_at":2893276800
+ "redirect_uris":["https://client.example.org/callback",
+    "https://client.example.org/callback2"]
  "scope": "read write dolphin",
  "grant_type": ["authorization_code", "refresh_token"]
  "token_endpoint_auth_method": "client_secret_basic",
  "logo_url": "https://client.example.org/logo.png",
  "jwk_url": "https://client.example.org/my_rsa_public_key.jwk",
- "registration_access_token": "reg-23410913-abewfq.123483",
- "expires_at":2893276800
 }]]></artwork>
         </figure>
       </section>
@@ -511,7 +506,7 @@ Cache-Control: no-store
       </section>
     </section>
 
-    <section title="Client Update Endpoint">
+    <section title="Client Registration Management Endpoint">
       <t>The Client Update Endpoint is an OAuth 2.0 protected endpoint that is
       provisioned by the server for a specific client to be able to view and
       update its registered information. It is RECOMMENDED that this endpoint
@@ -613,43 +608,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
             <t hangText="client_id"><vspace/>REQUIRED. The unique Client
             identifier, MUST equal the value of the client_id returned in the
             original client_register request.</t>
-
-            <t hangText="_links"><vspace blankLines="0"/>REQUIRED. A JSON
-            object that contains references to the Client Update Endpoint and
-            Client Secret Rotation Endpoint, via the following members:<list
-                style="hanging">
-                <t hangText="self">REQUIRED. A JSON object that contains the
-                member href which contains the fully qualified URL of the
-                Client Update Endpoint for this client. This MAY be
-                constructed using a URL Template of the Client Registration
-                Endpoint with the issued client_id.</t>
-              </list></t>
           </list></t>
-
-        <figure>
-          <preamble>Following is a non-normative example response:</preamble>
-
-          <artwork><![CDATA[HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-
-{
- _links: {
-   "self": {
-     "href": "https://server.example.com/register/s6BhdRkqt3"
-   }
- },
- "client_id": "s6BhdRkqt3",
- "client_name": "My New Example",
- "redirect_uri": ["https://client.example.org/callback",
-   "https://client.example.org/alt"]
- "scope": "read write dolphin",
- "grant_type": ["authorization_code", "refresh_token"],
- "token_endpoint_auth_method": "client_secret_basic",
- "logo_url": "https://client.example.org/newlogo.png",
- "jwk_url": "https://client.example.org/my_rsa_public_key.jwk",
-}]]></artwork>
-        </figure>
       </section>
 
       <section title="Client Delete Request">
@@ -750,8 +709,8 @@ Cache-Control: no-store
       Working Group, and the OpenID Connect Working Group participants for
       their input to this document. In particular, the following individuals
       have been instrumental in their review and contribution to various
-      versions of this document: Torsten Lodderstedt, Eve Maler, Thomas
-      Hardjono, Christian Scholz, Nat Sakimura, George Fletcher, Amanda
+      versions of this document: Tim Bray, Torsten Lodderstedt, Eve Maler,
+      Thomas Hardjono, Christian Scholz, Nat Sakimura, George Fletcher, Amanda
       Anganes, and Domenico Catalano.</t>
     </section>
 
@@ -763,6 +722,9 @@ Cache-Control: no-store
       <t><list style="symbols">
           <t>removed secret_rotation as a client-initiated action, including
           removing client secret rotation endpoint and parameters</t>
+
+          <t>Chaned _links structure to single value
+          registration_access_url</t>
         </list></t>
 
       <t>- 05</t>
