@@ -135,7 +135,7 @@
             Client obtaining the URL for this endpoint are out of scope for
             this specification.</t>
 
-            <t>Client Registration Management Endpoint: The OAuth 2.0 Endpoint
+            <t>Client Registration Access Endpoint: The OAuth 2.0 Endpoint
             through which a specific Client can manage its registration
             information, provided by the Authorization Server to the Client.
             This URL for this endpoint is communicated to the client by the
@@ -369,163 +369,93 @@ Host: server.example.com
 }
 ]]></artwork>
         </figure>
+
+        <t/>
       </section>
 
       <section title="Client Registration Response">
-        <t>Upon successful registration, the Client Registration Endpoint
-        returns the newly-created Client Identifier and, if applicable, a
-        Client Secret.</t>
+        <t>Upon successful registrartion, the Authorization Server generates a
+        new Client Identifier for the client. This Client Identifier MUST be
+        unique at the server and MUST NOT be in use by any other client. The
+        server responds with an HTTP 201 Created code and a body of type
+        <spanx style="verb">application/json</spanx> with content described in
+        <xref target="client-info-response">Client Information
+        Response</xref>.</t>
 
-        <t>Additionally, the Authorization Server SHOULD return all registered
-        <xref target="client-metadata">metadata</xref> about this client,
-        including any fields provisioned by the Authorization Server itself.
-        The Authorization Server MAY reject or replace any of the client's
-        requested metadata values submitted during the registration request
-        and substitute them with suitable values. If the Authorization Server
-        performs any such substitutions to the requested values, it MUST
-        return these values in the response.</t>
-
-        <t>The response contains a <spanx style="verb">_links</spanx>
-        structure which contains fully qualified URLs to the Client Update
-        Endpoint and the Client Secret Rotation Endpoint for this specific
-        client. The response also contains a Registration Access Token that is
-        to be used by the client to perform subsequent operations at the
-        Client Update Endpoint and the Client Secret Rotation Endpoint.</t>
-
-        <t>The response is an <spanx style="verb">application/json</spanx>
-        document with the following parameters in addition to any applicable
-        client metadata fields as top-level members of a <xref
-        target="RFC4627">JSON object</xref> .</t>
-
-        <t><list style="hanging">
-            <t hangText="client_id"><vspace/>REQUIRED. The unique Client
-            identifier, MUST NOT be currently valid for any other registered
-            Client.</t>
-
-            <t hangText="client_secret"><vspace/>OPTIONAL. The Client secret.
-            If issued, this MUST be unique for each <spanx style="verb">client_id</spanx>.
-            This value is used by confidential clients to authenticate to the
-            Token Endpoint as described in OAuth 2.0 Section 2.3.1.</t>
-
-            <t hangText="registration_access_token"><vspace/>REQUIRED. The
-            Access token to be used by the client to perform actions on the
-            Client Update Endpoint and the Client Secret Rotation
-            Endpoint.</t>
-
-            <t hangText="issued_at"><vspace/>OPTIONAL. Specifies the timestamp
-            when the Client Identifier was issued. The timestamp value MUST be
-            a positive integer. The value is expressed in the number of
-            seconds since January 1, 1970 00:00:00 GMT.</t>
-
-            <t hangText="expires_at"><vspace/>REQUIRED if <spanx style="verb">client_secret</spanx>
-            is issued. The number of seconds from 1970-01-01T0:0:0Z as
-            measured in UTC that the <spanx style="verb">client_secret</spanx>
-            will expire or <spanx style="verb">0</spanx> if it does not
-            expire. See <xref target="RFC3339">RFC 3339</xref> for details
-            regarding date/times in general and UTC in particular.</t>
-
-            <t hangText="registration_access_url"><vspace
-            blankLines="0"/>REQUIRED. The fully qualified URL of the Client
-            Update Endpoint for this client. This MAY be constructed using a
-            URL Template of the Client Registration Endpoint with the issued
-            client_id.</t>
-          </list></t>
-
-        <figure>
-          <preamble>Following is a non-normative example response:</preamble>
-
-          <artwork><![CDATA[HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-
-{
- "registration_access_token": "reg-23410913-abewfq.123483",
- "registration_access_url": 
-       "https://server.example.com/register/s6BhdRkqt3",
- "client_id":"s6BhdRkqt3",
- "client_secret": "cf136dc3c1fc93f31185e5885805d",
- "expires_at":2893276800
- "redirect_uris":["https://client.example.org/callback",
-    "https://client.example.org/callback2"]
- "scope": "read write dolphin",
- "grant_type": ["authorization_code", "refresh_token"]
- "token_endpoint_auth_method": "client_secret_basic",
- "logo_url": "https://client.example.org/logo.png",
- "jwk_url": "https://client.example.org/my_rsa_public_key.jwk",
-}]]></artwork>
-        </figure>
-      </section>
-
-      <section title="Client Registration Error Response">
-        <t>When an OAuth error condition occurs, the Client Registration
-        Endpoint returns an Error Response as defined in Section 5.2 of the
-        OAuth 2.0 specification.</t>
-
-        <t>When a registration error condition occurs, the Client Registration
-        Endpoint returns a HTTP 400 status code including a <xref
-        target="RFC4627">JSON object</xref> describing the error in the
-        response body.</t>
-
-        <t>The JSON object contains two members:</t>
-
-        <t><list style="hanging">
-            <t hangText="error"><vspace/>The error code, a single ASCII
-            string.</t>
-
-            <t hangText="error_description"><vspace/>The additional text
-            description of the error for debugging.</t>
-          </list></t>
-
-        <t>This specification defines the following error codes:</t>
-
-        <t><list style="hanging">
-            <t hangText="invalid_redirect_uri"><vspace/>The value of one or
-            more <spanx style="verb">redirect_uris</spanx> is invalid.</t>
-
-            <t hangText="invalid_client_metadata"><vspace/>The value of one of
-            the <xref target="client-metadata">client metadata</xref> fields
-            is invalid and the server has rejected this request. Note that an
-            Authorization server MAY choose to substitute a valid value for
-            any requested parameter of a client's metadata.</t>
-          </list></t>
-
-        <figure>
-          <preamble>Following is a non-normative example of an error response
-          (with line wraps for display purposes only):</preamble>
-
-          <artwork><![CDATA[HTTP/1.1 400 Bad Request
-Content-Type: application/json
-Cache-Control: no-store
-   
-{
- "error":"invalid_redirect_uri",
- "error_description":"The redirect URI of http://sketchy.example.com
-   is not allowed for this server."
-}]]></artwork>
-        </figure>
+        <t>Upon an unsuccessful registration, the Authorization Server
+        responds with an error as described in <xref target="???">Client
+        Registration Error</xref>.</t>
       </section>
     </section>
 
-    <section title="Client Registration Management Endpoint">
-      <t>The Client Update Endpoint is an OAuth 2.0 protected endpoint that is
-      provisioned by the server for a specific client to be able to view and
-      update its registered information. It is RECOMMENDED that this endpoint
-      URL be formed through the use of a URL template which combines the
-      Client Registration Endpoint and the issued client_id for this client,
-      either as a path parameter
-      (https://server.example.com/register/client_id) or as a query parameter
-      (https://server.example.com/register/?update=client_id). The
-      Authorization Server MUST provide the client with the fully qualified
-      URL in the _links structure described in section 3 and MUST NOT require
-      the client to construct this URL on its own.</t>
+    <section title="Client Registration Access Endpoint">
+      <t>The Client Registration Access Endpoint is an OAuth 2.0 protected
+      endpoint that is provisioned by the server for a specific client to be
+      able to view and update its registered information. The Client MUST
+      include its Registration Access Token in all calls to this endpoint as
+      an <xref target="RFC6750">OAuth 2.0 Bearer Token</xref>.</t>
 
-      <t>The Authorization Server MUST be able to determine the appropriate
-      client_id from the context of the request without requiring the Client
-      to explicitly send its own <spanx style="verb">client_id</spanx> in the
-      request.</t>
+      <t>Operations on this endpoint are switched through the use of different
+      <xref target="RFC2616">HTTP methods</xref>.</t>
 
-      <t>Operations on this endpoint are switched through the use of specific
-      HTTP verbs.</t>
+      <section title="Forming the Client Registration Access Endpoint URL">
+        <t>The Authorization Server MUST provide the client with the fully
+        qualified URL in the <spanx style="verb">registration_access_url</spanx>
+        element of the <xref target="client-info-response">Client Information
+        Response</xref>. The Authorization Server MUST NOT expect the client
+        to construct or discover this URL on its own. The Client MUST use the
+        URL as given by the server and MUST NOT construct this URL from
+        component pieces. </t>
+
+        <t>Depending on deployment characteristics, the Client Registration
+        Access Endpont URL may take any number of forms. It is RECOMMENDED
+        that this endpoint URL be formed through the use of a
+        server-constructed URL string which combines the Client Registration
+        Endpoint's URL and the issued client_id for this Client, with the
+        latter as either a path parameter
+        (https://server.example.com/register/client_id) or a query parameter
+        (https://server.example.com/register/?update=client_id). These common
+        patterns can help the Server to more easily determine the client to
+        which the request pertains, which MUST be matched against the client
+        to which the Registration Access Token was issued. If desired, the
+        server MAY simply return the Client Registration Endpoint URL as the
+        Client Registration Access Endpoint URL and change behavior based on
+        the authentication context provided by the Registration Access
+        Token.</t>
+      </section>
+
+      <section title="Client Read Request">
+        <t>In order to read the current configuration of the Client on the
+        Authorization Server, the Client makes an HTTP GET request to the
+        Client Update Endpoint, authenticating with its Registration Access
+        Token.</t>
+
+        <figure>
+          <preamble>Following is a non-normative example request (with line
+          wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[GET /register/s6BhdRkqt3 HTTP/1.1
+Accept: application/json
+Host: server.example.com
+Authorization: Bearer reg-23410913-abewfq.123483
+
+]]></artwork>
+        </figure>
+
+        <t/>
+
+        <t>Upon successful read of the information for a currently active
+        Client, the Authorization Server responds with an HTTP 200 OK with
+        content type of <spanx style="verb">application/json</spanx> and a a
+        response body as described in <xref
+        target="client-info-response">Client Information Response</xref>.</t>
+
+        <t>If the client does not exist on this server, the server MUST return
+        an HTTP 404 Not Found. [[ Editor's note: If the client doesn't exist,
+        then the Refresh Access Token shouldn't be valid, making this kind of
+        error a 403 at the auth layer instead. How best to call this
+        inconsistency out? ]]</t>
+      </section>
 
       <section title="Client Update Request">
         <t>This operation updates a previously-registered client with new
@@ -564,24 +494,6 @@ Authorization: Bearer reg-23410913-abewfq.123483
  "client_name":"My New Example",
  "logo_url":"https://client.example.org/newlogo.png"
 }
-]]></artwork>
-        </figure>
-      </section>
-
-      <section title="Client Read Request">
-        <t>In order to read the current configuration of the Client on the
-        Authorization Server, the Client makes an HTTP GET request to the
-        Client Update Endpoint with the Registration Access Token.</t>
-
-        <figure>
-          <preamble>Following is a non-normative example request (with line
-          wraps for display purposes only):</preamble>
-
-          <artwork><![CDATA[GET /register/s6BhdRkqt3 HTTP/1.1
-Accept: application/json
-Host: server.example.com
-Authorization: Bearer reg-23410913-abewfq.123483
-
 ]]></artwork>
         </figure>
       </section>
@@ -645,6 +557,148 @@ Cache-Control: no-store
       </section>
     </section>
 
+    <section title="Client Registration Response">
+      <t>In response to certain requests from the Client to either the Client
+      Registration Endpoint or the Client Registration Access Endpoint as
+      described in this specification, the Authorization Server sends the
+      following response bodies.</t>
+
+      <section anchor="client-info-response"
+               title="Client Information Response">
+        <t>Upon successful registration, the Client Registration Endpoint
+        returns the newly-created Client Identifier and, if applicable, a
+        Client Secret.</t>
+
+        <t>Additionally, the Authorization Server SHOULD return all registered
+        <xref target="client-metadata">metadata</xref> about this client,
+        including any fields provisioned by the Authorization Server itself.
+        The Authorization Server MAY reject or replace any of the client's
+        requested metadata values submitted during the registration request
+        and substitute them with suitable values. If the Authorization Server
+        performs any such substitutions to the requested values, it MUST
+        return these values in the response.</t>
+
+        <t>The response contains a the fully qualified URLs to the Client
+        Registration Access Endpoint for this specific client. The response
+        also contains a Registration Access Token that is to be used by the
+        client to perform subsequent operations at the Client Update Endpoint
+        and the Client Secret Rotation Endpoint.</t>
+
+        <t>The response is an <spanx style="verb">application/json</spanx>
+        document with the following parameters in addition to any applicable
+        client metadata fields as top-level members of a <xref
+        target="RFC4627">JSON object</xref> .</t>
+
+        <t><list style="hanging">
+            <t hangText="client_id"><vspace/>REQUIRED. The unique Client
+            identifier, MUST NOT be currently valid for any other registered
+            Client.</t>
+
+            <t hangText="client_secret"><vspace/>OPTIONAL. The Client secret.
+            If issued, this MUST be unique for each <spanx style="verb">client_id</spanx>.
+            This value is used by confidential clients to authenticate to the
+            Token Endpoint as described in OAuth 2.0 Section 2.3.1.</t>
+
+            <t hangText="expires_at"><vspace/>REQUIRED if <spanx style="verb">client_secret</spanx>
+            is issued. The number of seconds from 1970-01-01T0:0:0Z as
+            measured in UTC that the <spanx style="verb">client_secret</spanx>
+            will expire or <spanx style="verb">0</spanx> if it does not
+            expire. See <xref target="RFC3339">RFC 3339</xref> for details
+            regarding date/times in general and UTC in particular.</t>
+
+            <t hangText="issued_at"><vspace/>OPTIONAL. Specifies the timestamp
+            when the Client Identifier was issued. The timestamp value MUST be
+            a positive integer. The value is expressed in the number of
+            seconds since January 1, 1970 00:00:00 GMT.</t>
+
+            <t hangText="registration_access_token"><vspace/>REQUIRED. The
+            Access token to be used by the client to perform actions on the
+            Client Update Endpoint and the Client Secret Rotation
+            Endpoint.</t>
+
+            <t hangText="registration_access_url"><vspace
+            blankLines="0"/>REQUIRED. The fully qualified URL of the Client
+            Update Endpoint for this client. This MAY be constructed using a
+            URL Template of the Client Registration Endpoint with the issued
+            client_id.</t>
+          </list></t>
+
+        <figure>
+          <preamble>Following is a non-normative example response:</preamble>
+
+          <artwork><![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+ "registration_access_token": "reg-23410913-abewfq.123483",
+ "registration_access_url": 
+       "https://server.example.com/register/s6BhdRkqt3",
+ "client_id":"s6BhdRkqt3",
+ "client_secret": "cf136dc3c1fc93f31185e5885805d",
+ "expires_at":2893276800
+ "redirect_uris":["https://client.example.org/callback",
+    "https://client.example.org/callback2"]
+ "scope": "read write dolphin",
+ "grant_type": ["authorization_code", "refresh_token"]
+ "token_endpoint_auth_method": "client_secret_basic",
+ "logo_url": "https://client.example.org/logo.png",
+ "jwk_url": "https://client.example.org/my_rsa_public_key.jwk",
+}]]></artwork>
+        </figure>
+      </section>
+
+      <section anchor="client-registration-error"
+               title="Client Registration Error Response">
+        <t>When an OAuth error condition occurs, the Client Registration
+        Endpoint returns an Error Response as defined in Section 5.2 of the
+        OAuth 2.0 specification.</t>
+
+        <t>When a registration error condition occurs, the Client Registration
+        Endpoint returns a HTTP 400 status code including a <xref
+        target="RFC4627">JSON object</xref> describing the error in the
+        response body.</t>
+
+        <t>The JSON object contains two members:</t>
+
+        <t><list style="hanging">
+            <t hangText="error"><vspace/>The error code, a single ASCII
+            string.</t>
+
+            <t hangText="error_description"><vspace/>A human-readable text
+            description of the error for debugging.</t>
+          </list></t>
+
+        <t>This specification defines the following error codes:</t>
+
+        <t><list style="hanging">
+            <t hangText="invalid_redirect_uri"><vspace/>The value of one or
+            more <spanx style="verb">redirect_uris</spanx> is invalid.</t>
+
+            <t hangText="invalid_client_metadata"><vspace/>The value of one of
+            the <xref target="client-metadata">client metadata</xref> fields
+            is invalid and the server has rejected this request. Note that an
+            Authorization server MAY choose to substitute a valid value for
+            any requested parameter of a client's metadata.</t>
+          </list></t>
+
+        <figure>
+          <preamble>Following is a non-normative example of an error response
+          (with line wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+   
+{
+ "error":"invalid_redirect_uri",
+ "error_description":"The redirect URI of http://sketchy.example.com
+   is not allowed for this server."
+}]]></artwork>
+        </figure>
+      </section>
+    </section>
+
     <section anchor="IANA" title="IANA Considerations">
       <t>This document makes no requests of IANA.</t>
     </section>
@@ -695,13 +749,18 @@ Cache-Control: no-store
       should not expire while a client is still actively registered. If this
       token were to expire, a Client could be left in a situation where it has
       no means of updating itself and must register itself anew. As the
-      Registration Access Tokens are long-term credentials, they MUST be
-      protected by the Client as a shared secret.</t>
-
-      <t>Since the Registration Access Token is a Bearer token and acts as the
-      sole authentication for use at the Client Update Endpoint, it MUST be
+      Registration Access Tokens are long-term credentials, and since the
+      Registration Access Token is a Bearer token and acts as the sole
+      authentication for use at the Client Update Endpoint, it MUST be
       protected by the Client as described in <xref target="RFC6750">OAuth 2.0
       Bearer</xref>.</t>
+
+      <t>If a Client is deprovisioned from a server, any outstanding
+      Registration Access Tokens for that client MUST be invalidated at the
+      same time. Otherwise, this can lead to an inconsistent state wherein a
+      Client could make requests to the Client Registration Access Endpoint
+      where the authentication would succeed but the action would fail because
+      the Client is no longer valid.</t>
     </section>
 
     <section title="Acknowledgments">
@@ -725,6 +784,14 @@ Cache-Control: no-store
 
           <t>Chaned _links structure to single value
           registration_access_url</t>
+
+          <t>Collapsed create/update/read responses into client info
+          response</t>
+
+          <t>Changed return code of create action to 201</t>
+
+          <t>Added section to describe suggested generation and composition of
+          Client Registration Access Url</t>
         </list></t>
 
       <t>- 05</t>
