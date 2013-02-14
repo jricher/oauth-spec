@@ -446,9 +446,9 @@ Authorization: Bearer reg-23410913-abewfq.123483
 
         <t>Upon successful read of the information for a currently active
         Client, the Authorization Server responds with an HTTP 200 OK with
-        content type of <spanx style="verb">application/json</spanx> and a a
-        response body as described in <xref
-        target="client-info-response">Client Information Response</xref>.</t>
+        content type of <spanx style="verb">application/json</spanx> and a
+        payload as described in <xref target="client-info-response">Client
+        Information Response</xref>.</t>
 
         <t>If the client does not exist on this server, the server MUST return
         an HTTP 404 Not Found. [[ Editor's note: If the client doesn't exist,
@@ -464,16 +464,24 @@ Authorization: Bearer reg-23410913-abewfq.123483
 
         <t>The Client makes an HTTP PUT request to the Client Update Endpoint
         with a content type of <spanx style="verb">application/json</spanx>.
-        This request MAY include any fields described in <xref
-        target="client-metadata">Client Metadata</xref>. If included in the
-        request, valid values of Client Metadata fields in this request MUST
+        This request MUST include all fields described in <xref
+        target="client-metadata">Client Metadata</xref> as returned to the
+        Client from a previous register, read, or update operation. The Client
+        MUST NOT include the <spanx style="verb">registration_access_token</spanx>,
+        <spanx style="verb">registration_access_url</spanx>, <spanx
+        style="verb">expires_at</spanx>, or <spanx style="verb">issued_at</spanx>
+        fields described in <xref target="client-info-response">Client
+        Information Response</xref>.</t>
+
+        <t>Valid values of Client Metadata fields in this request MUST
         replace, not augment, the values previously associated with this
-        Client. Any fields with the value of a JSON "null" in Client Metadata
-        MUST be taken as a request to clear any existing value of that field.
-        Omitted values in the Client Metadata MUST remain unchanged by the
-        Authorization Server. The Authorization Server MAY replace any invalid
-        values with suitable values, and it MUST return any such fields to the
-        Client in the response.</t>
+        Client. Omitted fields MUST be treated as null or empty values by the
+        server. The Client MUST include its client_id field in the request,
+        and it MUST be the same as its currently-issued</t>
+
+        <t>For all metadata fields, the Authorization Server MAY replace any
+        invalid values with suitable default values, and it MUST return any
+        such fields to the Client in the response.</t>
 
         <t>For example, a client could send the following request to the
         Client Registration Endpoint to update the client registration in the
@@ -488,6 +496,8 @@ Accept: application/json
 Host: server.example.com
 Authorization: Bearer reg-23410913-abewfq.123483
 
+TODO -- need to update this example --
+
 {
  "redirect_uri":["https://client.example.org/callback",
     "https://client.example.org/alt"],
@@ -496,38 +506,39 @@ Authorization: Bearer reg-23410913-abewfq.123483
 }
 ]]></artwork>
         </figure>
-      </section>
 
-      <section title="Client Information Response">
-        <t>Upon successful update or read operation, the Client Update
-        Endpoint returns the Client ID. Additionally, the Authorization Server
-        SHOULD return all registered <xref
-        target="client-metadata">metadata</xref> about this client, including
-        any fields provisioned by the Authorization Server itself.</t>
+        <t/>
 
-        <t>The Authorization Server MAY reject or replace any of the client's
-        requested metadata values submitted during an update request and
-        substitute them with suitable values. If the Authorization Server
-        performs any such substitutions to the requested values, it MUST
-        return these values in the response.</t>
+        <t>Upon successful update, the Authorization Server responds with an
+        HTTP 200 OK Message with content type <spanx style="verb">applicaiton/json</spanx>
+        and a payload as described in <xref
+        target="client-info-response">Client Information Response</xref>. The
+        Authorization Server MAY include a new Client Secret and/or
+        Registration Access Token in its response. If so, the Client MUST
+        immediately discard its preivous Client Secret and/or Registration
+        Access Token.</t>
 
-        <t>The Authorization Server MUST NOT include the Client Secret or
-        Request Access Token in this response.</t>
+        <t>If the Client does not exist on this server, the server MUST return
+        an HTTP 404 Not Found. [[ Editor's note: If the client doesn't exist,
+        then the Refresh Access Token shouldn't be valid, making this kind of
+        error a 403 at the auth layer instead. How best to call this
+        inconsistency out? ]]</t>
 
-        <t>The response is a <xref target="RFC4627">JSON Document</xref> with
-        the following fields as well as any applicable client metadata as
-        top-level members of a JSON object.<list style="hanging">
-            <t hangText="client_id"><vspace/>REQUIRED. The unique Client
-            identifier, MUST equal the value of the client_id returned in the
-            original client_register request.</t>
-          </list></t>
+        <t>If the Client is not allowed to update its records, the server MUST
+        respond with HTTP 403 Forbidden.</t>
+
+        <t>If the Client attempts to set an invalid metadata field and the
+        Authorizaton Server does not set a default value, the Authorization
+        Server responds with an error as described in <xref
+        target="client-registration-error">Client Registration Error
+        Response</xref>.</t>
       </section>
 
       <section title="Client Delete Request">
         <t>In order to deprovision itself on the Authorization Server, the
-        Client makes an HTTP DELETE request to the Client Update Endpoint with
-        the Registration Access Token. This request is authenticated by the
-        Registration Access Token issued to the client.</t>
+        Client makes an HTTP DELETE request to the Client Registration Access
+        Endpoint. This request is authenticated by the Registration Access
+        Token issued to the client.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -545,6 +556,15 @@ Authorization: Bearer reg-23410913-abewfq.123483
 
         <t>If a client has been successfully deprovisioned, the Authorization
         Server responds with an HTTP 204 No Content message.</t>
+
+        <t>If there is no such client, the server responds with an HTTP 404
+        Not Found. </t>
+
+        <t>If the client is not allowed to delete itself, the server responds
+        with HTTP 403 Forbidden.</t>
+
+        <t>If the server does not support the delete method, it responds with
+        an HTTP 405 Not Supported.</t>
 
         <figure>
           <preamble>Following is a non-normative example response:</preamble>
