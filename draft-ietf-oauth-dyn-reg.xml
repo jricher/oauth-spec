@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-05" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-06" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -79,7 +79,7 @@
       </address>
     </author>
 
-    <date day="6" month="February" year="2013"/>
+    <date day="14" month="February" year="2013"/>
 
     <abstract>
       <t>This specification defines an endpoint and protocol for dynamic
@@ -136,10 +136,6 @@
             <t>Client Update Endpoint: The OAuth 2.0 Endpoint through which a
             specific Client can manage its registration information, provided
             by the Authorization Server to the Client.</t>
-
-            <t>Client Secret Rotation Endpoint: The OAuth 2.0 Endpoint through
-            which a specific Client can request refreshes of its Client Secret
-            and Registration Access Token. </t>
 
             <t>Registration Access Token: An OAuth 2.0 Bearer Token issued by
             the Authorization Server through the Client Registration Endpoint
@@ -433,12 +429,6 @@ Host: server.example.com
                 Client Update Endpoint for this client. This MAY be
                 constructed using a URL Template of the Client Registration
                 Endpoint with the issued client_id.</t>
-
-                <t hangText="rotate_secret">REQUIRED. A JSON object that
-                contains the member href which contains the fully qualified
-                URL of the Client Secret Rotation Endpoint for this client.
-                This MAY be constructed using a URL Template of the Client
-                Registration Endpoint with the issued client_id.</t>
               </list></t>
           </list></t>
 
@@ -454,11 +444,8 @@ Cache-Control: no-store
    "self": {
      "href": 
        "https://server.example.com/register/s6BhdRkqt3"
-   },
-   "rotate_secret": {
-     "href": 
-       "https://server.example.com/register/rotate_secret/s6BhdRkqt3"
    }
+ },
  "redirect_uris":["https://client.example.org/callback",
     "https://client.example.org/callback2"]
  "client_id":"s6BhdRkqt3",
@@ -604,12 +591,12 @@ Authorization: Bearer reg-23410913-abewfq.123483
         </figure>
       </section>
 
-      <section title="Client Update or Read Response">
+      <section title="Client Information Response">
         <t>Upon successful update or read operation, the Client Update
         Endpoint returns the Client ID. Additionally, the Authorization Server
         SHOULD return all registered <xref
         target="client-metadata">metadata</xref> about this client, including
-        any fields provisioned by the Authorization Server itself. </t>
+        any fields provisioned by the Authorization Server itself.</t>
 
         <t>The Authorization Server MAY reject or replace any of the client's
         requested metadata values submitted during an update request and
@@ -636,12 +623,6 @@ Authorization: Bearer reg-23410913-abewfq.123483
                 Client Update Endpoint for this client. This MAY be
                 constructed using a URL Template of the Client Registration
                 Endpoint with the issued client_id.</t>
-
-                <t hangText="rotate_secret">REQUIRED. A JSON object that
-                contains the member href which contains the fully qualified
-                URL of the Client Secret Rotation Endpoint for this client.
-                This MAY be constructed using a URL Template of the Client
-                Registration Endpoint with the issued client_id.</t>
               </list></t>
           </list></t>
 
@@ -656,10 +637,8 @@ Cache-Control: no-store
  _links: {
    "self": {
      "href": "https://server.example.com/register/s6BhdRkqt3"
-   },
-   "rotate_secret": {
-     "href": "https://server.example.com/register/s6BhdRkqt3/secret"
    }
+ },
  "client_id": "s6BhdRkqt3",
  "client_name": "My New Example",
  "redirect_uri": ["https://client.example.org/callback",
@@ -704,101 +683,6 @@ Cache-Control: no-store
 
 ]]></artwork>
         </figure>
-      </section>
-    </section>
-
-    <section title="Client Secret Rotation">
-      <t>The Client Secret Rotation Endpoint is an OAuth 2.0 protected
-      endpoint that is provisioned by the server for a specific client to be
-      able to request rotation of its Registration Access Token and, if it has
-      one, Client Secret. It is RECOMMENDED that this endpoint URL be formed
-      through the use of a URL template which combines the Client Registration
-      Endpoint and the issued client_id for this client, either as a path
-      parameter (https://server.example.com/register/rotate_secret/client_id)
-      or as a query parameter
-      (https://server.example.com/register/?rotate_secret=client_id). The
-      Authorization Server MUST provide the client with the fully qualified
-      URL in the _links structure described in section 3, and MUST NOT require
-      the Client to construct this URL on its own.</t>
-
-      <t>The Authorization Server MUST be able to determine the appropriate
-      client_id from the context of the request without requiring the Client
-      to explicitly send its own <spanx style="verb">client_id</spanx> in the
-      request.</t>
-
-      <section title="Rotate Secret Request">
-        <t>This operation allows the client to rotate its current Registration
-        Access Token as well as its Client Secret, if it has one. The client
-        sends an HTTP POST with its current Registration Access Token. This
-        request is authenticated by the Registration Access Token issued to
-        the client.</t>
-
-        <figure>
-          <preamble>Following is a non-normative example request (with line
-          wraps for display purposes only):</preamble>
-
-          <artwork><![CDATA[POST /register/rotate_secret/s6BhdRkqt3 HTTP/1.1
-Accept: application/json
-Host: server.example.com
-Authorization: Bearer reg-23410913-abewfq.123483
-
-]]></artwork>
-        </figure>
-      </section>
-
-      <section title="Rotate Secret Response">
-        <t>Upon successful rotation of the Registration Access Token, and
-        optionally the Client Secret, the Client Registration Endpoint returns
-        a <xref target="RFC4627">JSON document</xref> with the following
-        fields as top-level members of the root JSON object. This response
-        MUST NOT include any other client metadata.<list style="hanging">
-            <t hangText="client_id"><vspace/>REQUIRED. The unique Client
-            identifier, MUST match the client_id issued in the original
-            registration request.</t>
-
-            <t hangText="client_secret"><vspace/>REQUIRED if the server
-            initially issued this Client a Client Secret, otherwise the server
-            MUST NOT return a value. The value MUST be unique for each <spanx
-            style="verb">client_id</spanx>.</t>
-
-            <t hangText="registration_access_token"><vspace/>REQUIRED. The
-            Access token to be used by the client to perform subsequent <spanx
-            style="verb">client_update</spanx> and <spanx style="verb">rotate_secret</spanx>
-            requests.</t>
-
-            <t hangText="issued_at"><vspace/>OPTIONAL. Specifies the timestamp
-            when the identifier was issued. The timestamp value MUST be a
-            positive integer. The value is expressed in the number of seconds
-            since January 1, 1970 00:00:00 GMT.</t>
-
-            <t hangText="expires_at"><vspace/>REQUIRED if the server issues a
-            Client Secret. The number of seconds from 1970-01-01T0:0:0Z as
-            measured in UTC that the <spanx style="verb">client_secret</spanx>
-            will expire or <spanx style="verb">0</spanx> if they do not
-            expire. See <xref target="RFC3339">RFC 3339</xref> for details
-            regarding date/times in general and UTC in particular.</t>
-          </list></t>
-
-        <figure>
-          <preamble>Following is a non-normative example response:</preamble>
-
-          <artwork><![CDATA[HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-
-{
- "client_id":"s6BhdRkqt3",
- "client_secret": "7fce6c93f31185e5885805d",
-  "registration_access_token": "reg-02348913-oieqer.983421",
- "expires_at":2893276800
-}]]></artwork>
-        </figure>
-
-        <t/>
-
-        <t>The Authorization Server SHOULD discard and invalidate the Request
-        Access Token and the Client Secret associated with this Client after
-        successful completion of this request.</t>
       </section>
     </section>
 
@@ -853,10 +737,7 @@ Cache-Control: no-store
       token were to expire, a Client could be left in a situation where it has
       no means of updating itself and must register itself anew. As the
       Registration Access Tokens are long-term credentials, they MUST be
-      protected by the Client as a secret. [[ Editor's note: with the right
-      error codes returned from client_update, the AS could force the Client
-      to call rotate_secret before going forward, lessening the window for
-      abuse of a leaked registration token. ]]</t>
+      protected by the Client as a shared secret.</t>
 
       <t>Since the Registration Access Token is a Bearer token and acts as the
       sole authentication for use at the Client Update Endpoint, it MUST be
@@ -876,6 +757,13 @@ Cache-Control: no-store
 
     <section title="Document History">
       <t>[[ to be removed by RFC editor before publication as an RFC ]]</t>
+
+      <t>- 06</t>
+
+      <t><list style="symbols">
+          <t>removed secret_rotation as a client-initiated action, including
+          removing client secret rotation endpoint and parameters</t>
+        </list></t>
 
       <t>- 05</t>
 
