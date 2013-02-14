@@ -452,10 +452,12 @@ Cache-Control: no-store
 {
  _links: {
    "self": {
-     "href": "https://server.example.com/register/s6BhdRkqt3"
+     "href": 
+       "https://server.example.com/register/s6BhdRkqt3"
    },
    "rotate_secret": {
-     "href": "https://server.example.com/register/rotate_secret/s6BhdRkqt3"
+     "href": 
+       "https://server.example.com/register/rotate_secret/s6BhdRkqt3"
    }
  "redirect_uris":["https://client.example.org/callback",
     "https://client.example.org/callback2"]
@@ -515,8 +517,8 @@ Cache-Control: no-store
    
 {
  "error":"invalid_redirect_uri",
- "error_description":"The redirect URI of http://sketchy.example.com is not
-    allowed for this server."
+ "error_description":"The redirect URI of http://sketchy.example.com
+   is not allowed for this server."
 }]]></artwork>
         </figure>
       </section>
