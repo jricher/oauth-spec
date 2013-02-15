@@ -82,6 +82,7 @@
     <date day="15" month="February" year="2013"/>
 
     <area>Security</area>
+
     <workgroup>OAuth Working Group</workgroup>
 
     <abstract>
@@ -109,8 +110,9 @@
       <t>As part of the registration process, this specification also defines
       a mechanism for the client to present the Authorization Server with a
       set of metadata, such as a display name and icon to be presented to the
-      user during the authorization step. This draft provides a method for the
-      client to register and update this information over time.</t>
+      user during the authorization step. This draft also provides a mechanism
+      for the Client to read and update this information after the initial
+      registration action.</t>
 
       <section title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -146,8 +148,8 @@
 
             <t>Registration Access Token: An OAuth 2.0 Bearer Token issued by
             the Authorization Server through the Client Registration Endpoint
-            which is used by the Client to authenticate itself during update
-            and secret rotation operations. This token is associated with a
+            which is used by the Client to authenticate itself during read,
+            update, and delete operations. This token is associated with a
             particular Client.</t>
           </list></t>
       </section>
@@ -176,10 +178,11 @@
 
       <t><list style="hanging">
           <t hangText="redirect_uris"><vspace blankLines="0"/>RECOMMENDED.
-          Array of redirect URIs for use in the Authorization Code and Implicit
-          grant types. An Authorization Server SHOULD require registration of
-          valid redirect URIs for all clients that use these grant types in
-          order to protect against token and credential theft attacks.</t>
+          Array of redirect URIs for use in the Authorization Code and
+          Implicit grant types. An Authorization Server SHOULD require
+          registration of valid redirect URIs for all clients that use these
+          grant types in order to protect against token and credential theft
+          attacks.</t>
 
           <t hangText="client_name"><vspace blankLines="0"/>RECOMMENDED.
           Human-readable name of the Client to be presented to the user. If
@@ -232,10 +235,9 @@
 
           <t hangText="scope"><vspace blankLines="0"/>OPTIONAL. Space
           separated list of scope values (as described in <xref
-          target="RFC6749">OAuth 2.0 Section 3.3</xref>) that the client
-	  is declaring that it may use when requesting access tokens.
-	  If omitted, an Authorization
-          Server MAY register a Client with a default set of
+          target="RFC6749">OAuth 2.0 Section 3.3</xref>) that the client is
+          declaring that it may use when requesting access tokens. If omitted,
+          an Authorization Server MAY register a Client with a default set of
           scopes.</t>
 
           <t hangText="grant_type"><vspace blankLines="0"/>OPTIONAL. Array of
@@ -298,7 +300,8 @@
         </list></t>
     </section>
 
-    <section anchor="RegistrationEndpoint" title="Client Registration Endpoint">
+    <section anchor="RegistrationEndpoint"
+             title="Client Registration Endpoint">
       <t>The Client Registration Endpoint is an OAuth 2.0 Endpoint defined in
       this document that is designed to allow a Client to register itself with
       the Authorization Server. The Client Registration Endpoint MUST accept
@@ -328,15 +331,17 @@
       <t>In order to facilitate registered clients updating their information,
       the Client Registration Endpoint issues a Request Access Token for
       clients to securely identify themselves in future connections to the
-      Client Access Endpoint. As such, the Client Access Endpoint MUST accept
-      requests with <xref target="RFC6750">OAuth 2.0 Bearer Tokens</xref> for
-      these operations, whether or not the initial registration call requires
-      authentication of some form.</t>
+      <xref target="AccessEndpoint">Client Registration Access
+      Endpoint</xref>. As such, the Client Registration Access Endpoint MUST
+      accept requests with <xref target="RFC6750">OAuth 2.0 Bearer
+      Tokens</xref> for these operations, whether or not the initial
+      registration call requires authentication of some form.</t>
 
       <t>The Client Registration Endpoint MUST ignore all parameters it does
       not understand.</t>
 
-      <section anchor="RegistrationRequest" title="Client Registration Request">
+      <section anchor="RegistrationRequest"
+               title="Client Registration Request">
         <t>This operation registers a new Client to the Authorization Server.
         The Authorization Server assigns this client a unique Client
         Identifier, optionally assigns a Client Secret, and associates the
@@ -381,7 +386,8 @@ Host: server.example.com
         <t/>
       </section>
 
-      <section anchor="RegistrationResponse" title="Client Registration Response">
+      <section anchor="RegistrationResponse"
+               title="Client Registration Response">
         <t>Upon successful registration, the Authorization Server generates a
         new Client Identifier for the client. This Client Identifier MUST be
         unique at the server and MUST NOT be in use by any other client. The
@@ -397,7 +403,8 @@ Host: server.example.com
       </section>
     </section>
 
-    <section anchor="AccessEndpoint" title="Client Registration Access Endpoint">
+    <section anchor="AccessEndpoint"
+             title="Client Registration Access Endpoint">
       <t>The Client Registration Access Endpoint is an OAuth 2.0 protected
       endpoint that is provisioned by the server for a specific client to be
       able to view and update its registered information. The Client MUST
@@ -407,14 +414,15 @@ Host: server.example.com
       <t>Operations on this endpoint are switched through the use of different
       <xref target="RFC2616">HTTP methods</xref>.</t>
 
-      <section anchor="AccessURL" title="Forming the Client Registration Access Endpoint URL">
+      <section anchor="AccessURL"
+               title="Forming the Client Registration Access Endpoint URL">
         <t>The Authorization Server MUST provide the client with the fully
         qualified URL in the <spanx style="verb">registration_access_url</spanx>
         element of the <xref target="client-info-response">Client Information
         Response</xref>. The Authorization Server MUST NOT expect the client
         to construct or discover this URL on its own. The Client MUST use the
         URL as given by the server and MUST NOT construct this URL from
-        component pieces. </t>
+        component pieces.</t>
 
         <t>Depending on deployment characteristics, the Client Registration
         Access Endpoint URL may take any number of forms. It is RECOMMENDED
@@ -436,8 +444,8 @@ Host: server.example.com
       <section anchor="ReadRequest" title="Client Read Request">
         <t>In order to read the current configuration of the Client on the
         Authorization Server, the Client makes an HTTP GET request to the
-        Client Access Endpoint, authenticating with its Registration Access
-        Token.</t>
+        Client Registration Access Endpoint, authenticating with its
+        Registration Access Token.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -489,7 +497,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
         <t>Valid values of Client Metadata fields in this request MUST
         replace, not augment, the values previously associated with this
         Client. Omitted fields MUST be treated as null or empty values by the
-        server. </t>
+        server.</t>
 
         <t>The Client MUST include its client_id field in the request, and it
         MUST be the same as its currently-issued Client Identifier. If the
@@ -740,9 +748,8 @@ Cache-Control: no-store
             Authorization server MAY choose to substitute a valid value for
             any requested parameter of a client's metadata.</t>
 
-	    <t hangText="invalid_client_id"><vspace/>
-	      Value of <spanx style="verb">client_id</spanx> is invalid.
-	    </t>
+            <t hangText="invalid_client_id"><vspace/> Value of <spanx
+            style="verb">client_id</spanx> is invalid.</t>
           </list></t>
 
         <figure>
@@ -814,9 +821,9 @@ Cache-Control: no-store
       no means of updating itself and must register itself anew. As the
       Registration Access Tokens are long-term credentials, and since the
       Registration Access Token is a Bearer token and acts as the sole
-      authentication for use at the Client Access Endpoint, it MUST be
-      protected by the Client as described in <xref target="RFC6750">OAuth 2.0
-      Bearer</xref>.</t>
+      authentication for use at the Client Registration Access Endpoint, it
+      MUST be protected by the Client as described in <xref
+      target="RFC6750">OAuth 2.0 Bearer</xref>.</t>
 
       <t>If a Client is deprovisioned from a server, any outstanding
       Registration Access Tokens for that client MUST be invalidated at the
@@ -868,21 +875,14 @@ Cache-Control: no-store
       Working Group, and the OpenID Connect Working Group participants for
       their input to this document. In particular, the following individuals
       have been instrumental in their review and contribution to various
-      versions of this document:
-      Amanda Anganes,
-      Tim Bray,
-      Domenico Catalano,
-      George Fletcher,
-      Torsten Lodderstedt,
-      Eve Maler,
-      Thomas Hardjono,
-      Nat Sakimura,
-      and Christian Scholz.
-      </t>
+      versions of this document: Amanda Anganes, Tim Bray, Domenico Catalano,
+      George Fletcher, Torsten Lodderstedt, Eve Maler, Thomas Hardjono, Nat
+      Sakimura, and Christian Scholz.</t>
     </section>
 
     <section anchor="History" title="Document History">
-      <t>[[ to be removed by the RFC editor before publication as an RFC ]]</t>
+      <t>[[ to be removed by the RFC editor before publication as an RFC
+      ]]</t>
 
       <t>-06</t>
 
@@ -997,6 +997,5 @@ Cache-Control: no-store
           <t>Imported original UMA draft specification</t>
         </list></t>
     </section>
-
   </back>
 </rfc>
