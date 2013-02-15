@@ -79,7 +79,10 @@
       </address>
     </author>
 
-    <date day="14" month="February" year="2013"/>
+    <date day="15" month="February" year="2013"/>
+
+    <area>Security</area>
+    <workgroup>OAuth Working Group</workgroup>
 
     <abstract>
       <t>This specification defines an endpoint and protocol for dynamic
@@ -172,8 +175,8 @@
       parameters for interoperability. ]]</t>
 
       <t><list style="hanging">
-          <t hangText="redirect_uris"><vspace blankLines="0"/>RECOMMENDED. A
-          list of redirect URIs for use in the Authorization Code and Implicit
+          <t hangText="redirect_uris"><vspace blankLines="0"/>RECOMMENDED.
+          Array of redirect URIs for use in the Authorization Code and Implicit
           grant types. An Authorization Server SHOULD require registration of
           valid redirect URIs for all clients that use these grant types in
           order to protect against token and credential theft attacks.</t>
@@ -191,7 +194,7 @@
           references a logo for the Client. If present, the server SHOULD
           display this image to the end user during approval.</t>
 
-          <t hangText="contacts"><vspace blankLines="0"/>OPTIONAL. List of
+          <t hangText="contacts"><vspace blankLines="0"/>OPTIONAL. Array of
           email addresses for people responsible for this Client. The
           Authorization Server MAY make these addresses available to end users
           for support requests for the Client. An Authorization Server MAY use
@@ -228,13 +231,14 @@
           2.3.1 of OAuth 2.0.</t>
 
           <t hangText="scope"><vspace blankLines="0"/>OPTIONAL. Space
-          separated list of scopes (as described in <xref
-          target="RFC6749">OAuth 2.0 Section 3.3</xref>) that the client will
-          be allowed to request tokens for. If omitted, an Authorization
-          Server MAY register a Client with a default set of allowed
+          separated list of scope values (as described in <xref
+          target="RFC6749">OAuth 2.0 Section 3.3</xref>) that the client
+	  is declaring that it may use when requesting access tokens.
+	  If omitted, an Authorization
+          Server MAY register a Client with a default set of
           scopes.</t>
 
-          <t hangText="grant_type"><vspace blankLines="0"/>OPTIONAL. List of
+          <t hangText="grant_type"><vspace blankLines="0"/>OPTIONAL. Array of
           grant types that a client may use. These grant types are defined as
           follows:<list style="symbols">
               <t><spanx style="verb">authorization_code</spanx>: The
@@ -294,7 +298,7 @@
         </list></t>
     </section>
 
-    <section title="Client Registration Endpoint">
+    <section anchor="RegistrationEndpoint" title="Client Registration Endpoint">
       <t>The Client Registration Endpoint is an OAuth 2.0 Endpoint defined in
       this document that is designed to allow a Client to register itself with
       the Authorization Server. The Client Registration Endpoint MUST accept
@@ -324,7 +328,7 @@
       <t>In order to facilitate registered clients updating their information,
       the Client Registration Endpoint issues a Request Access Token for
       clients to securely identify themselves in future connections to the
-      Client Update Endpoint. As such, the Client Update Endpoint MUST accept
+      Client Access Endpoint. As such, the Client Access Endpoint MUST accept
       requests with <xref target="RFC6750">OAuth 2.0 Bearer Tokens</xref> for
       these operations, whether or not the initial registration call requires
       authentication of some form.</t>
@@ -332,7 +336,7 @@
       <t>The Client Registration Endpoint MUST ignore all parameters it does
       not understand.</t>
 
-      <section title="Client Registration Request">
+      <section anchor="RegistrationRequest" title="Client Registration Request">
         <t>This operation registers a new Client to the Authorization Server.
         The Authorization Server assigns this client a unique Client
         Identifier, optionally assigns a Client Secret, and associates the
@@ -356,7 +360,9 @@
           <preamble>Following is a non-normative example request (with line
           wraps for display purposes only):</preamble>
 
-          <artwork><![CDATA[POST /register HTTP/1.1
+          <artwork><![CDATA[
+POST /register HTTP/1.1
+Content-Type: application/json
 Accept: application/json
 Host: server.example.com
 
@@ -375,7 +381,7 @@ Host: server.example.com
         <t/>
       </section>
 
-      <section title="Client Registration Response">
+      <section anchor="RegistrationResponse" title="Client Registration Response">
         <t>Upon successful registration, the Authorization Server generates a
         new Client Identifier for the client. This Client Identifier MUST be
         unique at the server and MUST NOT be in use by any other client. The
@@ -391,7 +397,7 @@ Host: server.example.com
       </section>
     </section>
 
-    <section title="Client Registration Access Endpoint">
+    <section anchor="AccessEndpoint" title="Client Registration Access Endpoint">
       <t>The Client Registration Access Endpoint is an OAuth 2.0 protected
       endpoint that is provisioned by the server for a specific client to be
       able to view and update its registered information. The Client MUST
@@ -401,14 +407,14 @@ Host: server.example.com
       <t>Operations on this endpoint are switched through the use of different
       <xref target="RFC2616">HTTP methods</xref>.</t>
 
-      <section title="Forming the Client Registration Access Endpoint URL">
+      <section anchor="AccessURL" title="Forming the Client Registration Access Endpoint URL">
         <t>The Authorization Server MUST provide the client with the fully
         qualified URL in the <spanx style="verb">registration_access_url</spanx>
         element of the <xref target="client-info-response">Client Information
         Response</xref>. The Authorization Server MUST NOT expect the client
         to construct or discover this URL on its own. The Client MUST use the
         URL as given by the server and MUST NOT construct this URL from
-        component pieces.</t>
+        component pieces. </t>
 
         <t>Depending on deployment characteristics, the Client Registration
         Access Endpoint URL may take any number of forms. It is RECOMMENDED
@@ -427,10 +433,10 @@ Host: server.example.com
         Token.</t>
       </section>
 
-      <section title="Client Read Request">
+      <section anchor="ReadRequest" title="Client Read Request">
         <t>In order to read the current configuration of the Client on the
         Authorization Server, the Client makes an HTTP GET request to the
-        Client Update Endpoint, authenticating with its Registration Access
+        Client Access Endpoint, authenticating with its Registration Access
         Token.</t>
 
         <figure>
@@ -460,7 +466,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
         inconsistency out? ]]</t>
       </section>
 
-      <section title="Client Update Request">
+      <section anchor="UpdateRequest" title="Client Update Request">
         <t>This operation updates a previously-registered client with new
         metadata at the Authorization Server. This request is authenticated by
         the Registration Access Token issued to the client.</t>
@@ -483,7 +489,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
         <t>Valid values of Client Metadata fields in this request MUST
         replace, not augment, the values previously associated with this
         Client. Omitted fields MUST be treated as null or empty values by the
-        server.</t>
+        server. </t>
 
         <t>The Client MUST include its client_id field in the request, and it
         MUST be the same as its currently-issued Client Identifier. If the
@@ -551,7 +557,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
         Response</xref>.</t>
       </section>
 
-      <section title="Client Delete Request">
+      <section anchor="DeleteRequest" title="Client Delete Request">
         <t>[[ Editor's note: The utility and nature of this function are still
         under active discussion. This is a proposed set of functionality that
         a server MAY choose to implement, else give a 405 response to any
@@ -609,7 +615,7 @@ Cache-Control: no-store
       </section>
     </section>
 
-    <section title="Client Registration Response">
+    <section anchor="Responses" title="Responses">
       <t>In response to certain requests from the Client to either the Client
       Registration Endpoint or the Client Registration Access Endpoint as
       described in this specification, the Authorization Server sends the
@@ -733,6 +739,10 @@ Cache-Control: no-store
             is invalid and the server has rejected this request. Note that an
             Authorization server MAY choose to substitute a valid value for
             any requested parameter of a client's metadata.</t>
+
+	    <t hangText="invalid_client_id"><vspace/>
+	      Value of <spanx style="verb">client_id</spanx> is invalid.
+	    </t>
           </list></t>
 
         <figure>
@@ -756,7 +766,7 @@ Cache-Control: no-store
       <t>This document makes no requests of IANA.</t>
     </section>
 
-    <section title="Security Considerations">
+    <section anchor="Security" title="Security Considerations">
       <t>[[ Editor's note: Following are some security considerations taken
       from the UMA and OpenID Connect source drafts. These need to be massaged
       into a properly generic set of considerations. ]]</t>
@@ -804,7 +814,7 @@ Cache-Control: no-store
       no means of updating itself and must register itself anew. As the
       Registration Access Tokens are long-term credentials, and since the
       Registration Access Token is a Bearer token and acts as the sole
-      authentication for use at the Client Update Endpoint, it MUST be
+      authentication for use at the Client Access Endpoint, it MUST be
       protected by the Client as described in <xref target="RFC6750">OAuth 2.0
       Bearer</xref>.</t>
 
@@ -814,133 +824,6 @@ Cache-Control: no-store
       Client could make requests to the Client Registration Access Endpoint
       where the authentication would succeed but the action would fail because
       the Client is no longer valid.</t>
-    </section>
-
-    <section title="Acknowledgments">
-      <t>The authors thank the OAuth Working Group, the User-Managed Access
-      Working Group, and the OpenID Connect Working Group participants for
-      their input to this document. In particular, the following individuals
-      have been instrumental in their review and contribution to various
-      versions of this document: Tim Bray, Torsten Lodderstedt, Eve Maler,
-      Thomas Hardjono, Christian Scholz, Nat Sakimura, George Fletcher, Amanda
-      Anganes, and Domenico Catalano.</t>
-    </section>
-
-    <section title="Document History">
-      <t>[[ to be removed by RFC editor before publication as an RFC ]]</t>
-
-      <t>- 06</t>
-
-      <t><list style="symbols">
-          <t>removed secret_rotation as a client-initiated action, including
-          removing client secret rotation endpoint and parameters</t>
-
-          <t>Changed _links structure to single value
-          registration_access_url</t>
-
-          <t>Collapsed create/update/read responses into client info
-          response</t>
-
-          <t>Changed return code of create action to 201</t>
-
-          <t>Added section to describe suggested generation and composition of
-          Client Registration Access URL</t>
-
-          <t>Added clarifying text to PUT and POST requests to specify JSON in
-          the body</t>
-
-          <t>Added Editor's Note to DELETE operation about its inclusion</t>
-
-          <t>Added Editor's Note to registration_access_url about alternate
-          syntax proposals.</t>
-        </list></t>
-
-      <t>- 05</t>
-
-      <t><list style="symbols">
-          <t>changed redirect_uri and contact to lists instead of space
-          delimited strings</t>
-
-          <t>removed operation parameter</t>
-
-          <t>added _links structure</t>
-
-          <t>made client update management more RESTful</t>
-
-          <t>split endpoint into three parts</t>
-
-          <t>changed input to JSON from form-encoded</t>
-
-          <t>added READ and DELETE operations</t>
-
-          <t>removed Requirements section</t>
-
-          <t>changed token_endpoint_auth_type back to
-          token_endpoint_auth_method to match OIDC who changed to match us</t>
-        </list></t>
-
-      <t>- 04</t>
-
-      <t><list style="symbols">
-          <t>removed default_acr, too undefined in the general OAuth2 case</t>
-
-          <t>removed default_max_auth_age, since there's no mechanism for
-          supplying a non-default max_auth_age in OAuth2</t>
-
-          <t>clarified signing and encryption URLs</t>
-
-          <t>changed token_endpoint_auth_method to token_endpoint_auth_type to
-          match OIDC</t>
-        </list></t>
-
-      <t>- 03</t>
-
-      <t><list style="symbols">
-          <t>added scope and grant_type claims</t>
-
-          <t>fixed various typos and changed wording for better clarity</t>
-
-          <t>endpoint now returns the full set of client information</t>
-
-          <t>operations on client_update allow for three actions on metadata:
-          leave existing value, clear existing value, replace existing value
-          with new value</t>
-        </list></t>
-
-      <t>- 02</t>
-
-      <t><list style="symbols">
-          <t>Reorganized contributors and references</t>
-
-          <t>Moved OAuth references to RFC</t>
-
-          <t>Reorganized model/protocol sections for clarity</t>
-
-          <t>Changed terminology to "client register" instead of "client
-          associate"</t>
-
-          <t>Specified that client_id must match across all subsequent
-          requests</t>
-
-          <t>Fixed RFC2XML formatting, especially on lists</t>
-        </list></t>
-
-      <t>- 01</t>
-
-      <t><list style="symbols">
-          <t>Merged UMA and OpenID Connect registrations into a single
-          document</t>
-
-          <t>Changed to form-paramter inputs to endpoint</t>
-
-          <t>Removed pull-based registration</t>
-        </list></t>
-
-      <t>- 00</t>
-
-      <t><list style="symbols">
-          <t>Imported original UMA draft specification</t>
-        </list></t>
     </section>
   </middle>
 
@@ -979,5 +862,141 @@ Cache-Control: no-store
                 type="HTML"/>
       </reference>
     </references>
+
+    <section anchor="Acknowledgments" title="Acknowledgments">
+      <t>The authors thank the OAuth Working Group, the User-Managed Access
+      Working Group, and the OpenID Connect Working Group participants for
+      their input to this document. In particular, the following individuals
+      have been instrumental in their review and contribution to various
+      versions of this document:
+      Amanda Anganes,
+      Tim Bray,
+      Domenico Catalano,
+      George Fletcher,
+      Torsten Lodderstedt,
+      Eve Maler,
+      Thomas Hardjono,
+      Nat Sakimura,
+      and Christian Scholz.
+      </t>
+    </section>
+
+    <section anchor="History" title="Document History">
+      <t>[[ to be removed by the RFC editor before publication as an RFC ]]</t>
+
+      <t>-06</t>
+
+      <t><list style="symbols">
+          <t>Removed secret_rotation as a client-initiated action, including
+          removing client secret rotation endpoint and parameters.</t>
+
+          <t>Changed _links structure to single value
+          registration_access_url.</t>
+
+          <t>Collapsed create/update/read responses into client info
+          response.</t>
+
+          <t>Changed return code of create action to 201.</t>
+
+          <t>Added section to describe suggested generation and composition of
+          Client Registration Access URL.</t>
+
+          <t>Added clarifying text to PUT and POST requests to specify JSON in
+          the body.</t>
+
+          <t>Added Editor's Note to DELETE operation about its inclusion.</t>
+
+          <t>Added Editor's Note to registration_access_url about alternate
+          syntax proposals.</t>
+        </list></t>
+
+      <t>-05</t>
+
+      <t><list style="symbols">
+          <t>changed redirect_uri and contact to lists instead of space
+          delimited strings</t>
+
+          <t>removed operation parameter</t>
+
+          <t>added _links structure</t>
+
+          <t>made client update management more RESTful</t>
+
+          <t>split endpoint into three parts</t>
+
+          <t>changed input to JSON from form-encoded</t>
+
+          <t>added READ and DELETE operations</t>
+
+          <t>removed Requirements section</t>
+
+          <t>changed token_endpoint_auth_type back to
+          token_endpoint_auth_method to match OIDC who changed to match us</t>
+        </list></t>
+
+      <t>-04</t>
+
+      <t><list style="symbols">
+          <t>removed default_acr, too undefined in the general OAuth2 case</t>
+
+          <t>removed default_max_auth_age, since there's no mechanism for
+          supplying a non-default max_auth_age in OAuth2</t>
+
+          <t>clarified signing and encryption URLs</t>
+
+          <t>changed token_endpoint_auth_method to token_endpoint_auth_type to
+          match OIDC</t>
+        </list></t>
+
+      <t>-03</t>
+
+      <t><list style="symbols">
+          <t>added scope and grant_type claims</t>
+
+          <t>fixed various typos and changed wording for better clarity</t>
+
+          <t>endpoint now returns the full set of client information</t>
+
+          <t>operations on client_update allow for three actions on metadata:
+          leave existing value, clear existing value, replace existing value
+          with new value</t>
+        </list></t>
+
+      <t>-02</t>
+
+      <t><list style="symbols">
+          <t>Reorganized contributors and references</t>
+
+          <t>Moved OAuth references to RFC</t>
+
+          <t>Reorganized model/protocol sections for clarity</t>
+
+          <t>Changed terminology to "client register" instead of "client
+          associate"</t>
+
+          <t>Specified that client_id must match across all subsequent
+          requests</t>
+
+          <t>Fixed RFC2XML formatting, especially on lists</t>
+        </list></t>
+
+      <t>-01</t>
+
+      <t><list style="symbols">
+          <t>Merged UMA and OpenID Connect registrations into a single
+          document</t>
+
+          <t>Changed to form-paramter inputs to endpoint</t>
+
+          <t>Removed pull-based registration</t>
+        </list></t>
+
+      <t>-00</t>
+
+      <t><list style="symbols">
+          <t>Imported original UMA draft specification</t>
+        </list></t>
+    </section>
+
   </back>
 </rfc>
