@@ -408,7 +408,7 @@ Host: server.example.com
         Response</xref>. The Authorization Server MUST NOT expect the client
         to construct or discover this URL on its own. The Client MUST use the
         URL as given by the server and MUST NOT construct this URL from
-        component pieces. </t>
+        component pieces.</t>
 
         <t>Depending on deployment characteristics, the Client Registration
         Access Endpoint URL may take any number of forms. It is RECOMMENDED
@@ -483,7 +483,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
         <t>Valid values of Client Metadata fields in this request MUST
         replace, not augment, the values previously associated with this
         Client. Omitted fields MUST be treated as null or empty values by the
-        server. </t>
+        server.</t>
 
         <t>The Client MUST include its client_id field in the request, and it
         MUST be the same as its currently-issued Client Identifier. If the
@@ -508,8 +508,6 @@ Authorization: Bearer reg-23410913-abewfq.123483
 Accept: application/json
 Host: server.example.com
 Authorization: Bearer reg-23410913-abewfq.123483
-
-TODO -- need to update this example --
 
 {
  "client_id":"s6BhdRkqt3",
