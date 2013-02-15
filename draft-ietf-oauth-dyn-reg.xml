@@ -385,8 +385,9 @@ Host: server.example.com
         Response</xref>.</t>
 
         <t>Upon an unsuccessful registration, the Authorization Server
-        responds with an error as described in <xref target="???">Client
-        Registration Error</xref>.</t>
+        responds with an error as described in <xref
+        target="client-registration-error">Client Registration
+        Error</xref>.</t>
       </section>
     </section>
 
