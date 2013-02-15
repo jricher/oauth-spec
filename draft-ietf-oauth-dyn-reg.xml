@@ -376,7 +376,7 @@ Host: server.example.com
       </section>
 
       <section title="Client Registration Response">
-        <t>Upon successful registrartion, the Authorization Server generates a
+        <t>Upon successful registration, the Authorization Server generates a
         new Client Identifier for the client. This Client Identifier MUST be
         unique at the server and MUST NOT be in use by any other client. The
         server responds with an HTTP 201 Created code and a body of type
@@ -410,7 +410,7 @@ Host: server.example.com
         component pieces. </t>
 
         <t>Depending on deployment characteristics, the Client Registration
-        Access Endpont URL may take any number of forms. It is RECOMMENDED
+        Access Endpoint URL may take any number of forms. It is RECOMMENDED
         that this endpoint URL be formed through the use of a
         server-constructed URL string which combines the Client Registration
         Endpoint's URL and the issued client_id for this Client, with the
@@ -533,7 +533,7 @@ TODO -- need to update this example --
         target="client-info-response">Client Information Response</xref>. The
         Authorization Server MAY include a new Client Secret and/or
         Registration Access Token in its response. If so, the Client MUST
-        immediately discard its preivous Client Secret and/or Registration
+        immediately discard its previous Client Secret and/or Registration
         Access Token.</t>
 
         <t>If the Client does not exist on this server, the server MUST return
@@ -546,7 +546,7 @@ TODO -- need to update this example --
         respond with HTTP 403 Forbidden.</t>
 
         <t>If the Client attempts to set an invalid metadata field and the
-        Authorizaton Server does not set a default value, the Authorization
+        Authorization Server does not set a default value, the Authorization
         Server responds with an error as described in <xref
         target="client-registration-error">Client Registration Error
         Response</xref>.</t>
@@ -582,14 +582,14 @@ Authorization: Bearer reg-23410913-abewfq.123483
         preventing the client_id from being used at either the Authorization
         Endpoint or Token Endpoint of the Authorization Server. The
         Authorization Server SHOULD immediately invalidate all existing
-        autorization grants and currently-active tokens associated with this
+        authorization grants and currently-active tokens associated with this
         Client.</t>
 
         <t>If a Client has been successfully deprovisioned, the Authorization
         Server responds with an HTTP 204 No Content message.</t>
 
         <t>If there is no such client, the server responds with an HTTP 404
-        Not Found. [[ Editor's note: This is an inconsistant state and
+        Not Found. [[ Editor's note: This is an inconsistent state and
         shouldn't happen. See discussion about the Registration Access Token
         validity above. ]]</t>
 
@@ -836,7 +836,7 @@ Cache-Control: no-store
           <t>removed secret_rotation as a client-initiated action, including
           removing client secret rotation endpoint and parameters</t>
 
-          <t>Chaned _links structure to single value
+          <t>Changed _links structure to single value
           registration_access_url</t>
 
           <t>Collapsed create/update/read responses into client info
@@ -845,7 +845,7 @@ Cache-Control: no-store
           <t>Changed return code of create action to 201</t>
 
           <t>Added section to describe suggested generation and composition of
-          Client Registration Access Url</t>
+          Client Registration Access URL</t>
 
           <t>Added clarifying text to PUT and POST requests to specify JSON in
           the body</t>
