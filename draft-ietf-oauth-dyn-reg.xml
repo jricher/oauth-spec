@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-06" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-07" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -79,7 +79,7 @@
       </address>
     </author>
 
-    <date day="15" month="February" year="2013"/>
+    <date day="21" month="February" year="2013"/>
 
     <area>Security</area>
 
@@ -668,7 +668,7 @@ Pragma: no-cache
             Access token to be used by the client to perform actions on the
             Client Registration Access Endpoint.</t>
 
-            <t hangText="registration_access_url"><vspace
+            <t hangText="registration_client_uri"><vspace
             blankLines="0"/>REQUIRED. The fully qualified URL of the Client
             Registration Access Endpoint for this client. The Client MUST use
             this URL as given when communicating with the Client Registration
@@ -699,7 +699,7 @@ Pragma: no-cache
 
 {
  "registration_access_token": "reg-23410913-abewfq.123483",
- "registration_access_url": 
+ "registration_client_uri": 
        "https://server.example.com/register/s6BhdRkqt3",
  "client_id":"s6BhdRkqt3",
  "client_secret": "cf136dc3c1fc93f31185e5885805d",
