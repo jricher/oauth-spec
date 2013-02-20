@@ -632,15 +632,13 @@ Pragma: no-cache
 
       <section anchor="client-info-response"
                title="Client Information Response">
-        <t>The response contains the following fields:</t>
-
-        <t>, as well as a Client Secret if this client is a confidential
-        client. The response also contains the fully qualified URL to the
-        Client Registration Access Endpoint for this specific client that the
-        client may use to obtain and update information about itself. The
-        response also contains a Registration Access Token that is to be used
-        by the client to perform subsequent operations at the Client
-        Registration Access Endpoint.</t>
+        <t>The response contains the Client Identifier as well as the Client
+        Secret, if the Client is a confidential Client. The response also
+        contains the fully qualified URL to the Client Registration Access
+        Endpoint for this specific client that the client may use to obtain
+        and update information about itself. The response also contains a
+        Registration Access Token that is to be used by the client to perform
+        subsequent operations at the Client Registration Access Endpoint.</t>
 
         <t><list style="hanging">
             <t hangText="client_id"><vspace/>REQUIRED. The unique Client
