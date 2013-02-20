@@ -617,6 +617,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
 
           <artwork><![CDATA[HTTP/1.1 204 No Content
 Cache-Control: no-store
+Pragma: no-cache
 
 ]]></artwork>
         </figure>
@@ -694,6 +695,7 @@ Cache-Control: no-store
           <artwork><![CDATA[HTTP/1.1 200 OK
 Content-Type: application/json
 Cache-Control: no-store
+Pragma: no-cache
 
 {
  "registration_access_token": "reg-23410913-abewfq.123483",
@@ -759,6 +761,7 @@ Cache-Control: no-store
           <artwork><![CDATA[HTTP/1.1 400 Bad Request
 Content-Type: application/json
 Cache-Control: no-store
+Pragma: no-cache
    
 {
  "error":"invalid_redirect_uri",
