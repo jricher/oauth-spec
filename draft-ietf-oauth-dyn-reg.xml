@@ -140,11 +140,11 @@
             Client obtaining the URL for this endpoint are out of scope for
             this specification.</t>
 
-            <t>Client Registration Access Endpoint: The OAuth 2.0 Endpoint
-            through which a specific Client can manage its registration
-            information, provided by the Authorization Server to the Client.
-            This URL for this endpoint is communicated to the client by the
-            Authorization Server in the Client Information Response.</t>
+            <t>Client Configuration Endpoint: The OAuth 2.0 Endpoint through
+            which a specific Client can manage its registration information,
+            provided by the Authorization Server to the Client. This URL for
+            this endpoint is communicated to the client by the Authorization
+            Server in the Client Information Response.</t>
 
             <t>Registration Access Token: An OAuth 2.0 Bearer Token issued by
             the Authorization Server through the Client Registration Endpoint
@@ -331,11 +331,11 @@
       <t>In order to facilitate registered clients updating their information,
       the Client Registration Endpoint issues a Request Access Token for
       clients to securely identify themselves in future connections to the
-      <xref target="AccessEndpoint">Client Registration Access
-      Endpoint</xref>. As such, the Client Registration Access Endpoint MUST
-      accept requests with <xref target="RFC6750">OAuth 2.0 Bearer
-      Tokens</xref> for these operations, whether or not the initial
-      registration call requires authentication of some form.</t>
+      <xref target="AccessEndpoint">Client Configuration Endpoint</xref>. As
+      such, the Client Configuration Endpoint MUST accept requests with <xref
+      target="RFC6750">OAuth 2.0 Bearer Tokens</xref> for these operations,
+      whether or not the initial registration call requires authentication of
+      some form.</t>
 
       <t>The Client Registration Endpoint MUST ignore all parameters it does
       not understand.</t>
@@ -403,19 +403,18 @@ Host: server.example.com
       </section>
     </section>
 
-    <section anchor="AccessEndpoint"
-             title="Client Registration Access Endpoint">
-      <t>The Client Registration Access Endpoint is an OAuth 2.0 protected
-      endpoint that is provisioned by the server for a specific client to be
-      able to view and update its registered information. The Client MUST
-      include its Registration Access Token in all calls to this endpoint as
-      an <xref target="RFC6750">OAuth 2.0 Bearer Token</xref>.</t>
+    <section anchor="AccessEndpoint" title="Client Configuration Endpoint">
+      <t>The Client Configuration Endpoint is an OAuth 2.0 protected endpoint
+      that is provisioned by the server for a specific client to be able to
+      view and update its registered information. The Client MUST include its
+      Registration Access Token in all calls to this endpoint as an <xref
+      target="RFC6750">OAuth 2.0 Bearer Token</xref>.</t>
 
       <t>Operations on this endpoint are switched through the use of different
       <xref target="RFC2616">HTTP methods</xref>.</t>
 
       <section anchor="AccessURL"
-               title="Forming the Client Registration Access Endpoint URL">
+               title="Forming the Client Configuration Endpoint URL">
         <t>The Authorization Server MUST provide the client with the fully
         qualified URL in the <spanx style="verb">registration_client_uri</spanx>
         element of the <xref target="client-info-response">Client Information
@@ -424,28 +423,27 @@ Host: server.example.com
         URL as given by the server and MUST NOT construct this URL from
         component pieces.</t>
 
-        <t>Depending on deployment characteristics, the Client Registration
-        Access Endpoint URL may take any number of forms. It is RECOMMENDED
-        that this endpoint URL be formed through the use of a
-        server-constructed URL string which combines the Client Registration
-        Endpoint's URL and the issued client_id for this Client, with the
-        latter as either a path parameter
-        (https://server.example.com/register/client_id) or a query parameter
-        (https://server.example.com/register/?update=client_id). These common
-        patterns can help the Server to more easily determine the client to
-        which the request pertains, which MUST be matched against the client
-        to which the Registration Access Token was issued. If desired, the
-        server MAY simply return the Client Registration Endpoint URL as the
-        Client Registration Access Endpoint URL and change behavior based on
-        the authentication context provided by the Registration Access
+        <t>Depending on deployment characteristics, the Client Configuration
+        Endpoint URL may take any number of forms. It is RECOMMENDED that this
+        endpoint URL be formed through the use of a server-constructed URL
+        string which combines the Client Registration Endpoint's URL and the
+        issued client_id for this Client, with the latter as either a path
+        parameter (https://server.example.com/register/client_id) or a query
+        parameter (https://server.example.com/register/?update=client_id).
+        These common patterns can help the Server to more easily determine the
+        client to which the request pertains, which MUST be matched against
+        the client to which the Registration Access Token was issued. If
+        desired, the server MAY simply return the Client Registration Endpoint
+        URL as the Client Configuration Endpoint URL and change behavior based
+        on the authentication context provided by the Registration Access
         Token.</t>
       </section>
 
       <section anchor="ReadRequest" title="Client Read Request">
         <t>In order to read the current configuration of the Client on the
         Authorization Server, the Client makes an HTTP GET request to the
-        Client Registration Access Endpoint, authenticating with its
-        Registration Access Token.</t>
+        Client Configuration Endpoint, authenticating with its Registration
+        Access Token.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -479,10 +477,10 @@ Authorization: Bearer reg-23410913-abewfq.123483
         metadata at the Authorization Server. This request is authenticated by
         the Registration Access Token issued to the client.</t>
 
-        <t>The Client sends an HTTP PUT to the Client Registration Access
-        Endpoint with a content type of "application/json". The HTTP Entity
-        Payload is a <xref target="RFC4627">JSON</xref> document consisting of
-        a JSON object and all parameters as top- level members of that JSON
+        <t>The Client sends an HTTP PUT to the Client Configuration Endpoint
+        with a content type of "application/json". The HTTP Entity Payload is
+        a <xref target="RFC4627">JSON</xref> document consisting of a JSON
+        object and all parameters as top- level members of that JSON
         object.</t>
 
         <t>This request MUST include all fields described in <xref
@@ -569,7 +567,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
         client that tries, if it can't support it. ]]</t>
 
         <t>In order to deprovision itself on the Authorization Server, the
-        Client makes an HTTP DELETE request to the Client Registration Access
+        Client makes an HTTP DELETE request to the Client Configuration
         Endpoint. This request is authenticated by the Registration Access
         Token issued to the client.</t>
 
@@ -621,19 +619,19 @@ Pragma: no-cache
 
     <section anchor="Responses" title="Responses">
       <t>In response to certain requests from the Client to either the Client
-      Registration Endpoint or the Client Registration Access Endpoint as
-      described in this specification, the Authorization Server sends the
-      following response bodies.</t>
+      Registration Endpoint or the Client Configuration Endpoint as described
+      in this specification, the Authorization Server sends the following
+      response bodies.</t>
 
       <section anchor="client-info-response"
                title="Client Information Response">
         <t>The response contains the Client Identifier as well as the Client
         Secret, if the Client is a confidential Client. The response also
-        contains the fully qualified URL to the Client Registration Access
-        Endpoint for this specific client that the client may use to obtain
-        and update information about itself. The response also contains a
-        Registration Access Token that is to be used by the client to perform
-        subsequent operations at the Client Registration Access Endpoint.</t>
+        contains the fully qualified URL to the Client Configuration Endpoint
+        for this specific client that the client may use to obtain and update
+        information about itself. The response also contains a Registration
+        Access Token that is to be used by the client to perform subsequent
+        operations at the Client Configuration Endpoint.</t>
 
         <t><list style="hanging">
             <t hangText="client_id"><vspace/>REQUIRED. The unique Client
@@ -659,16 +657,16 @@ Pragma: no-cache
 
             <t hangText="registration_access_token"><vspace/>REQUIRED. The
             Access token to be used by the client to perform actions on the
-            Client Registration Access Endpoint.</t>
+            Client Configuration Endpoint.</t>
 
             <t hangText="registration_client_uri"><vspace
             blankLines="0"/>REQUIRED. The fully qualified URL of the Client
-            Registration Access Endpoint for this client. The Client MUST use
-            this URL as given when communicating with the Client Registration
-            Access Endpoint. [[ Editor's note: The syntax for this parameter
-            is still under active discussion. There have been several
-            alternative proposals to a flat URL here, including a structure
-            based on HAL for JSON and a structure based on JSON-LD. ]]</t>
+            Configuration Endpoint for this client. The Client MUST use this
+            URL as given when communicating with the Client Configuration
+            Endpoint. [[ Editor's note: The syntax for this parameter is still
+            under active discussion. There have been several alternative
+            proposals to a flat URL here, including a structure based on HAL
+            for JSON and a structure based on JSON-LD. ]]</t>
           </list></t>
 
         <t>Additionally, the Authorization Server MUST return all registered
@@ -817,16 +815,16 @@ Pragma: no-cache
       no means of updating itself and must register itself anew. As the
       Registration Access Tokens are long-term credentials, and since the
       Registration Access Token is a Bearer token and acts as the sole
-      authentication for use at the Client Registration Access Endpoint, it
-      MUST be protected by the Client as described in <xref
-      target="RFC6750">OAuth 2.0 Bearer</xref>.</t>
+      authentication for use at the Client Configuration Endpoint, it MUST be
+      protected by the Client as described in <xref target="RFC6750">OAuth 2.0
+      Bearer</xref>.</t>
 
       <t>If a Client is deprovisioned from a server, any outstanding
       Registration Access Tokens for that client MUST be invalidated at the
       same time. Otherwise, this can lead to an inconsistent state wherein a
-      Client could make requests to the Client Registration Access Endpoint
-      where the authentication would succeed but the action would fail because
-      the Client is no longer valid.</t>
+      Client could make requests to the Client Configuration Endpoint where
+      the authentication would succeed but the action would fail because the
+      Client is no longer valid.</t>
     </section>
   </middle>
 
@@ -890,6 +888,9 @@ Pragma: no-cache
           <t>added Pragma: no-cache to examples</t>
 
           <t>Changed "no such client" error to 403</t>
+
+          <t>Renamed Client Registration Access Endpoint to Client
+          Configuration Endpoint</t>
         </list></t>
 
       <t>-06</t>
