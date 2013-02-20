@@ -468,10 +468,10 @@ Authorization: Bearer reg-23410913-abewfq.123483
         Information Response</xref>.</t>
 
         <t>If the client does not exist on this server, the server MUST return
-        an HTTP 404 Not Found. [[ Editor's note: If the client doesn't exist,
-        then the Refresh Access Token shouldn't be valid, making this kind of
-        error a 403 at the auth layer instead. How best to call this
-        inconsistency out? ]]</t>
+        an HTTP 403 Forbidden.</t>
+
+        <t>If the Client does not have permission to read its record, the
+        server MUST return an HTTP 403 Forbidden.</t>
       </section>
 
       <section anchor="UpdateRequest" title="Client Update Request">
@@ -550,10 +550,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
         Access Token.</t>
 
         <t>If the Client does not exist on this server, the server MUST return
-        an HTTP 404 Not Found. [[ Editor's note: If the client doesn't exist,
-        then the Refresh Access Token shouldn't be valid, making this kind of
-        error a 403 at the auth layer instead. How best to call this
-        inconsistency out? ]]</t>
+        an HTTP 403 Forbidden.</t>
 
         <t>If the Client is not allowed to update its records, the server MUST
         respond with HTTP 403 Forbidden.</t>
@@ -601,10 +598,8 @@ Authorization: Bearer reg-23410913-abewfq.123483
         <t>If a Client has been successfully deprovisioned, the Authorization
         Server responds with an HTTP 204 No Content message.</t>
 
-        <t>If there is no such client, the server responds with an HTTP 404
-        Not Found. [[ Editor's note: This is an inconsistent state and
-        shouldn't happen. See discussion about the Registration Access Token
-        validity above. ]]</t>
+        <t>If there is no such client, the server responds with an HTTP 403
+        Forbidden.</t>
 
         <t>If the client is not allowed to delete itself, the server responds
         with HTTP 403 Forbidden.</t>
@@ -884,6 +879,18 @@ Pragma: no-cache
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-07</t>
+
+      <t><list style="symbols">
+          <t>changed registration_access_url to registration_client_uri</t>
+
+          <t>fixed missing text in 5.1</t>
+
+          <t>added Pragma: no-cache to examples</t>
+
+          <t>Changed "no such client" error to 403</t>
+        </list></t>
 
       <t>-06</t>
 
