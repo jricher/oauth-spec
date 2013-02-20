@@ -417,7 +417,7 @@ Host: server.example.com
       <section anchor="AccessURL"
                title="Forming the Client Registration Access Endpoint URL">
         <t>The Authorization Server MUST provide the client with the fully
-        qualified URL in the <spanx style="verb">registration_access_url</spanx>
+        qualified URL in the <spanx style="verb">registration_client_uri</spanx>
         element of the <xref target="client-info-response">Client Information
         Response</xref>. The Authorization Server MUST NOT expect the client
         to construct or discover this URL on its own. The Client MUST use the
@@ -489,7 +489,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
         target="client-metadata">Client Metadata</xref> as returned to the
         Client from a previous register, read, or update operation. The Client
         MUST NOT include the <spanx style="verb">registration_access_token</spanx>,
-        <spanx style="verb">registration_access_url</spanx>, <spanx
+        <spanx style="verb">registration_client_uri</spanx>, <spanx
         style="verb">expires_at</spanx>, or <spanx style="verb">issued_at</spanx>
         fields described in <xref target="client-info-response">Client
         Information Response</xref>.</t>
