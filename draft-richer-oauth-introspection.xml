@@ -156,11 +156,11 @@ token=X3241Affw.4233-99JXJ
         </figure>
 
         <t>The Authorization Server validates the client credentials and looks
-        up the information in the token. If the token is valid, it returns the
-        following JSON document.</t>
+        up the information in the token. If the token is currently active, it
+        returns the following JSON document.</t>
 
         <figure>
-          <preamble>Following is a non-normative example valid token response
+          <preamble>Following is a non-normative example active token response
           (with line wraps for display purposes only):</preamble>
 
           <artwork><![CDATA[HTTP/1.1 200 OK
@@ -178,12 +178,13 @@ Cache-Control: no-store
 
         <t/>
 
-        <t>If the token presented is not valid (but the authentication
-        presented is valid), it returns the following JSON document.</t>
+        <t>If the token presented is not currently active (but the
+        authentication presented is valid), it returns the following JSON
+        document.</t>
 
         <figure>
           <preamble>Following is a non-normative example response to an
-          invalid token (with line wraps for display purposes
+          inactive or invalid token (with line wraps for display purposes
           only):</preamble>
 
           <artwork><![CDATA[HTTP/1.1 200 OK
