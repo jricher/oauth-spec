@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-richer-oauth-introspection-02"
+<rfc category="std" docName="draft-richer-oauth-introspection-03"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth Token Introspection</title>
@@ -24,7 +24,11 @@
       </address>
     </author>
 
-    <date day="6" month="February" year="2013"/>
+    <date day="21" month="February" year="2013"/>
+
+    <area>Security</area>
+
+    <workgroup>OAuth Working Group</workgroup>
 
     <abstract>
       <t>This specification defines a method for a client or protected
@@ -101,8 +105,8 @@
         information.</t>
 
         <t><list style="hanging">
-            <t hangText="valid">REQUIRED. Boolean indicator of whether or not
-            the presented token is valid.</t>
+            <t hangText="active">REQUIRED. Boolean indicator of whether or not
+            the presented token is currently active.</t>
 
             <t hangText="expires_at">OPTIONAL. Integer timestamp, measured in
             the number of seconds since January 1 1970 UTC, indicating when
@@ -164,7 +168,7 @@ Content-Type: application/json
 Cache-Control: no-store
 
 {
- "valid": true,
+ "active": true,
  "client_id":"s6BhdRkqt3",
  "scope": "read write dolphin",
  "sub": "2309fj32kl",
@@ -187,7 +191,7 @@ Content-Type: application/json
 Cache-Control: no-store
 
 {
- "valid": false
+ "active": false
 }]]></artwork>
         </figure>
 
