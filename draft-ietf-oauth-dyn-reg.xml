@@ -524,7 +524,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
 {
  "client_id":"s6BhdRkqt3",
  "client_secret": "cf136dc3c1fc93f31185e5885805d",
- "redirect_uri":["https://client.example.org/callback",
+ "redirect_uris":["https://client.example.org/callback",
     "https://client.example.org/alt"],
  "scope": "read write dolphin",
  "grant_type": ["authorization_code", "refresh_token"]
@@ -889,7 +889,8 @@ Pragma: no-cache
           <t>Renamed Client Registration Access Endpoint to Client
           Configuration Endpoint</t>
 
-	  <t>Changed all the parameter names containing "_url" to instead use "_uri"</t>
+          <t>Changed all the parameter names containing "_url" to instead use
+          "_uri"</t>
         </list></t>
 
       <t>-06</t>
