@@ -428,15 +428,20 @@ Host: server.example.com
         endpoint URL be formed through the use of a server-constructed URL
         string which combines the Client Registration Endpoint's URL and the
         issued client_id for this Client, with the latter as either a path
-        parameter (https://server.example.com/register/client_id) or a query
-        parameter (https://server.example.com/register/?update=client_id).
-        These common patterns can help the Server to more easily determine the
-        client to which the request pertains, which MUST be matched against
-        the client to which the Registration Access Token was issued. If
-        desired, the server MAY simply return the Client Registration Endpoint
-        URL as the Client Configuration Endpoint URL and change behavior based
-        on the authentication context provided by the Registration Access
-        Token.</t>
+        parameter or a query parameter. For example, a Client with the Client
+        ID <spanx style="verb">s6BhdRkqt3</spanx> could be given a Client
+        Configuration Endpoint URL of <spanx style="verb">https://server.example.com/register/s6BhdRkqt3</spanx>
+        (path parameter) or of <spanx style="verb">https://server.example.com/register?client_id=s6BhdRkqt3</spanx>
+        (query parameter). In both of these cases, the client simply follows
+        the URL as given.</t>
+
+        <t>These common patterns can help the Server to more easily determine
+        the client to which the request pertains, which MUST be matched
+        against the client to which the Registration Access Token was issued.
+        If desired, the server MAY simply return the Client Registration
+        Endpoint URL as the Client Configuration Endpoint URL and change
+        behavior based on the authentication context provided by the
+        Registration Access Token.</t>
       </section>
 
       <section anchor="ReadRequest" title="Client Read Request">
@@ -891,6 +896,9 @@ Pragma: no-cache
 
           <t>Changed all the parameter names containing "_url" to instead use
           "_uri"</t>
+
+          <t>Updated example text for forming Client Configuration Endpoint
+          URL</t>
         </list></t>
 
       <t>-06</t>
