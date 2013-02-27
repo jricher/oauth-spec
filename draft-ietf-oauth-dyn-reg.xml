@@ -460,10 +460,10 @@ Authorization: Bearer reg-23410913-abewfq.123483
         the Registration Access Token issued to the client.</t>
 
         <t>The Client sends an HTTP PUT to the Client Configuration Endpoint
-        with a content type of "application/json". The HTTP Entity Payload is
-        a <xref target="RFC4627">JSON</xref> document consisting of a JSON
-        object and all parameters as top- level members of that JSON
-        object.</t>
+        with a content type of <spanx style="verb">application/json</spanx>.
+        The HTTP Entity Payload is a <xref target="RFC4627">JSON</xref>
+        document consisting of a JSON object and all parameters as top- level
+        members of that JSON object.</t>
 
         <t>This request MUST include all fields described in <xref
         target="client-metadata">Client Metadata</xref> as returned to the
@@ -479,11 +479,12 @@ Authorization: Bearer reg-23410913-abewfq.123483
         Client. Omitted fields MUST be treated as null or empty values by the
         server.</t>
 
-        <t>The Client MUST include its client_id field in the request, and it
-        MUST be the same as its currently-issued Client Identifier. If the
-        client includes its client_secret in the request, then it MUST match
-        the currently-issued client_secret for that Client. The client MUST
-        NOT be allowed to overwrite its existing client_secret with its own
+        <t>The Client MUST include its <spanx style="verb">client_id</spanx>
+        field in the request, and it MUST be the same as its currently-issued
+        Client Identifier. If the client includes the <spanx style="verb">client_secret</spanx>
+        field in the request, the value of this field MUST match the
+        currently-issued Client Secret for that Client. The Client MUST NOT be
+        allowed to overwrite its existing Client Secret with its own chosen
         value.</t>
 
         <t>For all metadata fields, the Authorization Server MAY replace any
@@ -492,7 +493,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
 
         <t>For example, a client could send the following request to the
         Client Registration Endpoint to update the client registration in the
-        above example:</t>
+        above example with new information:</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -747,10 +748,6 @@ Pragma: no-cache
     </section>
 
     <section anchor="Security" title="Security Considerations">
-      <t>[[ Editor's note: Following are some security considerations taken
-      from the UMA and OpenID Connect source drafts. These need to be massaged
-      into a properly generic set of considerations. ]]</t>
-
       <t>Since requests to the Client Registration Endpoint result in the
       transmission of clear-text credentials (in the HTTP request and
       response), the server MUST require the use of a transport-layer security
