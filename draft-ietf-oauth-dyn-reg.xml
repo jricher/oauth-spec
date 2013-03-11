@@ -23,7 +23,7 @@
   <?rfc notedraftinprogress='yes' ?>
 
   <front>
-    <title abbrev="oauth-dyn-reg">OAuth Dynamic Client Registration
+    <title abbrev="oauth-dyn-reg">OAuth 2.0 Dynamic Client Registration
     Protocol</title>
 
     <author fullname="Justin Richer" initials="J" role="editor"
@@ -87,25 +87,27 @@
 
     <abstract>
       <t>This specification defines an endpoint and protocol for dynamic
-      registration of OAuth Clients at an Authorization Server.</t>
+      registration of OAuth 2.0 Clients at an Authorization Server and methods
+      for the dynamically registered client to manage its registration.</t>
     </abstract>
   </front>
 
   <middle>
     <section title="Introduction">
       <t>In some use-case scenarios, it is desirable or necessary to allow
-      OAuth clients to obtain authorization from an OAuth authorization server
-      without requiring the two parties to interact beforehand. Nevertheless,
-      in order for the authorization server to accurately and securely
-      represent to end-users which client is seeking authorization to access
-      the end-user's resources, a method for automatic and unique registration
-      of clients is needed. The OAuth2 authorization framework does not define
-      how the relationship between the Client and the Authorization Server is
-      initialized, or how a given client is assigned a unique Client
-      Identifier. Historically, this has happened out-of-band from the OAuth
-      protocol. This draft provides a mechanism for a client to register
-      itself with the Authorization Server, which can be used to dynamically
-      provision a Client Identifier, and optionally a Client Secret.</t>
+      OAuth 2.0 clients to obtain authorization from an OAuth 2.0
+      authorization server without requiring the two parties to interact
+      beforehand. Nevertheless, in order for the authorization server to
+      accurately and securely represent to end-users which client is seeking
+      authorization to access the end-user's resources, a method for automatic
+      and unique registration of clients is needed. The OAuth 2.0
+      authorization framework does not define how the relationship between the
+      Client and the Authorization Server is initialized, or how a given
+      client is assigned a unique Client Identifier. Historically, this has
+      happened out-of-band from the OAuth 2.0 protocol. This draft provides a
+      mechanism for a client to register itself with the Authorization Server,
+      which can be used to dynamically provision a Client Identifier, and
+      optionally a Client Secret.</t>
 
       <t>As part of the registration process, this specification also defines
       a mechanism for the client to present the Authorization Server with a
@@ -216,7 +218,7 @@
               defined in OAuth 2.0 and does not have a client secret</t>
 
               <t><spanx style="verb">client_secret_post</spanx>: the client
-              uses the HTTP POST parameters defined in OAuth2.0 section
+              uses the HTTP POST parameters defined in OAuth 2.0 section
               2.3.1</t>
 
               <t><spanx style="verb">client_secret_basic</spanx>: the client
@@ -244,24 +246,25 @@
           grant types that a client may use. These grant types are defined as
           follows:<list style="symbols">
               <t><spanx style="verb">authorization_code</spanx>: The
-              Authorization Code Grant described in OAuth2 Section 4.1.</t>
+              Authorization Code Grant described in OAuth 2.0 Section 4.1.</t>
 
               <t><spanx style="verb">implicit</spanx>: The Implicit Grant
-              described in OAuth2 Section 4.2.</t>
+              described in OAuth 2.0 Section 4.2.</t>
 
               <t><spanx style="verb">password</spanx>: The Resource Owner
-              Password Credentials Grant described in OAuth2 Section 4.3</t>
+              Password Credentials Grant described in OAuth 2.0 Section
+              4.3</t>
 
               <t><spanx style="verb">client_credentials</spanx>: The Client
-              Credentials Grant described in OAuth2 Section 4.4</t>
+              Credentials Grant described in OAuth 2.0 Section 4.4</t>
 
               <t><spanx style="verb">refresh_token</spanx>: The Refresh Token
-              Grant described in OAuth2 Section 6.</t>
+              Grant described in OAuth 2.0 Section 6.</t>
             </list>Authorization Servers MAY allow for other values as defined
-          in grant type extensions to OAuth2. The extension process is
-          described in OAuth2 Section 2.5, and the value of this parameter
+          in grant type extensions to OAuth 2.0. The extension process is
+          described in OAuth 2.0 Section 2.5, and the value of this parameter
           MUST be the same as the value of the <spanx style="verb">grant_type</spanx>
-          parameter defined in the extension.</t>
+          parameter passed to the Token Ednpoint defined in the extension.</t>
 
           <t hangText="policy_uri"><vspace blankLines="0"/>OPTIONAL. A URL
           location that the Client provides to the End-User to read about the
@@ -688,10 +691,10 @@ Pragma: no-cache
 
       <section anchor="client-registration-error"
                title="Client Registration Error Response">
-        <t>When an OAuth error condition occurs, such as the client presenting
-        an invalid Registration Access Token, the Authorization Server returns
-        an Error Response as defined in Section 5.2 of the OAuth 2.0
-        specification.</t>
+        <t>When an OAuth 2.0 error condition occurs, such as the client
+        presenting an invalid Registration Access Token, the Authorization
+        Server returns an Error Response as defined in Section 5.2 of the
+        OAuth 2.0 specification.</t>
 
         <t>When a registration error condition occurs, the Authorization
         Server returns an HTTP 400 status code with content type <spanx
@@ -758,7 +761,7 @@ Pragma: no-cache
       MUST perform a TLS/SSL server certificate check, per <xref
       target="RFC6125">RFC 6125</xref>.</t>
 
-      <t>As this endpoint is an OAuth2 Protected Resource, requests to the
+      <t>As this endpoint is an OAuth 2.0 Protected Resource, requests to the
       Registration Endpoint SHOULD have some rate limiting on failures to
       prevent the Registration Access Token from being disclosed though
       repeated access attempts.</t>
@@ -861,6 +864,8 @@ Pragma: no-cache
           x509_encryption_uri into a single jwks_uri parameter</t>
 
           <t>Renamed grant_type to grant_types since it's a plural value</t>
+
+          <t>Formalized name of "OAuth 2.0" throughout document</t>
         </list></t>
 
       <t>-07</t>
