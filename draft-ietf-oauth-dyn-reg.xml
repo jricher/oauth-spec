@@ -79,7 +79,7 @@
       </address>
     </author>
 
-    <date day="21" month="February" year="2013"/>
+    <date day="14" month="March" year="2013"/>
 
     <area>Security</area>
 
@@ -268,7 +268,7 @@
           in grant type extensions to OAuth 2.0. The extension process is
           described in OAuth 2.0 Section 2.5, and the value of this parameter
           MUST be the same as the value of the <spanx style="verb">grant_type</spanx>
-          parameter passed to the Token Ednpoint defined in the extension.</t>
+          parameter passed to the Token Endpoint defined in the extension.</t>
 
           <t hangText="response_types">OPTIONAL. Array containing a list of
           the OAuth 2.0 response types that the may use. These response types
@@ -282,7 +282,7 @@
           in response type extensions to OAuth 2.0. The extension process is
           described in OAuth 2.0 Section 2.5, and the value of this parameter
           MUST be the same as the value of the <spanx style="verb">response_type</spanx>
-          paramter passed to the Authorization Endpoint defined in the
+          parameter passed to the Authorization Endpoint defined in the
           extension.</t>
 
           <t hangText="policy_uri"><vspace blankLines="0"/>OPTIONAL. A URL
