@@ -260,11 +260,30 @@
 
               <t><spanx style="verb">refresh_token</spanx>: The Refresh Token
               Grant described in OAuth 2.0 Section 6.</t>
+
+              <t><spanx style="verb">urn:ietf:params:oauth:grant-type:jwt-bearer</spanx>:
+              The JWT Bearer grant type defined in <xref
+              target="OAuth.JWT">OAuth JWT Bearer Token Profiles</xref>.</t>
             </list>Authorization Servers MAY allow for other values as defined
           in grant type extensions to OAuth 2.0. The extension process is
           described in OAuth 2.0 Section 2.5, and the value of this parameter
           MUST be the same as the value of the <spanx style="verb">grant_type</spanx>
           parameter passed to the Token Ednpoint defined in the extension.</t>
+
+          <t hangText="response_types">OPTIONAL. Array containing a list of
+          the OAuth 2.0 response types that the may use. These response types
+          are defined as follows:<list style="symbols">
+              <t>code: The Authorization Code response described in OAuth 2.0
+              Section 4.1.</t>
+
+              <t>token: The Implicit response described in OAuth 2.0 Section
+              4.2</t>
+            </list>Authorization Servers MAY allow for other values as defined
+          in response type extensions to OAuth 2.0. The extension process is
+          described in OAuth 2.0 Section 2.5, and the value of this parameter
+          MUST be the same as the value of the <spanx style="verb">response_type</spanx>
+          paramter passed to the Authorization Endpoint defined in the
+          extension.</t>
 
           <t hangText="policy_uri"><vspace blankLines="0"/>OPTIONAL. A URL
           location that the Client provides to the End-User to read about the
@@ -278,6 +297,61 @@
           client credential. The keys MAY also be used for higher level
           protocols that require signing or encryption.</t>
         </list></t>
+
+      <section anchor="GrantTypesAndResponseTypes"
+               title="Relationship Between Grant Types and Response Types">
+        <t>The <spanx style="verb">grant_types</spanx> and <spanx
+        style="verb">response_types</spanx> values described above are
+        partially orthogonal, as they refer to arguments passed to different
+        endpoints in the OAuth protocol. However, they are related in that the
+        <spanx style="verb">grant_types</spanx> available to a client
+        influence the <spanx style="verb">response_types</spanx> that the
+        client is allowed to use, and vice versa. For instance, a <spanx
+        style="verb">grant_types</spanx> value that includes <spanx
+        style="verb">authorization_code</spanx> implies a <spanx style="verb">response_types</spanx>
+        value that includes code, as both values are defined as part of the
+        OAuth 2.0 Authorization Code Grant. As such, a server supporting these
+        fields SHOULD take steps to ensure that a client cannot register
+        itself into an inconsistent state.</t>
+
+        <t>The correlation between the two fields is listed in the table
+        below.</t>
+
+        <texttable>
+          <ttcol>grant_types value includes:</ttcol>
+
+          <ttcol>response_types value includes:</ttcol>
+
+          <c>authorization_code</c>
+
+          <c>code</c>
+
+          <c>implicit</c>
+
+          <c>token</c>
+
+          <c>password</c>
+
+          <c>(none)</c>
+
+          <c>client_credentials</c>
+
+          <c>(none)</c>
+
+          <c>refresh_token</c>
+
+          <c>(none)</c>
+
+          <c>urn:ietf:params:oauth:grant-type:jwt-bearer</c>
+
+          <c>(none)</c>
+        </texttable>
+
+        <t>Extensions and profiles of this draft which introduce new values to
+        either the <spanx style="verb">grant_types</spanx> or <spanx
+        style="verb">response_types</spanx> parameter MUST document all
+        correspondences between the parameter types.</t>
+      </section>
     </section>
 
     <section anchor="RegistrationEndpoint"
@@ -841,6 +915,35 @@ Pragma: no-cache
         <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-key"
                 type="HTML"/>
       </reference>
+
+      <reference anchor="OAuth.JWT">
+        <front>
+          <title abbrev="OAuth JWT Bearer Token Profiles">JSON Web Token (JWT)
+          Bearer Token Profiles for OAuth 2.0</title>
+
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <!-- role="editor" -->
+
+            <organization>Microsoft</organization>
+          </author>
+
+          <author fullname="Brian Campbell" initials="B." surname="Campbell">
+            <organization abbrev="Ping Identity">Ping Identity
+            Corp.</organization>
+          </author>
+
+          <author fullname="Chuck Mortimore" initials="C." surname="Mortimore">
+            <organization>Salesforce</organization>
+          </author>
+
+          <date day="27" month="December" year="2012"/>
+        </front>
+
+        <seriesInfo name="Internet-Draft" value="draft-ietf-oauth-jwt-bearer"/>
+
+        <format target="http://tools.ietf.org/html/draft-ietf-oauth-jwt-bearer"
+                type="HTML"/>
+      </reference>
     </references>
 
     <section anchor="Acknowledgments" title="Acknowledgments">
@@ -866,6 +969,11 @@ Pragma: no-cache
           <t>Renamed grant_type to grant_types since it's a plural value</t>
 
           <t>Formalized name of "OAuth 2.0" throughout document</t>
+
+          <t>Added JWT Bearer Assertion to example grant types</t>
+
+          <t>Added response_types parameter and explanatory text on its use
+          with and relationship to grant_types</t>
         </list></t>
 
       <t>-07</t>
