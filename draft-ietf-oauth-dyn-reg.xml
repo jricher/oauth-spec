@@ -79,7 +79,7 @@
       </address>
     </author>
 
-    <date day="14" month="March" year="2013"/>
+    <date day="18" month="March" year="2013"/>
 
     <area>Security</area>
 
@@ -243,8 +243,8 @@
           scopes.</t>
 
           <t hangText="grant_types"><vspace blankLines="0"/>OPTIONAL. Array of
-          grant types that a client may use. These grant types are defined as
-          follows:<list style="symbols">
+          OAuth 2.0 grant types that the Client may use. These grant types are
+          defined as follows:<list style="symbols">
               <t><spanx style="verb">authorization_code</spanx>: The
               Authorization Code Grant described in OAuth 2.0 Section 4.1.</t>
 
@@ -264,20 +264,25 @@
               <t><spanx style="verb">urn:ietf:params:oauth:grant-type:jwt-bearer</spanx>:
               The JWT Bearer grant type defined in <xref
               target="OAuth.JWT">OAuth JWT Bearer Token Profiles</xref>.</t>
+
+              <t><spanx style="verb">urn:ietf:params:oauth:grant-type:saml2-bearer</spanx>:
+              The SAML 2 Bearer grant type defined in <xref
+              target="OAuth.SAML2">OAuth SAML 2 Bearer Token
+              Profiles</xref>.</t>
             </list>Authorization Servers MAY allow for other values as defined
           in grant type extensions to OAuth 2.0. The extension process is
           described in OAuth 2.0 Section 2.5, and the value of this parameter
           MUST be the same as the value of the <spanx style="verb">grant_type</spanx>
           parameter passed to the Token Endpoint defined in the extension.</t>
 
-          <t hangText="response_types">OPTIONAL. Array containing a list of
-          the OAuth 2.0 response types that the may use. These response types
-          are defined as follows:<list style="symbols">
-              <t>code: The Authorization Code response described in OAuth 2.0
-              Section 4.1.</t>
+          <t hangText="response_types"><vspace blankLines="0"/>OPTIONAL. Array
+          of the OAuth 2.0 response types that the Client may use. These
+          response types are defined as follows:<list style="symbols">
+              <t><spanx style="verb">code</spanx>: The Authorization Code
+              response described in OAuth 2.0 Section 4.1.</t>
 
-              <t>token: The Implicit response described in OAuth 2.0 Section
-              4.2</t>
+              <t><spanx style="verb">token</spanx>: The Implicit response
+              described in OAuth 2.0 Section 4.2</t>
             </list>Authorization Servers MAY allow for other values as defined
           in response type extensions to OAuth 2.0. The extension process is
           described in OAuth 2.0 Section 2.5, and the value of this parameter
@@ -347,8 +352,8 @@
           <c>(none)</c>
         </texttable>
 
-        <t>Extensions and profiles of this draft which introduce new values to
-        either the <spanx style="verb">grant_types</spanx> or <spanx
+        <t>Extensions and profiles of this document which introduce new values
+        to either the <spanx style="verb">grant_types</spanx> or <spanx
         style="verb">response_types</spanx> parameter MUST document all
         correspondences between the parameter types.</t>
       </section>
@@ -409,7 +414,7 @@
         <t>The Client sends an HTTP POST to the Client Registration Endpoint
         with a content type of "application/json". The HTTP Entity Payload is
         a <xref target="RFC4627">JSON</xref> document consisting of a JSON
-        object and all parameters as top- level members of that JSON
+        object and all parameters as top-level members of that JSON
         object.</t>
 
         <t>For example, a client could send the following registration request
@@ -944,6 +949,30 @@ Pragma: no-cache
         <format target="http://tools.ietf.org/html/draft-ietf-oauth-jwt-bearer"
                 type="HTML"/>
       </reference>
+
+      <reference anchor="OAuth.SAML2">
+        <front>
+          <title abbrev="OAuth JWT Bearer Token Profiles">JSON Web Token (JWT)
+          Bearer Token Profiles for OAuth 2.0</title>
+
+          <author fullname="Brian Campbell" initials="B." surname="Campbell">
+            <organization abbrev="Ping Identity">Ping Identity
+            Corp.</organization>
+          </author>
+
+          <author fullname="Chuck Mortimore" initials="C." surname="Mortimore">
+            <organization>Salesforce</organization>
+          </author>
+
+          <date day="27" month="December" year="2012"/>
+        </front>
+
+        <seriesInfo name="Internet-Draft"
+                    value="draft-ietf-oauth-saml2-bearer"/>
+
+        <format target="http://tools.ietf.org/html/draft-ietf-oauth-saml2-bearer"
+                type="HTML"/>
+      </reference>
     </references>
 
     <section anchor="Acknowledgments" title="Acknowledgments">
@@ -970,7 +999,8 @@ Pragma: no-cache
 
           <t>Formalized name of "OAuth 2.0" throughout document</t>
 
-          <t>Added JWT Bearer Assertion to example grant types</t>
+          <t>Added JWT Bearer Assertion and SAML 2 Bearer Assertion to example
+          grant types</t>
 
           <t>Added response_types parameter and explanatory text on its use
           with and relationship to grant_types</t>
