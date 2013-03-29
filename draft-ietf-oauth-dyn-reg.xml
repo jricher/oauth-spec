@@ -427,7 +427,7 @@
         for these claims. For instance, in JavaScript, if one parses the JSON
         as follows, <spanx style="verb">var j = JSON.parse(json);</spanx>,
         then the member <spanx style="verb">client_name#en-us</spanx> can be
-        accessed using using the JavaScript syntax <spanx style="verb">j["client_name#en-us"]</spanx>.</t>
+        accessed using the JavaScript syntax <spanx style="verb">j["client_name#en-us"]</spanx>.</t>
       </section>
     </section>
 
