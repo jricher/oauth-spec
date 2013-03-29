@@ -366,7 +366,7 @@
           <c>(none)</c>
         </texttable>
 
-        <t>Extensions and profiles of this document which introduce new values
+        <t>Extensions and profiles of this document that introduce new values
         to either the <spanx style="verb">grant_types</spanx> or <spanx
         style="verb">response_types</spanx> parameter MUST document all
         correspondences between the parameter types.</t>
@@ -387,17 +387,17 @@
         Metadata member names, delimited by a # character. Since JSON member
         names are case sensitive, it is RECOMMENDED that language tag values
         used in Claim Names be spelled using the character case with which
-        they are registered in the IANA Language Subtag Registry
-        [IANA.Language]. In particular, normally language names are spelled
-        with lowercase characters, region names are spelled with uppercase
-        characters, and languages are spelled with mixed case characters.
-        However, since BCP47 language tag values are case insensitive,
-        implementations SHOULD interpret the language tag values supplied in a
-        case insensitive manner. Per the recommendations in BCP47, language
-        tag used for a field value should only be as specific as necessary.
-        For instance, using <spanx style="verb">fr</spanx> might be sufficient
-        in many contexts, rather than <spanx style="verb">fr-CA</spanx> or
-        <spanx style="verb">fr-FR</spanx>. </t>
+        they are registered in the <xref target="IANA.Language">IANA Language
+        Subtag Registry</xref>. In particular, normally language names are
+        spelled with lowercase characters, region names are spelled with
+        uppercase characters, and languages are spelled with mixed case
+        characters. However, since BCP47 language tag values are case
+        insensitive, implementations SHOULD interpret the language tag values
+        supplied in a case insensitive manner. Per the recommendations in
+        BCP47, language tag used for a field value should only be as specific
+        as necessary. For instance, using <spanx style="verb">fr</spanx> might
+        be sufficient in many contexts, rather than <spanx style="verb">fr-CA</spanx>
+        or <spanx style="verb">fr-FR</spanx>. </t>
 
         <t>For example, a Client may represent its name in English as <spanx
         style="verb">"client_name#en": "My Client"</spanx> and its name in
@@ -1023,8 +1023,8 @@ Pragma: no-cache
 
       <reference anchor="OAuth.SAML2">
         <front>
-          <title abbrev="OAuth JWT Bearer Token Profiles">JSON Web Token (JWT)
-          Bearer Token Profiles for OAuth 2.0</title>
+          <title abbrev="OAuth JWT Bearer Token Profiles">SAML 2.0 Bearer
+          Assertion Profiles for OAuth 2.0</title>
 
           <author fullname="Brian Campbell" initials="B." surname="Campbell">
             <organization abbrev="Ping Identity">Ping Identity
@@ -1035,7 +1035,7 @@ Pragma: no-cache
             <organization>Salesforce</organization>
           </author>
 
-          <date day="27" month="December" year="2012"/>
+          <date day="7" month="November" year="2012"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1043,6 +1043,22 @@ Pragma: no-cache
 
         <format target="http://tools.ietf.org/html/draft-ietf-oauth-saml2-bearer"
                 type="HTML"/>
+      </reference>
+
+      <reference anchor="IANA.Language">
+        <front>
+          <title>Language Subtag Registry</title>
+
+          <author>
+            <organization>Internet Assigned Numbers Authority
+            (IANA)</organization>
+          </author>
+
+          <date year="2005"/>
+        </front>
+
+        <format target="http://www.iana.org/assignments/language-subtag-registry"
+                type="TXT"/>
       </reference>
     </references>
 
@@ -1064,6 +1080,8 @@ Pragma: no-cache
 
       <t><list style="symbols">
           <t>Added method of internationalization for claims</t>
+
+          <t>Fixed SAML reference</t>
         </list></t>
 
       <t>-08</t>
