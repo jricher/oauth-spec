@@ -1082,7 +1082,8 @@ Pragma: no-cache
       <t>-09</t>
 
       <t><list style="symbols">
-          <t>Added method of internationalization for claims</t>
+          <t>Added method of internationalization for Client Metadata
+          values</t>
 
           <t>Fixed SAML reference</t>
         </list></t>
