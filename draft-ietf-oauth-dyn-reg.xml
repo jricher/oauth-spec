@@ -620,8 +620,9 @@ Authorization: Bearer reg-23410913-abewfq.123483
         payload as described in <xref target="client-info-response">Client
         Information Response</xref>.</t>
 
-        <t>If the client does not exist on this server, the server MUST return
-        an HTTP 403 Forbidden.</t>
+        <t>If the client does not exist on this server, the server MUST
+        respond with HTTP 401 Unauthorized and the Registration Access Token
+        used to make this request SHOULD be immediately revoked.</t>
 
         <t>If the Client does not have permission to read its record, the
         server MUST return an HTTP 403 Forbidden.</t>
@@ -703,8 +704,9 @@ Authorization: Bearer reg-23410913-abewfq.123483
         immediately discard its previous Client Secret and/or Registration
         Access Token.</t>
 
-        <t>If the Client does not exist on this server, the server MUST return
-        an HTTP 403 Forbidden.</t>
+        <t>If the client does not exist on this server, the server MUST
+        respond with HTTP 401 Unauthorized, and the Registration Access Token
+        used to make this request SHOULD be immediately revoked.</t>
 
         <t>If the Client is not allowed to update its records, the server MUST
         respond with HTTP 403 Forbidden.</t>
@@ -717,11 +719,6 @@ Authorization: Bearer reg-23410913-abewfq.123483
       </section>
 
       <section anchor="DeleteRequest" title="Client Delete Request">
-        <t>[[ Editor's note: The utility and nature of this function are still
-        under active discussion. This is a proposed set of functionality that
-        a server MAY choose to implement, else give a 405 response to any
-        client that tries, if it can't support it. ]]</t>
-
         <t>In order to deprovision itself on the Authorization Server, the
         Client makes an HTTP DELETE request to the Client Configuration
         Endpoint. This request is authenticated by the Registration Access
@@ -752,14 +749,15 @@ Authorization: Bearer reg-23410913-abewfq.123483
         <t>If a Client has been successfully deprovisioned, the Authorization
         Server responds with an HTTP 204 No Content message.</t>
 
-        <t>If there is no such client, the server responds with an HTTP 403
-        Forbidden.</t>
+        <t>If the server does not support the delete method, the server MUST
+        respond with an HTTP 405 Not Supported.</t>
 
-        <t>If the client is not allowed to delete itself, the server responds
-        with HTTP 403 Forbidden.</t>
+        <t>If the client does not exist on this server, the server MUST
+        respond with HTTP 401 Unauthorized and the Registration Access Token
+        used to make this request SHOULD be immediately revoked.</t>
 
-        <t>If the server does not support the delete method, it responds with
-        an HTTP 405 Not Supported.</t>
+        <t>If the client is not allowed to delete itself, the server MUST
+        respond with HTTP 403 Forbidden.</t>
 
         <figure>
           <preamble>Following is a non-normative example response:</preamble>
@@ -1119,6 +1117,9 @@ Pragma: no-cache
           URIs</t>
 
           <t>Added security consideration about registering redirect URIs</t>
+
+          <t>Changed erroneous 403 responses to 401's with notes about token
+          handling</t>
         </list></t>
 
       <t>-09</t>
