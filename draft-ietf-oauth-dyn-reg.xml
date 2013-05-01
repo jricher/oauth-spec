@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-09" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-10" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -79,7 +79,7 @@
       </address>
     </author>
 
-    <date day="29" month="March" year="2013"/>
+    <date day="2" month="May" year="2013"/>
 
     <area>Security</area>
 
@@ -1078,6 +1078,8 @@ Pragma: no-cache
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-10</t>
 
       <t>-09</t>
 
