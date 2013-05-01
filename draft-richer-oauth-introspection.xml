@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-richer-oauth-introspection-03"
+<rfc category="std" docName="draft-richer-oauth-introspection-04"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="21" month="February" year="2013"/>
+    <date day="1" month="May" year="2013"/>
 
     <area>Security</area>
 
@@ -70,10 +70,14 @@
 
     <section title="Introspection Endpoint">
       <t hangText="instance_name">The Introspection Endpoint is an OAuth 2
-      Endpoint that responds to HTTP GET and HTTP POST requests from token
-      holders. The endpoint takes a single parameter representing the token
-      (and optionally further authentication) and returns a JSON document
-      representing the meta information surrounding the token.</t>
+      Endpoint that responds to HTTP POST requests (and optionally HTTP GET
+      requests) from token holders, particularly including Resource Servers
+      and Clients. The endpoint takes a single parameter representing the
+      token (and optionally further authentication) and returns a JSON
+      document representing the meta information surrounding the token.</t>
+
+      <t hangText="instance_name">The endpoint MUST be protected by TLS or
+      equivalent.</t>
 
       <section title="Introspection Request">
         <t hangText="instance_name"><list style="hanging">
@@ -82,6 +86,16 @@
             <t hangText="resource_id">OPTIONAL. A service-specific string
             identifying the resource that the client doing the introspection
             is asking about.</t>
+
+            <t hangText="token_type_hint">OPTIONAL. A hint about the type of
+            the token submitted for revocation. Clients MAY pass this
+            parameter in order to help the authorization server to optimize
+            the token lookup. If the server is unable to locate the token
+            using the given hint, it MUST extend its search accross all of its
+            supported token types. An authorization server MAY ignore this
+            parameter, particularly if it is able to detect the token type
+            automatically. Values for this field are defined in <xref
+            target="Revocation">OAuth Token Revocation</xref>.</t>
           </list></t>
 
         <t hangText="instance_name">The endpoint MAY allow other parameters to
@@ -92,8 +106,8 @@
         <t hangText="instance_name">The endpoint SHOULD also require some form
         of authentication to access this endpoint, such as the Client
         Authentication as described in <xref target="RFC6749">OAuth 2 Core
-        Specification</xref> or a separate OAuth2 Access Token. The methods of
-        managing and validating these authentication credentials are out of
+        Specification</xref> or a separate OAuth 2.0 Access Token. The methods
+        of managing and validating these authentication credentials are out of
         scope of this specification.</t>
       </section>
 
@@ -130,6 +144,9 @@
             <t hangText="aud">OPTIONAL. Service-specific string identifier or
             list of string identifiers representing the intended audience for
             this token.</t>
+
+            <t hangText="token_type">OPTIONAL. Type of the token as defined in
+            OAuth 2.0 section 5.1.</t>
           </list></t>
       </section>
 
@@ -217,6 +234,10 @@ Cache-Control: no-store
       credentials may be used directly at the endpoint, or they may be
       exchanged for an OAuth2 Access token scoped specifically for the
       Introspection Endpoint.</t>
+
+      <t>Since the introspection endpoint takes in OAuth 2 tokens as
+      parameters, it MUST be protected by TLS or equivalent. A server MAY
+      require an HTTP POST method only to the endpoint.</t>
     </section>
 
     <section title="Acknowledgements">
@@ -234,6 +255,19 @@ Cache-Control: no-store
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
+
+      <reference anchor="Revocation">
+        <front>
+          <title>OAuth Token Revocation</title>
+
+          <author fullname="Torsten Lodderstedt" initials="T."
+                  surname="Lodderstedt">
+            <organization>Deutsche Telekom AG</organization>
+          </author>
+
+          <date day="15" month="April" year="2013"/>
+        </front>
+      </reference>
     </references>
   </back>
 </rfc>
