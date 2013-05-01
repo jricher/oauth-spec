@@ -251,11 +251,14 @@
               uses HTTP Basic defined in OAuth 2.0 section 2.3.1</t>
 
               <t><spanx style="verb">client_secret_jwt</spanx>: the client
-              uses the JWT Assertion profile with a symmetric secret issued by
-              the server</t>
+              uses the <xref target="OAuth.JWT">JWT Assertion</xref> profile
+              with a symmetric signature using the <spanx style="verb">client_secret</spanx>
+              issued by the server</t>
 
               <t><spanx style="verb">private_key_jwt</spanx>: the client uses
-              the JWT Assertion profile with its own private key</t>
+              the <xref target="OAuth.JWT">JWT Assertion</xref> profile with
+              its own private key, usually with its public key location
+              indicated by the <spanx style="verb">jwks_uri</spanx> field</t>
             </list>Other authentication methods may be defined by extension.
           If unspecified or omitted, the default is <spanx style="verb">client_secret_basic</spanx>,
           denoting HTTP Basic Authentication Scheme as specified in Section
