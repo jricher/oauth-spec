@@ -933,6 +933,13 @@ Pragma: no-cache
       prevent the Registration Access Token from being disclosed though
       repeated access attempts.</t>
 
+      <t>For clients that use redirect-based grant types such as Authorization
+      Code and Implicit, Authorization Servers SHOULD require clients to
+      pre-register their <spanx style="verb">redirect_uris</spanx>. Requiring
+      Clients to do so can help mitigate attacks where rogue actors inject and
+      impersonate a validly-registered client and intercept its authorization
+      code or tokens through an invalid redirect URI.</t>
+
       <t>The authorization server MUST treat all client metadata as
       self-asserted. A rogue Client might use the name and logo for the
       legitimate Client, which it is trying to impersonate. An Authorization
@@ -1006,6 +1013,8 @@ Pragma: no-cache
 
           <date day="12" month="May" year="2012"/>
         </front>
+
+        <seriesInfo name="Internet-Draft" value="draft-ietf-jose-json-web-key"/>
 
         <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-key"
                 type="HTML"/>
@@ -1105,6 +1114,8 @@ Pragma: no-cache
 
           <t>Added extensibility to token_endpoint_auth_method using absolute
           URIs</t>
+
+          <t>Added security consideration about registering redirect URIs</t>
         </list></t>
 
       <t>-09</t>
