@@ -10,12 +10,13 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-richer-oauth-chain" ipr="trust200902">
+<rfc category="std" docName="draft-richer-oauth-chain-01" ipr="trust200902">
   <front>
     <title abbrev="oauth2-chain">A Method of Bearer Token Redelegation and
     Chaining for OAuth 2</title>
 
-    <author fullname="Justin Richer" initials="J." surname="Richer">
+    <author fullname="Justin Richer" initials="J." role="editor"
+            surname="Richer">
       <organization>The MITRE Corporation</organization>
 
       <address>
@@ -33,13 +34,43 @@
 
         <phone>+1-781-271-8176</phone>
 
-        <facsimile></facsimile>
+        <facsimile/>
 
         <email>jricher@mitre.org</email>
       </address>
     </author>
 
-    <date day="07" month="September" year="2012" />
+    <author fullname="Phil Hunt" initials="P." surname="Hunt">
+      <organization>Oracle Corporation</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city/>
+
+          <region/>
+
+          <code/>
+
+          <country/>
+        </postal>
+
+        <phone/>
+
+        <facsimile/>
+
+        <email>phil.hunt@yahoo.com</email>
+
+        <uri/>
+      </address>
+    </author>
+
+    <date day="01" month="May" year="2013"/>
+
+    <area>Security</area>
+
+    <workgroup>OAuth</workgroup>
 
     <keyword>Draft</keyword>
 
@@ -93,11 +124,15 @@
 
       <section title="Abbreviations Used In This Document">
         <t><list style="hanging">
-            <t hangText="AS">Authorization Server</t>
-
             <t hangText="C">Client</t>
 
             <t hangText="RO">Resource Owner</t>
+
+            <t hangText="AS1">Authorization Server that issues tokens for
+            Primary Resource Server (RS1)</t>
+
+            <t hangText="AS2">Authorization Server that issues tokens for
+            Chained Resource Server (RS2), MAY be the same as AS1</t>
 
             <t hangText="RS1">Primary Resource Server, initially called by C
             on behalf of RO</t>
@@ -116,7 +151,7 @@
 
     <section title="Protocol Description">
       <t>The process begins with any standard OAuth2 protocol flow, where the
-      client obtains AT1 from the AS.</t>
+      client obtains AT1 from AS1.</t>
 
       <figure>
         <preamble>The beginning of the process is standard OAuth2 &sect;1.2
@@ -131,22 +166,22 @@
   |        |
   |        |                             +---------------+
   |        |--(C)----------------------->| Authorization |
-  | Client |                             |     Server    |
-  |        |<-(D)------------------------|      (AS)     |
-  |        |                             |               |
-  |        |                             |               |
-  |        |       +-------------+       |               |
-  |        |--(E)->|  Primary    |--(F)->|               |
-  |        |       |  Resource   |       |               |
-  |        |       |   Server    |<-(G)--|               |
-  |        |       |   (RS1)     |       +---------------+
-  |        |       |             |
-  |        |       |             |       +---------------+
-  |        |       |             |--(H)->|   Chained     |
-  |        |       |             |       |   Resource    |
-  |        |       |             |       |    Server     |
-  |        |       |             |<-(I)--|    (RS2)      |
-  |        |<-(J)--|             |       +---------------+
+  |        |                             |    Server 1   |
+  |        |<-(D)------------------------|     (AS1)     |
+  |        |                             +---------------+
+  |        |                             
+  | Client |       +-------------+                             +---------------+
+  |        |--(E)->|             |--------------(F)----------->| Authorization |
+  |        |       |             |                             |    Server 2   |
+  |        |       |             |<-------------(G)------------|     (AS2)     |
+  |        |       |   Primary   |                             +---------------+
+  |        |       |  Resource   |
+  |        |       |   Server    |                             +---------------+
+  |        |       |    (RS1)    |-------------(H)------------>|   Chained     |
+  |        |       |             |                             |   Resource    |
+  |        |       |             |                             |    Server     |
+  |        |       |             |<------------(I)-------------|    (RS2)      |
+  |        |<-(J)--|             |                             +---------------+
   +--------+       +-------------+
 
  
@@ -160,23 +195,24 @@
           <t hangText="(B)">Client receives authorization from the Resource
           Owner using any valid OAuth2 grant type</t>
 
-          <t hangText="(C)">Client requests AT1 from the AS by authenticating
-          with the AS and presenting the authorization grant obtained in
+          <t hangText="(C)">Client requests AT1 from the AS1 by authenticating
+          with the AS1 and presenting the authorization grant obtained in
           (B)</t>
 
-          <t hangText="(D)">AS authenticates the Client and issues access
+          <t hangText="(D)">AS1 authenticates the Client and issues access
           token AT1 for use at RS1</t>
 
           <t hangText="(E)">Client presents access token AT1 to RS1 to access
           a protected resource</t>
 
           <t hangText="(F)">RS1 needs to access RS2 to fulfill this request,
-          makes a call to the Token Endpoint on the AS using the redelegate
+          makes a call to the Token Endpoint on the AS2 using the redelegate
           grant_type</t>
 
-          <t hangText="(G)">AS validates AT1 and issues a token AT2 for use by
-          RS1 against RS2, where the rights assigned to AT2 are a subset of
-          those assigned to AT1</t>
+          <t hangText="(G)">AS2 validates AT1 (using methods outside the scope
+          of this specification) and issues a token AT2 for use by RS1 against
+          RS2, where the rights assigned to AT2 are a subset of those assigned
+          to AT1</t>
 
           <t hangText="(H)">RS1 presents AT2 to RS2 to access a protected
           resource</t>
@@ -209,8 +245,8 @@
         Server's Token Endpoint with the following parameters:</t>
 
         <t><list style="hanging">
-            <t hangText="grant_type">REQUIRED. Value MUST be set to
-            "urn:ietf:params:oauth:grant_type:redelegate".</t>
+            <t hangText="grant_type">REQUIRED. Value MUST be set to <spanx
+            style="verb">urn:ietf:params:oauth:grant_type:redelegate</spanx></t>
 
             <t hangText="token">REQUIRED The token that was presented to the
             resource server by the client, referred to as AT1 in the protocol
@@ -254,7 +290,7 @@
       <section title="Error Response">
         <t>If the token request is not valid, such as the access token
         presented does not allow for redelegation, the AS returns an error
-        response as described in OAuth2 Core.</t>
+        response as described in OAuth2.</t>
       </section>
     </section>
 
@@ -275,6 +311,15 @@
       of scopes required for accessing the full service chain. A redelegation
       request MUST NOT request escalated privileges without involving the
       resource owner in a new authorization grant.</t>
+
+      <t>OAuth protected servers within the same domain, using the same Token
+      server, MAY request new OAuth tokens for the purpose of binding the
+      original user context with the new client credential.</t>
+
+      <t>When issuing tokens between OAuth domains, the token server MUST be
+      able to determine the submitted token's issuer. The token server SHOULD
+      have a method of establishing trust with the issuer of the received
+      OAuth token.</t>
     </section>
 
     <section anchor="Acknowledgements" title="Acknowledgements">
@@ -286,18 +331,20 @@
   <back>
     <references title="Normative References">
       <?rfc include="reference.RFC.2119"?>
+
+      <?rfc include="reference.RFC.6749"?>
     </references>
 
     <references title="Informative References">
       <reference anchor="InfRef">
         <front>
-          <title></title>
+          <title/>
 
           <author>
-            <organization></organization>
+            <organization/>
           </author>
 
-          <date year="2004" />
+          <date year="2004"/>
         </front>
       </reference>
     </references>
