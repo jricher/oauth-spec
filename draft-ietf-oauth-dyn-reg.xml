@@ -508,7 +508,7 @@
         object and all parameters as top-level members of that JSON
         object.</t>
 
-        <t>For example, a client could send the following oepn registration
+        <t>For example, a client could send the following open registration
         request to the Client Registration Endpoint:</t>
 
         <figure>
