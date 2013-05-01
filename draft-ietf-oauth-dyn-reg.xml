@@ -276,10 +276,10 @@
           grant types that the Client may use. These grant types are defined
           as follows:<list style="symbols">
               <t><spanx style="verb">authorization_code</spanx>: The
-              Authorization Code Grant described in OAuth 2.0 Section 4.1.</t>
+              Authorization Code Grant described in OAuth 2.0 Section 4.1</t>
 
               <t><spanx style="verb">implicit</spanx>: The Implicit Grant
-              described in OAuth 2.0 Section 4.2.</t>
+              described in OAuth 2.0 Section 4.2</t>
 
               <t><spanx style="verb">password</spanx>: The Resource Owner
               Password Credentials Grant described in OAuth 2.0 Section
@@ -309,7 +309,7 @@
           OAuth 2.0 response types that the Client may use. These response
           types are defined as follows:<list style="symbols">
               <t><spanx style="verb">code</spanx>: The Authorization Code
-              response described in OAuth 2.0 Section 4.1.</t>
+              response described in OAuth 2.0 Section 4.1</t>
 
               <t><spanx style="verb">token</spanx>: The Implicit response
               described in OAuth 2.0 Section 4.2</t>
