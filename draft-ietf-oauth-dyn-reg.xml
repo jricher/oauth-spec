@@ -79,7 +79,7 @@
       </address>
     </author>
 
-    <date day="2" month="May" year="2013"/>
+    <date day="6" month="May" year="2013"/>
 
     <area>Security</area>
 
@@ -165,13 +165,13 @@
       URIs.</t>
 
       <t>The client metadata values serve two parallel purposes in the overall
-      OAuth 2.0 Dynamic Client Registration protocol: </t>
+      OAuth 2.0 Dynamic Client Registration protocol:</t>
 
       <t><list style="symbols">
           <t>the Client requesting its desired values for each parameter to
           the Authorization Server in a <xref
           target="RegistrationRequest">register</xref> or <xref
-          target="UpdateRequest">update</xref> request, </t>
+          target="UpdateRequest">update</xref> request, and</t>
 
           <t>the Authorization Server informing the Client of the current
           values of each parameter that the Client has been registered to use
@@ -202,12 +202,11 @@
 
           <t hangText="client_name"><vspace blankLines="0"/>Human-readable
           name of the Client to be presented to the user. If omitted, the
-          Authorization Server MAY display to the user the raw <spanx
-          style="verb">client_id</spanx> value instead. It is RECOMMENDED that
-          clients always send this field. The value of this field MAY be
-          internationalized as described in <xref
-          target="HumanReadableClientMetadata">Human Readable Client
-          Metadata</xref>.</t>
+          Authorization Server MAY display the raw <spanx style="verb">client_id</spanx>
+          value to the user instead. It is RECOMMENDED that clients always
+          send this field. The value of this field MAY be internationalized as
+          described in <xref target="HumanReadableClientMetadata">Human
+          Readable Client Metadata</xref>.</t>
 
           <t hangText="client_uri"><vspace/>URL of the homepage of the Client.
           If present, the server SHOULD display this URL to the end user in a
@@ -218,8 +217,8 @@
 
           <t hangText="logo_uri"><vspace blankLines="0"/>URL that references a
           logo for the Client. If present, the server SHOULD display this
-          image to the end user during approval.The value of this field MAY be
-          internationalized as described in <xref
+          image to the end user during approval. The value of this field MAY
+          be internationalized as described in <xref
           target="HumanReadableClientMetadata">Human Readable Client
           Metadata</xref>.</t>
 
@@ -528,7 +527,7 @@ Host: server.example.com
  "token_endpoint_auth_method":"client_secret_basic",
  "scope":"read write dolphin",
  "logo_uri":"https://client.example.org/logo.png",
- "jwk_uri":"https://client.example.org/my_rsa_public_key.jwk"
+ "jwks_uri":"https://client.example.org/my_public_keys.jwks"
 }
 ]]></artwork>
         </figure>
@@ -557,7 +556,7 @@ Host: server.example.com
  "token_endpoint_auth_method":"client_secret_basic",
  "scope":"read write dolphin",
  "logo_uri":"https://client.example.org/logo.png",
- "jwk_uri":"https://client.example.org/my_rsa_public_key.jwk"
+ "jwks_uri":"https://client.example.org/my_public_keys.jwks"
 }
 ]]></artwork>
         </figure>
@@ -715,7 +714,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
  "scope": "read write dolphin",
  "grant_types": ["authorization_code", "refresh_token"]
  "token_endpoint_auth_method": "client_secret_basic",
- "jwk_uri": "https://client.example.org/my_rsa_public_key.jwk"
+ "jwks_uri": "https://client.example.org/my_public_keys.jwks"
  "client_name":"My New Example",
  "logo_uri":"https://client.example.org/newlogo.png"
 }
@@ -827,16 +826,15 @@ Pragma: no-cache
             Token Endpoint as described in OAuth 2.0 Section 2.3.1.</t>
 
             <t hangText="expires_at"><vspace/>REQUIRED if <spanx style="verb">client_secret</spanx>
-            is issued. The number of seconds from 1970-01-01T0:0:0Z as
-            measured in UTC that the <spanx style="verb">client_secret</spanx>
-            will expire or <spanx style="verb">0</spanx> if it does not
-            expire. See <xref target="RFC3339">RFC 3339</xref> for details
-            regarding date/times in general and UTC in particular.</t>
+            is issued. Time at which the <spanx style="verb">client_secret</spanx>
+            will expire or 0 if it will not expire. The time is represented as
+            the number of seconds from 1970-01-01T0:0:0Z as measured in UTC
+            until the date/time.</t>
 
-            <t hangText="issued_at"><vspace/>OPTIONAL. Specifies the timestamp
-            when the Client Identifier was issued. The timestamp value MUST be
-            a positive integer. The value is expressed in the number of
-            seconds since January 1, 1970 00:00:00 GMT.</t>
+            <t hangText="issued_at"><vspace/>OPTIONAL. Time at which the
+            Client Identifier was issued. The time is represented as the
+            number of seconds from 1970-01-01T0:0:0Z as measured in UTC until
+            the date/time.</t>
 
             <t hangText="registration_access_token"><vspace/>REQUIRED. The
             Access token to be used by the client to perform actions on the
@@ -881,7 +879,7 @@ Pragma: no-cache
  "grant_types": ["authorization_code", "refresh_token"]
  "token_endpoint_auth_method": "client_secret_basic",
  "logo_uri": "https://client.example.org/logo.png",
- "jwk_uri": "https://client.example.org/my_rsa_public_key.jwk"
+ "jwks_uri": "https://client.example.org/my_public_keys.jwks"
 }]]></artwork>
         </figure>
       </section>
@@ -967,7 +965,7 @@ Pragma: no-cache
       Code and Implicit, Authorization Servers SHOULD require clients to
       pre-register their <spanx style="verb">redirect_uris</spanx>. Requiring
       Clients to do so can help mitigate attacks where rogue actors inject and
-      impersonate a validly-registered client and intercept its authorization
+      impersonate a validly registered client and intercept its authorization
       code or tokens through an invalid redirect URI.</t>
 
       <t>The authorization server MUST treat all client metadata as
@@ -1019,8 +1017,6 @@ Pragma: no-cache
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.3339.xml'?>
-
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5646.xml'?>
@@ -1039,9 +1035,15 @@ Pragma: no-cache
 
           <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
             <organization>Microsoft</organization>
+
+            <address>
+              <email>mbj@microsoft.com</email>
+
+              <uri>http://self-issued.info/</uri>
+            </address>
           </author>
 
-          <date day="12" month="May" year="2012"/>
+          <date day="25" month="April" year="2013"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-jose-json-web-key"/>
@@ -1070,7 +1072,7 @@ Pragma: no-cache
             <organization>Salesforce</organization>
           </author>
 
-          <date day="27" month="December" year="2012"/>
+          <date day="29" month="March" year="2013"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-oauth-jwt-bearer"/>
@@ -1093,7 +1095,11 @@ Pragma: no-cache
             <organization>Salesforce</organization>
           </author>
 
-          <date day="7" month="November" year="2012"/>
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <organization>Microsoft</organization>
+          </author>
+
+          <date day="29" month="March" year="2013"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
