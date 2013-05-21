@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-10" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-11" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -79,7 +79,7 @@
       </address>
     </author>
 
-    <date day="6" month="May" year="2013"/>
+    <date day="21" month="May" year="2013"/>
 
     <area>Security</area>
 
@@ -524,6 +524,7 @@ Host: server.example.com
  "redirect_uris":["https://client.example.org/callback",
     "https://client.example.org/callback2"]
  "client_name":"My Example Client",
+ "client_name#ja-Jpan-JP":"&#12463;&#12521;&#12452;&#12450;&#12531;&#12488;&#21517;",
  "token_endpoint_auth_method":"client_secret_basic",
  "scope":"read write dolphin",
  "logo_uri":"https://client.example.org/logo.png",
@@ -535,8 +536,9 @@ Host: server.example.com
         <t/>
 
         <t>Alternatively, if the client has been provisioned with an initial
-        authorization credential, it could send the following registration
-        request to the Client Registration Endpoint:</t>
+        authorization credential, it sends the following registration request
+        to the Client Registration Endpoint. The method that the client
+        obtains this credential is out of scope for this specification.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -553,6 +555,7 @@ Host: server.example.com
  "redirect_uris":["https://client.example.org/callback",
     "https://client.example.org/callback2"]
  "client_name":"My Example Client",
+ "client_name#ja-Jpan-JP":"&#12463;&#12521;&#12452;&#12450;&#12531;&#12488;&#21517;",
  "token_endpoint_auth_method":"client_secret_basic",
  "scope":"read write dolphin",
  "logo_uri":"https://client.example.org/logo.png",
@@ -716,7 +719,9 @@ Authorization: Bearer reg-23410913-abewfq.123483
  "token_endpoint_auth_method": "client_secret_basic",
  "jwks_uri": "https://client.example.org/my_public_keys.jwks"
  "client_name":"My New Example",
+ "client_name#fr":"Mon Nouvel Exemple",
  "logo_uri":"https://client.example.org/newlogo.png"
+ "logo_uri#fr":"https://client.example.org/fr/newlogo.png"
 }
 ]]></artwork>
         </figure>
@@ -873,6 +878,8 @@ Pragma: no-cache
  "client_id":"s6BhdRkqt3",
  "client_secret": "cf136dc3c1fc93f31185e5885805d",
  "expires_at":2893276800
+ "client_name":"My Example Client",
+ "client_name#ja-Jpan-JP":"&#12463;&#12521;&#12452;&#12450;&#12531;&#12488;&#21517;",
  "redirect_uris":["https://client.example.org/callback",
     "https://client.example.org/callback2"]
  "scope": "read write dolphin",
@@ -1139,6 +1146,13 @@ Pragma: no-cache
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-11</t>
+
+      <t><list style="symbols">
+          <t>Added examples for localized text to client request and
+          response.</t>
+        </list></t>
 
       <t>-10</t>
 
