@@ -248,21 +248,11 @@
 
               <t><spanx style="verb">client_secret_basic</spanx>: the client
               uses HTTP Basic defined in OAuth 2.0 section 2.3.1</t>
-
-              <t><spanx style="verb">client_secret_jwt</spanx>: the client
-              uses the <xref target="OAuth.JWT">JWT Assertion</xref> profile
-              with a symmetric signature using the <spanx style="verb">client_secret</spanx>
-              issued by the server</t>
-
-              <t><spanx style="verb">private_key_jwt</spanx>: the client uses
-              the <xref target="OAuth.JWT">JWT Assertion</xref> profile with
-              its own private key, usually with its public key location
-              indicated by the <spanx style="verb">jwks_uri</spanx> field</t>
-            </list>Other authentication methods may be defined by extension.
-          If unspecified or omitted, the default is <spanx style="verb">client_secret_basic</spanx>,
-          denoting HTTP Basic Authentication Scheme as specified in Section
-          2.3.1 of OAuth 2.0. Other authentication methods MAY be supported by
-          using an absolute URI as the value of this parameter.</t>
+            </list>Other authentication methods may be defined by extensions
+          using the [[ REGISTRY ]]. If unspecified or omitted, the default is
+          <spanx style="verb">client_secret_basic</spanx>, denoting HTTP Basic
+          Authentication Scheme as specified in Section 2.3.1 of OAuth
+          2.0.</t>
 
           <t hangText="scope"><vspace blankLines="0"/>Space separated list of
           scope values (as described in <xref target="RFC6749">OAuth 2.0
@@ -328,11 +318,9 @@
           Metadata</xref>.</t>
 
           <t hangText="jwks_uri"><vspace blankLines="0"/>URL for the Client's
-          <xref target="JWK">JSON Web Key Set</xref> document that is used for
-          signing requests, such as requests to the Token Endpoint using the
-          <spanx style="verb">private_key_jwt</spanx> assertion client
-          credential. The keys MAY also be used for higher level protocols
-          that require signing or encryption.</t>
+          <xref target="JWK">JSON Web Key Set</xref> document representing the
+          client's public keys. These keys MAY also be used for higher level
+          protocols that require signing or encryption.</t>
         </list></t>
 
       <section anchor="GrantTypesAndResponseTypes"
@@ -382,12 +370,16 @@
           <c>urn:ietf:params:oauth:grant-type:jwt-bearer</c>
 
           <c>(none)</c>
+
+          <c>urn:ietf:params:oauth:grant-type:saml2-bearer</c>
+
+          <c>(none)</c>
         </texttable>
 
         <t>Extensions and profiles of this document that introduce new values
         to either the <spanx style="verb">grant_types</spanx> or <spanx
         style="verb">response_types</spanx> parameter MUST document all
-        correspondences between the parameter types.</t>
+        correspondences between these two parameter types.</t>
       </section>
 
       <section anchor="HumanReadableClientMetadata"
@@ -1151,7 +1143,9 @@ Pragma: no-cache
 
       <t><list style="symbols">
           <t>Added examples for localized text to client request and
-          response.</t>
+          response</t>
+
+          <t>Removed client_secret_jwt and private_key_jwt </t>
         </list></t>
 
       <t>-10</t>
