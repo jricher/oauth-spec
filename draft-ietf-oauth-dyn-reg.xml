@@ -230,11 +230,22 @@
           client.</t>
 
           <t hangText="tos_uri"><vspace blankLines="0"/>URL that points to a
-          human-readable Terms of Service for the Client. The Authorization
-          Server SHOULD display this URL to the End-User if it is given. The
-          value of this field MAY be internationalized as described in <xref
+          human-readable Terms of Service document for the Client. The
+          Authorization Server SHOULD display this URL to the End-User if it
+          is given. The Terms of Service usually describe a contractual
+          relationship between the End-User and the Client that the End-User
+          accepts when authorizing the Client. The value of this field MAY be
+          internationalized as described in <xref
           target="HumanReadableClientMetadata">Human Readable Client
           Metadata</xref>.</t>
+
+          <t hangText="policy_uri"><vspace blankLines="0"/>URL that points to
+          a human-readable Policy docuument for the Client. The Authorization
+          Server SHOULD display this URL to the End-User if it is given. The
+          Policy usually describes how an End-User's data will be used by the
+          Client. The value of this field MAY be internationalized as
+          described in <xref target="HumanReadableClientMetadata">Human
+          Readable Client Metadata</xref>.</t>
 
           <t hangText="token_endpoint_auth_method"><vspace blankLines="0"/>The
           requested authentication type for the Token Endpoint. Valid values
@@ -308,14 +319,6 @@
           MUST be the same as the value of the <spanx style="verb">response_type</spanx>
           parameter passed to the Authorization Endpoint defined in the
           extension.</t>
-
-          <t hangText="policy_uri"><vspace blankLines="0"/>A URL location that
-          the Client provides to the End-User to read about the how the
-          profile data will be used. The Authorization Server SHOULD display
-          this URL to the End-User if it is given. The value of this field MAY
-          be internationalized as described in <xref
-          target="HumanReadableClientMetadata">Human Readable Client
-          Metadata</xref>.</t>
 
           <t hangText="jwks_uri"><vspace blankLines="0"/>URL for the Client's
           <xref target="JWK">JSON Web Key Set</xref> document representing the
@@ -1145,7 +1148,9 @@ Pragma: no-cache
           <t>Added examples for localized text to client request and
           response</t>
 
-          <t>Removed client_secret_jwt and private_key_jwt </t>
+          <t>Removed client_secret_jwt and private_key_jwt</t>
+
+          <t>Clarified tos_uri and policy_uri</t>
         </list></t>
 
       <t>-10</t>
