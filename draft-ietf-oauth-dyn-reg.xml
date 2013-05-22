@@ -384,14 +384,16 @@
           <t hangText="client_uri"><vspace/>URL of the homepage of the Client.
           If present, the server SHOULD display this URL to the end user in a
           clickable fashion. It is RECOMMENDED that clients always send this
-          field. The value of this field MAY be internationalized as described
-          in <xref target="HumanReadableClientMetadata">Human Readable Client
+          field. The value of this field MUST point to a valid web page. The
+          value of this field MAY be internationalized as described in <xref
+          target="HumanReadableClientMetadata">Human Readable Client
           Metadata</xref>.</t>
 
           <t hangText="logo_uri"><vspace blankLines="0"/>URL that references a
           logo for the Client. If present, the server SHOULD display this
-          image to the end user during approval. The value of this field MAY
-          be internationalized as described in <xref
+          image to the end user during approval. The value of this field MUST
+          point to a valid image file. The value of this field MAY be
+          internationalized as described in <xref
           target="HumanReadableClientMetadata">Human Readable Client
           Metadata</xref>.</t>
 
@@ -407,7 +409,8 @@
           Authorization Server SHOULD display this URL to the End-User if it
           is given. The Terms of Service usually describe a contractual
           relationship between the End-User and the Client that the End-User
-          accepts when authorizing the Client. The value of this field MAY be
+          accepts when authorizing the Client. The value of this field MUST
+          point to a valid web page. The value of this field MAY be
           internationalized as described in <xref
           target="HumanReadableClientMetadata">Human Readable Client
           Metadata</xref>.</t>
@@ -416,9 +419,10 @@
           a human-readable Policy document for the Client. The Authorization
           Server SHOULD display this URL to the End-User if it is given. The
           Policy usually describes how an End-User's data will be used by the
-          Client. The value of this field MAY be internationalized as
-          described in <xref target="HumanReadableClientMetadata">Human
-          Readable Client Metadata</xref>.</t>
+          Client. The value of this field MUST point to a valid web page. The
+          value of this field MAY be internationalized as described in <xref
+          target="HumanReadableClientMetadata">Human Readable Client
+          Metadata</xref>.</t>
 
           <t hangText="token_endpoint_auth_method"><vspace blankLines="0"/>The
           requested authentication method for the Token Endpoint. Values
@@ -497,8 +501,9 @@
 
           <t hangText="jwks_uri"><vspace blankLines="0"/>URL for the Client's
           <xref target="JWK">JSON Web Key Set</xref> document representing the
-          client's public keys. These keys MAY also be used for higher level
-          protocols that require signing or encryption.</t>
+          client's public keys. The value of this field MUST point to a valid
+          JWK Set. These keys MAY also be used for higher level protocols that
+          require signing or encryption.</t>
         </list></t>
 
       <section anchor="GrantTypesAndResponseTypes"
