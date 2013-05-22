@@ -322,7 +322,7 @@
             the Client Configuration Endpoint</t>
 
             <t>The Client Credentials (such as client_secret) are optional
-            depending on the type of client regisrtation and are only used at
+            depending on the type of client registration and are only used at
             the Token Endpoint</t>
           </list></t>
 
@@ -413,7 +413,7 @@
           Metadata</xref>.</t>
 
           <t hangText="policy_uri"><vspace blankLines="0"/>URL that points to
-          a human-readable Policy docuument for the Client. The Authorization
+          a human-readable Policy document for the Client. The Authorization
           Server SHOULD display this URL to the End-User if it is given. The
           Policy usually describes how an End-User's data will be used by the
           Client. The value of this field MAY be internationalized as
@@ -1223,7 +1223,7 @@ Pragma: no-cache
 
       <t>For clients that use redirect-based grant types such as Authorization
       Code and Implicit, Authorization Servers SHOULD require clients to
-      pre-register their <spanx style="verb">redirect_uris</spanx>. Requiring
+      register their <spanx style="verb">redirect_uris</spanx>. Requiring
       Clients to do so can help mitigate attacks where rogue actors inject and
       impersonate a validly registered client and intercept its authorization
       code or tokens through an invalid redirect URI.</t>
