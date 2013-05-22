@@ -66,6 +66,8 @@
 
       <address>
         <email>mbj@microsoft.com</email>
+
+        <uri>http://self-issued.info/</uri>
       </address>
     </author>
 
@@ -162,7 +164,7 @@
         at every Authorization Server that it associates with. The OAuth 2.0
         specification does not define how a Client is assigned a Client
         Identifier by an Authorization Server, merely requiring that it have
-        one. </t>
+        one.</t>
       </section>
     </section>
 
@@ -257,8 +259,8 @@
           Readable Client Metadata</xref>.</t>
 
           <t hangText="token_endpoint_auth_method"><vspace blankLines="0"/>The
-          requested authentication type for the Token Endpoint. Valid values
-          are:<list style="symbols">
+          requested authentication method for the Token Endpoint. Values
+          defined by this specification are: <list style="symbols">
               <t><spanx style="verb">none</spanx>: this is a public client as
               defined in OAuth 2.0 and does not have a client secret</t>
 
@@ -268,9 +270,11 @@
 
               <t><spanx style="verb">client_secret_basic</spanx>: the client
               uses HTTP Basic defined in OAuth 2.0 section 2.3.1</t>
-            </list>Other authentication methods may be defined by extensions
-          using the [[ REGISTRY ]]. If unspecified or omitted, the default is
-          <spanx style="verb">client_secret_basic</spanx>, denoting HTTP Basic
+            </list> Additional values can be defined via the IANA OAuth Token
+          Endpoint Authentication Methods registry <xref
+          target="team-registry"/>. Absolute URIs can also be used as values
+          for this parameter. If unspecified or omitted, the default is <spanx
+          style="verb">client_secret_basic</spanx>, denoting HTTP Basic
           Authentication Scheme as specified in Section 2.3.1 of OAuth
           2.0.</t>
 
@@ -423,7 +427,7 @@
 
         <t>For example, a Client could represent its name in English as <spanx
         style="verb">"client_name#en": "My Client"</spanx> and its name in
-        Japanese as <spanx style="verb">"client_name#ja-Jpan-JP": "&#12463;&#12521;&#12452;&#12450;&#12531;&#12488;&#21517;"</spanx>
+        Japanese as <spanx style="verb">"client_name#ja-Jpan-JP": "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D"</spanx>
         within the same registration request. The Authorization Server MAY
         display any or all of these names to the Resource Owner during the
         authorization step, choosing which name to display based on system
@@ -952,8 +956,91 @@ Pragma: no-cache
       </section>
     </section>
 
-    <section anchor="IANA" title="IANA Considerations">
-      <t>This document makes no requests of IANA.</t>
+    <section title="IANA Considerations">
+      <section anchor="team-registry"
+               title="OAuth Token Endpoint Authentication Methods Registry">
+        <t>This specification establishes the OAuth Token Endpoint
+        Authentication Methods registry.</t>
+
+        <t>Additional values for use as <spanx style="verb">token_endpoint_auth_method</spanx>
+        metadata values are registered with a Specification Required (<xref
+        target="RFC5226"/>) after a two-week review period on the
+        oauth-ext-review@ietf.org mailing list, on the advice of one or more
+        Designated Experts. However, to allow for the allocation of values
+        prior to publication, the Designated Expert(s) may approve
+        registration once they are satisfied that such a specification will be
+        published.</t>
+
+        <t>Registration requests must be sent to the oauth-ext-review@ietf.org
+        mailing list for review and comment, with an appropriate subject
+        (e.g., "Request to register token_endpoint_auth_method value:
+        example").</t>
+
+        <t>Within the review period, the Designated Expert(s) will either
+        approve or deny the registration request, communicating this decision
+        to the review list and IANA. Denials should include an explanation
+        and, if applicable, suggestions as to how to make the request
+        successful.</t>
+
+        <t>IANA must only accept registry updates from the Designated
+        Expert(s) and should direct all requests for registration to the
+        review mailing list.</t>
+
+        <section anchor="team-template" title="Registration Template">
+          <t><list style="hanging">
+              <t
+              hangText="Token Endpoint Authorization Method name:"><vspace/>The
+              name requested (e.g., "example"). This name is case sensitive.
+              Names that match other registered names in a case insensitive
+              manner SHOULD NOT be accepted.</t>
+
+              <t hangText="Change controller:"><vspace/>For Standards Track
+              RFCs, state "IETF". For others, give the name of the responsible
+              party. Other details (e.g., postal address, email address, home
+              page URI) may also be included.</t>
+
+              <t hangText="Specification document(s):"><vspace/>Reference to
+              the document(s) that specify the token endpoint authorization
+              method, preferably including a URI that can be used to retrieve
+              a copy of the document(s). An indication of the relevant
+              sections may also be included but is not required.</t>
+            </list></t>
+        </section>
+
+        <section anchor="team-contents" title="Initial Registry Contents">
+          <t>The OAuth Token Endpoint Authentication Methods registry's
+          initial contents are:</t>
+
+          <t><?rfc subcompact="yes"?> <list style="symbols">
+              <t>Token Endpoint Authorization Method name: <spanx
+              style="verb">none</spanx></t>
+
+              <t>Change controller: IETF</t>
+
+              <t>Specification document(s): [[ this document ]]</t>
+            </list></t>
+
+          <t><list style="symbols">
+              <t>Token Endpoint Authorization Method name: <spanx
+              style="verb">client_secret_post</spanx></t>
+
+              <t>Change controller: IETF</t>
+
+              <t>Specification document(s): [[ this document ]]</t>
+            </list></t>
+
+          <t><list style="symbols">
+              <t>Token Endpoint Authorization Method name: <spanx
+              style="verb">client_secret_basic</spanx></t>
+
+              <t>Change controller: IETF</t>
+
+              <t>Specification document(s): [[ this document ]]</t>
+            </list></t>
+        </section>
+
+        <?rfc subcompact="no"?>
+      </section>
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -1028,6 +1115,10 @@ Pragma: no-cache
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
 
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml'?>
+
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5646.xml'?>
@@ -1037,8 +1128,6 @@ Pragma: no-cache
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
-
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
 
       <reference anchor="JWK">
         <front>
@@ -1054,7 +1143,7 @@ Pragma: no-cache
             </address>
           </author>
 
-          <date day="25" month="April" year="2013"/>
+          <date day="8" month="May" year="2013"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-jose-json-web-key"/>
@@ -1160,6 +1249,13 @@ Pragma: no-cache
           <t>Removed client_secret_jwt and private_key_jwt</t>
 
           <t>Clarified tos_uri and policy_uri</t>
+
+          <t>Added the OAuth Token Endpoint Authentication Methods registry
+          for registering <spanx style="verb">token_endpoint_auth_method</spanx>
+          metadata values.</t>
+
+          <t>Removed uses of non-ASCII characters, per RFC formatting
+          rules.</t>
         </list></t>
 
       <t>-10</t>
