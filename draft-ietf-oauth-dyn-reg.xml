@@ -161,10 +161,172 @@
       <section anchor="client-lifecycle" title="Client Lifecycle">
         <t>In the <xref target="RFC6749">OAuth 2.0 specification</xref>, a
         Client is identified by its own unique Client Identifier (client_id)
-        at every Authorization Server that it associates with. The OAuth 2.0
-        specification does not define how a Client is assigned a Client
-        Identifier by an Authorization Server, merely requiring that it have
-        one.</t>
+        at each Authorization Server that it associates with. Dynamic
+        Registration as defined in this document is one way for a Client to
+        get a Client Identifier and associate a set of metadata with that
+        identifier. Lack of such a Client Identifier is the expected trigger
+        for a client registration operation.</t>
+
+        <t>This Client Identifier is a unique, pairwise association between a
+        particular running instance of a piece of Client software and a
+        particular running instance of an Authorization Server software. In
+        particular:</t>
+
+        <t><list style="symbols">
+            <t>A single instance of Client software (such as a web server)
+            talking to multiple Authorization Servers will need to register
+            with each Authorization Server separately, creating a distinct
+            Client Identifier with each Authorization Server. The Client can
+            not make any assumption of correlation on the part of the
+            Authorization Server without further specifications, profiles, and
+            extensions to this specification document.</t>
+
+            <t>Multiple instances of Client software (such as a native
+            application installed on multiple devices simultaneously) talking
+            to the same Authorization Server will need to each register with
+            that Authorization Server separately, creating a distinct Client
+            Identifier for each copy of the application. The Authorization
+            Server can not make any assumption of correlation between these
+            clients without further specifications, profiles, and extensions
+            to this specification document.</t>
+          </list></t>
+
+        <t>Mechanisms for sharing Client Identifiers between multiple
+        instances of a piece of software (either Client or Authorization
+        Server) are outside the scope of this specification, as it is expected
+        that every successful <xref target="RegistrationRequest">registration
+        request</xref> results in the issuance of a new Client Identifier.
+        </t>
+
+        <t>The following non-normative lifecycle descriptions assume that a
+        Client and an Authorization Server both support the Dynamic
+        Registration protocol and that all necessary discovery steps have
+        already been performed.</t>
+
+        <t>Open Registration, with no authentication on the Registration
+        Endpoint, works as follows:</t>
+
+        <t><list style="letters">
+            <t>A Client needs to get OAuth 2.0 tokens from an Authorization
+            Server, but the Client does not have a Client Identifier for that
+            Authorization Server.</t>
+
+            <t>The Client sends an HTTP POST request to the Client
+            Registration Endpoint at the Authorization Server and includes its
+            metadata.</t>
+
+            <t>The Authorization Server issues a Client Identifier and returns
+            it to the Client along with a Registration Access Token and a
+            reference to the Client's Client Configuration Endpoint.</t>
+
+            <t>The Client stores the returned response from the Authorization
+            Server. At a minimum, it should know the values of client_id,
+            client_secret (if present), registration_access_token, and
+            registration_client_uri. </t>
+
+            <t>The Client uses the its client_id and client_secret (if
+            provided) to request OAuth 2.0 tokens using any valid OAuth 2.0
+            flow.</t>
+
+            <t>If the Client's client_secret expires or otherwise stops
+            working, the Client sends an HTTP GET request to the
+            registration_client_uri with the registration_access_token as its
+            authorization. This response will contain the Client's refreshed
+            client_secret along with any changed metadata values. Its
+            client_id will remain the same.</t>
+
+            <t>If the Client needs to update its configuration on the
+            Authorization Server, it sends an HTTP PUT request to the
+            registration_client_uri with the registration_access_token as its
+            authorization. This response will contain the Client's changed
+            metadata values. Its client_id will remain the same.</t>
+
+            <t>If the Client is uninstalled or otherwise deprovisioned, it can
+            send an HTTP DELETE request to the registration_client_uri with
+            the registration_access_token as its authorization. This will
+            effectively deprovision the client from the Authorization
+            Server.</t>
+          </list></t>
+
+        <t>If instead the Authorization Server supports an initial access
+        token on request to the Registration Endpoint, things could work
+        slightly differently. While the method by which a Client receives this
+        initial access token and the method by which the Authorization Server
+        validates this initial access token is out of scope for this
+        specification, a common approach is to use a manual pre-registration
+        portal to allow application developers to package their applications
+        with an identifier that ties the application back to that
+        developer.</t>
+
+        <t><list style="letters">
+            <t>A Developer is creating a Client to talk to an Authorization
+            Server and knows that instances of the Client will dynamically
+            register at runtime.</t>
+
+            <t>The Developer visits a manual pre-registration page and is
+            issued an initial access token in the form of an OAuth 2.0 Bearer
+            Token.</t>
+
+            <t>The Developer packages that token with all copies of the
+            application. </t>
+
+            <t>The Client needs to get OAuth 2.0 tokens from an Authorization
+            Server, but the Client does not have a Client Identifier for that
+            Authorization Server.</t>
+
+            <t>The Client sends an HTTP POST request to the Client
+            Registration Endpoint at the Authorization Server with its
+            metadata, and the initial access token as its authorization.</t>
+
+            <t>The Authorization Server issues a Client Identifier and returns
+            it to the Client along with a Registration Access Token and a
+            reference to the Client's Client Configuration Endpoint.</t>
+
+            <t>The Client stores the returned response from the Authorization
+            Server. At a minimum, it should know the values of client_id,
+            client_secret (if present), registration_access_token, and
+            registration_client_uri.</t>
+
+            <t>The Client uses the its client_id and client_secret (if
+            provided) to request OAuth 2.0 tokens using any valid OAuth 2.0
+            flow.</t>
+
+            <t>If the Client's client_secret expires or otherwise stops
+            working, the Client sends an HTTP GET request to the
+            registration_client_uri with the registration_access_token as its
+            authorization. This response will contain the Client's refreshed
+            client_secret along with any changed metadata values. Its
+            client_id will remain the same.</t>
+
+            <t>If the Client needs to update its configuration on the
+            Authorization Server, it sends an HTTP PUT request to the
+            registration_client_uri with the registration_access_token as its
+            authorization. This response will contain the Client's changed
+            metadata values. Its client_id will remain the same.</t>
+
+            <t>If the Client is uninstalled or otherwise deprovisioned, it can
+            send an HTTP DELETE request to the registration_client_uri with
+            the registration_access_token as its authorization. This will
+            effectively deprovision the client from the Authorization
+            Server.</t>
+          </list></t>
+
+        <t>Throughout this lifecycle, there are three different classes of
+        credential in play, each with different properties and targets:</t>
+
+        <t><list style="symbols">
+            <t>The initial access token is optional and is only used at the
+            Registration Endpoint</t>
+
+            <t>The Registration Access Token is mandatory and is only used at
+            the Client Configuration Endpoint</t>
+
+            <t>The Client Credentials (such as client_secret) are optional
+            depending on the type of client regisrtation and are only used at
+            the Token Endpoint</t>
+          </list></t>
+
+        <t/>
       </section>
     </section>
 
