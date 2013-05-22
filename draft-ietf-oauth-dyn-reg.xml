@@ -155,6 +155,15 @@
             particular Client.</t>
           </list></t>
       </section>
+
+      <section anchor="client-lifecycle" title="Client Lifecycle">
+        <t>In the <xref target="RFC6749">OAuth 2.0 specification</xref>, a
+        Client is identified by its own unique Client Identifier (client_id)
+        at every Authorization Server that it associates with. The OAuth 2.0
+        specification does not define how a Client is assigned a Client
+        Identifier by an Authorization Server, merely requiring that it have
+        one. </t>
+      </section>
     </section>
 
     <section anchor="client-metadata" title="Client Metadata">
