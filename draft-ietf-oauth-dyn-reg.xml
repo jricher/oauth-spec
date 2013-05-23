@@ -167,10 +167,10 @@
         identifier. Lack of such a Client Identifier is the expected trigger
         for a client registration operation.</t>
 
-        <t>This Client Identifier is a unique, pairwise association between a
-        particular running instance of a piece of Client software and a
-        particular running instance of an Authorization Server software. In
-        particular:</t>
+        <t>In many cases, this Client Identifier is a unique, pairwise
+        association between a particular running instance of a piece of Client
+        software and a particular running instance of an Authorization Server
+        software. In particular:</t>
 
         <t><list style="symbols">
             <t>A single instance of Client software (such as a web server)
@@ -191,12 +191,13 @@
             to this specification document.</t>
           </list></t>
 
-        <t>Mechanisms for sharing Client Identifiers between multiple
-        instances of a piece of software (either Client or Authorization
-        Server) are outside the scope of this specification, as it is expected
-        that every successful <xref target="RegistrationRequest">registration
-        request</xref> results in the issuance of a new Client Identifier.
-        </t>
+        <t>A Client Identifier (and its associated credentials) could also be
+        shared between multiple copies Mechanisms for sharing Client
+        Identifiers between multiple instances of a piece of software (either
+        Client or Authorization Server) are outside the scope of this
+        specification, as it is expected that every successful <xref
+        target="RegistrationRequest">registration request</xref> results in
+        the issuance of a new Client Identifier. </t>
 
         <t>The following non-normative lifecycle descriptions assume that a
         Client and an Authorization Server both support the Dynamic
@@ -427,8 +428,9 @@
           <t hangText="token_endpoint_auth_method"><vspace blankLines="0"/>The
           requested authentication method for the Token Endpoint. Values
           defined by this specification are: <list style="symbols">
-              <t><spanx style="verb">none</spanx>: this is a public client as
-              defined in OAuth 2.0 and does not have a client secret</t>
+              <t><spanx style="verb">none</spanx>: the client is a public
+              client as defined in OAuth 2.0 and does not have a client
+              secret</t>
 
               <t><spanx style="verb">client_secret_post</spanx>: the client
               uses the HTTP POST parameters defined in OAuth 2.0 section
@@ -762,14 +764,17 @@ Host: server.example.com
     <section anchor="AccessEndpoint" title="Client Configuration Endpoint">
       <t>The Client Configuration Endpoint is an OAuth 2.0 protected endpoint
       that is provisioned by the server for a specific client to be able to
-      view and update its registered information. The Client MUST include its
-      Registration Access Token in all calls to this endpoint as an <xref
-      target="RFC6750">OAuth 2.0 Bearer Token</xref>.</t>
+      view and update its registered information. The location of this
+      endpoint is communicated to the Client through the <spanx style="verb">registration_client_uri</spanx>
+      member of the <xref target="client-info-response">Client Information
+      Response</xref>. The Client MUST include its Registration Access Token
+      in all calls to this endpoint as an <xref target="RFC6750">OAuth 2.0
+      Bearer Token</xref>.</t>
 
       <t>Operations on this endpoint are switched through the use of different
       <xref target="RFC2616">HTTP methods</xref>.</t>
 
-      <section anchor="AccessURL"
+      <section anchor="client-configuration-endpoint-uri"
                title="Forming the Client Configuration Endpoint URL">
         <t>The Authorization Server MUST provide the client with the fully
         qualified URL in the <spanx style="verb">registration_client_uri</spanx>
