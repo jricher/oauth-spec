@@ -1334,7 +1334,7 @@ Pragma: no-cache
       should not expire while a client is still actively registered. If this
       token were to expire, a Client could be left in a situation where it has
       no means of reading its registration or updating itself and must
-      register itself anew, thereby getting a new Client Identifer. However,
+      register itself anew, thereby getting a new Client Identifier. However,
       Registration Access Tokens MAY be rotated when the client does a read or
       update operation on its Client Configuration Endpoint, and the Client
       MUST use this new Registration Access Token. As the Registration Access
@@ -1477,8 +1477,8 @@ Pragma: no-cache
       their input to this document. In particular, the following individuals
       have been instrumental in their review and contribution to various
       versions of this document: Amanda Anganes, Tim Bray, Domenico Catalano,
-      George Fletcher, Torsten Lodderstedt, Eve Maler, Nov Matake, Thomas
-      Hardjono, Nat Sakimura, and Christian Scholz.</t>
+      George Fletcher, Thomas Hardjono, Phil Hunt, Torsten Lodderstedt, Eve
+      Maler, Nov Matake, Nat Sakimura, and Christian Scholz.</t>
     </section>
 
     <section anchor="History" title="Document History">
