@@ -192,9 +192,9 @@
           </list></t>
 
         <t>A Client Identifier (and its associated credentials) could also be
-        shared between multiple copies Mechanisms for sharing Client
-        Identifiers between multiple instances of a piece of software (either
-        Client or Authorization Server) are outside the scope of this
+        shared between multiple copies of a Client. Mechanisms for sharing
+        Client Identifiers between multiple instances of a piece of software
+        (either Client or Authorization Server) are outside the scope of this
         specification, as it is expected that every successful <xref
         target="RegistrationRequest">registration request</xref> results in
         the issuance of a new Client Identifier. </t>
