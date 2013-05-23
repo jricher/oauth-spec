@@ -824,7 +824,14 @@ Authorization: Bearer reg-23410913-abewfq.123483
         Client, the Authorization Server responds with an HTTP 200 OK with
         content type of <spanx style="verb">application/json</spanx> and a
         payload as described in <xref target="client-info-response">Client
-        Information Response</xref>.</t>
+        Information Response</xref>. Some values in the response, including
+        the <spanx style="verb">client_secret</spanx> and r<spanx
+        style="verb">egistration_access_token</spanx>, MAY be changed from the
+        initial registration response. If the Authorization Server MAY include
+        a new Client Secret and/or Registration Access Token in its response,
+        the Client MUST immediately discard its previous Client Secret and/or
+        Registration Access Token. The value of the <spanx style="verb">client_id</spanx>
+        MUST NOT change from the initial registration response.</t>
 
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized and the Registration Access Token
@@ -906,11 +913,15 @@ Authorization: Bearer reg-23410913-abewfq.123483
         <t>Upon successful update, the Authorization Server responds with an
         HTTP 200 OK Message with content type <spanx style="verb">application/json</spanx>
         and a payload as described in <xref
-        target="client-info-response">Client Information Response</xref>. The
-        Authorization Server MAY include a new Client Secret and/or
-        Registration Access Token in its response. If so, the Client MUST
-        immediately discard its previous Client Secret and/or Registration
-        Access Token.</t>
+        target="client-info-response">Client Information Response</xref>. Some
+        values in the response, including the <spanx style="verb"> client_secret</spanx>
+        and r<spanx style="verb">egistration_access_token</spanx>, MAY be
+        changed from the initial registration response. If the Authorization
+        Server MAY include a new Client Secret and/or Registration Access
+        Token in its response, the Client MUST immediately discard its
+        previous Client Secret and/or Registration Access Token. The value of
+        the <spanx style="verb">client_id</spanx> MUST NOT change from the
+        initial registration response.</t>
 
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized, and the Registration Access Token
