@@ -403,6 +403,11 @@
               Server and knows that instances of the Client will not
               dynamically register at runtime.</t>
 
+              <t>The Developer visits a manual pre-registration page at the
+              Authorization Server and is issued an initial access token in
+              the form of an <xref target="RFC6750">OAuth 2.0 Bearer
+              Token</xref>.</t>
+
               <t>The Developer configures his build environment to send an
               HTTP POST request to the Client Registration Endpoint at the
               Authorization Server with the Client's metadata, using the
@@ -1581,6 +1586,12 @@ Pragma: no-cache
           style="verb">client_secret_expires_at</spanx> and <spanx
           style="verb">issued_at</spanx> to <spanx style="verb">client_id_issued_at</spanx>
           for greater clarity.</t>
+
+          <t>Added explanatory text for different credentials (initial access
+          token, registration access token, client credentials) and what
+          they're used for.</t>
+
+          <t>Added client lifecycle discussion and examples.</t>
         </list></t>
 
       <t>-10</t>
