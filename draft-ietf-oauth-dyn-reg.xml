@@ -242,29 +242,29 @@
 
               <t>The Client stores the returned response from the
               Authorization Server. At a minimum, it should know the values of
-              client_id, client_secret (if present),
-              registration_access_token, and registration_client_uri.</t>
+              <spanx style="verb">client_id</spanx>, <spanx style="verb">client_secret</spanx> (if present),
+              <spanx style="verb">registration_access_token</spanx>, and <spanx style="verb">registration_client_uri</spanx>.</t>
 
-              <t>The Client uses the its client_id and client_secret (if
+              <t>The Client uses the its <spanx style="verb">client_id</spanx> and <spanx style="verb">client_secret</spanx> (if
               provided) to request OAuth 2.0 tokens using any valid OAuth 2.0
               flow.</t>
 
-              <t>If the Client's client_secret expires or otherwise stops
+              <t>If the Client's <spanx style="verb">client_secret</spanx> expires or otherwise stops
               working, the Client sends an HTTP GET request to the
-              registration_client_uri with the registration_access_token as
+              <spanx style="verb">registration_client_uri</spanx> with the <spanx style="verb">registration_access_token</spanx> as
               its authorization. This response will contain the Client's
-              refreshed client_secret along with any changed metadata values.
-              Its client_id will remain the same.</t>
+              refreshed <spanx style="verb">client_secret</spanx> along with any changed metadata values.
+              Its <spanx style="verb">client_id</spanx> will remain the same.</t>
 
               <t>If the Client needs to update its configuration on the
               Authorization Server, it sends an HTTP PUT request to the
-              registration_client_uri with the registration_access_token as
+              <spanx style="verb">registration_client_uri</spanx> with the <spanx style="verb">registration_access_token</spanx> as
               its authorization. This response will contain the Client's
-              changed metadata values. Its client_id will remain the same.</t>
+              changed metadata values. Its <spanx style="verb">client_id</spanx> will remain the same.</t>
 
               <t>If the Client is uninstalled or otherwise deprovisioned, it
-              can send an HTTP DELETE request to the registration_client_uri
-              with the registration_access_token as its authorization. This
+              can send an HTTP DELETE request to the <spanx style="verb">registration_client_uri</spanx>
+              with the <spanx style="verb">registration_access_token</spanx> as its authorization. This
               will effectively deprovision the client from the Authorization
               Server.</t>
             </list></t>
@@ -343,9 +343,18 @@
               Server and knows that instances of the Client will not
               dynamically register at runtime.</t>
 
-              <t>The Developer configures their build environment to send an
+	      <t>An Authorization Server may require an initial access token for
+	      requests to its Registration Endpoint. While the method by which a
+	      Client receives this initial access token and the method by which
+	      the Authorization Server validates this initial access token is out
+	      of scope for this specification, a common approach is for the developer to use a
+	      manual pre-registration portal that issues an initial access token.</t>
+
+              <t>The Developer configures his build environment to send an
               HTTP POST request to the Client Registration Endpoint at the
-              Authorization Server with the Client's metadata.</t>
+              Authorization Server with the Client's metadata,
+	      using the initial access token obtained the previous step as
+	      an <xref target="RFC6750">OAuth 2.0 Bearer Token</xref>, if needed.</t>
 
               <t>The Authorization Server issues a Client Identifier and
               returns it to the Developer along with a Registration Access
@@ -353,33 +362,33 @@
               Endpoint.</t>
 
               <t>The Developer packages the Client Identifier with the client
-              and stores the registration_access_token, and
-              registration_client_uri.</t>
+              and stores the <spanx style="verb">registration_access_token</spanx>, and
+              <spanx style="verb">registration_client_uri</spanx>.</t>
 
-              <t>The Client uses the its client_id and client_secret (if
+              <t>The Client uses the its <spanx style="verb">client_id</spanx> and <spanx style="verb">client_secret</spanx> (if
               provided) to request OAuth 2.0 tokens using any valid OAuth 2.0
               flow.</t>
 
-              <t>If the Client's client_secret expires or otherwise stops
+              <t>If the Client's <spanx style="verb">client_secret</spanx> expires or otherwise stops
               working, the Developer's deployment system sends an HTTP GET
-              request to the registration_client_uri with the
-              registration_access_token as its authorization. This response
-              will contain the Client's refreshed client_secret along with any
-              changed metadata values. Its client_id will remain the same.
-              These new values will then be packaged and shipped to instances
-              of the Client if necessary.</t>
+              request to the <spanx style="verb">registration_client_uri</spanx> with the
+              <spanx style="verb">registration_access_token</spanx> as its authorization. This response
+              will contain the Client's refreshed <spanx style="verb">client_secret</spanx> along with any
+              changed metadata values. Its <spanx style="verb">client_id</spanx> will remain the same.
+              These new values will then be packaged and shipped to or
+	      retrieved by instances of the Client, if necessary.</t>
 
               <t>If the Developer needs to update its configuration on the
               Authorization Server, the deployment system sends an HTTP PUT
-              request to the registration_client_uri with the
-              registration_access_token as its authorization. This response
-              will contain the Client's changed metadata values. Its client_id
+              request to the <spanx style="verb">registration_client_uri</spanx> with the
+              <spanx style="verb">registration_access_token</spanx> as its authorization. This response
+              will contain the Client's changed metadata values. Its <spanx style="verb">client_id</spanx>
               will remain the same. These new values will then be packaged and
-              shipped to instances of the Client if necessary.</t>
+              shipped to or retrieved by instances of the Client, if necessary.</t>
 
               <t>If the Client is deprovisioned, the Developer's deployment
               system can send an HTTP DELETE request to the
-              registration_client_uri with the registration_access_token as
+              <spanx style="verb">registration_client_uri</spanx> with the <spanx style="verb">registration_access_token</spanx> as
               its authorization. This will effectively deprovision the client
               from the Authorization Server and prevent any copies of the
               client from functioning.</t>
