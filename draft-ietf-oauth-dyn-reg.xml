@@ -158,6 +158,57 @@
           </list></t>
       </section>
 
+      <section title="Registration Tokens and Credentials">
+        <t>Throughout the course of the Dynamic Registration protocol, there
+        are three different classes of credentials in play, each with
+        different properties and targets. </t>
+
+        <t><list style="symbols">
+            <t>The initial access token is optionally used by the Client or
+            Developer at the Registration Endpoint. This is an OAuth 2.0
+            Bearer Token that is used to authorize the initial Client
+            Registration Request. The content, structure, generation, and
+            validation of this token are out of scope for this specification.
+            The Authorization Server can use this token to verify that the
+            presenter is allowed to dynamically register new clients. The
+            Authorization Server can also use this token to tie multiple
+            instances of registered clients (each with their own distinct
+            Client Identifier) back to the party to whom the initial access
+            token was issued, usually an application developer. This token may
+            be shared between multiple instances of a Client to allow them to
+            each register separately. This token should be used only at the
+            Client Registration Endpoint.</t>
+
+            <t>The Registration Access Token is used by the Client or
+            Developer at the Client Configuration Endpoint and represents the
+            holder's authorization to manage the registration of a Client.
+            This is an OAuth 2.0 Bearer Token that is issued from the Client
+            Registration Endpoint in response to a Client Registration Request
+            and is returned in a Client Information Response. The Registration
+            Access Token is uniquely bound to the Client Identifier and is
+            required to be presented with all calls to the Client
+            Configuration Endpoint. The Registration Access Token should be
+            protected and should not be shared between instances of a client
+            (otherwise, one instance could change or delete registration
+            values for all copies of the client). The Registration Access
+            Token can be rotated through the use of the client read and update
+            methods on the Client Configuration Endpoint. The Registration
+            Access Token should be used only at the Client Configuration
+            Endpoint.</t>
+
+            <t>The Client Credentials (such as <spanx style="verb">client_secret</spanx>)
+            are optional depending on the type of Client and are used to
+            retrieve OAuth tokens. Client Credentials are usually bound to
+            particular instances of a Client and should not be shared between
+            instances. Since not all types of Clients have Client Credentials,
+            they can not be used to manage client registrations. The Client
+            Credentials can be rotated through the use of the client read and
+            update methods on the Client Configuration Endpoint. The Client
+            Credentials should not be used for authentication at the Client
+            Registration Endpoint or at the Client Configuration endpoint.</t>
+          </list></t>
+      </section>
+
       <section anchor="client-lifecycle" title="Client Lifecycle">
         <t>In the <xref target="RFC6749">OAuth 2.0 specification</xref>, a
         Client is identified by its own unique Client Identifier (<spanx
@@ -198,21 +249,6 @@
         specification, as it is expected that every successful <xref
         target="RegistrationRequest">registration request</xref> results in
         the issuance of a new Client Identifier.</t>
-
-        <t>Throughout this lifecycle, there are three different classes of
-        credentials in play, each with different properties and targets:</t>
-
-        <t><list style="symbols">
-            <t>The initial access token is optional and is only used at the
-            Registration Endpoint.</t>
-
-            <t>The Registration Access Token is mandatory and is only used at
-            the Client Configuration Endpoint.</t>
-
-            <t>The Client Credentials (such as <spanx style="verb">client_secret</spanx>)
-            are optional, depending on the type of client registration, and
-            are only used at the Token Endpoint.</t>
-          </list></t>
 
         <t>There are several patterns of OAuth Client registration that this
         protocol can enable. The following non-normative example lifecycle
