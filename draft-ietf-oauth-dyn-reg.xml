@@ -99,17 +99,17 @@
       <t>In some use-case scenarios, it is desirable or necessary to allow
       OAuth 2.0 clients to obtain authorization from an OAuth 2.0
       authorization server without requiring the two parties to interact
-      beforehand. Nevertheless, for the authorization server to
-      accurately and securely represent to end-users which client is seeking
-      authorization to access the end-user's resources, a method for automatic
-      and unique registration of clients is needed. The OAuth 2.0
-      authorization framework does not define how the relationship between the
-      Client and the Authorization Server is initialized, or how a given
-      client is assigned a unique Client Identifier. Historically, this has
-      happened out-of-band from the OAuth 2.0 protocol. This draft provides a
-      mechanism for a client to register itself with the Authorization Server,
-      which can be used to dynamically provision a Client Identifier, and
-      optionally a Client Secret.</t>
+      beforehand. Nevertheless, for the authorization server to accurately and
+      securely represent to end-users which client is seeking authorization to
+      access the end-user's resources, a method for automatic and unique
+      registration of clients is needed. The OAuth 2.0 authorization framework
+      does not define how the relationship between the Client and the
+      Authorization Server is initialized, or how a given client is assigned a
+      unique Client Identifier. Historically, this has happened out-of-band
+      from the OAuth 2.0 protocol. This draft provides a mechanism for a
+      client to register itself with the Authorization Server, which can be
+      used to dynamically provision a Client Identifier, and optionally a
+      Client Secret.</t>
 
       <t>As part of the registration process, this specification also defines
       a mechanism for the client to present the Authorization Server with a
@@ -152,20 +152,20 @@
 
             <t>Registration Access Token: An OAuth 2.0 Bearer Token issued by
             the Authorization Server through the Client Registration Endpoint
-            that is used to authenticate the caller during read,
-            update, and delete operations. This token is associated with a
-            particular Client.</t>
+            that is used to authenticate the caller during read, update, and
+            delete operations. This token is associated with a particular
+            Client.</t>
           </list></t>
       </section>
 
       <section anchor="client-lifecycle" title="Client Lifecycle">
         <t>In the <xref target="RFC6749">OAuth 2.0 specification</xref>, a
-        Client is identified by its own unique Client Identifier (<spanx style="verb">client_id</spanx>)
-        at each Authorization Server that it associates with. Dynamic
-        Registration as defined in this document is one way for a Client to
-        get a Client Identifier and associate a set of metadata with that
-        identifier. Lack of such a Client Identifier is the expected trigger
-        for a client registration operation.</t>
+        Client is identified by its own unique Client Identifier (<spanx
+        style="verb">client_id</spanx>) at each Authorization Server that it
+        associates with. Dynamic Registration as defined in this document is
+        one way for a Client to get a Client Identifier and associate a set of
+        metadata with that identifier. Lack of such a Client Identifier is the
+        expected trigger for a client registration operation.</t>
 
         <t>In many cases, this Client Identifier is a unique, pairwise
         association between a particular running instance of a piece of Client
@@ -197,7 +197,7 @@
         (either Client or Authorization Server) are outside the scope of this
         specification, as it is expected that every successful <xref
         target="RegistrationRequest">registration request</xref> results in
-        the issuance of a new Client Identifier. </t>
+        the issuance of a new Client Identifier.</t>
 
         <t>Throughout this lifecycle, there are three different classes of
         credentials in play, each with different properties and targets:</t>
@@ -209,18 +209,17 @@
             <t>The Registration Access Token is mandatory and is only used at
             the Client Configuration Endpoint.</t>
 
-            <t>The Client Credentials (such as <spanx style="verb">client_secret</spanx>) are optional,
-            depending on the type of client registration, and are only used at
-            the Token Endpoint.</t>
+            <t>The Client Credentials (such as <spanx style="verb">client_secret</spanx>)
+            are optional, depending on the type of client registration, and
+            are only used at the Token Endpoint.</t>
           </list></t>
 
-        <t>There are several patterns of OAuth Client registration that
-        this protocol can enable. The following non-normative example
-        lifecycle descriptions are not intended to be an exhaustive
-        list. It is assumed that the Authorization Server supports the Dynamic
-        Registration protocol and that all necessary discovery steps (which
-        are out of scope for this specification) have already been
-        performed.</t>
+        <t>There are several patterns of OAuth Client registration that this
+        protocol can enable. The following non-normative example lifecycle
+        descriptions are not intended to be an exhaustive list. It is assumed
+        that the Authorization Server supports the Dynamic Registration
+        protocol and that all necessary discovery steps (which are out of
+        scope for this specification) have already been performed.</t>
 
         <section title="Open Registration">
           <t>Open Registration, with no authentication on the Registration
@@ -242,31 +241,36 @@
 
               <t>The Client stores the returned response from the
               Authorization Server. At a minimum, it should know the values of
-              <spanx style="verb">client_id</spanx>, <spanx style="verb">client_secret</spanx> (if present),
-              <spanx style="verb">registration_access_token</spanx>, and <spanx style="verb">registration_client_uri</spanx>.</t>
+              <spanx style="verb">client_id</spanx>, <spanx style="verb">client_secret</spanx>
+              (if present), <spanx style="verb">registration_access_token</spanx>,
+              and <spanx style="verb">registration_client_uri</spanx>.</t>
 
-              <t>The Client uses the its <spanx style="verb">client_id</spanx> and <spanx style="verb">client_secret</spanx> (if
-              provided) to request OAuth 2.0 tokens using any valid OAuth 2.0
-              flow.</t>
+              <t>The Client uses the its <spanx style="verb">client_id</spanx>
+              and <spanx style="verb">client_secret</spanx> (if provided) to
+              request OAuth 2.0 tokens using any valid OAuth 2.0 flow.</t>
 
-              <t>If the Client's <spanx style="verb">client_secret</spanx> expires or otherwise stops
-              working, the Client sends an HTTP GET request to the
-              <spanx style="verb">registration_client_uri</spanx> with the <spanx style="verb">registration_access_token</spanx> as
-              its authorization. This response will contain the Client's
-              refreshed <spanx style="verb">client_secret</spanx> along with any changed metadata values.
-              Its <spanx style="verb">client_id</spanx> will remain the same.</t>
+              <t>If the Client's <spanx style="verb">client_secret</spanx>
+              expires or otherwise stops working, the Client sends an HTTP GET
+              request to the <spanx style="verb">registration_client_uri</spanx>
+              with the <spanx style="verb">registration_access_token</spanx>
+              as its authorization. This response will contain the Client's
+              refreshed <spanx style="verb">client_secret</spanx> along with
+              any changed metadata values. Its <spanx style="verb">client_id</spanx>
+              will remain the same.</t>
 
               <t>If the Client needs to update its configuration on the
-              Authorization Server, it sends an HTTP PUT request to the
-              <spanx style="verb">registration_client_uri</spanx> with the <spanx style="verb">registration_access_token</spanx> as
-              its authorization. This response will contain the Client's
-              changed metadata values. Its <spanx style="verb">client_id</spanx> will remain the same.</t>
+              Authorization Server, it sends an HTTP PUT request to the <spanx
+              style="verb">registration_client_uri</spanx> with the <spanx
+              style="verb">registration_access_token</spanx> as its
+              authorization. This response will contain the Client's changed
+              metadata values. Its <spanx style="verb">client_id</spanx> will
+              remain the same.</t>
 
               <t>If the Client is uninstalled or otherwise deprovisioned, it
               can send an HTTP DELETE request to the <spanx style="verb">registration_client_uri</spanx>
-              with the <spanx style="verb">registration_access_token</spanx> as its authorization. This
-              will effectively deprovision the client from the Authorization
-              Server.</t>
+              with the <spanx style="verb">registration_access_token</spanx>
+              as its authorization. This will effectively deprovision the
+              client from the Authorization Server.</t>
             </list></t>
         </section>
 
@@ -275,22 +279,29 @@
           request to the Registration Endpoint. While the method by which a
           Client receives this initial access token and the method by which
           the Authorization Server validates this initial access token is out
-          of scope for this specification, a common approach is to use a
-          manual pre-registration portal that issues a token, allowing
-          application developers to package their applications with the token
-          that ties instances of the application back to that developer.</t>
+          of scope for this specification, a common approach is for the
+          Developer to use a manual pre-registration portal at the
+          Authorizaiton Server that issues an initial access token to the
+          Developer. This allows the Developer to package the initial access
+          token with different copies of the application. While each copy of
+          the application would get its own Client Identifier (and
+          Registration Access Token), all copies of the application would be
+          tied back to the Developer by their use of this initial registration
+          token.</t>
 
           <t><list style="letters">
               <t>A Developer is creating a Client to talk to an Authorization
               Server and knows that instances of the Client will dynamically
-              register at runtime.</t>
+              register at runtime, but that the Authorization Server requires
+              authorization the registration endpoint.</t>
 
-              <t>The Developer visits a manual pre-registration page and is
-              issued an initial access token in the form of an OAuth 2.0
-              Bearer Token.</t>
+              <t>The Developer visits a manual pre-registration page at the
+              Authorization Server and is issued an initial access token in
+              the form of an <xref target="RFC6750">OAuth 2.0 Bearer
+              Token</xref>.</t>
 
               <t>The Developer packages that token with all copies of the
-              application.</t>
+              Client application.</t>
 
               <t>The Client needs to get OAuth 2.0 tokens from an
               Authorization Server, but the Client does not have a Client
@@ -307,91 +318,103 @@
 
               <t>The Client stores the returned response from the
               Authorization Server. At a minimum, it should know the values of
-              client_id, client_secret (if present),
-              registration_access_token, and registration_client_uri.</t>
+              <spanx style="verb">client_id</spanx>, <spanx style="verb">client_secret</spanx>
+              (if present), <spanx style="verb">registration_access_token</spanx>,
+              and <spanx style="verb">registration_client_uri</spanx>.</t>
 
-              <t>The Client uses the its client_id and client_secret (if
-              provided) to request OAuth 2.0 tokens using any valid OAuth 2.0
-              flow.</t>
+              <t>The Client uses the its <spanx style="verb">client_id</spanx>
+              and <spanx style="verb">client_secret</spanx> (if provided) to
+              request OAuth 2.0 tokens using any valid OAuth 2.0 flow.</t>
 
-              <t>If the Client's client_secret expires or otherwise stops
-              working, the Client sends an HTTP GET request to the
-              registration_client_uri with the registration_access_token as
-              its authorization. This response will contain the Client's
-              refreshed client_secret along with any changed metadata values.
-              Its client_id will remain the same.</t>
+              <t>If the Client's <spanx style="verb">client_secret</spanx>
+              expires or otherwise stops working, the Client sends an HTTP GET
+              request to the <spanx style="verb">registration_client_uri</spanx>
+              with the <spanx style="verb">registration_access_token</spanx>
+              as its authorization. This response will contain the Client's
+              refreshed <spanx style="verb">client_secret</spanx> along with
+              any metadata values registered to that client, some of which may
+              have changed. Its <spanx style="verb">client_id</spanx> will
+              remain the same.</t>
 
               <t>If the Client needs to update its configuration on the
-              Authorization Server, it sends an HTTP PUT request to the
-              registration_client_uri with the registration_access_token as
-              its authorization. This response will contain the Client's
-              changed metadata values. Its client_id will remain the same.</t>
+              Authorization Server, it sends an HTTP PUT request to the <spanx
+              style="verb">registration_client_uri</spanx> with the <spanx
+              style="verb">registration_access_token</spanx> as its
+              authorization. The response will contain the Client's changed
+              metadata values. Its <spanx style="verb">client_id</spanx> will
+              remain the same.</t>
 
               <t>If the Client is uninstalled or otherwise deprovisioned, it
-              can send an HTTP DELETE request to the registration_client_uri
-              with the registration_access_token as its authorization. This
-              will effectively deprovision the client from the Authorization
-              Server.</t>
+              can send an HTTP DELETE request to the <spanx style="verb">registration_client_uri</spanx>
+              with the <spanx style="verb">registration_access_token</spanx>
+              as its authorization. This will effectively deprovision the
+              client from the Authorization Server.</t>
             </list></t>
         </section>
 
         <section title="Developer Automation">
           <t>The Dynamic Registration protocol can also be used in place of a
           manual registration portal, for instance as part of an automated
-          build and deployment process.<list style="letters">
+          build and deployment process. An Authorization Server may require an
+          initial access token for requests to its Registration Endpoint, as
+          described in Protected Registration. However, in this scenario, the
+          Developer manages the Client's registration instead of the client
+          itself. Therefore, the intitial registration token and registration
+          access token all remain with the Developer. The Developer packages
+          the Client Identifier with the Client as part of its build process.
+          <list style="letters">
               <t>A Developer is creating a Client to talk to an Authorization
               Server and knows that instances of the Client will not
               dynamically register at runtime.</t>
 
-	      <t>An Authorization Server may require an initial access token for
-	      requests to its Registration Endpoint. While the method by which a
-	      Client receives this initial access token and the method by which
-	      the Authorization Server validates this initial access token is out
-	      of scope for this specification, a common approach is for the developer to use a
-	      manual pre-registration portal that issues an initial access token.</t>
-
               <t>The Developer configures his build environment to send an
               HTTP POST request to the Client Registration Endpoint at the
-              Authorization Server with the Client's metadata,
-	      using the initial access token obtained the previous step as
-	      an <xref target="RFC6750">OAuth 2.0 Bearer Token</xref>, if needed.</t>
+              Authorization Server with the Client's metadata, using the
+              initial access token obtained the previous step as an <xref
+              target="RFC6750">OAuth 2.0 Bearer Token</xref>, if needed.</t>
 
               <t>The Authorization Server issues a Client Identifier and
               returns it to the Developer along with a Registration Access
               Token and a reference to the Client's Client Configuration
               Endpoint.</t>
 
-              <t>The Developer packages the Client Identifier with the client
-              and stores the <spanx style="verb">registration_access_token</spanx>, and
-              <spanx style="verb">registration_client_uri</spanx>.</t>
+              <t>The Developer packages the Client Identifier with the Client
+              and stores the <spanx style="verb">registration_access_token</spanx>,
+              and <spanx style="verb">registration_client_uri</spanx> in the
+              deployment system.</t>
 
-              <t>The Client uses the its <spanx style="verb">client_id</spanx> and <spanx style="verb">client_secret</spanx> (if
-              provided) to request OAuth 2.0 tokens using any valid OAuth 2.0
-              flow.</t>
+              <t>The Client uses the its <spanx style="verb">client_id</spanx>
+              and <spanx style="verb">client_secret</spanx> (if provided) to
+              request OAuth 2.0 tokens using any valid OAuth 2.0 flow.</t>
 
-              <t>If the Client's <spanx style="verb">client_secret</spanx> expires or otherwise stops
-              working, the Developer's deployment system sends an HTTP GET
-              request to the <spanx style="verb">registration_client_uri</spanx> with the
-              <spanx style="verb">registration_access_token</spanx> as its authorization. This response
-              will contain the Client's refreshed <spanx style="verb">client_secret</spanx> along with any
-              changed metadata values. Its <spanx style="verb">client_id</spanx> will remain the same.
-              These new values will then be packaged and shipped to or
-	      retrieved by instances of the Client, if necessary.</t>
+              <t>If the Client's <spanx style="verb">client_secret</spanx>
+              expires or otherwise stops working, the Developer's deployment
+              system sends an HTTP GET request to the <spanx style="verb">registration_client_uri</spanx>
+              with the <spanx style="verb">registration_access_token</spanx>
+              as its authorization. This response will contain the Client's
+              refreshed <spanx style="verb">client_secret</spanx> along with
+              any changed metadata values. Its <spanx style="verb">client_id</spanx>
+              will remain the same. These new values will then be packaged and
+              shipped to or retrieved by instances of the Client, if
+              necessary.</t>
 
               <t>If the Developer needs to update its configuration on the
               Authorization Server, the deployment system sends an HTTP PUT
-              request to the <spanx style="verb">registration_client_uri</spanx> with the
-              <spanx style="verb">registration_access_token</spanx> as its authorization. This response
-              will contain the Client's changed metadata values. Its <spanx style="verb">client_id</spanx>
+              request to the <spanx style="verb">registration_client_uri</spanx>
+              with the <spanx style="verb">registration_access_token</spanx>
+              as its authorization. This response will contain the Client's
+              changed metadata values. Its <spanx style="verb">client_id</spanx>
               will remain the same. These new values will then be packaged and
-              shipped to or retrieved by instances of the Client, if necessary.</t>
+              shipped to or retrieved by instances of the Client, if
+              necessary.</t>
 
               <t>If the Client is deprovisioned, the Developer's deployment
-              system can send an HTTP DELETE request to the
-              <spanx style="verb">registration_client_uri</spanx> with the <spanx style="verb">registration_access_token</spanx> as
-              its authorization. This will effectively deprovision the client
-              from the Authorization Server and prevent any copies of the
-              client from functioning.</t>
+              system can send an HTTP DELETE request to the <spanx
+              style="verb">registration_client_uri</spanx> with the <spanx
+              style="verb">registration_access_token</spanx> as its
+              authorization. This will effectively deprovision the client from
+              the Authorization Server and prevent any copies of the client
+              from functioning.</t>
             </list></t>
         </section>
       </section>
@@ -437,8 +460,8 @@
           Authorization Code and Implicit grant types. It is RECOMMENDED that
           clients using these flows register this parameter, and an
           Authorization Server SHOULD require registration of valid redirect
-          URIs for all clients that use these grant types to protect
-          against token and credential theft attacks.</t>
+          URIs for all clients that use these grant types to protect against
+          token and credential theft attacks.</t>
 
           <t hangText="client_name"><vspace blankLines="0"/>Human-readable
           name of the Client to be presented to the user. If omitted, the
@@ -707,24 +730,23 @@
       server certificate check, per <xref target="RFC6125">RFC
       6125</xref>.</t>
 
-      <t>The Client Registration Endpoint MAY accept an initial access
-      token in the form of an <xref target="RFC6749">OAuth 2.0 </xref>
-      access token to limit registration to only previously
-      authorized parties. The method by which this access token is obtained by
-      the registrant is generally out-of-band and is out of scope of this
-      specification.</t>
+      <t>The Client Registration Endpoint MAY accept an initial access token
+      in the form of an <xref target="RFC6749">OAuth 2.0 </xref> access token
+      to limit registration to only previously authorized parties. The method
+      by which this access token is obtained by the registrant is generally
+      out-of-band and is out of scope of this specification.</t>
 
-      <t>To support open registration and facilitate wider
-      interoperability, the Client Registration Endpoint SHOULD allow initial
-      registration requests with no authentication. These requests MAY be
-      rate-limited or otherwise limited to prevent a denial-of-service attack
-      on the Client Registration Endpoint.</t>
+      <t>To support open registration and facilitate wider interoperability,
+      the Client Registration Endpoint SHOULD allow initial registration
+      requests with no authentication. These requests MAY be rate-limited or
+      otherwise limited to prevent a denial-of-service attack on the Client
+      Registration Endpoint.</t>
 
-      <t>To facilitate registered clients updating their information,
-      the Client Registration Endpoint issues a Request Access Token for
-      clients to securely identify themselves in future connections to the
-      <xref target="AccessEndpoint">Client Configuration Endpoint</xref>. As
-      such, the Client Configuration Endpoint MUST accept requests with <xref
+      <t>To facilitate registered clients updating their information, the
+      Client Registration Endpoint issues a Request Access Token for clients
+      to securely identify themselves in future connections to the <xref
+      target="AccessEndpoint">Client Configuration Endpoint</xref>. As such,
+      the Client Configuration Endpoint MUST accept requests with <xref
       target="RFC6750">OAuth 2.0 Bearer Tokens</xref> for these operations,
       whether or not the initial registration call requires authentication of
       some form.</t>
@@ -779,10 +801,11 @@ Host: server.example.com
 
         <t/>
 
-        <t>Alternatively, if the developer or the client has been provisioned with an initial
-        access token, he or it sends the following registration request
-        to the Client Registration Endpoint. The method by which the initial access token
-	is obtained is out of scope for this specification.</t>
+        <t>Alternatively, if the developer or the client has been provisioned
+        with an initial access token, he or it sends the following
+        registration request to the Client Registration Endpoint. The method
+        by which the initial access token is obtained is out of scope for this
+        specification.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -835,9 +858,9 @@ Host: server.example.com
       view and update its registered information. The location of this
       endpoint is communicated to the Client through the <spanx style="verb">registration_client_uri</spanx>
       member of the <xref target="client-info-response">Client Information
-      Response</xref>. The Client MUST use its Registration Access Token
-      in all calls to this endpoint as an <xref target="RFC6750">OAuth 2.0
-      Bearer Token</xref>.</t>
+      Response</xref>. The Client MUST use its Registration Access Token in
+      all calls to this endpoint as an <xref target="RFC6750">OAuth 2.0 Bearer
+      Token</xref>.</t>
 
       <t>Operations on this endpoint are switched through the use of different
       <xref target="RFC2616">HTTP methods</xref>.</t>
@@ -856,13 +879,13 @@ Host: server.example.com
         Endpoint URL may take any number of forms. It is RECOMMENDED that this
         endpoint URL be formed through the use of a server-constructed URL
         string which combines the Client Registration Endpoint's URL and the
-        issued <spanx style="verb">client_id</spanx> for this Client, with the latter as either a path
-        parameter or a query parameter. For example, a Client with the Client
-        ID <spanx style="verb">s6BhdRkqt3</spanx> could be given a Client
-        Configuration Endpoint URL of <spanx style="verb">https://server.example.com/register/s6BhdRkqt3</spanx>
+        issued <spanx style="verb">client_id</spanx> for this Client, with the
+        latter as either a path parameter or a query parameter. For example, a
+        Client with the Client ID <spanx style="verb">s6BhdRkqt3</spanx> could
+        be given a Client Configuration Endpoint URL of <spanx style="verb">https://server.example.com/register/s6BhdRkqt3</spanx>
         (path parameter) or of <spanx style="verb">https://server.example.com/register?client_id=s6BhdRkqt3</spanx>
-        (query parameter). In both of these cases, the client simply uses
-        the URL as given.</t>
+        (query parameter). In both of these cases, the client simply uses the
+        URL as given.</t>
 
         <t>These common patterns can help the Server to more easily determine
         the client to which the request pertains, which MUST be matched
@@ -898,13 +921,13 @@ Authorization: Bearer reg-23410913-abewfq.123483
         content type of <spanx style="verb">application/json</spanx> and a
         payload as described in <xref target="client-info-response">Client
         Information Response</xref>. Some values in the response, including
-        the <spanx style="verb">client_secret</spanx> and <spanx
-        style="verb">registration_access_token</spanx>, MAY be different from those in the
-        initial registration response. If the Authorization Server includes
-        a new Client Secret and/or Registration Access Token in its response,
-        the Client MUST immediately discard its previous Client Secret and/or
-        Registration Access Token. The value of the <spanx style="verb">client_id</spanx>
-        MUST NOT change from the initial registration response.</t>
+        the <spanx style="verb">client_secret</spanx> and <spanx style="verb">registration_access_token</spanx>,
+        MAY be different from those in the initial registration response. If
+        the Authorization Server includes a new Client Secret and/or
+        Registration Access Token in its response, the Client MUST immediately
+        discard its previous Client Secret and/or Registration Access Token.
+        The value of the <spanx style="verb">client_id</spanx> MUST NOT change
+        from the initial registration response.</t>
 
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized and the Registration Access Token
@@ -989,9 +1012,9 @@ Authorization: Bearer reg-23410913-abewfq.123483
         target="client-info-response">Client Information Response</xref>. Some
         values in the response, including the <spanx style="verb">client_secret</spanx>
         and r<spanx style="verb">egistration_access_token</spanx>, MAY be
-        different from those in the initial registration response. If the Authorization
-        Server includes a new Client Secret and/or Registration Access
-        Token in its response, the Client MUST immediately discard its
+        different from those in the initial registration response. If the
+        Authorization Server includes a new Client Secret and/or Registration
+        Access Token in its response, the Client MUST immediately discard its
         previous Client Secret and/or Registration Access Token. The value of
         the <spanx style="verb">client_id</spanx> MUST NOT change from the
         initial registration response.</t>
@@ -1011,10 +1034,10 @@ Authorization: Bearer reg-23410913-abewfq.123483
       </section>
 
       <section anchor="DeleteRequest" title="Client Delete Request">
-        <t>To deprovision itself on the Authorization Server, the
-        Client makes an HTTP DELETE request to the Client Configuration
-        Endpoint. This request is authenticated by the Registration Access
-        Token issued to the client.</t>
+        <t>To deprovision itself on the Authorization Server, the Client makes
+        an HTTP DELETE request to the Client Configuration Endpoint. This
+        request is authenticated by the Registration Access Token issued to
+        the client.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -1031,12 +1054,12 @@ Authorization: Bearer reg-23410913-abewfq.123483
         <t/>
 
         <t>A successful delete action will invalidate the <spanx style="verb">client_id</spanx>,
-        <spanx style="verb">client_secret</spanx>, and <spanx style="verb">registration_access_token</spanx> for this client, thereby
-        preventing the <spanx style="verb">client_id</spanx> from being used at either the Authorization
-        Endpoint or Token Endpoint of the Authorization Server. The
-        Authorization Server SHOULD immediately invalidate all existing
-        authorization grants and currently-active tokens associated with this
-        Client.</t>
+        <spanx style="verb">client_secret</spanx>, and <spanx style="verb">registration_access_token</spanx>
+        for this client, thereby preventing the <spanx style="verb">client_id</spanx>
+        from being used at either the Authorization Endpoint or Token Endpoint
+        of the Authorization Server. The Authorization Server SHOULD
+        immediately invalidate all existing authorization grants and
+        currently-active tokens associated with this Client.</t>
 
         <t>If a Client has been successfully deprovisioned, the Authorization
         Server responds with an HTTP 204 No Content message.</t>
@@ -1344,16 +1367,18 @@ Pragma: no-cache
 
       <t>While the Client Secret can expire, the Registration Access Token
       should not expire while a client is still actively registered. If this
-      token were to expire, a developer or Client could be left in a situation where they have
-      no means of retrieving the Client's registration information or updating it.
-      Were that the case, a new registration would be required, thereby getting a new Client Identifier. However,
-      Registration Access Tokens MAY be rotated when the developer or client does a read or
-      update operation on its Client Configuration Endpoint, and the developer or Client
-      MUST use this new Registration Access Token. As the Registration Access
-      Tokens are long-term credentials, and since the Registration Access
-      Token is a Bearer token and acts as the sole authentication for use at
-      the Client Configuration Endpoint, it MUST be protected by the developer or Client as
-      described in <xref target="RFC6750">OAuth 2.0 Bearer</xref>.</t>
+      token were to expire, a developer or Client could be left in a situation
+      where they have no means of retrieving the Client's registration
+      information or updating it. Were that the case, a new registration would
+      be required, thereby getting a new Client Identifier. However,
+      Registration Access Tokens MAY be rotated when the developer or client
+      does a read or update operation on its Client Configuration Endpoint,
+      and the developer or Client MUST use this new Registration Access Token.
+      As the Registration Access Tokens are long-term credentials, and since
+      the Registration Access Token is a Bearer token and acts as the sole
+      authentication for use at the Client Configuration Endpoint, it MUST be
+      protected by the developer or Client as described in <xref
+      target="RFC6750">OAuth 2.0 Bearer</xref>.</t>
 
       <t>If a Client is deprovisioned from a server, any outstanding
       Registration Access Tokens for that client MUST be invalidated at the
@@ -1500,13 +1525,14 @@ Pragma: no-cache
       <t>-11</t>
 
       <t><list style="symbols">
-          <t>Added localized text to registration request and response examples.</t>
+          <t>Added localized text to registration request and response
+          examples.</t>
 
-          <t>Removed <spanx style="verb">client_secret_jwt</spanx> and
-	  <spanx style="verb">private_key_jwt</spanx>.</t>
+          <t>Removed <spanx style="verb">client_secret_jwt</spanx> and <spanx
+          style="verb">private_key_jwt</spanx>.</t>
 
-          <t>Clarified <spanx style="verb">tos_uri</spanx> and
-	  <spanx style="verb">policy_uri</spanx> definitions.</t>
+          <t>Clarified <spanx style="verb">tos_uri</spanx> and <spanx
+          style="verb">policy_uri</spanx> definitions.</t>
 
           <t>Added the OAuth Token Endpoint Authentication Methods registry
           for registering <spanx style="verb">token_endpoint_auth_method</spanx>
@@ -1515,10 +1541,10 @@ Pragma: no-cache
           <t>Removed uses of non-ASCII characters, per RFC formatting
           rules.</t>
 
-          <t>Changed <spanx style="verb">expires_at</spanx> to
-	  <spanx style="verb">client_secret_expires_at</spanx> and
-          <spanx style="verb">issued_at</spanx> to
-	  <spanx style="verb">client_id_issued_at</spanx> for greater clarity.</t>
+          <t>Changed <spanx style="verb">expires_at</spanx> to <spanx
+          style="verb">client_secret_expires_at</spanx> and <spanx
+          style="verb">issued_at</spanx> to <spanx style="verb">client_id_issued_at</spanx>
+          for greater clarity.</t>
         </list></t>
 
       <t>-10</t>
