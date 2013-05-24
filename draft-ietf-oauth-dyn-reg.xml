@@ -95,7 +95,7 @@
   </front>
 
   <middle>
-    <section title="Introduction">
+    <section anchor="Introduction" title="Introduction">
       <t>In some use-case scenarios, it is desirable or necessary to allow
       OAuth 2.0 clients to obtain authorization from an OAuth 2.0
       authorization server without requiring the two parties to interact
@@ -118,7 +118,7 @@
       for the Client to read and update this information after the initial
       registration action.</t>
 
-      <section title="Notational Conventions">
+      <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
         'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', and 'OPTIONAL' in this
         document are to be interpreted as described in <xref
@@ -162,7 +162,7 @@
           </list></t>
       </section>
 
-      <section title="Registration Tokens and Credentials">
+      <section anchor="Credentials" title="Registration Tokens and Credentials">
         <t>Throughout the course of the Dynamic Registration protocol, there
         are three different classes of credentials in play, each with
         different properties and targets.</t>
@@ -261,7 +261,7 @@
         protocol and that all necessary discovery steps (which are out of
         scope for this specification) have already been performed.</t>
 
-        <section title="Open Registration">
+        <section anchor="OpenRegistration" title="Open Registration">
           <t>Open Registration, with no authentication on the Registration
           Endpoint, works as follows:</t>
 
@@ -392,7 +392,7 @@
             </list></t>
         </section>
 
-        <section title="Developer Automation">
+        <section anchor="DeveloperAutomation" title="Developer Automation">
           <t>The Dynamic Registration protocol can also be used in place of a
           manual registration portal, for instance as part of an automated
           build and deployment process. An Authorization Server may require an
@@ -1279,7 +1279,7 @@ Pragma: no-cache
       </section>
     </section>
 
-    <section title="IANA Considerations">
+    <section anchor="IANA" title="IANA Considerations">
       <section anchor="team-registry"
                title="OAuth Token Endpoint Authentication Methods Registry">
         <t>This specification establishes the OAuth Token Endpoint
