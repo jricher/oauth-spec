@@ -138,36 +138,34 @@
 
         <t>This specification defines the following additional terms:</t>
 
-        <t><list style="symbols">
-            <t hangText="Client Registration Endpoint">
-	      OAuth 2.0 Endpoint through which a Client
-	      can be registered at an Authorization Server.
-	      The means by which the URL for this endpoint
-	      are obtained are out of scope for this specification.
-	    </t>
+        <t><list style="hanging">
+            <t hangText="Client Registration Endpoint">OAuth 2.0 Endpoint
+            through which a Client can be registered at an Authorization
+            Server. The means by which the URL for this endpoint are obtained
+            are out of scope for this specification.</t>
 
-            <t hangText="Client Configuration Endpoint">OAuth 2.0 Endpoint through
-            which registration information for a registered Client can be managed.
-            This URL for this endpoint is returned by the Authorization
-            Server in the Client Information Response.</t>
+            <t hangText="Client Configuration Endpoint">OAuth 2.0 Endpoint
+            through which registration information for a registered Client can
+            be managed. This URL for this endpoint is returned by the
+            Authorization Server in the Client Information Response.</t>
 
-            <t hangText="Registration Access Token">OAuth 2.0 Bearer Token issued by
-            the Authorization Server through the Client Registration Endpoint
-            that is used to authenticate the caller when accessing the Client's
-	    registration information at the Client Configuration Endpoint.
-	    This Access Token is associated with a particular registered Client.</t>
+            <t hangText="Registration Access Token">OAuth 2.0 Bearer Token
+            issued by the Authorization Server through the Client Registration
+            Endpoint that is used to authenticate the caller when accessing
+            the Client's registration information at the Client Configuration
+            Endpoint. This Access Token is associated with a particular
+            registered Client.</t>
 
-	    <t hangText="Initial Access Token">
-	      An OAuth 2.0 Access Token optionally issued by an Authorization Server
-	      granting access to its Client Registration Endpoint.
-	    </t>
+            <t hangText="Initial Access Token">An OAuth 2.0 Access Token
+            optionally issued by an Authorization Server granting access to
+            its Client Registration Endpoint.</t>
           </list></t>
       </section>
 
       <section title="Registration Tokens and Credentials">
         <t>Throughout the course of the Dynamic Registration protocol, there
         are three different classes of credentials in play, each with
-        different properties and targets. </t>
+        different properties and targets.</t>
 
         <t><list style="symbols">
             <t>The Initial Access Token is optionally used by the Client or
@@ -317,19 +315,19 @@
         </section>
 
         <section anchor="ProtectedRegistration" title="Protected Registration">
-          <t>An Authorization Server may require an Initial Access Token
-          for requests to its Registration Endpoint. While the method by which a
+          <t>An Authorization Server may require an Initial Access Token for
+          requests to its Registration Endpoint. While the method by which a
           Client receives this Initial Access Token and the method by which
           the Authorization Server validates this Initial Access Token are out
           of scope for this specification, a common approach is for the
           Developer to use a manual pre-registration portal at the
           Authorization Server that issues an Initial Access Token to the
           Developer. This allows the Developer to package the Initial Access
-          Token with different instances of the application. While each copy of
-          the application would get its own Client Identifier (and
-          Registration Access Token), all instances of the application would be
-          tied back to the Developer by their use of this initial registration
-          token.</t>
+          Token with different instances of the application. While each copy
+          of the application would get its own Client Identifier (and
+          Registration Access Token), all instances of the application would
+          be tied back to the Developer by their use of this initial
+          registration token.</t>
 
           <t><list style="letters">
               <t>A Developer is creating a Client to use an Authorization
@@ -399,18 +397,19 @@
           manual registration portal, for instance as part of an automated
           build and deployment process. An Authorization Server may require an
           Initial Access Token for requests to its Registration Endpoint, as
-          described in <xref target="ProtectedRegistration"/>. However, in this scenario, the
-          Developer manages the Client's registration instead of the Client
-          itself. Therefore, the initial registration token and Registration
-          Access Token all remain with the Developer. The Developer packages
-          the Client Identifier with the Client as part of its build process.
+          described in <xref target="ProtectedRegistration">Protected
+          Registration </xref>. However, in this scenario, the Developer
+          manages the Client's registration instead of the Client itself.
+          Therefore, the initial registration token and Registration Access
+          Token all remain with the Developer. The Developer packages the
+          Client Identifier with the Client as part of its build process.
           <list style="letters">
               <t>A Developer is creating a Client to use an Authorization
               Server and knows that instances of the Client will not
               dynamically register at runtime.</t>
 
               <t>If required for registrations at the Authorization Server,
-	      the Developer visits a manual pre-registration page at the
+              the Developer visits a manual pre-registration page at the
               Authorization Server and is issued an Initial Access Token in
               the form of an <xref target="RFC6750">OAuth 2.0 Bearer
               Token</xref>.</t>
@@ -781,8 +780,8 @@
       <t>The Client Registration Endpoint MAY accept an Initial Access Token
       in the form of an <xref target="RFC6749">OAuth 2.0 </xref> access token
       to limit registration to only previously authorized parties. The method
-      by which this Access Token is obtained by the registrant is generally
-      out-of-band and is out of scope of this specification.</t>
+      by which the Initial Access Token is obtained by the registrant is
+      generally out-of-band and is out of scope of this specification.</t>
 
       <t>To support open registration and facilitate wider interoperability,
       the Client Registration Endpoint SHOULD allow initial registration
@@ -1171,9 +1170,9 @@ Pragma: no-cache
             will not expire. The time is represented as the number of seconds
             from 1970-01-01T0:0:0Z as measured in UTC until the date/time.</t>
 
-            <t hangText="registration_access_token"><vspace/>REQUIRED.
-	    Access Token that is used at the Client Configuration Endpoint to
-	    perform subsequent operations upon the Client registration.</t>
+            <t hangText="registration_access_token"><vspace/>REQUIRED. Access
+            Token that is used at the Client Configuration Endpoint to perform
+            subsequent operations upon the Client registration.</t>
 
             <t hangText="registration_client_uri"><vspace
             blankLines="0"/>REQUIRED. The fully qualified URL of the Client
@@ -1600,7 +1599,7 @@ Pragma: no-cache
 
           <t>Added Client Lifecycle discussion and examples.</t>
 
-	  <t>Defined Initial Access Token in Terminology section.</t>
+          <t>Defined Initial Access Token in Terminology section.</t>
         </list></t>
 
       <t>-10</t>
