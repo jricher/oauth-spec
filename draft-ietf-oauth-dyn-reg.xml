@@ -81,7 +81,7 @@
       </address>
     </author>
 
-    <date day="23" month="May" year="2013"/>
+    <date day="24" month="May" year="2013"/>
 
     <area>Security</area>
 
@@ -139,22 +139,28 @@
         <t>This specification defines the following additional terms:</t>
 
         <t><list style="symbols">
-            <t>Client Registration Endpoint: The OAuth 2.0 Endpoint through
-            which a Client can request new registration. The means of the
-            Client obtaining the URL for this endpoint are out of scope for
-            this specification.</t>
+            <t hangText="Client Registration Endpoint">
+	      OAuth 2.0 Endpoint through which a Client
+	      can be registered at an Authorization Server.
+	      The means by which the URL for this endpoint
+	      are obtained are out of scope for this specification.
+	    </t>
 
-            <t>Client Configuration Endpoint: The OAuth 2.0 Endpoint through
-            which a specific Client can manage its registration information,
-            provided by the Authorization Server to the Client. This URL for
-            this endpoint is communicated to the client by the Authorization
+            <t hangText="Client Configuration Endpoint">OAuth 2.0 Endpoint through
+            which registration information for a registered Client can be managed.
+            This URL for this endpoint is returned by the Authorization
             Server in the Client Information Response.</t>
 
-            <t>Registration Access Token: An OAuth 2.0 Bearer Token issued by
+            <t hangText="Registration Access Token">OAuth 2.0 Bearer Token issued by
             the Authorization Server through the Client Registration Endpoint
-            that is used to authenticate the caller during read, update, and
-            delete operations. This token is associated with a particular
-            Client.</t>
+            that is used to authenticate the caller when accessing the Client's
+	    registration information at the Client Configuration Endpoint.
+	    This Access Token is associated with a particular registered Client.</t>
+
+	    <t hangText="Initial Access Token">
+	      An OAuth 2.0 Access Token optionally issued by an Authorization Server
+	      granting access to its Client Registration Endpoint.
+	    </t>
           </list></t>
       </section>
 
@@ -164,7 +170,7 @@
         different properties and targets. </t>
 
         <t><list style="symbols">
-            <t>The initial access token is optionally used by the Client or
+            <t>The Initial Access Token is optionally used by the Client or
             Developer at the Registration Endpoint. This is an OAuth 2.0
             Bearer Token that is used to authorize the initial Client
             Registration Request. The content, structure, generation, and
@@ -173,8 +179,8 @@
             presenter is allowed to dynamically register new clients. The
             Authorization Server can also use this token to tie multiple
             instances of registered clients (each with their own distinct
-            Client Identifier) back to the party to whom the initial access
-            token was issued, usually an application developer. This token may
+            Client Identifier) back to the party to whom the Initial Access
+            Token was issued, usually an application developer. This token may
             be shared between multiple instances of a Client to allow them to
             each register separately. This token should be used only at the
             Client Registration Endpoint.</t>
@@ -190,7 +196,7 @@
             Configuration Endpoint. The Registration Access Token should be
             protected and should not be shared between instances of a client
             (otherwise, one instance could change or delete registration
-            values for all copies of the client). The Registration Access
+            values for all instances of the client). The Registration Access
             Token can be rotated through the use of the client read and update
             methods on the Client Configuration Endpoint. The Registration
             Access Token should be used only at the Client Configuration
@@ -201,7 +207,7 @@
             retrieve OAuth tokens. Client Credentials are usually bound to
             particular instances of a Client and should not be shared between
             instances. Since not all types of Clients have Client Credentials,
-            they can not be used to manage client registrations. The Client
+            they cannot be used to manage client registrations. The Client
             Credentials can be rotated through the use of the client read and
             update methods on the Client Configuration Endpoint. The Client
             Credentials should not be used for authentication at the Client
@@ -237,13 +243,13 @@
             to the same Authorization Server will need to each register with
             that Authorization Server separately, creating a distinct Client
             Identifier for each copy of the application. The Authorization
-            Server can not make any assumption of correlation between these
+            Server cannot make any assumption of correlation between these
             clients without further specifications, profiles, and extensions
             to this specification document.</t>
           </list></t>
 
         <t>A Client Identifier (and its associated credentials) could also be
-        shared between multiple copies of a Client. Mechanisms for sharing
+        shared between multiple instances of a Client. Mechanisms for sharing
         Client Identifiers between multiple instances of a piece of software
         (either Client or Authorization Server) are outside the scope of this
         specification, as it is expected that every successful <xref
@@ -310,33 +316,33 @@
             </list></t>
         </section>
 
-        <section title="Protected Registration">
-          <t>An Authorization Server may support an initial access token on
-          request to the Registration Endpoint. While the method by which a
-          Client receives this initial access token and the method by which
-          the Authorization Server validates this initial access token is out
+        <section anchor="ProtectedRegistration" title="Protected Registration">
+          <t>An Authorization Server may require an Initial Access Token
+          for requests to its Registration Endpoint. While the method by which a
+          Client receives this Initial Access Token and the method by which
+          the Authorization Server validates this Initial Access Token are out
           of scope for this specification, a common approach is for the
           Developer to use a manual pre-registration portal at the
-          Authorization Server that issues an initial access token to the
-          Developer. This allows the Developer to package the initial access
-          token with different copies of the application. While each copy of
+          Authorization Server that issues an Initial Access Token to the
+          Developer. This allows the Developer to package the Initial Access
+          Token with different instances of the application. While each copy of
           the application would get its own Client Identifier (and
-          Registration Access Token), all copies of the application would be
+          Registration Access Token), all instances of the application would be
           tied back to the Developer by their use of this initial registration
           token.</t>
 
           <t><list style="letters">
-              <t>A Developer is creating a Client to talk to an Authorization
+              <t>A Developer is creating a Client to use an Authorization
               Server and knows that instances of the Client will dynamically
               register at runtime, but that the Authorization Server requires
               authorization the registration endpoint.</t>
 
               <t>The Developer visits a manual pre-registration page at the
-              Authorization Server and is issued an initial access token in
+              Authorization Server and is issued an Initial Access Token in
               the form of an <xref target="RFC6750">OAuth 2.0 Bearer
               Token</xref>.</t>
 
-              <t>The Developer packages that token with all copies of the
+              <t>The Developer packages that token with all instances of the
               Client application.</t>
 
               <t>The Client needs to get OAuth 2.0 tokens from an
@@ -345,7 +351,7 @@
 
               <t>The Client sends an HTTP POST request to the Client
               Registration Endpoint at the Authorization Server with its
-              metadata, and the initial access token as its authorization.</t>
+              metadata, and the Initial Access Token as its authorization.</t>
 
               <t>The Authorization Server issues a Client Identifier and
               returns it to the Client along with a Registration Access Token
@@ -360,7 +366,7 @@
 
               <t>The Client uses the its <spanx style="verb">client_id</spanx>
               and <spanx style="verb">client_secret</spanx> (if provided) to
-              request OAuth 2.0 tokens using any valid OAuth 2.0 flow.</t>
+              request OAuth 2.0 tokens using any supported OAuth 2.0 flow.</t>
 
               <t>If the Client's <spanx style="verb">client_secret</spanx>
               expires or otherwise stops working, the Client sends an HTTP GET
@@ -392,26 +398,27 @@
           <t>The Dynamic Registration protocol can also be used in place of a
           manual registration portal, for instance as part of an automated
           build and deployment process. An Authorization Server may require an
-          initial access token for requests to its Registration Endpoint, as
-          described in Protected Registration. However, in this scenario, the
-          Developer manages the Client's registration instead of the client
-          itself. Therefore, the initial registration token and registration
-          access token all remain with the Developer. The Developer packages
+          Initial Access Token for requests to its Registration Endpoint, as
+          described in <xref target="ProtectedRegistration"/>. However, in this scenario, the
+          Developer manages the Client's registration instead of the Client
+          itself. Therefore, the initial registration token and Registration
+          Access Token all remain with the Developer. The Developer packages
           the Client Identifier with the Client as part of its build process.
           <list style="letters">
-              <t>A Developer is creating a Client to talk to an Authorization
+              <t>A Developer is creating a Client to use an Authorization
               Server and knows that instances of the Client will not
               dynamically register at runtime.</t>
 
-              <t>The Developer visits a manual pre-registration page at the
-              Authorization Server and is issued an initial access token in
+              <t>If required for registrations at the Authorization Server,
+	      the Developer visits a manual pre-registration page at the
+              Authorization Server and is issued an Initial Access Token in
               the form of an <xref target="RFC6750">OAuth 2.0 Bearer
               Token</xref>.</t>
 
               <t>The Developer configures his build environment to send an
               HTTP POST request to the Client Registration Endpoint at the
               Authorization Server with the Client's metadata, using the
-              initial access token obtained the previous step as an <xref
+              Initial Access Token obtained the previous step as an <xref
               target="RFC6750">OAuth 2.0 Bearer Token</xref>, if needed.</t>
 
               <t>The Authorization Server issues a Client Identifier and
@@ -426,7 +433,7 @@
 
               <t>The Client uses the its <spanx style="verb">client_id</spanx>
               and <spanx style="verb">client_secret</spanx> (if provided) to
-              request OAuth 2.0 tokens using any valid OAuth 2.0 flow.</t>
+              request OAuth 2.0 tokens using any supported OAuth 2.0 flow.</t>
 
               <t>If the Client's <spanx style="verb">client_secret</spanx>
               expires or otherwise stops working, the Developer's deployment
@@ -454,7 +461,7 @@
               style="verb">registration_client_uri</spanx> with the <spanx
               style="verb">registration_access_token</spanx> as its
               authorization. This will effectively deprovision the client from
-              the Authorization Server and prevent any copies of the client
+              the Authorization Server and prevent any instances of the client
               from functioning.</t>
             </list></t>
         </section>
@@ -771,10 +778,10 @@
       server certificate check, per <xref target="RFC6125">RFC
       6125</xref>.</t>
 
-      <t>The Client Registration Endpoint MAY accept an initial access token
+      <t>The Client Registration Endpoint MAY accept an Initial Access Token
       in the form of an <xref target="RFC6749">OAuth 2.0 </xref> access token
       to limit registration to only previously authorized parties. The method
-      by which this access token is obtained by the registrant is generally
+      by which this Access Token is obtained by the registrant is generally
       out-of-band and is out of scope of this specification.</t>
 
       <t>To support open registration and facilitate wider interoperability,
@@ -843,9 +850,9 @@ Host: server.example.com
         <t/>
 
         <t>Alternatively, if the developer or the client has been provisioned
-        with an initial access token, he or it sends the following
+        with an Initial Access Token, he or it sends the following
         registration request to the Client Registration Endpoint. The method
-        by which the initial access token is obtained is out of scope for this
+        by which the Initial Access Token is obtained is out of scope for this
         specification.</t>
 
         <figure>
@@ -1164,9 +1171,9 @@ Pragma: no-cache
             will not expire. The time is represented as the number of seconds
             from 1970-01-01T0:0:0Z as measured in UTC until the date/time.</t>
 
-            <t hangText="registration_access_token"><vspace/>REQUIRED. The
-            Access token to be used by the client to perform actions on the
-            Client Configuration Endpoint.</t>
+            <t hangText="registration_access_token"><vspace/>REQUIRED.
+	    Access Token that is used at the Client Configuration Endpoint to
+	    perform subsequent operations upon the Client registration.</t>
 
             <t hangText="registration_client_uri"><vspace
             blankLines="0"/>REQUIRED. The fully qualified URL of the Client
@@ -1587,11 +1594,13 @@ Pragma: no-cache
           style="verb">issued_at</spanx> to <spanx style="verb">client_id_issued_at</spanx>
           for greater clarity.</t>
 
-          <t>Added explanatory text for different credentials (initial access
-          token, registration access token, client credentials) and what
+          <t>Added explanatory text for different credentials (Initial Access
+          Token, Registration Access Token, Client Credentials) and what
           they're used for.</t>
 
-          <t>Added client lifecycle discussion and examples.</t>
+          <t>Added Client Lifecycle discussion and examples.</t>
+
+	  <t>Defined Initial Access Token in Terminology section.</t>
         </list></t>
 
       <t>-10</t>
