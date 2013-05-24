@@ -317,7 +317,7 @@
           the Authorization Server validates this initial access token is out
           of scope for this specification, a common approach is for the
           Developer to use a manual pre-registration portal at the
-          Authorizaiton Server that issues an initial access token to the
+          Authorization Server that issues an initial access token to the
           Developer. This allows the Developer to package the initial access
           token with different copies of the application. While each copy of
           the application would get its own Client Identifier (and
@@ -395,7 +395,7 @@
           initial access token for requests to its Registration Endpoint, as
           described in Protected Registration. However, in this scenario, the
           Developer manages the Client's registration instead of the client
-          itself. Therefore, the intitial registration token and registration
+          itself. Therefore, the initial registration token and registration
           access token all remain with the Developer. The Developer packages
           the Client Identifier with the Client as part of its build process.
           <list style="letters">
