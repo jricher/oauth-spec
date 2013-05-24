@@ -99,7 +99,7 @@
       <t>In some use-case scenarios, it is desirable or necessary to allow
       OAuth 2.0 clients to obtain authorization from an OAuth 2.0
       authorization server without requiring the two parties to interact
-      beforehand. Nevertheless, in order for the authorization server to
+      beforehand. Nevertheless, for the authorization server to
       accurately and securely represent to end-users which client is seeking
       authorization to access the end-user's resources, a method for automatic
       and unique registration of clients is needed. The OAuth 2.0
@@ -152,7 +152,7 @@
 
             <t>Registration Access Token: An OAuth 2.0 Bearer Token issued by
             the Authorization Server through the Client Registration Endpoint
-            which is used by the Client to authenticate itself during read,
+            that is used to authenticate the caller during read,
             update, and delete operations. This token is associated with a
             particular Client.</t>
           </list></t>
@@ -160,7 +160,7 @@
 
       <section anchor="client-lifecycle" title="Client Lifecycle">
         <t>In the <xref target="RFC6749">OAuth 2.0 specification</xref>, a
-        Client is identified by its own unique Client Identifier (client_id)
+        Client is identified by its own unique Client Identifier (<spanx style="verb">client_id</spanx>)
         at each Authorization Server that it associates with. Dynamic
         Registration as defined in this document is one way for a Client to
         get a Client Identifier and associate a set of metadata with that
@@ -173,7 +173,7 @@
         software. In particular:</t>
 
         <t><list style="symbols">
-            <t>A single instance of Client software (such as a web server)
+            <t>A single instance of Client software (such as a Web server)
             talking to multiple Authorization Servers will need to register
             with each Authorization Server separately, creating a distinct
             Client Identifier with each Authorization Server. The Client can
@@ -200,23 +200,23 @@
         the issuance of a new Client Identifier. </t>
 
         <t>Throughout this lifecycle, there are three different classes of
-        credential in play, each with different properties and targets:</t>
+        credentials in play, each with different properties and targets:</t>
 
         <t><list style="symbols">
             <t>The initial access token is optional and is only used at the
-            Registration Endpoint</t>
+            Registration Endpoint.</t>
 
             <t>The Registration Access Token is mandatory and is only used at
-            the Client Configuration Endpoint</t>
+            the Client Configuration Endpoint.</t>
 
-            <t>The Client Credentials (such as client_secret) are optional
-            depending on the type of client registration and are only used at
-            the Token Endpoint</t>
+            <t>The Client Credentials (such as <spanx style="verb">client_secret</spanx>) are optional,
+            depending on the type of client registration, and are only used at
+            the Token Endpoint.</t>
           </list></t>
 
-        <t>There are several common patterns of OAuth Client registration that
+        <t>There are several patterns of OAuth Client registration that
         this protocol can enable. The following non-normative example
-        lifecycle descriptions assume are not intended to be an exhaustive
+        lifecycle descriptions are not intended to be an exhaustive
         list. It is assumed that the Authorization Server supports the Dynamic
         Registration protocol and that all necessary discovery steps (which
         are out of scope for this specification) have already been
@@ -428,7 +428,7 @@
           Authorization Code and Implicit grant types. It is RECOMMENDED that
           clients using these flows register this parameter, and an
           Authorization Server SHOULD require registration of valid redirect
-          URIs for all clients that use these grant types in order to protect
+          URIs for all clients that use these grant types to protect
           against token and credential theft attacks.</t>
 
           <t hangText="client_name"><vspace blankLines="0"/>Human-readable
@@ -442,7 +442,7 @@
           <t hangText="client_uri"><vspace/>URL of the homepage of the Client.
           If present, the server SHOULD display this URL to the end user in a
           clickable fashion. It is RECOMMENDED that clients always send this
-          field. The value of this field MUST point to a valid web page. The
+          field. The value of this field MUST point to a valid Web page. The
           value of this field MAY be internationalized as described in <xref
           target="HumanReadableClientMetadata">Human Readable Client
           Metadata</xref>.</t>
@@ -468,7 +468,7 @@
           is given. The Terms of Service usually describe a contractual
           relationship between the End-User and the Client that the End-User
           accepts when authorizing the Client. The value of this field MUST
-          point to a valid web page. The value of this field MAY be
+          point to a valid Web page. The value of this field MAY be
           internationalized as described in <xref
           target="HumanReadableClientMetadata">Human Readable Client
           Metadata</xref>.</t>
@@ -477,7 +477,7 @@
           a human-readable Policy document for the Client. The Authorization
           Server SHOULD display this URL to the End-User if it is given. The
           Policy usually describes how an End-User's data will be used by the
-          Client. The value of this field MUST point to a valid web page. The
+          Client. The value of this field MUST point to a valid Web page. The
           value of this field MAY be internationalized as described in <xref
           target="HumanReadableClientMetadata">Human Readable Client
           Metadata</xref>.</t>
@@ -485,13 +485,13 @@
           <t hangText="token_endpoint_auth_method"><vspace blankLines="0"/>The
           requested authentication method for the Token Endpoint. Values
           defined by this specification are: <list style="symbols">
-              <t><spanx style="verb">none</spanx>: the client is a public
+              <t><spanx style="verb">none</spanx>: The client is a public
               client as defined in OAuth 2.0 and does not have a client
-              secret</t>
+              secret.</t>
 
-              <t><spanx style="verb">client_secret_post</spanx>: the client
+              <t><spanx style="verb">client_secret_post</spanx>: The client
               uses the HTTP POST parameters defined in OAuth 2.0 section
-              2.3.1</t>
+              2.3.1.</t>
 
               <t><spanx style="verb">client_secret_basic</spanx>: the client
               uses HTTP Basic defined in OAuth 2.0 section 2.3.1</t>
@@ -547,10 +547,10 @@
           OAuth 2.0 response types that the Client may use. These response
           types are defined as follows:<list style="symbols">
               <t><spanx style="verb">code</spanx>: The Authorization Code
-              response described in OAuth 2.0 Section 4.1</t>
+              response described in OAuth 2.0 Section 4.1.</t>
 
               <t><spanx style="verb">token</spanx>: The Implicit response
-              described in OAuth 2.0 Section 4.2</t>
+              described in OAuth 2.0 Section 4.2.</t>
             </list>Authorization Servers MAY allow for other values as defined
           in response type extensions to OAuth 2.0. The extension process is
           described in OAuth 2.0 Section 2.5, and the value of this parameter
@@ -698,20 +698,20 @@
       server certificate check, per <xref target="RFC6125">RFC
       6125</xref>.</t>
 
-      <t>The Client Registration Endpoint MAY accept an initial authorization
-      credential in the form of an <xref target="RFC6749">OAuth 2.0 </xref>
-      access token in order to limit registration to only previously
+      <t>The Client Registration Endpoint MAY accept an initial access
+      token in the form of an <xref target="RFC6749">OAuth 2.0 </xref>
+      access token to limit registration to only previously
       authorized parties. The method by which this access token is obtained by
       the registrant is generally out-of-band and is out of scope of this
       specification.</t>
 
-      <t>In order to support open registration and facilitate wider
+      <t>To support open registration and facilitate wider
       interoperability, the Client Registration Endpoint SHOULD allow initial
       registration requests with no authentication. These requests MAY be
       rate-limited or otherwise limited to prevent a denial-of-service attack
       on the Client Registration Endpoint.</t>
 
-      <t>In order to facilitate registered clients updating their information,
+      <t>To facilitate registered clients updating their information,
       the Client Registration Endpoint issues a Request Access Token for
       clients to securely identify themselves in future connections to the
       <xref target="AccessEndpoint">Client Configuration Endpoint</xref>. As
@@ -758,7 +758,8 @@ Host: server.example.com
  "redirect_uris":["https://client.example.org/callback",
     "https://client.example.org/callback2"]
  "client_name":"My Example Client",
- "client_name#ja-Jpan-JP":"&#12463;&#12521;&#12452;&#12450;&#12531;&#12488;&#21517;",
+ "client_name#ja-Jpan-JP":
+    "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D",
  "token_endpoint_auth_method":"client_secret_basic",
  "scope":"read write dolphin",
  "logo_uri":"https://client.example.org/logo.png",
@@ -769,10 +770,10 @@ Host: server.example.com
 
         <t/>
 
-        <t>Alternatively, if the client has been provisioned with an initial
-        authorization credential, it sends the following registration request
-        to the Client Registration Endpoint. The method that the client
-        obtains this credential is out of scope for this specification.</t>
+        <t>Alternatively, if the developer or the client has been provisioned with an initial
+        access token, he or it sends the following registration request
+        to the Client Registration Endpoint. The method by which the initial access token
+	is obtained is out of scope for this specification.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -789,7 +790,8 @@ Host: server.example.com
  "redirect_uris":["https://client.example.org/callback",
     "https://client.example.org/callback2"]
  "client_name":"My Example Client",
- "client_name#ja-Jpan-JP":"&#12463;&#12521;&#12452;&#12450;&#12531;&#12488;&#21517;",
+ "client_name#ja-Jpan-JP":
+    "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D",
  "token_endpoint_auth_method":"client_secret_basic",
  "scope":"read write dolphin",
  "logo_uri":"https://client.example.org/logo.png",
@@ -819,12 +821,12 @@ Host: server.example.com
     </section>
 
     <section anchor="AccessEndpoint" title="Client Configuration Endpoint">
-      <t>The Client Configuration Endpoint is an OAuth 2.0 protected endpoint
+      <t>The Client Configuration Endpoint is an OAuth 2.0 protected resource
       that is provisioned by the server for a specific client to be able to
       view and update its registered information. The location of this
       endpoint is communicated to the Client through the <spanx style="verb">registration_client_uri</spanx>
       member of the <xref target="client-info-response">Client Information
-      Response</xref>. The Client MUST include its Registration Access Token
+      Response</xref>. The Client MUST use its Registration Access Token
       in all calls to this endpoint as an <xref target="RFC6750">OAuth 2.0
       Bearer Token</xref>.</t>
 
@@ -845,12 +847,12 @@ Host: server.example.com
         Endpoint URL may take any number of forms. It is RECOMMENDED that this
         endpoint URL be formed through the use of a server-constructed URL
         string which combines the Client Registration Endpoint's URL and the
-        issued client_id for this Client, with the latter as either a path
+        issued <spanx style="verb">client_id</spanx> for this Client, with the latter as either a path
         parameter or a query parameter. For example, a Client with the Client
         ID <spanx style="verb">s6BhdRkqt3</spanx> could be given a Client
         Configuration Endpoint URL of <spanx style="verb">https://server.example.com/register/s6BhdRkqt3</spanx>
         (path parameter) or of <spanx style="verb">https://server.example.com/register?client_id=s6BhdRkqt3</spanx>
-        (query parameter). In both of these cases, the client simply follows
+        (query parameter). In both of these cases, the client simply uses
         the URL as given.</t>
 
         <t>These common patterns can help the Server to more easily determine
@@ -863,7 +865,7 @@ Host: server.example.com
       </section>
 
       <section anchor="ReadRequest" title="Client Read Request">
-        <t>In order to read the current configuration of the Client on the
+        <t>To read the current configuration of the Client on the
         Authorization Server, the Client makes an HTTP GET request to the
         Client Configuration Endpoint, authenticating with its Registration
         Access Token.</t>
@@ -887,9 +889,9 @@ Authorization: Bearer reg-23410913-abewfq.123483
         content type of <spanx style="verb">application/json</spanx> and a
         payload as described in <xref target="client-info-response">Client
         Information Response</xref>. Some values in the response, including
-        the <spanx style="verb">client_secret</spanx> and r<spanx
-        style="verb">egistration_access_token</spanx>, MAY be changed from the
-        initial registration response. If the Authorization Server MAY include
+        the <spanx style="verb">client_secret</spanx> and <spanx
+        style="verb">registration_access_token</spanx>, MAY be different from those in the
+        initial registration response. If the Authorization Server includes
         a new Client Secret and/or Registration Access Token in its response,
         the Client MUST immediately discard its previous Client Secret and/or
         Registration Access Token. The value of the <spanx style="verb">client_id</spanx>
@@ -976,10 +978,10 @@ Authorization: Bearer reg-23410913-abewfq.123483
         HTTP 200 OK Message with content type <spanx style="verb">application/json</spanx>
         and a payload as described in <xref
         target="client-info-response">Client Information Response</xref>. Some
-        values in the response, including the <spanx style="verb"> client_secret</spanx>
+        values in the response, including the <spanx style="verb">client_secret</spanx>
         and r<spanx style="verb">egistration_access_token</spanx>, MAY be
-        changed from the initial registration response. If the Authorization
-        Server MAY include a new Client Secret and/or Registration Access
+        different from those in the initial registration response. If the Authorization
+        Server includes a new Client Secret and/or Registration Access
         Token in its response, the Client MUST immediately discard its
         previous Client Secret and/or Registration Access Token. The value of
         the <spanx style="verb">client_id</spanx> MUST NOT change from the
@@ -1000,7 +1002,7 @@ Authorization: Bearer reg-23410913-abewfq.123483
       </section>
 
       <section anchor="DeleteRequest" title="Client Delete Request">
-        <t>In order to deprovision itself on the Authorization Server, the
+        <t>To deprovision itself on the Authorization Server, the
         Client makes an HTTP DELETE request to the Client Configuration
         Endpoint. This request is authenticated by the Registration Access
         Token issued to the client.</t>
@@ -1019,9 +1021,9 @@ Authorization: Bearer reg-23410913-abewfq.123483
 
         <t/>
 
-        <t>A successful delete action will invalidate the client_id,
-        client_secret, and registration_access_token for this client, thereby
-        preventing the client_id from being used at either the Authorization
+        <t>A successful delete action will invalidate the <spanx style="verb">client_id</spanx>,
+        <spanx style="verb">client_secret</spanx>, and <spanx style="verb">registration_access_token</spanx> for this client, thereby
+        preventing the <spanx style="verb">client_id</spanx> from being used at either the Authorization
         Endpoint or Token Endpoint of the Authorization Server. The
         Authorization Server SHOULD immediately invalidate all existing
         authorization grants and currently-active tokens associated with this
@@ -1122,13 +1124,14 @@ Pragma: no-cache
 {
  "registration_access_token": "reg-23410913-abewfq.123483",
  "registration_client_uri": 
-       "https://server.example.com/register/s6BhdRkqt3",
+    "https://server.example.com/register/s6BhdRkqt3",
  "client_id":"s6BhdRkqt3",
  "client_secret": "cf136dc3c1fc93f31185e5885805d",
  "client_id_issued_at":2893256800
  "client_secret_expires_at":2893276800
  "client_name":"My Example Client",
- "client_name#ja-Jpan-JP":"&#12463;&#12521;&#12452;&#12450;&#12531;&#12488;&#21517;",
+ "client_name#ja-Jpan-JP":
+    "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D",
  "redirect_uris":["https://client.example.org/callback",
     "https://client.example.org/callback2"]
  "scope": "read write dolphin",
@@ -1328,19 +1331,19 @@ Pragma: no-cache
       Authorization Server SHOULD check to see if the <spanx style="verb">logo_uri</spanx>
       and <spanx style="verb">policy_uri</spanx> have the same host as the
       hosts defined in the array of <spanx style="verb">redirect_uris</spanx>
-      and that all of these resolve to valid web pages.</t>
+      and that all of these resolve to valid Web pages.</t>
 
       <t>While the Client Secret can expire, the Registration Access Token
       should not expire while a client is still actively registered. If this
-      token were to expire, a Client could be left in a situation where it has
-      no means of reading its registration or updating itself and must
-      register itself anew, thereby getting a new Client Identifier. However,
-      Registration Access Tokens MAY be rotated when the client does a read or
-      update operation on its Client Configuration Endpoint, and the Client
+      token were to expire, a developer or Client could be left in a situation where they have
+      no means of retrieving the Client's registration information or updating it.
+      Were that the case, a new registration would be required, thereby getting a new Client Identifier. However,
+      Registration Access Tokens MAY be rotated when the developer or client does a read or
+      update operation on its Client Configuration Endpoint, and the developer or Client
       MUST use this new Registration Access Token. As the Registration Access
       Tokens are long-term credentials, and since the Registration Access
       Token is a Bearer token and acts as the sole authentication for use at
-      the Client Configuration Endpoint, it MUST be protected by the Client as
+      the Client Configuration Endpoint, it MUST be protected by the developer or Client as
       described in <xref target="RFC6750">OAuth 2.0 Bearer</xref>.</t>
 
       <t>If a Client is deprovisioned from a server, any outstanding
@@ -1488,22 +1491,25 @@ Pragma: no-cache
       <t>-11</t>
 
       <t><list style="symbols">
-          <t>Added examples for localized text to client request and
-          response</t>
+          <t>Added localized text to registration request and response examples.</t>
 
-          <t>Removed client_secret_jwt and private_key_jwt</t>
+          <t>Removed <spanx style="verb">client_secret_jwt</spanx> and
+	  <spanx style="verb">private_key_jwt</spanx>.</t>
 
-          <t>Clarified tos_uri and policy_uri</t>
+          <t>Clarified <spanx style="verb">tos_uri</spanx> and
+	  <spanx style="verb">policy_uri</spanx> definitions.</t>
 
           <t>Added the OAuth Token Endpoint Authentication Methods registry
           for registering <spanx style="verb">token_endpoint_auth_method</spanx>
-          metadata values</t>
+          metadata values.</t>
 
           <t>Removed uses of non-ASCII characters, per RFC formatting
-          rules</t>
+          rules.</t>
 
-          <t>Changed "expires_at" to "client_secret_expires_at" and
-          "issued_at" to "client_id_issued_at" for greater clarity</t>
+          <t>Changed <spanx style="verb">expires_at</spanx> to
+	  <spanx style="verb">client_secret_expires_at</spanx> and
+          <spanx style="verb">issued_at</spanx> to
+	  <spanx style="verb">client_id_issued_at</spanx> for greater clarity.</t>
         </list></t>
 
       <t>-10</t>
