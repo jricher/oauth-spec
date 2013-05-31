@@ -1155,12 +1155,14 @@ Pragma: no-cache
       <t>In a situation where the Authorization Server is supporting open
       Client registration, it must be extremely careful with any URL provided
       by the Client that will be displayed to the user (e.g. <spanx
-      style="verb">logo_uri</spanx> and <spanx style="verb">policy_uri</spanx>).
-      A rogue Client could specify a registration request with a reference to
-      a drive-by download in the <spanx style="verb">policy_uri</spanx>. The
-      Authorization Server SHOULD check to see if the <spanx style="verb">logo_uri</spanx>
-      and <spanx style="verb">policy_uri</spanx> have the same host as the
-      hosts defined in the array of <spanx style="verb">redirect_uris</spanx>
+      style="verb">logo_uri</spanx>, <spanx style="verb">tos_uri</spanx>,
+      <spanx style="verb">client_uri</spanx>, and <spanx style="verb">policy_uri</spanx>).
+      For instance, a rogue Client could specify a registration request with a
+      reference to a drive-by download in the <spanx style="verb">policy_uri</spanx>.
+      The Authorization Server SHOULD check to see if the <spanx style="verb">logo_uri</spanx>,
+      <spanx style="verb">tos_uri</spanx>, <spanx style="verb">client_uri</spanx>,
+      and <spanx style="verb">policy_uri</spanx> have the same host and scheme
+      as the those defined in the array of <spanx style="verb">redirect_uris</spanx>
       and that all of these resolve to valid Web pages.</t>
 
       <t>While the Client Secret can expire, the Registration Access Token
@@ -1184,6 +1186,19 @@ Pragma: no-cache
       Client could make requests to the Client Configuration Endpoint where
       the authentication would succeed but the action would fail because the
       Client is no longer valid.</t>
+
+      <t>Public clients MAY register with an Authorization Server using this
+      protocol, if the Authorization Server's policy allows them, by using a
+      <spanx style="verb">none</spanx> value for the<spanx style="verb"> token_endpoint_auth_method</spanx>
+      metadata field and generally used with the <spanx style="verb">implicit</spanx>
+      grant type. Often these clients will be short-lived in-browser
+      applications requesting access to a user's resources and access is tied
+      to a user's active session at the Authorization Server. Since such
+      clients often do not have long-term storage, it's possible that such
+      clients would need to re-register every time the browser application is
+      loaded. To avoid the resulting proliferation of dead Client Identifiers,
+      an Authorization Server MAY decide to expire registrations for existing
+      clients meeting certain criteria after a period of time has elapsed.</t>
     </section>
   </middle>
 
