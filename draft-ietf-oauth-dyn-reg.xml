@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-11" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-12" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -162,7 +162,8 @@
           </list></t>
       </section>
 
-      <section anchor="Credentials" title="Registration Tokens and Credentials">
+      <section anchor="Credentials"
+               title="Registration Tokens and Credentials">
         <t>Throughout the course of the Dynamic Registration protocol, there
         are three different classes of credentials in play, each with
         different properties and targets.</t>
@@ -1568,6 +1569,12 @@ Pragma: no-cache
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-12</t>
+
+      <t><list style="symbols">
+          <t/>
+        </list></t>
 
       <t>-11</t>
 
