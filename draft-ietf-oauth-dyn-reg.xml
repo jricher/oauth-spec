@@ -156,9 +156,12 @@
             Endpoint. This Access Token is associated with a particular
             registered Client.</t>
 
-            <t hangText="Initial Access Token">An OAuth 2.0 Access Token
+            <t hangText="Initial Access Token">OAuth 2.0 Access Token
             optionally issued by an Authorization Server granting access to
-            its Client Registration Endpoint.</t>
+            its Client Registration Endpoint. The means by which the
+            Authorization Server issues this token as well as the means by
+            which the Registration Endpoint validates this token are out of
+            scope for this specification.</t>
           </list></t>
       </section>
 
@@ -1573,7 +1576,7 @@ Pragma: no-cache
       <t>-12</t>
 
       <t><list style="symbols">
-          <t/>
+          <t>Improved definition of Initial Access Token</t>
         </list></t>
 
       <t>-11</t>
