@@ -406,17 +406,18 @@
           manages the Client's registration instead of the Client itself.
           Therefore, the initial registration token and Registration Access
           Token all remain with the Developer. The Developer packages the
-          Client Identifier with the Client as part of its build process.
-          <list style="letters">
+          Client Identifier with the Client as part of the Client's build
+          process. <list style="letters">
               <t>A Developer is creating a Client to use an Authorization
               Server and knows that instances of the Client will not
               dynamically register at runtime.</t>
 
               <t>If required for registrations at the Authorization Server,
-              the Developer visits a manual pre-registration page at the
-              Authorization Server and is issued an Initial Access Token in
-              the form of an <xref target="RFC6750">OAuth 2.0 Bearer
-              Token</xref>.</t>
+              the Developer performs an OAuth 2.0 authorization of his build
+              environment aginst the Authorization Server. The Authorization
+              Server and is issues an Initial Access Token to the Developer's
+              build environment in the form of an <xref target="RFC6750">OAuth
+              2.0 Bearer Token</xref>.</t>
 
               <t>The Developer configures his build environment to send an
               HTTP POST request to the Client Registration Endpoint at the
@@ -1577,6 +1578,9 @@ Pragma: no-cache
 
       <t><list style="symbols">
           <t>Improved definition of Initial Access Token</t>
+
+          <t>Chagned developer registration scenario to have the Initial
+          Access Token gotten through a normal OAuth 2.0 flow</t>
         </list></t>
 
       <t>-11</t>
