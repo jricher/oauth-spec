@@ -1189,7 +1189,7 @@ Pragma: no-cache
 
       <t>Public clients MAY register with an Authorization Server using this
       protocol, if the Authorization Server's policy allows them, by using a
-      <spanx style="verb">none</spanx> value for the<spanx style="verb"> token_endpoint_auth_method</spanx>
+      <spanx style="verb">none</spanx> value for the <spanx style="verb">token_endpoint_auth_method</spanx>
       metadata field and generally used with the <spanx style="verb">implicit</spanx>
       grant type. Often these clients will be short-lived in-browser
       applications requesting access to a user's resources and access is tied
@@ -1353,7 +1353,7 @@ Pragma: no-cache
           any assumption that the Authorization Server is correlating separate
           instances of the client together without further profiles and
           extensions to this specification document. The means by which a
-          Cient discovers and differentiates between multiple Authorization
+          Client discovers and differentiates between multiple Authorization
           Servers is out of scope for this specification.</t>
 
           <t>Multiple instances of Client software (such as a native
@@ -1526,7 +1526,7 @@ Pragma: no-cache
 
             <t>If required for registrations at the Authorization Server, the
             Developer performs an OAuth 2.0 authorization of his build
-            environment aginst the Authorization Server. The Authorization
+            environment against the Authorization Server. The Authorization
             Server and is issues an Initial Access Token to the Developer's
             build environment in the form of an <xref target="RFC6750">OAuth
             2.0 Bearer Token</xref>.</t>
@@ -1590,7 +1590,7 @@ Pragma: no-cache
       <t><list style="symbols">
           <t>Improved definition of Initial Access Token</t>
 
-          <t>Chagned developer registration scenario to have the Initial
+          <t>Changed developer registration scenario to have the Initial
           Access Token gotten through a normal OAuth 2.0 flow</t>
 
           <t>Moved non-normative client lifecycle examples to appendix</t>
