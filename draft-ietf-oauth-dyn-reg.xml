@@ -1327,8 +1327,9 @@ Pragma: no-cache
       their input to this document. In particular, the following individuals
       have been instrumental in their review and contribution to various
       versions of this document: Amanda Anganes, Tim Bray, Domenico Catalano,
-      George Fletcher, Thomas Hardjono, Phil Hunt, Torsten Lodderstedt, Eve
-      Maler, Nov Matake, Nat Sakimura, and Christian Scholz.</t>
+      Donald Coffin, George Fletcher, Thomas Hardjono, Phil Hunt, Torsten
+      Lodderstedt, Eve Maler, Josh Mandel, Nov Matake, Nat Sakimura, and
+      Christian Scholz.</t>
     </section>
 
     <section anchor="client-lifecycle" title="Client Lifecycle Examples">
