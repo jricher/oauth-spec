@@ -1335,9 +1335,11 @@ Pragma: no-cache
           talking to multiple Authorization Servers will need to register with
           each Authorization Server separately, creating a distinct Client
           Identifier with each Authorization Server. The Client can not make
-          any assumption of correlation on the part of the Authorization
-          Server without further specifications, profiles, and extensions to
-          this specification document.</t>
+          any assumption that the Authorization Server is correlating separate
+          instances of the client together without further profiles and
+          extensions to this specification document. The means by which a
+          Cient discovers and differentiates between multiple Authorization
+          Servers is out of scope for this specification.</t>
 
           <t>Multiple instances of Client software (such as a native
           application installed on multiple devices simultaneously) talking to
@@ -1346,7 +1348,7 @@ Pragma: no-cache
           Identifier for each copy of the application. The Authorization
           Server cannot make any assumption of correlation between these
           clients without further specifications, profiles, and extensions to
-          this specification document.</t>
+          this specification.</t>
         </list></t>
 
       <t>A Client Identifier (and its associated credentials) could also be
@@ -1577,6 +1579,8 @@ Pragma: no-cache
           Access Token gotten through a normal OAuth 2.0 flow</t>
 
           <t>Moved non-normative client lifecycle examples to appendix</t>
+
+          <t>Marked differentiating between auth servers as out of scope</t>
         </list></t>
 
       <t>-11</t>
