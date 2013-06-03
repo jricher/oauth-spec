@@ -210,7 +210,9 @@
         <t><list style="hanging">
             <t hangText="(A)"><vspace blankLines="0"/>Optionally, the Client
             or Developer is issued an Initial Access Token for use with the
-            Client Registration Endpoint.</t>
+            Client Registration Endpoint. The method by which the Initial
+            Access Token is issued to the Client or Developer is out of scope
+            for this specification. </t>
 
             <t hangText="(B)">The Client or Developer calls the Client
             Registration Endpoint with its desired registration metadata,
