@@ -109,14 +109,18 @@
       from the OAuth 2.0 protocol. This draft provides a mechanism for a
       client to register itself with the Authorization Server, which can be
       used to dynamically provision a Client Identifier, and optionally a
-      Client Secret.</t>
+      Client Secret. Additionally, the mechanisms in this draft may can be
+      used by a client developer to register the client with the authorization
+      server in a programmatic fashion.</t>
 
       <t>As part of the registration process, this specification also defines
       a mechanism for the client to present the Authorization Server with a
       set of metadata, such as a display name and icon to be presented to the
       user during the authorization step. This draft also provides a mechanism
       for the Client to read and update this information after the initial
-      registration action.</t>
+      registration action. This draft protects these actions through the use
+      of an OAuth 2.0 Bearer Access Token that is issused to the client during
+      registration explicitly for this purpose.</t>
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -239,7 +243,10 @@
             <t hangText="(G)">The Authorization Server deprovisions the client
             and responds with a confirmation that the deletion has taken
             place.</t>
-          </list></t>
+          </list>Further discussion of possible example lifecycles are found
+        in the Appendix to this specification, <xref
+        target="client-lifecycle-examples">Client Lifecycle
+        Examples</xref>.</t>
       </section>
 
       <section anchor="Credentials"
@@ -1409,7 +1416,8 @@ Pragma: no-cache
       Christian Scholz.</t>
     </section>
 
-    <section anchor="client-lifecycle" title="Client Lifecycle Examples">
+    <section anchor="client-lifecycle-examples"
+             title="Client Lifecycle Examples">
       <t>In the <xref target="RFC6749">OAuth 2.0 specification</xref>, a
       Client is identified by its own unique Client Identifier (<spanx
       style="verb">client_id</spanx>) at each Authorization Server that it
