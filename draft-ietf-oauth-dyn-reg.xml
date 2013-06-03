@@ -214,37 +214,39 @@
             Access Token is issued to the Client or Developer is out of scope
             for this specification. </t>
 
-            <t hangText="(B)">The Client or Developer calls the Client
-            Registration Endpoint with its desired registration metadata,
-            optionally including the Initial Access Token from (A) if one is
-            required by the Authorization Server.</t>
+            <t hangText="(B)"><vspace blankLines="0"/>The Client or Developer
+            calls the Client Registration Endpoint with its desired
+            registration metadata, optionally including the Initial Access
+            Token from (A) if one is required by the Authorization Server.</t>
 
-            <t hangText="(C)">The Authorization Server registers the Client
-            and returns the client's registered metadata, a Client Identifier
-            that is unique at the server, a set of Client Credentials such as
-            a Client Secret if applicable for this Client, a URI pointing to
-            the Client Configuration Endpoint, and a Registration Access Token
-            to be used when calling the Client Configuration Endpoint.</t>
+            <t hangText="(C)"><vspace blankLines="0"/>The Authorization Server
+            registers the Client and returns the client's registered metadata,
+            a Client Identifier that is unique at the server, a set of Client
+            Credentials such as a Client Secret if applicable for this Client,
+            a URI pointing to the Client Configuration Endpoint, and a
+            Registration Access Token to be used when calling the Client
+            Configuration Endpoint.</t>
 
-            <t hangText="(D)">The Client or Developer optionally calls the
-            Client Configuration Endpoint with a Read or Update request using
-            the Registration Access Token issued in (C).</t>
+            <t hangText="(D)"><vspace blankLines="0"/>The Client or Developer
+            optionally calls the Client Configuration Endpoint with a Read or
+            Update request using the Registration Access Token issued in
+            (C).</t>
 
-            <t hangText="(E)">The Authorization Server responds with the
-            Client's current configuration, potentially including a new
-            Registration Access Token and a new set of Client Credentials such
-            as a Client Secret if applicable for this Client. If a new
-            Registration Access Token is issued, it replaces the token issued
-            in (C) for all subsequent calls to the Client Configuration
-            Endpoint.</t>
+            <t hangText="(E)"><vspace blankLines="0"/>The Authorization Server
+            responds with the Client's current configuration, potentially
+            including a new Registration Access Token and a new set of Client
+            Credentials such as a Client Secret if applicable for this Client.
+            If a new Registration Access Token is issued, it replaces the
+            token issued in (C) for all subsequent calls to the Client
+            Configuration Endpoint.</t>
 
-            <t hangText="(F)">The Client or Developer optionally calls the
-            Client Configuration Endpoint with a Delete request using the
-            Registration Access Token issued in (C). </t>
+            <t hangText="(F)"><vspace blankLines="0"/>The Client or Developer
+            optionally calls the Client Configuration Endpoint with a Delete
+            request using the Registration Access Token issued in (C). </t>
 
-            <t hangText="(G)">The Authorization Server deprovisions the client
-            and responds with a confirmation that the deletion has taken
-            place.</t>
+            <t hangText="(G)"><vspace blankLines="0"/>The Authorization Server
+            deprovisions the client and responds with a confirmation that the
+            deletion has taken place.</t>
           </list>Further discussion of possible example lifecycles are found
         in the Appendix to this specification, <xref
         target="client-lifecycle-examples">Client Lifecycle
