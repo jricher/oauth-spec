@@ -165,6 +165,83 @@
           </list></t>
       </section>
 
+      <section anchor="protocol-flow" title="Protocol Flow">
+        <figure>
+          <preamble>(preamble)</preamble>
+
+          <artwork><![CDATA[
+       +--------(A)- Initial Access Token
+       |
+       v
+ +-----------+                                      +---------------+
+ |           |--(B)- Client Registration Reqeust -->|    Client     |
+ |           |                                      | Registration  |
+ |           |<-(C)- Client Information Response ---|   Endpoint    |
+ |           |                                      +---------------+
+ |           |
+ |           |                                      +---------------+
+ | Client or |--(D)- Read or Update Request ------->|               |
+ | Developer |                                      |               |
+ |           |<-(E)- Client Information Response ---|    Client     |
+ |           |                                      | Configuration |
+ |           |                                      |   Endpoint    |
+ |           |                                      |               |
+ |           |--(F)- Delete Request --------------->|               |
+ |           |                                      |               |
+ |           |<-(G)- Delete Confirmation -----------|               |
+ +-----------+                                      +---------------+
+
+
+]]></artwork>
+
+          <postamble>Figure 1: Abstract Protocol Flow</postamble>
+        </figure>
+
+        <t>The abstract OAuth 2.0 Client Dynamic Registration flow illustrated
+        in Figure 1 describes the interaction between the Client or Developer
+        and the two Endpoints defined in this specification. This figure does
+        not demonstrate error conditions. This flow includes the following
+        steps:</t>
+
+        <t><list style="hanging">
+            <t hangText="(A)"><vspace blankLines="0"/>Optionally, the Client
+            or Developer is issued an Initial Access Token for use with the
+            Client Registration Endpoint.</t>
+
+            <t hangText="(B)">The Client or Developer calls the Client
+            Registration Endpoint with its desired registration metadata,
+            optionally including the Initial Access Token from (A) if one is
+            required by the Authorization Server.</t>
+
+            <t hangText="(C)">The Authorization Server registers the Client
+            and returns the client's registered metadata, a Client Identifier
+            that is unique at the server, a set of Client Credentials such as
+            a Client Secret if applicable for this Client, a URI pointing to
+            the Client Configuration Endpoint, and a Registration Access Token
+            to be used when calling the Client Configuration Endpoint.</t>
+
+            <t hangText="(D)">The Client or Developer optionally calls the
+            Client Configuration Endpoint with a Read or Update request using
+            the Registration Access Token issued in (C).</t>
+
+            <t hangText="(E)">The Authorization Server responds with the
+            Client's current configuration, potentially including a new
+            Registration Access Token and a new set of Client Credentials such
+            as a Client Secret if applicable for this Client. If a new
+            Registration Access Token is issued, it replaces the token issued
+            in (C) for all subsequent calls to the Client Configuration
+            Endpoint.</t>
+
+            <t hangText="(F)">The Client or Developer optionally calls the
+            Client Configuration Endpoint with a Delete request using the
+            Registration Access Token issued in (C). </t>
+
+            <t hangText="(G)">The Authorization Server deprovisions the client
+            and responds with a confirmation that the deletion has taken
+            place.</t>
+          </list></t>
+      </section>
+
       <section anchor="Credentials"
                title="Registration Tokens and Credentials">
         <t>Throughout the course of the Dynamic Registration protocol, there
@@ -1597,6 +1674,8 @@ Pragma: no-cache
           <t>Moved non-normative client lifecycle examples to appendix</t>
 
           <t>Marked differentiating between auth servers as out of scope</t>
+
+          <t>Added protocol flow diagram</t>
         </list></t>
 
       <t>-11</t>
