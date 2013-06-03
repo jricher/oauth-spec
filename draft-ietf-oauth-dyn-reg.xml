@@ -632,11 +632,14 @@
       server certificate check, per <xref target="RFC6125">RFC
       6125</xref>.</t>
 
-      <t>The Client Registration Endpoint MAY accept an Initial Access Token
-      in the form of an <xref target="RFC6749">OAuth 2.0 </xref> access token
-      to limit registration to only previously authorized parties. The method
-      by which the Initial Access Token is obtained by the registrant is
-      generally out-of-band and is out of scope of this specification.</t>
+      <t>The Client Registration Endpoint MAY be an OAuth 2.0 Protected
+      Resource and accept an Initial Access Token in the form of an <xref
+      target="RFC6749">OAuth 2.0 </xref> access token to limit registration to
+      only previously authorized parties. The method by which the Initial
+      Access Token is obtained by the registrant is generally out-of-band and
+      is out of scope for this specification. The method by which the Initial
+      Access Token is verified and validated by the Client Registration
+      Endpoint is out of scope for this specificaiton.</t>
 
       <t>To support open registration and facilitate wider interoperability,
       the Client Registration Endpoint SHOULD allow initial registration
