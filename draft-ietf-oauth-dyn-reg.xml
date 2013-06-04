@@ -643,14 +643,16 @@
 
       <t>To support open registration and facilitate wider interoperability,
       the Client Registration Endpoint SHOULD allow initial registration
-      requests with no authentication. These requests MAY be rate-limited or
+      requests with no authorization (which is to say, with no OAuth 2.0
+      access token in the request). These requests MAY be rate-limited or
       otherwise limited to prevent a denial-of-service attack on the Client
       Registration Endpoint.</t>
 
       <t>To allow registered clients to manage their information, the Client
-      Registration Endpoint issues a Request Access Token to securely
-      authorize calls to the <xref target="AccessEndpoint">Client
-      Configuration Endpoint</xref>.</t>
+      Registration Endpoint issues a Request Access Token as an <xref
+      target="RFC6750">OAuth 2.0 Bearer Token</xref> to securely authorize
+      calls to the <xref target="AccessEndpoint">Client Configuration
+      Endpoint</xref>.</t>
 
       <t>The Client Registration Endpoint MUST ignore all parameters it does
       not understand.</t>
@@ -673,8 +675,9 @@
         object and all parameters as top-level members of that JSON
         object.</t>
 
-        <t>For example, a client could send the following open registration
-        request to the Client Registration Endpoint:</t>
+        <t>For example, if the server supports open registration (with no
+        Initial Access Token), the Client could send the following
+        registration request to the Client Registration Endpoint:</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -702,11 +705,13 @@ Host: server.example.com
 
         <t/>
 
-        <t>Alternatively, if the developer or the client has been provisioned
-        with an Initial Access Token, he or it sends the following
-        registration request to the Client Registration Endpoint. The method
-        by which the Initial Access Token is obtained is out of scope for this
-        specification.</t>
+        <t>Alternatively, if the server supports authorized registration, the
+        developer or the client will be provisioned with an Initial Access
+        Token (the method by which the Initial Access Token is obtained is out
+        of scope for this specification). The developer or client sends the
+        following authorized registration request to the Client Registration
+        Endpoint, with the Initial Access Token sent in this example as an
+        <xref target="RFC6750">OAuth 2.0 Bearer Token</xref>: </t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
