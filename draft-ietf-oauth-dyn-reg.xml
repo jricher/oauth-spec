@@ -1231,10 +1231,10 @@ Pragma: no-cache
       MUST perform a TLS/SSL server certificate check, per <xref
       target="RFC6125">RFC 6125</xref>.</t>
 
-      <t>As this endpoint is an OAuth 2.0 Protected Resource, requests to the
-      Registration Endpoint SHOULD have some rate limiting on failures to
-      prevent the Registration Access Token from being disclosed though
-      repeated access attempts.</t>
+      <t>Since the Client Configuration Endpoint is an OAuth 2.0 Protected
+      Resource, it SHOULD have some rate limiting on failures to prevent the
+      Registration Access Token from being disclosed though repeated access
+      attempts.</t>
 
       <t>For clients that use redirect-based grant types such as Authorization
       Code and Implicit, Authorization Servers SHOULD require clients to
@@ -1284,7 +1284,7 @@ Pragma: no-cache
       target="RFC6750">OAuth 2.0 Bearer</xref>.</t>
 
       <t>If a Client is deprovisioned from a server, any outstanding
-      Registration Access Tokens for that client MUST be invalidated at the
+      Registration Access Token for that client MUST be invalidated at the
       same time. Otherwise, this can lead to an inconsistent state wherein a
       Client could make requests to the Client Configuration Endpoint where
       the authentication would succeed but the action would fail because the
