@@ -119,7 +119,7 @@
       user during the authorization step. This draft also provides a mechanism
       for the Client to read and update this information after the initial
       registration action. This draft protects these actions through the use
-      of an OAuth 2.0 Bearer Access Token that is issused to the client during
+      of an OAuth 2.0 Bearer Access Token that is issued to the client during
       registration explicitly for this purpose.</t>
 
       <section anchor="Notation" title="Notational Conventions">
@@ -178,7 +178,7 @@
        |
        v
  +-----------+                                      +---------------+
- |           |--(B)- Client Registration Reqeust -->|    Client     |
+ |           |--(B)- Client Registration Request -->|    Client     |
  |           |                                      | Registration  |
  |           |<-(C)- Client Information Response ---|   Endpoint    |
  |           |                                      +---------------+
@@ -640,7 +640,7 @@
       Access Token is obtained by the registrant is generally out-of-band and
       is out of scope for this specification. The method by which the Initial
       Access Token is verified and validated by the Client Registration
-      Endpoint is out of scope for this specificaiton.</t>
+      Endpoint is out of scope for this specification.</t>
 
       <t>To support open registration and facilitate wider interoperability,
       the Client Registration Endpoint SHOULD allow initial registration
