@@ -254,7 +254,7 @@
       </section>
 
       <section anchor="Credentials"
-               title="Registration Tokens and Credentials">
+               title="Registration Tokens and Client Credentials">
         <t>Throughout the course of the Dynamic Registration protocol, there
         are three different classes of credentials in play, each with
         different properties and targets.</t>
@@ -305,27 +305,27 @@
           </list></t>
 
         <section anchor="credential-rotation" title="Credential Rotation">
-          <t>A dynamically registered Client's credentials can be rotated
-          throughout its lifetime and the Client MUST be able to accept new
-          credentials from the Authorization Server in these
-          circumstances.</t>
+          <t>The Authorization Server MAY rotate the Client's Registration
+          Access Token and/or Client Credentials (such as a client_secret)
+          throughout the lifetime of the Client. The Client is informed of the
+          changed values changing by making calls either Read or Update
+          requests to the Client Configuration Endpoint, and the new values of
+          the Registration Access Token and the Client Credentials will be
+          included in the Client Information Response.</t>
 
-          <t>When making a Read or Update request to the Client Configuration
-          Endpoint, the Client MAY receive a new Client Secret and/or
-          Registration Access Token as part of the Client Information
-          Response. The new Client Secret, if issued, MUST replace an existing
-          Client Secret and be used at the Token Endpoint. The new
-          Registration Access Token MUST be used for all subsequent calls to
-          the Client Configuration Endpoint. The old Client Secret and
-          Registration Access Token MUST be discarded as no longer valid.</t>
+          <t>The Registration Access Token SHOULD be rotated only in response
+          to a Read or Update request to the Client Configuration Endpoint, at
+          which point the new Registration Access Token is returned to the
+          Client and the old Registration Access Token SHOULD be discarded by
+          both parties.</t>
         </section>
       </section>
     </section>
 
     <section anchor="client-metadata" title="Client Metadata">
-      <t>Clients generally have an array of metadata associated with their
-      unique Client Identifier at the Authorization Server. These can range
-      from human-facing display strings, such as a client name, to items that
+      <t>s generally have an array of metadata associated with their unique
+      Client Identifier at the Authorization Server. These can range from
+      human-facing display strings, such as a client name, to items that
       impact the security of the protocol, such as the list of valid redirect
       URIs.</t>
 
@@ -1705,6 +1705,11 @@ Pragma: no-cache
           <t>Added protocol flow diagram</t>
 
           <t>Added credential rotation discussion</t>
+
+          <t>Called out Client Registration Endpoint as an OAuth 2.0 Protected
+          Resource</t>
+
+          <t>Cleaned up several pieces of text</t>
         </list></t>
 
       <t>-11</t>
