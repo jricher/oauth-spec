@@ -161,8 +161,8 @@
             registered Client.</t>
 
             <t hangText="Initial Access Token">OAuth 2.0 Access Token
-            optionally issued by an Authorization Server granting access to
-            its Client Registration Endpoint. The means by which the
+            optionally issued by an Authorization Server and used to authorize
+            calls to the Client Registration Endpoint. The means by which the
             Authorization Server issues this token as well as the means by
             which the Registration Endpoint validates this token are out of
             scope for this specification.</t>
