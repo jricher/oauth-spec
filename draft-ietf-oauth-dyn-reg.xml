@@ -349,12 +349,13 @@
       replace the requested value with a default at the server's discretion.
       The Authorization Server SHOULD provide documentation for any fields
       that it requires to be filled in by the client or to have particular
-      values or formats.</t>
+      values or formats. An Authorization Server MAY ignore the values in any
+      field in this list.</t>
 
       <t>Extensions and profiles of this specification MAY expand this list,
-      but Authorization Servers MUST accept or ignore all parameters on this
-      list. The Authorization Server MUST ignore any additional parameters
-      sent by the Client that it does not understand.</t>
+      and Authorization Servers MUST accept all fields in this list. The
+      Authorization Server MUST ignore any additional parameters sent by the
+      Client that it does not understand.</t>
 
       <t><list style="hanging">
           <t hangText="redirect_uris"><vspace blankLines="0"/>Array of
