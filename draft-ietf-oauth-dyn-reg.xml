@@ -212,7 +212,7 @@
             or Developer is issued an Initial Access Token for use with the
             Client Registration Endpoint. The method by which the Initial
             Access Token is issued to the Client or Developer is out of scope
-            for this specification. </t>
+            for this specification.</t>
 
             <t hangText="(B)"><vspace blankLines="0"/>The Client or Developer
             calls the Client Registration Endpoint with its desired
@@ -242,7 +242,7 @@
 
             <t hangText="(F)"><vspace blankLines="0"/>The Client or Developer
             optionally calls the Client Configuration Endpoint with a Delete
-            request using the Registration Access Token issued in (C). </t>
+            request using the Registration Access Token issued in (C).</t>
 
             <t hangText="(G)"><vspace blankLines="0"/>The Authorization Server
             deprovisions the client and responds with a confirmation that the
@@ -304,7 +304,7 @@
             Registration Endpoint or at the Client Configuration endpoint.</t>
           </list></t>
 
-        <section title="Credential Rotation">
+        <section anchor="credential-rotation" title="Credential Rotation">
           <t>A dynamically registered Client's credentials can be rotated
           throughout its lifetime and the Client MUST be able to accept new
           credentials from the Authorization Server in these
@@ -647,14 +647,10 @@
       otherwise limited to prevent a denial-of-service attack on the Client
       Registration Endpoint.</t>
 
-      <t>To facilitate registered clients updating their information, the
-      Client Registration Endpoint issues a Request Access Token for clients
-      to securely identify themselves in future connections to the <xref
-      target="AccessEndpoint">Client Configuration Endpoint</xref>. As such,
-      the Client Configuration Endpoint MUST accept requests with <xref
-      target="RFC6750">OAuth 2.0 Bearer Tokens</xref> for these operations,
-      whether or not the initial registration call requires authentication of
-      some form.</t>
+      <t>To allow registered clients to manage their information, the Client
+      Registration Endpoint issues a Request Access Token to securely
+      authorize calls to the <xref target="AccessEndpoint">Client
+      Configuration Endpoint</xref>.</t>
 
       <t>The Client Registration Endpoint MUST ignore all parameters it does
       not understand.</t>
