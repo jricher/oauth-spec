@@ -229,8 +229,9 @@
 
             <t hangText="(D)"><vspace blankLines="0"/>The Client or Developer
             optionally calls the Client Configuration Endpoint with a Read or
-            Update request using the Registration Access Token issued in
-            (C).</t>
+            Update request using the Registration Access Token issued in (C).
+            An Update request contains all of the client's registered
+            metadata.</t>
 
             <t hangText="(E)"><vspace blankLines="0"/>The Authorization Server
             responds with the Client's current configuration, potentially
@@ -261,19 +262,19 @@
 
         <t><list style="symbols">
             <t>The Initial Access Token is optionally used by the Client or
-            Developer at the Registration Endpoint. This is an OAuth 2.0
-            Bearer Token that is used to authorize the initial Client
-            Registration Request. The content, structure, generation, and
-            validation of this token are out of scope for this specification.
-            The Authorization Server can use this token to verify that the
-            presenter is allowed to dynamically register new clients. The
-            Authorization Server can also use this token to tie multiple
-            instances of registered clients (each with their own distinct
-            Client Identifier) back to the party to whom the Initial Access
-            Token was issued, usually an application developer. This token may
-            be shared between multiple instances of a Client to allow them to
-            each register separately. This token should be used only at the
-            Client Registration Endpoint.</t>
+            Developer at the Registration Endpoint. This is an OAuth 2.0 Token
+            that is used to authorize the initial Client Registration Request.
+            The content, structure, generation, and validation of this token
+            are out of scope for this specification. The Authorization Server
+            can use this token to verify that the presenter is allowed to
+            dynamically register new clients. This token may be shared between
+            multiple instances of a Client to allow them to each register
+            separately, thereby letting the Authorization Server use this
+            token to tie multiple instances of registered clients (each with
+            their own distinct Client Identifier) back to the party to whom
+            the Initial Access Token was issued, usually an application
+            developer. This token should be used only at the Client
+            Registration Endpoint.</t>
 
             <t>The Registration Access Token is used by the Client or
             Developer at the Client Configuration Endpoint and represents the
@@ -323,9 +324,9 @@
     </section>
 
     <section anchor="client-metadata" title="Client Metadata">
-      <t>s generally have an array of metadata associated with their unique
-      Client Identifier at the Authorization Server. These can range from
-      human-facing display strings, such as a client name, to items that
+      <t>Clients generally have an array of metadata associated with their
+      unique Client Identifier at the Authorization Server. These can range
+      from human-facing display strings, such as a client name, to items that
       impact the security of the protocol, such as the list of valid redirect
       URIs.</t>
 
@@ -474,9 +475,10 @@
               Profiles</xref>.</t>
             </list>Authorization Servers MAY allow for other values as defined
           in grant type extensions to OAuth 2.0. The extension process is
-          described in OAuth 2.0 Section 2.5, and the value of this parameter
-          MUST be the same as the value of the <spanx style="verb">grant_type</spanx>
-          parameter passed to the Token Endpoint defined in the extension.</t>
+          described in OAuth 2.0 Section 2.5. If the Token Endpoint is used in
+          the grant type, the value of this parameter MUST be the same as the
+          value of the <spanx style="verb">grant_type</spanx> parameter passed
+          to the Token Endpoint defined in the extension.</t>
 
           <t hangText="response_types"><vspace blankLines="0"/>Array of the
           OAuth 2.0 response types that the Client may use. These response
@@ -621,7 +623,7 @@
     <section anchor="RegistrationEndpoint"
              title="Client Registration Endpoint">
       <t>The Client Registration Endpoint is an OAuth 2.0 Endpoint defined in
-      this document that is designed to allow a Client to register itself with
+      this document that is designed to allow a Client to be registered with
       the Authorization Server. The Client Registration Endpoint MUST accept
       HTTP POST messages with request parameters encoded in the entity body
       using the <spanx style="verb">application/json</spanx> format. The
