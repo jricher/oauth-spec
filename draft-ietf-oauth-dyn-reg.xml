@@ -1231,13 +1231,14 @@ Pragma: no-cache
     <section anchor="Security" title="Security Considerations">
       <t>Since requests to the Client Registration Endpoint result in the
       transmission of clear-text credentials (in the HTTP request and
-      response), the server MUST require the use of a transport-layer security
-      mechanism when sending requests to the Registration Endpoint. The server
-      MUST support TLS 1.2 <xref target="RFC5246">RFC 5246</xref> and/or TLS
-      1.0 <xref target="RFC2246"/> and MAY support additional transport-layer
-      mechanisms meeting its security requirements. When using TLS, the Client
-      MUST perform a TLS/SSL server certificate check, per <xref
-      target="RFC6125">RFC 6125</xref>.</t>
+      response), the Authorization Server MUST require the use of a
+      transport-layer security mechanism when sending requests to the
+      Registration Endpoint. The server MUST support TLS 1.2 <xref
+      target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref target="RFC2246"/>
+      and MAY support additional transport-layer mechanisms meeting its
+      security requirements. When using TLS, the Client MUST perform a TLS/SSL
+      server certificate check, per <xref target="RFC6125">RFC
+      6125</xref>.</t>
 
       <t>Since the Client Configuration Endpoint is an OAuth 2.0 Protected
       Resource, it SHOULD have some rate limiting on failures to prevent the
@@ -1564,7 +1565,7 @@ Pragma: no-cache
             <t>A Developer is creating a Client to use an Authorization Server
             and knows that instances of the Client will dynamically register
             at runtime, but that the Authorization Server requires
-            authorization the registration endpoint.</t>
+            authorization at the registration endpoint.</t>
 
             <t>The Developer visits a manual pre-registration page at the
             Authorization Server and is issued an Initial Access Token in the
