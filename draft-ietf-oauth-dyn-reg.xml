@@ -1438,10 +1438,10 @@ Pragma: no-cache
       Working Group, and the OpenID Connect Working Group participants for
       their input to this document. In particular, the following individuals
       have been instrumental in their review and contribution to various
-      versions of this document: Amanda Anganes, Tim Bray, Domenico Catalano,
-      Donald Coffin, George Fletcher, Thomas Hardjono, Phil Hunt, Torsten
-      Lodderstedt, Eve Maler, Josh Mandel, Nov Matake, Nat Sakimura, Christian
-      Scholz, and Hannes Tschofenig.</t>
+      versions of this document: Amanda Anganes, Derek Atkins, Tim Bray,
+      Domenico Catalano, Donald Coffin, George Fletcher, Thomas Hardjono, Phil
+      Hunt, William Kim, Torsten Lodderstedt, Eve Maler, Josh Mandel, Nov
+      Matake, Nat Sakimura, Christian Scholz, and Hannes Tschofenig.</t>
     </section>
 
     <section anchor="client-lifecycle-examples"
