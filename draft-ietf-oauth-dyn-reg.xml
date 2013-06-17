@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-12" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-13" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -714,7 +714,7 @@ Host: server.example.com
         of scope for this specification). The developer or client sends the
         following authorized registration request to the Client Registration
         Endpoint, with the Initial Access Token sent in this example as an
-        <xref target="RFC6750">OAuth 2.0 Bearer Token</xref>: </t>
+        <xref target="RFC6750">OAuth 2.0 Bearer Token</xref>:</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -1697,6 +1697,12 @@ Pragma: no-cache
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-13</t>
+
+      <t><list style="symbols">
+          <t/>
+        </list></t>
 
       <t>-12</t>
 
