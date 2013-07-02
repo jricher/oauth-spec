@@ -158,7 +158,7 @@
             issued by the authorization server through the client registration
             endpoint that is used to authenticate the caller when accessing
             the client's registration information at the client configuration
-            cndpoint. This access token is associated with a particular
+            endpoint. This access token is associated with a particular
             registered client.</t>
 
             <t hangText="Initial Access Token">OAuth 2.0 access token
@@ -635,7 +635,7 @@
       the authorization server. The client registration Endpoint MUST accept
       HTTP POST messages with request parameters encoded in the entity body
       using the <spanx style="verb">application/json</spanx> format. The
-      client registration cndpoint MUST be protected by a transport-layer
+      client registration endpoint MUST be protected by a transport-layer
       security mechanism, and the server MUST support TLS 1.2 <xref
       target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref target="RFC2246"/>
       and MAY support additional transport-layer mechanisms meeting its
@@ -1329,7 +1329,7 @@ Pragma: no-cache
       not have long-term storage, it's possible that such clients would need
       to re-register every time the browser application is loaded.
       Additionally, such clients may not have ample opportunity to unregister
-      themsevles using the delete action before the browser closes. To avoid
+      themselves using the delete action before the browser closes. To avoid
       the resulting proliferation of dead client identifiers, an authorization
       server MAY decide to expire registrations for existing clients meeting
       certain criteria after a period of time has elapsed.</t>
@@ -1345,7 +1345,7 @@ Pragma: no-cache
       situation, a server MAY disallow clients from registering for both the
       <spanx style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>
       grant types simultaneously. Similarly, the <spanx style="verb">authorization_code</spanx>
-      grant type is used to represent access on behaof of an end user, but the
+      grant type is used to represent access on behalf of an end user, but the
       <spanx style="verb">client_credentials</spanx> grant type represents
       access on behalf of the client itself. For security reasons, an
       authorization server could require that different scopes be used for
@@ -1658,7 +1658,7 @@ Pragma: no-cache
             same.</t>
 
             <t>If the client needs to update its configuration on the
-            cuthorization server, it sends an HTTP PUT request to the <spanx
+            authorization server, it sends an HTTP PUT request to the <spanx
             style="verb">registration_client_uri</spanx> with the <spanx
             style="verb">registration_access_token</spanx> as its
             authorization. The response will contain the client's changed
@@ -1761,8 +1761,8 @@ Pragma: no-cache
 
           <t>Fixed error reference to point to RFC6750 instead of RFC6749</t>
 
-          <t>Clarified that servers must respond to all requests to config
-          endpoint, even if it's just an error code</t>
+          <t>Clarified that servers must respond to all requests to
+          configuration endpoint, even if it's just an error code</t>
 
           <t>Lowercased all Terms to conform to style used in RFC6750</t>
         </list></t>
