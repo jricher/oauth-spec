@@ -729,7 +729,7 @@ Host: server.example.com
 
 {
  "redirect_uris":["https://client.example.org/callback",
-    "https://client.example.org/callback2"]
+    "https://client.example.org/callback2"],
  "client_name":"My Example Client",
  "client_name#ja-Jpan-JP":
     "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D",
@@ -1702,7 +1702,9 @@ Pragma: no-cache
       <t>-13</t>
 
       <t><list style="symbols">
-          <t/>
+          <t>Fixed broken example text in registration request and in delete
+          request</t>
+
         </list></t>
 
       <t>-12</t>
