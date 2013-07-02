@@ -81,7 +81,7 @@
       </address>
     </author>
 
-    <date day="6" month="June" year="2013"/>
+    <date day="2" month="July" year="2013"/>
 
     <area>Security</area>
 
@@ -953,7 +953,6 @@ Authorization: Bearer reg-23410913-abewfq.123483
           wraps for display purposes only):</preamble>
 
           <artwork><![CDATA[DELETE /register/s6BhdRkqt3 HTTP/1.1
-Accept: application/json
 Host: server.example.com
 Authorization: Bearer reg-23410913-abewfq.123483
 
@@ -1439,9 +1438,10 @@ Pragma: no-cache
       their input to this document. In particular, the following individuals
       have been instrumental in their review and contribution to various
       versions of this document: Amanda Anganes, Derek Atkins, Tim Bray,
-      Domenico Catalano, Donald Coffin, George Fletcher, Thomas Hardjono, Phil
-      Hunt, William Kim, Torsten Lodderstedt, Eve Maler, Josh Mandel, Nov
-      Matake, Nat Sakimura, Christian Scholz, and Hannes Tschofenig.</t>
+      Domenico Catalano, Donald Coffin, Vladimir Dzhuvinov, George Fletcher,
+      Thomas Hardjono, Phil Hunt, William Kim, Torsten Lodderstedt, Eve Maler,
+      Josh Mandel, Nov Matake, Nat Sakimura, Christian Scholz, and Hannes
+      Tschofenig.</t>
     </section>
 
     <section anchor="client-lifecycle-examples"
