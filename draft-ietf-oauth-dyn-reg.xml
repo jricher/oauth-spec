@@ -1089,7 +1089,9 @@ Pragma: no-cache
                title="Client Registration Error Response">
         <t>When an OAuth 2.0 error condition occurs, such as the client
         presenting an invalid Registration Access Token, the Authorization
-        Server returns an Error Response as defined in Section 3 of <xref
+        Server returns an error response appropriate to the OAuth 2.0 token
+        type. For the registration access token, which is an OAuth 2.0 Bearer
+        Token, this error response is defined in Section 3 of <xref
         target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
 
         <t>When a registration error condition occurs, the Authorization
