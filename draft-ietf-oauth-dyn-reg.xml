@@ -1118,8 +1118,9 @@ Pragma: no-cache
             Authorization server MAY choose to substitute a valid value for
             any requested parameter of a client's metadata.</t>
 
-            <t hangText="invalid_client_id"><vspace/> Value of <spanx
-            style="verb">client_id</spanx> is invalid.</t>
+            <t hangText="invalid_client_id"><vspace/> The value of <spanx
+            style="verb">client_id</spanx> does not match the one assigned to
+            this client.</t>
           </list></t>
 
         <figure>
@@ -1260,8 +1261,8 @@ Pragma: no-cache
       the domain/site of the logo doesn't match the domain/site of redirect
       URIs. An Authorization Server can also present warning messages to end
       users about untrusted Clients in all cases, especially if such clients
-      have been dynamically registered and have not been trusted by any users
-      at the Authorization Server before.</t>
+      have been recently registered and have not been trusted by any users at
+      the Authorization Server before.</t>
 
       <t>In a situation where the Authorization Server is supporting open
       Client registration, it must be extremely careful with any URL provided
@@ -1310,6 +1311,27 @@ Pragma: no-cache
       loaded. To avoid the resulting proliferation of dead Client Identifiers,
       an Authorization Server MAY decide to expire registrations for existing
       clients meeting certain criteria after a period of time has elapsed.</t>
+
+      <t>Since different OAuth 2.0 grant types have different security and
+      usage parameters, an authorization server MAY require separate
+      registrations for a piece of software to support multiple grant types.
+      For instance, an authorization server might require that all clients
+      using the <spanx style="verb">authorization_code</spanx> grant type make
+      use of a client secret for the <spanx style="verb">token_endpoint_auth_method</spanx>,
+      but any clients using the <spanx style="verb">implicit</spanx> grant
+      type do not use any authentication at the token endpoint. In such a
+      situation, a server MAY disallow clients from registering for both the
+      <spanx style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>
+      grant types simultaneously. Similarly, the <spanx style="verb">authorization_code</spanx>
+      grant type is used to represent access on behaof of an end user, but the
+      <spanx style="verb">client_credentials</spanx> grant type represents
+      access on behalf of the client itself. For security reasons, an
+      authorization server could require that different scopes be used for
+      these different use cases, and as a consequence it MAY disallow these
+      two grant types from being registered together by the same client. In
+      all of these cases, the authorization server would respond with an
+      <spanx style="verb">invalid_client_metadata</spanx> <xref
+      target="client-registration-error">error response</xref>.</t>
     </section>
   </middle>
 
@@ -1705,6 +1727,8 @@ Pragma: no-cache
           <t>Fixed broken example text in registration request and in delete
           request</t>
 
+          <t>Added security discussion of separating clients of different
+          grant types</t>
         </list></t>
 
       <t>-12</t>
