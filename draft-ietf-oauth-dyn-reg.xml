@@ -772,7 +772,9 @@ Host: server.example.com
       Token</xref>.</t>
 
       <t>Operations on this endpoint are switched through the use of different
-      <xref target="RFC2616">HTTP methods</xref>.</t>
+      <xref target="RFC2616">HTTP methods</xref>. If an authorization server
+      does not support a particular method on the client configuration
+      endpoint, it MUST respond with the appropriate error code.</t>
 
       <section anchor="client-configuration-endpoint-uri"
                title="Forming the Client Configuration Endpoint URL">
@@ -1731,6 +1733,9 @@ Pragma: no-cache
           grant types</t>
 
           <t>Fixed error reference to point to 6750 instead of 6749</t>
+
+          <t>Clarified that servers must respond to all requests to config
+          endpoint, even if it's just an error code</t>
         </list></t>
 
       <t>-12</t>
