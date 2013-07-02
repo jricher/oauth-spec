@@ -1087,14 +1087,14 @@ Pragma: no-cache
                title="Client Registration Error Response">
         <t>When an OAuth 2.0 error condition occurs, such as the client
         presenting an invalid Registration Access Token, the Authorization
-        Server returns an Error Response as defined in Section 5.2 of the
-        OAuth 2.0 specification.</t>
+        Server returns an Error Response as defined in Section 3 of <xref
+        target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
 
         <t>When a registration error condition occurs, the Authorization
-        Server returns an HTTP 400 status code with content type <spanx
-        style="verb">application/json</spanx> consisting of a <xref
-        target="RFC4627">JSON object</xref> describing the error in the
-        response body.</t>
+        Server returns an HTTP 400 status code (unless otherwise specified)
+        with content type <spanx style="verb">application/json</spanx>
+        consisting of a <xref target="RFC4627">JSON object</xref> describing
+        the error in the response body.</t>
 
         <t>The JSON object contains two members:</t>
 
@@ -1729,6 +1729,8 @@ Pragma: no-cache
 
           <t>Added security discussion of separating clients of different
           grant types</t>
+
+          <t>Fixed error reference to point to 6750 instead of 6749</t>
         </list></t>
 
       <t>-12</t>
