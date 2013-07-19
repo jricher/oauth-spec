@@ -508,6 +508,27 @@
           client's public keys. The value of this field MUST point to a valid
           JWK Set. These keys MAY be used for higher level protocols that
           require signing or encryption.</t>
+
+          <t hangText="software_id"><vspace blankLines="0"/>A identifier for
+          the software that comprises a client. Unlike <spanx style="verb">client_id</spanx>,
+          which is issued by the authorization server and generally varies
+          between instances, the <spanx style="verb">software_id</spanx> is
+          asserted by the client software and is intended to be shared between
+          all copies of the client software. The value for this field MAY be a
+          <xref target="RFC4122">UUID</xref>. The identifier SHOULD NOT change
+          when software version changes or when a new installation instance is
+          detected. Authorization servers MUST treat this field as
+          self-asserted by the client and MUST NOT make any trusted decisions
+          on the value of this field alone. </t>
+
+          <t hangText="software_version"><vspace blankLines="0"/>A version
+          identifier for the software that comprises a client. The value of
+          this field is a string that is intended to be compared using string
+          equality matching. The value of the <spanx style="verb">software_version</spanx>
+          SHOULD change on any update to the client software. Authorization
+          servers MUST treat this field as self-asserted by the client and
+          MUST NOT make any trusted decisions on the value of this field
+          alone. </t>
         </list></t>
 
       <section anchor="GrantTypesAndResponseTypes"
@@ -1269,16 +1290,22 @@ Pragma: no-cache
       an invalid redirect URI.</t>
 
       <t>The authorization server MUST treat all client metadata as
-      self-asserted. A rogue client might use the name and logo for the
-      legitimate client, which it is trying to impersonate. An authorization
-      server needs to take steps to mitigate this phishing risk, since the
-      logo could confuse users into thinking they're logging in to the
-      legitimate client. For instance, an authorization server could warn if
-      the domain/site of the logo doesn't match the domain/site of redirect
-      URIs. An authorization server can also present warning messages to end
-      users about untrusted clients in all cases, especially if such clients
-      have been recently registered and have not been trusted by any users at
-      the authorization server before.</t>
+      self-asserted. For instance, a rogue client might use the name and logo
+      for the legitimate client which it is trying to impersonate.
+      Additionally, a rogue client might try to use the software identifier or
+      software version of a legitimate client to attempt to associate itself
+      on the authorization server instances of the legitimate client. To
+      counteract this, an authorization server needs to take steps to mitigate
+      this phishing risk by looking at the entire registration request and
+      client configuration. For instance, an authorization server could warn
+      if the domain/site of the logo doesn't match the domain/site of redirect
+      URIs. An authorization server could also refuse registration from a
+      known software identifier that is requesting different redirect URIs or
+      a different client homepage uri. An authorization server can also
+      present warning messages to end users about dynamically registered
+      clients in all cases, especially if such clients have been recently
+      registered or have not been trusted by any users at the authorization
+      server before.</t>
 
       <t>In a situation where the authorization server is supporting open
       client registration, it must be extremely careful with any URL provided
@@ -1364,6 +1391,8 @@ Pragma: no-cache
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2246.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4122.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
 
@@ -1753,6 +1782,7 @@ Pragma: no-cache
       <t>-14</t>
 
       <t><list style="symbols">
+          <t>Added software_id and software_version metadata fields</t>
         </list></t>
 
       <t>-13</t>
