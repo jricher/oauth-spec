@@ -313,11 +313,11 @@
           <t>The Authorization Server MAY rotate the client's registration
           access token and/or client credentials (such as a <spanx
           style="verb">client_secret</spanx>) throughout the lifetime of the
-          client. The client is informed of the changed values changing by
-          making either read or update requests to the client configuration
-          endpoint, and the new values of the registration access token and
-          the client credentials will be included in the client information
-          response.</t>
+          client. The client can discovery that these values have changed by
+          reading the client information response returned from either a read
+          or update request to the client configuration endpoint. The client's
+          current registration access token and client credentials (if
+          applicable) MUST be included in this response.</t>
 
           <t>The registration access token SHOULD be rotated only in response
           to a read or update request to the client configuration endpoint, at
@@ -519,7 +519,7 @@
           when software version changes or when a new installation instance is
           detected. Authorization servers MUST treat this field as
           self-asserted by the client and MUST NOT make any trusted decisions
-          on the value of this field alone. </t>
+          on the value of this field alone.</t>
 
           <t hangText="software_version"><vspace blankLines="0"/>A version
           identifier for the software that comprises a client. The value of
@@ -528,7 +528,7 @@
           SHOULD change on any update to the client software. Authorization
           servers MUST treat this field as self-asserted by the client and
           MUST NOT make any trusted decisions on the value of this field
-          alone. </t>
+          alone.</t>
         </list></t>
 
       <section anchor="GrantTypesAndResponseTypes"
@@ -653,7 +653,7 @@
              title="Client Registration Endpoint">
       <t>The client registration endpoint is an OAuth 2.0 endpoint defined in
       this document that is designed to allow a client to be registered with
-      the authorization server. The client registration Endpoint MUST accept
+      the authorization server. The client registration endpoint MUST accept
       HTTP POST messages with request parameters encoded in the entity body
       using the <spanx style="verb">application/json</spanx> format. The
       client registration endpoint MUST be protected by a transport-layer
@@ -872,6 +872,10 @@ Authorization: Bearer reg-23410913-abewfq.123483
         The value of the <spanx style="verb">client_id</spanx> MUST NOT change
         from the initial registration response.</t>
 
+        <t>If the registration access token used to make this request is not
+        valid, the server MUST respond with an error as described in <xref
+        target="RFC6750">OAuth Bearer Token Usage</xref>.</t>
+
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized and the registration access token
         used to make this request SHOULD be immediately revoked.</t>
@@ -962,6 +966,10 @@ Authorization: Bearer reg-23410913-abewfq.123483
         the <spanx style="verb">client_id</spanx> MUST NOT change from the
         initial registration response.</t>
 
+        <t>If the registration access token used to make this request is not
+        valid, the server MUST respond with an error as described in <xref
+        target="RFC6750">OAuth Bearer Token Usage</xref>.</t>
+
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized, and the registration access token
         used to make this request SHOULD be immediately revoked.</t>
@@ -1009,6 +1017,10 @@ Authorization: Bearer reg-23410913-abewfq.123483
         <t>If the server does not support the delete method, the server MUST
         respond with an HTTP 405 Not Supported.</t>
 
+        <t>If the registration access token used to make this request is not
+        valid, the server MUST respond with an error as described in <xref
+        target="RFC6750">OAuth Bearer Token Usage</xref>.</t>
+
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized and the registration access token
         used to make this request SHOULD be immediately revoked.</t>
@@ -1038,7 +1050,7 @@ Pragma: no-cache
                title="Client Information Response">
         <t>The response contains the client identifier as well as the client
         secret, if the client is a confidential client. The response also
-        contains the fully qualified URL to the client configuration endpoint
+        contains the fully qualified URL of the client configuration endpoint
         for this specific client that the client may use to obtain and update
         information about itself. The response also contains a registration
         access token that is to be used by the client to perform subsequent
@@ -1783,6 +1795,9 @@ Pragma: no-cache
 
       <t><list style="symbols">
           <t>Added software_id and software_version metadata fields</t>
+
+          <t>Added direct references to RFC6750 errors in read/update/delete
+          methods</t>
         </list></t>
 
       <t>-13</t>
