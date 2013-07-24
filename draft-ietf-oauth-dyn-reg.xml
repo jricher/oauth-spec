@@ -1064,7 +1064,8 @@ Pragma: no-cache
             <t hangText="client_secret"><vspace/>OPTIONAL. The client secret.
             If issued, this MUST be unique for each <spanx style="verb">client_id</spanx>.
             This value is used by confidential clients to authenticate to the
-            token endpoint as described in OAuth 2.0 Section 2.3.1.</t>
+            token endpoint as described in <xref target="RFC6749">OAuth
+            2.0</xref> Section 2.3.1.</t>
 
             <t hangText="client_id_issued_at"><vspace/>OPTIONAL. Time at which
             the Client Identifier was issued. The time is represented as the
