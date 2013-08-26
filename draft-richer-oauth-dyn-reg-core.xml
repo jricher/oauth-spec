@@ -1,0 +1,1197 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
+"http://xml.resource.org/authoring/rfc2629.dtd" [
+<!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
+]>
+<rfc category="std" docName="draft-richer-oauth-dyn-reg-core-00"
+     ipr="trust200902">
+  <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
+
+  <?rfc toc='yes' ?>
+
+  <?rfc tocdepth='3' ?>
+
+  <?rfc symrefs='yes' ?>
+
+  <?rfc sortrefs='yes' ?>
+
+  <?rfc compact='yes' ?>
+
+  <?rfc subcompact='no' ?>
+
+  <?rfc strict='yes' ?>
+
+  <?rfc notedraftinprogress='yes' ?>
+
+  <front>
+    <title abbrev="oauth-dyn-reg">OAuth 2.0 Core Dynamic Client
+    Registration</title>
+
+    <author fullname="Justin Richer" initials="J" role="editor"
+            surname="Richer">
+      <organization>The MITRE Corporation</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city/>
+
+          <region/>
+
+          <code/>
+
+          <country/>
+        </postal>
+
+        <phone/>
+
+        <facsimile/>
+
+        <email>jricher@mitre.org</email>
+
+        <uri/>
+      </address>
+    </author>
+
+    <author fullname="John Bradley" initials="J." surname="Bradley">
+      <organization abbrev="Ping Identity">Ping Identity</organization>
+
+      <address>
+        <email>ve7jtb@ve7jtb.com</email>
+      </address>
+    </author>
+
+    <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+      <organization abbrev="Microsoft">Microsoft</organization>
+
+      <address>
+        <email>mbj@microsoft.com</email>
+
+        <uri>http://self-issued.info/</uri>
+      </address>
+    </author>
+
+    <author fullname="Maciej Machulak" initials="M" surname="Machulak">
+      <organization>Newcastle University</organization>
+
+      <address>
+        <email>m.p.machulak@ncl.ac.uk</email>
+
+        <uri>http://ncl.ac.uk/</uri>
+      </address>
+    </author>
+
+    <date day="26" month="August" year="2013"/>
+
+    <area>Security</area>
+
+    <workgroup>OAuth Working Group</workgroup>
+
+    <abstract>
+      <t>This specification defines an endpoint and protocol for dynamic
+      registration of OAuth 2.0 clients at an authorization server.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section anchor="Introduction" title="Introduction">
+      <t>In some use-case scenarios, it is desirable or necessary to allow
+      OAuth 2.0 clients to obtain authorization from an OAuth 2.0
+      authorization server without requiring the two parties to interact
+      beforehand. Nevertheless, for the authorization server to accurately and
+      securely represent to end-users which client is seeking authorization to
+      access the end-user's resources, a method for automatic and unique
+      registration of clients is needed. The OAuth 2.0 authorization framework
+      does not define how the relationship between the client and the
+      authorization server is initialized, or how a given client is assigned a
+      unique client identifier. Historically, this has happened out-of-band
+      from the OAuth 2.0 protocol. This draft provides a mechanism for a
+      client to register itself with the authorization server, which can be
+      used to dynamically provision a client identifier, and optionally a
+      client secret. Additionally, the mechanisms in this draft may can be
+      used by a client developer to register the client with the authorization
+      server in a programmatic fashion.</t>
+
+      <t>As part of the registration process, this specification also defines
+      a mechanism for the client to present the authorization server with a
+      set of metadata, such as a set of valid redirect URIs.</t>
+
+      <section anchor="Notation" title="Notational Conventions">
+        <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
+        'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', and 'OPTIONAL' in this
+        document are to be interpreted as described in <xref
+        target="RFC2119"/>.</t>
+
+        <t>Unless otherwise noted, all the protocol parameter names and values
+        are case sensitive.</t>
+      </section>
+
+      <section anchor="terminology" title="Terminology">
+        <t>This specification uses the terms "Access Token", "Refresh Token",
+        "Authorization Code", "Authorization Grant", "Authorization Server",
+        "Authorization Endpoint", "Client", "Client Identifier", "Client
+        Secret", "Protected Resource", "Resource Owner", "Resource Server",
+        and "Token Endpoint" defined by <xref target="RFC6749">OAuth
+        2.0</xref>.</t>
+
+        <t>This specification defines the following additional terms:</t>
+
+        <t><list style="hanging">
+            <t hangText="Client Registration Endpoint">OAuth 2.0 endpoint
+            through which a client can be registered at an authorization
+            server. The means by which the URL for this endpoint are obtained
+            are out of scope for this specification.</t>
+
+            <t hangText="Initial Access Token">OAuth 2.0 access token
+            optionally issued by an Authorization Server and used to authorize
+            calls to the client registration endpoint. The type and format of
+            this token are likely service-specific and are out of scope for
+            this specification. The means by which the authorization server
+            issues this token as well as the means by which the registration
+            endpoint validates this token are out of scope for this
+            specification.</t>
+          </list></t>
+      </section>
+
+      <section anchor="protocol-flow" title="Protocol Flow">
+        <figure>
+          <preamble/>
+
+          <artwork><![CDATA[
+       +--------(A)- Initial Access Token
+       |
+       v
+ +-----------+                                      +---------------+
+ |           |--(B)- Client Registration Request -->|    Client     |
+ | Client or |                                      | Registration  |
+ | Developer |<-(C)- Client Information Response ---|   Endpoint    |
+ |           |                                      +---------------+
+ +-----------+
+
+
+]]></artwork>
+
+          <postamble>Figure 1: Abstract Protocol Flow</postamble>
+        </figure>
+
+        <t>The abstract OAuth 2.0 Client dynamic registration flow illustrated
+        in Figure 1 describes the interaction between the client or developer
+        and the endpoint defined in this specification. This figure does not
+        demonstrate error conditions. This flow includes the following
+        steps:</t>
+
+        <t><list style="hanging">
+            <t hangText="(A)"><vspace blankLines="0"/>Optionally, the client
+            or developer is issued an initial access token for use with the
+            client registration endpoint. The method by which the initial
+            access token is issued to the client or developer is out of scope
+            for this specification.</t>
+
+            <t hangText="(B)"><vspace blankLines="0"/>The client or developer
+            calls the client registration endpoint with its desired
+            registration metadata, optionally including the initial access
+            token from (A) if one is required by the authorization server.</t>
+
+            <t hangText="(C)"><vspace blankLines="0"/>The authorization server
+            registers the client and returns the client's registered metadata,
+            a client identifier that is unique at the server, a set of client
+            credentials such as a client secret if applicable for this client,
+            a URI pointing to the client configuration endpoint, and a
+            registration access token to be used when calling the client
+            configuration endpoint.</t>
+          </list></t>
+      </section>
+    </section>
+
+    <section anchor="client-metadata" title="Client Metadata">
+      <t>Clients generally have an array of metadata associated with their
+      unique client identifier at the authorization server, such as the list
+      of valid redirect URIs.</t>
+
+      <t>The client metadata values serve two parallel purposes in the overall
+      OAuth 2.0 dynamic client registration protocol:</t>
+
+      <t><list style="symbols">
+          <t>the client requesting its desired values for each parameter to
+          the authorization server in a <xref
+          target="RegistrationRequest">register</xref> request, and</t>
+
+          <t>the authorization server informing the client of the current
+          values of each parameter that the client has been registered to use
+          through a <xref target="client-info-response">client information
+          response</xref>.</t>
+        </list></t>
+
+      <t>An authorization server MAY override any value that a client requests
+      during the registration process (including any omitted values) and
+      replace the requested value with a default at the server's discretion.
+      The authorization server SHOULD provide documentation for any fields
+      that it requires to be filled in by the client or to have particular
+      values or formats. An authorization server MAY ignore the values
+      provided by the client for any field in this list.</t>
+
+      <t>Extensions and profiles of this specification MAY expand this list,
+      and authorization servers MUST accept all fields in this list. The
+      authorization server MUST ignore any additional parameters sent by the
+      Client that it does not understand.</t>
+
+      <t><list style="hanging">
+          <t hangText="redirect_uris"><vspace blankLines="0"/>Array of
+          redirect URIs for use in redirect-based flows such as the
+          authorization code and implicit grant types. It is RECOMMENDED that
+          clients using these flows register this parameter, and an
+          authorization server SHOULD require registration of valid redirect
+          URIs for all clients that use these grant types to protect against
+          token and credential theft attacks.</t>
+
+          <t hangText="token_endpoint_auth_method"><vspace blankLines="0"/>The
+          requested authentication method for the token endpoint. Values
+          defined by this specification are: <list style="symbols">
+              <t><spanx style="verb">none</spanx>: The client is a public
+              client as defined in OAuth 2.0 and does not have a client
+              secret.</t>
+
+              <t><spanx style="verb">client_secret_post</spanx>: The client
+              uses the HTTP POST parameters defined in OAuth 2.0 section
+              2.3.1.</t>
+
+              <t><spanx style="verb">client_secret_basic</spanx>: the client
+              uses HTTP Basic defined in OAuth 2.0 section 2.3.1</t>
+            </list> Additional values can be defined via the IANA OAuth Token
+          Endpoint Authentication Methods Registry <xref
+          target="team-registry"/>. Absolute URIs can also be used as values
+          for this parameter without being registered. If unspecified or
+          omitted, the default is <spanx style="verb">client_secret_basic</spanx>,
+          denoting HTTP Basic Authentication Scheme as specified in Section
+          2.3.1 of OAuth 2.0.</t>
+
+          <t hangText="scope"><vspace blankLines="0"/>Space separated list of
+          scope values (as described in <xref target="RFC6749">OAuth 2.0
+          Section 3.3</xref>) that the client can use when requesting access
+          tokens. The semantics of values in this list is service specific. If
+          omitted, an authorization server MAY register a Client with a
+          default set of scopes.</t>
+
+          <t hangText="grant_types"><vspace blankLines="0"/>Array of OAuth 2.0
+          grant types that the Client may use. These grant types are defined
+          as follows:<list style="symbols">
+              <t><spanx style="verb">authorization_code</spanx>: The
+              Authorization Code Grant described in OAuth 2.0 Section 4.1</t>
+
+              <t><spanx style="verb">implicit</spanx>: The Implicit Grant
+              described in OAuth 2.0 Section 4.2</t>
+
+              <t><spanx style="verb">password</spanx>: The Resource Owner
+              Password Credentials Grant described in OAuth 2.0 Section
+              4.3</t>
+
+              <t><spanx style="verb">client_credentials</spanx>: The Client
+              Credentials Grant described in OAuth 2.0 Section 4.4</t>
+
+              <t><spanx style="verb">refresh_token</spanx>: The Refresh Token
+              Grant described in OAuth 2.0 Section 6.</t>
+
+              <t><spanx style="verb">urn:ietf:params:oauth:grant-type:jwt-bearer</spanx>:
+              The JWT Bearer Grant defined in <xref target="OAuth.JWT">OAuth
+              JWT Bearer Token Profiles</xref>.</t>
+
+              <t><spanx style="verb">urn:ietf:params:oauth:grant-type:saml2-bearer</spanx>:
+              The SAML 2 Bearer Grant defined in <xref
+              target="OAuth.SAML2">OAuth SAML 2 Bearer Token
+              Profiles</xref>.</t>
+            </list>Authorization Servers MAY allow for other values as defined
+          in grant type extensions to OAuth 2.0. The extension process is
+          described in OAuth 2.0 Section 2.5. If the token endpoint is used in
+          the grant type, the value of this parameter MUST be the same as the
+          value of the <spanx style="verb">grant_type</spanx> parameter passed
+          to the token endpoint defined in the extension.</t>
+
+          <t hangText="response_types"><vspace blankLines="0"/>Array of the
+          OAuth 2.0 response types that the Client may use. These response
+          types are defined as follows:<list style="symbols">
+              <t><spanx style="verb">code</spanx>: The Authorization Code
+              response described in OAuth 2.0 Section 4.1.</t>
+
+              <t><spanx style="verb">token</spanx>: The Implicit response
+              described in OAuth 2.0 Section 4.2.</t>
+            </list>Authorization servers MAY allow for other values as defined
+          in response type extensions to OAuth 2.0. The extension process is
+          described in OAuth 2.0 Section 2.5. If the authorization endpoint is
+          used by the grant type, the value of this parameter MUST be the same
+          as the value of the <spanx style="verb">response_type</spanx>
+          parameter passed to the authorization endpoint defined in the
+          extension.</t>
+        </list></t>
+
+      <section anchor="GrantTypesAndResponseTypes"
+               title="Relationship Between Grant Types and Response Types">
+        <t>The <spanx style="verb">grant_types</spanx> and <spanx
+        style="verb">response_types</spanx> values described above are
+        partially orthogonal, as they refer to arguments passed to different
+        endpoints in the OAuth protocol. However, they are related in that the
+        <spanx style="verb">grant_types</spanx> available to a client
+        influence the <spanx style="verb">response_types</spanx> that the
+        client is allowed to use, and vice versa. For instance, a <spanx
+        style="verb">grant_types</spanx> value that includes <spanx
+        style="verb">authorization_code</spanx> implies a <spanx style="verb">response_types</spanx>
+        value that includes <spanx style="verb">code</spanx>, as both values
+        are defined as part of the OAuth 2.0 authorization code grant. As
+        such, a server supporting these fields SHOULD take steps to ensure
+        that a client cannot register itself into an inconsistent state.</t>
+
+        <t>The correlation between the two fields is listed in the table
+        below.</t>
+
+        <texttable>
+          <ttcol>grant_types value includes:</ttcol>
+
+          <ttcol>response_types value includes:</ttcol>
+
+          <c>authorization_code</c>
+
+          <c>code</c>
+
+          <c>implicit</c>
+
+          <c>token</c>
+
+          <c>password</c>
+
+          <c>(none)</c>
+
+          <c>client_credentials</c>
+
+          <c>(none)</c>
+
+          <c>refresh_token</c>
+
+          <c>(none)</c>
+
+          <c>urn:ietf:params:oauth:grant-type:jwt-bearer</c>
+
+          <c>(none)</c>
+
+          <c>urn:ietf:params:oauth:grant-type:saml2-bearer</c>
+
+          <c>(none)</c>
+        </texttable>
+
+        <t>Extensions and profiles of this document that introduce new values
+        to either the <spanx style="verb">grant_types</spanx> or <spanx
+        style="verb">response_types</spanx> parameter MUST document all
+        correspondences between these two parameter types.</t>
+      </section>
+    </section>
+
+    <section anchor="RegistrationEndpoint"
+             title="Client Registration Endpoint">
+      <t>The client registration endpoint is an OAuth 2.0 endpoint defined in
+      this document that is designed to allow a client to be registered with
+      the authorization server. The client registration endpoint MUST accept
+      HTTP POST messages with request parameters encoded in the entity body
+      using the <spanx style="verb">application/json</spanx> format. The
+      client registration endpoint MUST be protected by a transport-layer
+      security mechanism, and the server MUST support TLS 1.2 <xref
+      target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref target="RFC2246"/>
+      and MAY support additional transport-layer mechanisms meeting its
+      security requirements. When using TLS, the Client MUST perform a TLS/SSL
+      server certificate check, per <xref target="RFC6125">RFC
+      6125</xref>.</t>
+
+      <t>The client registration endpoint MAY be an OAuth 2.0 protected
+      resource and accept an initial access token in the form of an <xref
+      target="RFC6749">OAuth 2.0 </xref> access token to limit registration to
+      only previously authorized parties. The method by which the initial
+      access token is obtained by the registrant is generally out-of-band and
+      is out of scope for this specification. The method by which the initial
+      access token is verified and validated by the client registration
+      endpoint is out of scope for this specification.</t>
+
+      <t>To support open registration and facilitate wider interoperability,
+      the client registration endpoint SHOULD allow initial registration
+      requests with no authorization (which is to say, with no OAuth 2.0
+      access token in the request). These requests MAY be rate-limited or
+      otherwise limited to prevent a denial-of-service attack on the client
+      registration endpoint.</t>
+
+      <t>The client registration endpoint MUST ignore all parameters it does
+      not understand.</t>
+
+      <section anchor="RegistrationRequest"
+               title="Client Registration Request">
+        <t>This operation registers a new client to the authorization server.
+        The authorization server assigns this client a unique client
+        identifier, optionally assigns a client secret, and associates the
+        metadata given in the request with the issued client identifier. The
+        request includes any parameters described in <xref
+        target="client-metadata">Client Metadata</xref> that the client wishes
+        to specify for itself during the registration. The authorization
+        server MAY provision default values for any items omitted in the
+        client metadata.</t>
+
+        <t>To register, the client or developer sends an HTTP POST to the
+        client registration endpoint with a content type of <spanx
+        style="verb">application/json</spanx>. The HTTP Entity Payload is a
+        <xref target="RFC4627">JSON</xref> document consisting of a JSON
+        object and all parameters as top-level members of that JSON
+        object.</t>
+
+        <t>For example, if the server supports open registration (with no
+        initial access token), the client could send the following
+        registration request to the client registration endpoint:</t>
+
+        <figure>
+          <preamble>Following is a non-normative example request (with line
+          wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[
+POST /register HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Host: server.example.com
+
+{
+ "redirect_uris":["https://client.example.org/callback",
+    "https://client.example.org/callback2"],
+ "token_endpoint_auth_method":"client_secret_basic",
+ "scope":"read write dolphin",
+ "extension_parameter":"foo"
+}
+]]></artwork>
+        </figure>
+
+        <t/>
+
+        <t>Alternatively, if the server supports authorized registration, the
+        developer or the client will be provisioned with an initial access
+        token (the method by which the initial access token is obtained is out
+        of scope for this specification). The developer or client sends the
+        following authorized registration request to the client registration
+        endpoint. Note that the initial access token sent in this example as
+        an <xref target="RFC6750">OAuth 2.0 Bearer Token</xref>, but any OAuth
+        2.0 token type could be used by an authorization server:</t>
+
+        <figure>
+          <preamble>Following is a non-normative example request (with line
+          wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[
+POST /register HTTP/1.1
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer ey23f2.adfj230.af32-developer321
+Host: server.example.com
+
+{
+ "redirect_uris":["https://client.example.org/callback",
+    "https://client.example.org/callback2"],
+ "token_endpoint_auth_method":"client_secret_basic",
+ "scope":"read write dolphin",
+ "extension_parameter":"foo"
+}
+]]></artwork>
+        </figure>
+
+        <t/>
+      </section>
+
+      <section anchor="RegistrationResponse"
+               title="Client Registration Response">
+        <t>Upon successful registration, the authorization server generates a
+        new client identifier for the client. This client identifier MUST be
+        unique at the server and MUST NOT be in use by any other client. The
+        server responds with an HTTP 201 Created code and a body of type
+        <spanx style="verb">application/json</spanx> with content described in
+        <xref target="client-info-response">Client Information
+        Response</xref>.</t>
+
+        <t>Upon an unsuccessful registration, the authorization server
+        responds with an error as described in <xref
+        target="client-registration-error">Client Registration
+        Error</xref>.</t>
+      </section>
+    </section>
+
+    <section anchor="Responses" title="Responses">
+      <t>In response to certain requests from the client to either the client
+      registration endpoint as described in this specification, the
+      authorization server sends the following response bodies.</t>
+
+      <section anchor="client-info-response"
+               title="Client Information Response">
+        <t>The response contains the client identifier as well as the client
+        secret, if the client is a confidential client. The response also
+        contains the fully qualified URL of the client configuration endpoint
+        for this specific client that the client may use to obtain and update
+        information about itself. The response also contains a registration
+        access token that is to be used by the client to perform subsequent
+        operations at the client configuration endpoint.</t>
+
+        <t><list style="hanging">
+            <t hangText="client_id"><vspace/>REQUIRED. The unique client
+            identifier, MUST NOT be currently valid for any other registered
+            client.</t>
+
+            <t hangText="client_secret"><vspace/>OPTIONAL. The client secret.
+            If issued, this MUST be unique for each <spanx style="verb">client_id</spanx>.
+            This value is used by confidential clients to authenticate to the
+            token endpoint as described in <xref target="RFC6749">OAuth
+            2.0</xref> Section 2.3.1.</t>
+
+            <t hangText="client_id_issued_at"><vspace/>OPTIONAL. Time at which
+            the Client Identifier was issued. The time is represented as the
+            number of seconds from 1970-01-01T0:0:0Z as measured in UTC until
+            the date/time.</t>
+
+            <t hangText="client_secret_expires_at"><vspace/>REQUIRED if <spanx
+            style="verb">client_secret</spanx> is issued. Time at which the
+            <spanx style="verb">client_secret</spanx> will expire or 0 if it
+            will not expire. The time is represented as the number of seconds
+            from 1970-01-01T0:0:0Z as measured in UTC until the date/time.</t>
+          </list></t>
+
+        <t>Additionally, the Authorization Server MUST return all registered
+        <xref target="client-metadata">metadata</xref> about this client,
+        including any fields provisioned by the authorization server itself.
+        The authorization server MAY reject or replace any of the client's
+        requested metadata values submitted during the registration or update
+        requests and substitute them with suitable values.</t>
+
+        <t>The response is an <spanx style="verb">application/json</spanx>
+        document with all parameters as top-level members of a <xref
+        target="RFC4627">JSON object</xref>.</t>
+
+        <figure>
+          <preamble>Following is a non-normative example response:</preamble>
+
+          <artwork><![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+
+{
+ "client_id":"s6BhdRkqt3",
+ "client_secret": "cf136dc3c1fc93f31185e5885805d",
+ "client_id_issued_at":2893256800
+ "client_secret_expires_at":2893276800
+ "redirect_uris":["https://client.example.org/callback",
+    "https://client.example.org/callback2"]
+ "scope": "read write dolphin",
+ "grant_types": ["authorization_code", "refresh_token"]
+ "token_endpoint_auth_method": "client_secret_basic",
+ "extension_parameter": "foo"
+}]]></artwork>
+        </figure>
+      </section>
+
+      <section anchor="client-registration-error"
+               title="Client Registration Error Response">
+        <t>When an OAuth 2.0 error condition occurs, such as the client
+        presenting an invalid registration access token, the authorization
+        server returns an error response appropriate to the OAuth 2.0 token
+        type. For the registration access token, which is an OAuth 2.0 bearer
+        token, this error response is defined in Section 3 of <xref
+        target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
+
+        <t>When a registration error condition occurs, the authorization
+        server returns an HTTP 400 status code (unless otherwise specified)
+        with content type <spanx style="verb">application/json</spanx>
+        consisting of a <xref target="RFC4627">JSON object</xref> describing
+        the error in the response body.</t>
+
+        <t>The JSON object contains two members:</t>
+
+        <t><list style="hanging">
+            <t hangText="error"><vspace/>The error code, a single ASCII
+            string.</t>
+
+            <t hangText="error_description"><vspace/>A human-readable text
+            description of the error for debugging.</t>
+          </list></t>
+
+        <t>This specification defines the following error codes:</t>
+
+        <t><list style="hanging">
+            <t hangText="invalid_redirect_uri"><vspace/>The value of one or
+            more <spanx style="verb">redirect_uris</spanx> is invalid.</t>
+
+            <t hangText="invalid_client_metadata"><vspace/>The value of one of
+            the <xref target="client-metadata">client metadata</xref> fields
+            is invalid and the server has rejected this request. Note that an
+            Authorization server MAY choose to substitute a valid value for
+            any requested parameter of a client's metadata.</t>
+          </list></t>
+
+        <figure>
+          <preamble>Following is a non-normative example of an error response
+          (with line wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[HTTP/1.1 400 Bad Request
+Content-Type: application/json
+Cache-Control: no-store
+Pragma: no-cache
+   
+{
+ "error":"invalid_redirect_uri",
+ "error_description":"The redirect URI of http://sketchy.example.com
+   is not allowed for this server."
+}]]></artwork>
+        </figure>
+      </section>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <section anchor="team-registry"
+               title="OAuth Token Endpoint Authentication Methods Registry">
+        <t>This specification establishes the OAuth Token Endpoint
+        Authentication Methods registry.</t>
+
+        <t>Additional values for use as <spanx style="verb">token_endpoint_auth_method</spanx>
+        metadata values are registered with a Specification Required (<xref
+        target="RFC5226"/>) after a two-week review period on the
+        oauth-ext-review@ietf.org mailing list, on the advice of one or more
+        Designated Experts. However, to allow for the allocation of values
+        prior to publication, the Designated Expert(s) may approve
+        registration once they are satisfied that such a specification will be
+        published.</t>
+
+        <t>Registration requests must be sent to the oauth-ext-review@ietf.org
+        mailing list for review and comment, with an appropriate subject
+        (e.g., "Request to register token_endpoint_auth_method value:
+        example").</t>
+
+        <t>Within the review period, the Designated Expert(s) will either
+        approve or deny the registration request, communicating this decision
+        to the review list and IANA. Denials should include an explanation
+        and, if applicable, suggestions as to how to make the request
+        successful.</t>
+
+        <t>IANA must only accept registry updates from the Designated
+        Expert(s) and should direct all requests for registration to the
+        review mailing list.</t>
+
+        <section anchor="team-template" title="Registration Template">
+          <t><list style="hanging">
+              <t
+              hangText="Token Endpoint Authorization Method name:"><vspace/>The
+              name requested (e.g., "example"). This name is case sensitive.
+              Names that match other registered names in a case insensitive
+              manner SHOULD NOT be accepted.</t>
+
+              <t hangText="Change controller:"><vspace/>For Standards Track
+              RFCs, state "IETF". For others, give the name of the responsible
+              party. Other details (e.g., postal address, email address, home
+              page URI) may also be included.</t>
+
+              <t hangText="Specification document(s):"><vspace/>Reference to
+              the document(s) that specify the token endpoint authorization
+              method, preferably including a URI that can be used to retrieve
+              a copy of the document(s). An indication of the relevant
+              sections may also be included but is not required.</t>
+            </list></t>
+        </section>
+
+        <section anchor="team-contents" title="Initial Registry Contents">
+          <t>The OAuth Token Endpoint Authentication Methods registry's
+          initial contents are:</t>
+
+          <t><?rfc subcompact="yes"?> <list style="symbols">
+              <t>Token Endpoint Authorization Method name: <spanx
+              style="verb">none</spanx></t>
+
+              <t>Change controller: IETF</t>
+
+              <t>Specification document(s): [[ this document ]]</t>
+            </list></t>
+
+          <t><list style="symbols">
+              <t>Token Endpoint Authorization Method name: <spanx
+              style="verb">client_secret_post</spanx></t>
+
+              <t>Change controller: IETF</t>
+
+              <t>Specification document(s): [[ this document ]]</t>
+            </list></t>
+
+          <t><list style="symbols">
+              <t>Token Endpoint Authorization Method name: <spanx
+              style="verb">client_secret_basic</spanx></t>
+
+              <t>Change controller: IETF</t>
+
+              <t>Specification document(s): [[ this document ]]</t>
+            </list></t>
+        </section>
+
+        <?rfc subcompact="no"?>
+      </section>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <t>Since requests to the client registration endpoint result in the
+      transmission of clear-text credentials (in the HTTP request and
+      response), the Authorization Server MUST require the use of a
+      transport-layer security mechanism when sending requests to the
+      registration endpoint. The server MUST support TLS 1.2 <xref
+      target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref target="RFC2246"/>
+      and MAY support additional transport-layer mechanisms meeting its
+      security requirements. When using TLS, the Client MUST perform a TLS/SSL
+      server certificate check, per <xref target="RFC6125">RFC
+      6125</xref>.</t>
+
+      <t>For clients that use redirect-based grant types such as <spanx
+      style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>,
+      authorization servers SHOULD require clients to register their <spanx
+      style="verb">redirect_uris</spanx>. Requiring clients to do so can help
+      mitigate attacks where rogue actors inject and impersonate a validly
+      registered client and intercept its authorization code or tokens through
+      an invalid redirect URI.</t>
+
+      <t>Public clients MAY register with an authorization server using this
+      protocol, if the authorization server's policy allows them. Public
+      clients use a <spanx style="verb">none</spanx> value for the <spanx
+      style="verb">token_endpoint_auth_method</spanx> metadata field and are
+      generally used with the <spanx style="verb">implicit</spanx> grant type.
+      Often these clients will be short-lived in-browser applications
+      requesting access to a user's resources and access is tied to a user's
+      active session at the authorization server. Since such clients often do
+      not have long-term storage, it's possible that such clients would need
+      to re-register every time the browser application is loaded.
+      Additionally, such clients may not have ample opportunity to unregister
+      themselves using the delete action before the browser closes. To avoid
+      the resulting proliferation of dead client identifiers, an authorization
+      server MAY decide to expire registrations for existing clients meeting
+      certain criteria after a period of time has elapsed.</t>
+
+      <t>Since different OAuth 2.0 grant types have different security and
+      usage parameters, an authorization server MAY require separate
+      registrations for a piece of software to support multiple grant types.
+      For instance, an authorization server might require that all clients
+      using the <spanx style="verb">authorization_code</spanx> grant type make
+      use of a client secret for the <spanx style="verb">token_endpoint_auth_method</spanx>,
+      but any clients using the <spanx style="verb">implicit</spanx> grant
+      type do not use any authentication at the token endpoint. In such a
+      situation, a server MAY disallow clients from registering for both the
+      <spanx style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>
+      grant types simultaneously. Similarly, the <spanx style="verb">authorization_code</spanx>
+      grant type is used to represent access on behalf of an end user, but the
+      <spanx style="verb">client_credentials</spanx> grant type represents
+      access on behalf of the client itself. For security reasons, an
+      authorization server could require that different scopes be used for
+      these different use cases, and as a consequence it MAY disallow these
+      two grant types from being registered together by the same client. In
+      all of these cases, the authorization server would respond with an
+      <spanx style="verb">invalid_client_metadata</spanx> <xref
+      target="client-registration-error">error response</xref>.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml' ?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2246.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4122.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5646.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
+
+      <reference anchor="JWK">
+        <front>
+          <title>JSON Web Key (JWK)</title>
+
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <organization>Microsoft</organization>
+
+            <address>
+              <email>mbj@microsoft.com</email>
+
+              <uri>http://self-issued.info/</uri>
+            </address>
+          </author>
+
+          <date day="8" month="May" year="2013"/>
+        </front>
+
+        <seriesInfo name="Internet-Draft" value="draft-ietf-jose-json-web-key"/>
+
+        <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-key"
+                type="HTML"/>
+      </reference>
+
+      <reference anchor="OAuth.JWT">
+        <front>
+          <title abbrev="OAuth JWT Bearer Token Profiles">JSON Web Token (JWT)
+          Bearer Token Profiles for OAuth 2.0</title>
+
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <!-- role="editor" -->
+
+            <organization>Microsoft</organization>
+          </author>
+
+          <author fullname="Brian Campbell" initials="B." surname="Campbell">
+            <organization abbrev="Ping Identity">Ping Identity
+            Corp.</organization>
+          </author>
+
+          <author fullname="Chuck Mortimore" initials="C." surname="Mortimore">
+            <organization>Salesforce</organization>
+          </author>
+
+          <date day="29" month="March" year="2013"/>
+        </front>
+
+        <seriesInfo name="Internet-Draft" value="draft-ietf-oauth-jwt-bearer"/>
+
+        <format target="http://tools.ietf.org/html/draft-ietf-oauth-jwt-bearer"
+                type="HTML"/>
+      </reference>
+
+      <reference anchor="OAuth.SAML2">
+        <front>
+          <title abbrev="OAuth JWT Bearer Token Profiles">SAML 2.0 Bearer
+          Assertion Profiles for OAuth 2.0</title>
+
+          <author fullname="Brian Campbell" initials="B." surname="Campbell">
+            <organization abbrev="Ping Identity">Ping Identity
+            Corp.</organization>
+          </author>
+
+          <author fullname="Chuck Mortimore" initials="C." surname="Mortimore">
+            <organization>Salesforce</organization>
+          </author>
+
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <organization>Microsoft</organization>
+          </author>
+
+          <date day="29" month="March" year="2013"/>
+        </front>
+
+        <seriesInfo name="Internet-Draft"
+                    value="draft-ietf-oauth-saml2-bearer"/>
+
+        <format target="http://tools.ietf.org/html/draft-ietf-oauth-saml2-bearer"
+                type="HTML"/>
+      </reference>
+
+      <reference anchor="IANA.Language">
+        <front>
+          <title>Language Subtag Registry</title>
+
+          <author>
+            <organization>Internet Assigned Numbers Authority
+            (IANA)</organization>
+          </author>
+
+          <date year="2005"/>
+        </front>
+
+        <format target="http://www.iana.org/assignments/language-subtag-registry"
+                type="TXT"/>
+      </reference>
+    </references>
+
+    <section anchor="Acknowledgments" title="Acknowledgments">
+      <t>The authors thank the OAuth Working Group, the User-Managed Access
+      Working Group, and the OpenID Connect Working Group participants for
+      their input to this document. In particular, the following individuals
+      have been instrumental in their review and contribution to various
+      versions of this document: Amanda Anganes, Derek Atkins, Tim Bray,
+      Domenico Catalano, Donald Coffin, Vladimir Dzhuvinov, George Fletcher,
+      Thomas Hardjono, Phil Hunt, William Kim, Torsten Lodderstedt, Eve Maler,
+      Josh Mandel, Nov Matake, Nat Sakimura, Christian Scholz, and Hannes
+      Tschofenig.</t>
+    </section>
+
+    <section anchor="History" title="Document History">
+      <t>[[ to be removed by the RFC editor before publication as an RFC
+      ]]</t>
+
+      <t>- 00</t>
+
+      <t><list style="symbols">
+          <t>Partitioned dyn-reg specification into core and management
+          specs</t>
+        </list></t>
+
+      <t>[[ Previous changelog from draft-ietf-oauth-dyn-reg ]]</t>
+
+      <t>-14</t>
+
+      <t><list style="symbols">
+          <t>Added software_id and software_version metadata fields</t>
+
+          <t>Added direct references to RFC6750 errors in read/update/delete
+          methods</t>
+        </list></t>
+
+      <t>-13</t>
+
+      <t><list style="symbols">
+          <t>Fixed broken example text in registration request and in delete
+          request</t>
+
+          <t>Added security discussion of separating clients of different
+          grant types</t>
+
+          <t>Fixed error reference to point to RFC6750 instead of RFC6749</t>
+
+          <t>Clarified that servers must respond to all requests to
+          configuration endpoint, even if it's just an error code</t>
+
+          <t>Lowercased all Terms to conform to style used in RFC6750</t>
+        </list></t>
+
+      <t>-12</t>
+
+      <t><list style="symbols">
+          <t>Improved definition of Initial Access Token</t>
+
+          <t>Changed developer registration scenario to have the Initial
+          Access Token gotten through a normal OAuth 2.0 flow</t>
+
+          <t>Moved non-normative client lifecycle examples to appendix</t>
+
+          <t>Marked differentiating between auth servers as out of scope</t>
+
+          <t>Added protocol flow diagram</t>
+
+          <t>Added credential rotation discussion</t>
+
+          <t>Called out Client Registration Endpoint as an OAuth 2.0 Protected
+          Resource</t>
+
+          <t>Cleaned up several pieces of text</t>
+        </list></t>
+
+      <t>-11</t>
+
+      <t><list style="symbols">
+          <t>Added localized text to registration request and response
+          examples.</t>
+
+          <t>Removed <spanx style="verb">client_secret_jwt</spanx> and <spanx
+          style="verb">private_key_jwt</spanx>.</t>
+
+          <t>Clarified <spanx style="verb">tos_uri</spanx> and <spanx
+          style="verb">policy_uri</spanx> definitions.</t>
+
+          <t>Added the OAuth Token Endpoint Authentication Methods registry
+          for registering <spanx style="verb">token_endpoint_auth_method</spanx>
+          metadata values.</t>
+
+          <t>Removed uses of non-ASCII characters, per RFC formatting
+          rules.</t>
+
+          <t>Changed <spanx style="verb">expires_at</spanx> to <spanx
+          style="verb">client_secret_expires_at</spanx> and <spanx
+          style="verb">issued_at</spanx> to <spanx style="verb">client_id_issued_at</spanx>
+          for greater clarity.</t>
+
+          <t>Added explanatory text for different credentials (Initial Access
+          Token, Registration Access Token, Client Credentials) and what
+          they're used for.</t>
+
+          <t>Added Client Lifecycle discussion and examples.</t>
+
+          <t>Defined Initial Access Token in Terminology section.</t>
+        </list></t>
+
+      <t>-10</t>
+
+      <t><list style="symbols">
+          <t>Added language to point out that scope values are
+          service-specific</t>
+
+          <t>Clarified normative language around client metadata</t>
+
+          <t>Added extensibility to token_endpoint_auth_method using absolute
+          URIs</t>
+
+          <t>Added security consideration about registering redirect URIs</t>
+
+          <t>Changed erroneous 403 responses to 401's with notes about token
+          handling</t>
+
+          <t>Added example for initial registration credential</t>
+        </list></t>
+
+      <t>-09</t>
+
+      <t><list style="symbols">
+          <t>Added method of internationalization for Client Metadata
+          values</t>
+
+          <t>Fixed SAML reference</t>
+        </list></t>
+
+      <t>-08</t>
+
+      <t><list style="symbols">
+          <t>Collapsed jwk_uri, jwk_encryption_uri, x509_uri, and
+          x509_encryption_uri into a single jwks_uri parameter</t>
+
+          <t>Renamed grant_type to grant_types since it's a plural value</t>
+
+          <t>Formalized name of "OAuth 2.0" throughout document</t>
+
+          <t>Added JWT Bearer Assertion and SAML 2 Bearer Assertion to example
+          grant types</t>
+
+          <t>Added response_types parameter and explanatory text on its use
+          with and relationship to grant_types</t>
+        </list></t>
+
+      <t>-07</t>
+
+      <t><list style="symbols">
+          <t>Changed registration_access_url to registration_client_uri</t>
+
+          <t>Fixed missing text in 5.1</t>
+
+          <t>Added Pragma: no-cache to examples</t>
+
+          <t>Changed "no such client" error to 403</t>
+
+          <t>Renamed Client Registration Access Endpoint to Client
+          Configuration Endpoint</t>
+
+          <t>Changed all the parameter names containing "_url" to instead use
+          "_uri"</t>
+
+          <t>Updated example text for forming Client Configuration Endpoint
+          URL</t>
+        </list></t>
+
+      <t>-06</t>
+
+      <t><list style="symbols">
+          <t>Removed secret_rotation as a client-initiated action, including
+          removing client secret rotation endpoint and parameters.</t>
+
+          <t>Changed _links structure to single value
+          registration_access_url.</t>
+
+          <t>Collapsed create/update/read responses into client info
+          response.</t>
+
+          <t>Changed return code of create action to 201.</t>
+
+          <t>Added section to describe suggested generation and composition of
+          Client Registration Access URL.</t>
+
+          <t>Added clarifying text to PUT and POST requests to specify JSON in
+          the body.</t>
+
+          <t>Added Editor's Note to DELETE operation about its inclusion.</t>
+
+          <t>Added Editor's Note to registration_access_url about alternate
+          syntax proposals.</t>
+        </list></t>
+
+      <t>-05</t>
+
+      <t><list style="symbols">
+          <t>changed redirect_uri and contact to lists instead of space
+          delimited strings</t>
+
+          <t>removed operation parameter</t>
+
+          <t>added _links structure</t>
+
+          <t>made client update management more RESTful</t>
+
+          <t>split endpoint into three parts</t>
+
+          <t>changed input to JSON from form-encoded</t>
+
+          <t>added READ and DELETE operations</t>
+
+          <t>removed Requirements section</t>
+
+          <t>changed token_endpoint_auth_type back to
+          token_endpoint_auth_method to match OIDC who changed to match us</t>
+        </list></t>
+
+      <t>-04</t>
+
+      <t><list style="symbols">
+          <t>removed default_acr, too undefined in the general OAuth2 case</t>
+
+          <t>removed default_max_auth_age, since there's no mechanism for
+          supplying a non-default max_auth_age in OAuth2</t>
+
+          <t>clarified signing and encryption URLs</t>
+
+          <t>changed token_endpoint_auth_method to token_endpoint_auth_type to
+          match OIDC</t>
+        </list></t>
+
+      <t>-03</t>
+
+      <t><list style="symbols">
+          <t>added scope and grant_type claims</t>
+
+          <t>fixed various typos and changed wording for better clarity</t>
+
+          <t>endpoint now returns the full set of client information</t>
+
+          <t>operations on client_update allow for three actions on metadata:
+          leave existing value, clear existing value, replace existing value
+          with new value</t>
+        </list></t>
+
+      <t>-02</t>
+
+      <t><list style="symbols">
+          <t>Reorganized contributors and references</t>
+
+          <t>Moved OAuth references to RFC</t>
+
+          <t>Reorganized model/protocol sections for clarity</t>
+
+          <t>Changed terminology to "client register" instead of "client
+          associate"</t>
+
+          <t>Specified that client_id must match across all subsequent
+          requests</t>
+
+          <t>Fixed RFC2XML formatting, especially on lists</t>
+        </list></t>
+
+      <t>-01</t>
+
+      <t><list style="symbols">
+          <t>Merged UMA and OpenID Connect registrations into a single
+          document</t>
+
+          <t>Changed to form-paramter inputs to endpoint</t>
+
+          <t>Removed pull-based registration</t>
+        </list></t>
+
+      <t>-00</t>
+
+      <t><list style="symbols">
+          <t>Imported original UMA draft specification</t>
+        </list></t>
+    </section>
+  </back>
+</rfc>
