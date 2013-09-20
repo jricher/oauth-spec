@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-management-00"
+<rfc category="std" docName="draft-richer-oauth-dyn-reg-management-00"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -343,6 +343,13 @@
           internationalized as described in <xref
           target="HumanReadableClientMetadata">Human Readable Client
           Metadata</xref>.</t>
+
+          <t hangText="scope"><vspace blankLines="0"/>Space separated list of
+          scope values (as described in <xref target="RFC6749">OAuth 2.0
+          Section 3.3</xref>) that the client can use when requesting access
+          tokens. The semantics of values in this list is service specific. If
+          omitted, an authorization server MAY register a Client with a
+          default set of scopes.</t>
 
           <t hangText="contacts"><vspace blankLines="0"/>Array of email
           addresses for people responsible for this client. The authorization
