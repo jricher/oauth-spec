@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="exp" docName="draft-bradley-stateless-oauth-client-00"
+<rfc category="exp" docName="draft-bradley-stateless-oauth-client-01"
      ipr="trust200902">
   <front>
     <title abbrev="Abbreviated-Title">Stateless Client Identifier for OAuth
@@ -49,7 +49,7 @@
       </address>
     </author>
 
-    <date day="20" month="September" year="2013"/>
+    <date day="07" month="April" year="2014"/>
 
     <abstract>
       <t>This draft provides a method for communicating information about an
