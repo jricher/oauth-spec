@@ -681,10 +681,10 @@
       registration endpoint.</t>
 
       <t>To allow the registrant to manage the client's information, the
-      client registration endpoint issues a request access token as an <xref
-      target="RFC6750">OAuth 2.0 Bearer Token</xref> to securely authorize
-      calls to the <xref target="AccessEndpoint">client configuration
-      endpoint</xref>.</t>
+      client registration endpoint issues a registration access token as an
+      <xref target="RFC6750">OAuth 2.0 Bearer Token</xref> to securely
+      authorize calls to the <xref target="ClientConfigurationEndpoint">client
+      configuration endpoint</xref>.</t>
 
       <t>The client registration endpoint MUST ignore all parameters it does
       not understand.</t>
@@ -792,7 +792,8 @@ Host: server.example.com
       </section>
     </section>
 
-    <section anchor="AccessEndpoint" title="Client Configuration Endpoint">
+    <section anchor="ClientConfigurationEndpoint"
+             title="Client Configuration Endpoint">
       <t>The client configuration endpoint is an OAuth 2.0 protected resource
       that is provisioned by the server to facilitate viewing, updating, and
       deleting a client's registered information. The location of this
