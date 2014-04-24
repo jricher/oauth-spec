@@ -10,96 +10,120 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="exp" docName="draft-richer-oauth-signed-http-request"
+<rfc category="exp" docName="draft-richer-oauth-signed-http-request-00.txt"
      ipr="trust200902">
   <front>
-    <title abbrev="Abbreviated-Title">A Method for Signing an HTTP Requests
+    <title abbrev="HTTP Signed Messages">A Method for Signing an HTTP Requests
     for OAuth</title>
 
-    <author fullname="Justin Richer" initials="J." role="editor"
-            surname="Richer">
+    <author fullname="Justin Richer" initials="J." role="editor" surname="Richer">
       <organization>The MITRE Corporation</organization>
     </author>
-
+    
     <author fullname="John Bradley" initials="J." surname="Bradley">
-      <organization/>
-
+      <organization abbrev="Ping Identity">Ping Identity</organization>
       <address>
-        <postal>
-          <street/>
-
-          <city/>
-
-          <region/>
-
-          <code/>
-
-          <country/>
-        </postal>
-
-        <phone/>
-
-        <facsimile/>
-
-        <email/>
-
-        <uri/>
+	      <email>ve7jtb@ve7jtb.com</email>
+	      <uri>http://www.thread-safe.com/</uri>
       </address>
     </author>
+
+		<author initials="H." surname="Tschofenig" fullname="Hannes Tschofenig">
+			<organization>ARM Limited</organization>
+			<address>
+				<postal>
+					<street></street>
+					<city></city>
+					<code></code>
+					<country>Austria</country>
+				</postal>
+				<phone></phone>
+				<email>Hannes.Tschofenig@gmx.net</email>
+				<uri>http://www.tschofenig.priv.at</uri>
+			</address>
+		</author>
+		
 
     <date day="3" month="March" year="2014"/>
 
     <area>Security</area>
-
-    <workgroup>OAuth</workgroup>
+    <workgroup>OAuth Working Group</workgroup>
 
     <abstract>
-      <t>This draft proposes a simple method for creating a JSON object
-      structure based on an HTTP Request Message suitable for use in the bode
-      of a JWT (signed with JWS and/or encrypted with JWE). This draft also
-      describes a method of validating the portions of the HTTP message that
-      are included in the signed JWT. </t>
+      <t>This document a method for offering data origin authentication and integrity protection of 
+      HTTP requests. To convey the relevant data items in the request a JSON-based encapsulation 
+      is used and the JSON Web Signature (JWS) technique is re-used. JWS offers integrity protection 
+      using symmetric as well as asymmetric cryptography.</t>
     </abstract>
 
-    <note title="Requirements Language">
-      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
-      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
-      document are to be interpreted as described in <xref
-      target="RFC2119">RFC 2119</xref>.</t>
-    </note>
   </front>
 
   <middle>
     <section title="Introduction">
-      <t>In order to protect an HTTP request with a signature, we need a
-      method of attaching that request to a cryptographic envelope and
-      calculating a signature over it. Ideally, this should be done without
-      replicating the information already present in the HTTP request.
-      Additionally, most forms of canonicalization found in past attempts have
-      failed implementation tests. It is acknowledged by this draft that
-      common HTTP application frameworks can and will insert extra headers,
+      <t>In order to protect an HTTP request with a signature, a
+      method for conveying various parameters and to compute a signature is needed.
+      Ideally, this should be done without
+      replicating the information already present in the HTTP request. This version 
+      of the document still replicates most of the headers though.</t>
+      
+      <t>The keying material required for this signature calculation is distributed via 
+      mechanisms described in companion documents (see <xref target="I-D.bradley-oauth-pop-key-distribution"/> and <xref target="I-D.hunt-oauth-pop-architecture"/>). 
+      The JSON Web Signature (JWS) specification <xref target="I-D.ietf-jose-json-web-signature"/> is re-used for computing a digital signature (which uses asymmetric cryptography) or a keyed message digest (in case of symmetric cryptography).
+      </t>
+      
+  	  <t>The scope of the mechanism described in this document is shown in <xref target="flow"/> where a client in possession of keying material that is tied to the access token creates a JSON object, signs it, and issues an request to a resource server for access to a protected resource.</t>
+  	 <t>
+        <figure anchor="flow" title="Message Flow.">
+          <artwork><![CDATA[      
+ +-----------+                                    +------------+
+ |           |--(1)- HTTP Request               ->| Resource   |
+ | Client    |       (+Signature, +Access Token)->| Server     |
+ |           |                                    |            |
+ |           |<-(2)- HTTP Response ---------------|            |
+ +-----------+                                    +------------+
+]]></artwork>
+        </figure>
+	  </t>    
+    
+      <t>Many HTTP application frameworks insert extra headers,
       query parameters, and otherwise manipulate the HTTP request on its way
       from the web server into the application code itself. It is the goal of
-      this draft to have a signature protection mechanism that is robust
-      against such implementation issues. In the OAuth world, this signable
-      object is meant to be created by the Client and verified by the Resource
-      Server.</t>
+      this draft to have a signature protection mechanism that is sufficiently robust
+      against such deployment constraints (while still providing sufficient security benefits).</t>
+
+     <t>To convey the access token inside the HTTP request the bearer token specification <xref target="RFC6750"/> is re-used.</t>
+
+      
+      <t>The mechanism described in this document does not provide authentication of the resource server to the client  
+      does not provide authentication of the server to the client.This version of the document does not provide a cryptographic binding to 
+      Transport Layer Security (TLS) used underneath the an HTTPS request. </t>
+     
+      
+    </section>
+
+    <section title="Terminology">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "MAY", and "OPTIONAL" in this
+      document are to be interpreted as described in <xref
+      target="RFC2119">RFC 2119</xref>.</t>
+      
+      <t>We use the term 'sign' (or 'signature') to denote both a keyed message digest and a digital signature operation.</t>
+      
     </section>
 
     <section title="Generating a JSON Object from an HTTP Request">
-      <t>This section describes how to generate a JSON object appropriate for
-      inclusion into a JWT's claim set. Each of these sections below is
+      <t>This section describes how to generate a JSON object  below is
       included as a member of the JSON object. All members are OPTIONAL.</t>
 
       <t><list style="hanging">
-          <t hangText="m">The HTTP Method used to make this requst. This MUST
+          <t hangText="m">The HTTP Method used to make this request. This MUST
           be the uppercase HTTP verb as a JSON string.</t>
 
           <t hangText="h">The HTTP URL host component as a JSON string. This
           MAY include the port separated from the host by a colon in host:port
           format.</t>
 
-          <t hangText="p">The HTTP URL path component of the requst as an HTTP
+          <t hangText="p">The HTTP URL path component of the request as an HTTP
           string.</t>
 
           <t hangText="q">The hashed HTTP URL query parameter map of the
@@ -119,15 +143,10 @@
 
           <t hangText="b">The base64URL encoded hash of the HTTP Request body,
           calculated as the HMAC of the byte array of the body.</t>
+          
+          <t hangText="ts">The "ts" (timestamp) element provides replay protection of the 
+          JSON object. Its value MUST be a number containing an IntDate value.</t>
         </list></t>
-
-      <section title="Selection of a hashing algorithm and size">
-        <t>The hashes SHALL be calculated using the HMAC algorithm using a
-        hash size equal to the size of the surrounding JWT's alg header field.
-        That is, if the JWT uses HS256 or RS256, the HMAC here uses a 256-bit
-        HMAC. If the JWT uses RS512, the HMAC here uses 512-bit HMAC, and so
-        forth.</t>
-      </section>
 
       <section title="Calculating the query parameter list and hash">
         <t>To generate the query parameter list and hash, the client creates
@@ -170,7 +189,7 @@
             appends it to the string buffer. [[Separated by a newline?
             Alternatively we could have this also pulled into an ordered list
             and post-process the concatenation, but that might be too deep
-            into the weeds. ]]</t>
+            into the weeds. ]] </t>
           </list>Repeated header names are processed separately with no
         special handling. Headers MAY be skipped by the client if they are not
         required (or desired) to be covered by the signature.</t>
@@ -181,17 +200,22 @@
       </section>
     </section>
 
-    <section title="Validating the Hashes">
+    <section title="Verifying the Hashes">
       <t>Validation of the overall signature is done using the standard JWS
-      mechanisms for a signed JWT. However, in order to trust any of the
-      hashed mechanisms above, an application MUST re-create and validate a
-      hash for each component. </t>
+      mechanisms for JSON structures. However, in order to trust any of the
+      hashed mechanisms above, an application MUST re-create and verify a
+      hash for each component. Additionally, an application MUST compare 
+      the replicated values included in various JSON fields with the actual 
+      header fields of the request. Failure to-do so will allow an attacker 
+      to modify the underlying request, connect do different resources while 
+      at the same time having the application layer verify the signature 
+      correctly. </t>
 
       <section title="Validating the query parameter list and hash">
         <t>The client has at its disposal a map that indexes the query
         parameter names to the values given. The client creates a string
         buffer for calculating the hash. The client then iterates through the
-        "list" portion of the "p" parmaeter. For each item in the list (in the
+        "list" portion of the "p" parameter. For each item in the list (in the
         order of the list) it does the following:</t>
 
         <t><list style="numbers">
@@ -200,10 +224,8 @@
             parameters but not in the map, the validation fails.</t>
 
             <t>Encode the parameter as "name=value" and concatenate it to the
-            end of the string buffer. [[ same separator issue as above ]]</t>
-          </list>[[ Repeated parameters could be problematic here depending on
-        order preservation properties of the server's handling of them. Most
-        I've seen use arrays for that though. ]]</t>
+            end of the string buffer.</t>
+          </list></t>
 
         <t>The client calculates the hash of the string buffer and base64url
         encodes it. The client compares that string to the string passed in as
@@ -221,7 +243,7 @@
         <t>The client has at its disposal a map that indexes the header names
         to the values given. The client creates a string buffer for
         calculating the hash. The client then iterates through the "list"
-        portion of the "h" parmaeter. For each item in the list (in the order
+        portion of the "h" parameter. For each item in the list (in the order
         of the list) it does the following:</t>
 
         <t><list style="numbers">
@@ -231,9 +253,10 @@
 
             <t>Encode the parameter as "name: value" and concatenate it to the
             end of the string buffer. [[ same separator issue as above ]]</t>
-          </list>[[ Repeated headers could be problematic here depending on
+          </list><!-- [[ Repeated headers could be problematic here depending on
         order preservation properties of the server's handling of them. Most
-        I've seen use arrays for that though. ]]</t>
+        I've seen use arrays for that though. ]]--> 
+        </t>
 
         <t>The client calculates the hash of the string buffer and base64url
         encodes it. The client compares that string to the string passed in as
@@ -246,34 +269,231 @@
       </section>
     </section>
 
-    <section anchor="IANA" title="IANA Considerations">
-      <t>This document makes no request of IANA.</t>
 
-      <t>Note to RFC Editor: this section may be removed on publication as an
-      RFC.</t>
+<section title="Example">
+ <t>Example goes in here but will look like something like this (symmetric key case).
+ 
+      <figure anchor="example" title="Message Flow.">
+          <artwork><![CDATA[      
+   1) HTTP Request (plain)
+
+        POST /request?b5=%3D%253D&a3=a&c%40=&a2=r%20b&c2&a3=2 HTTP/1.1
+        Host: example.com
+
+   2) JWS protected JSON object
+
+      {"typ":"pop",
+       "alg":"HS256",
+       "kid":"client12345@example.com"}
+      .
+      {"m":"POST", 
+       "h":"example.com", 
+       "p":"request",
+       "ts":1300819380
+      }
+      .
+      dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk
+]]></artwork>
+        </figure>
+	  </t>    
+    
+ 
+</section> 
+
+    <section anchor="IANA" title="IANA Considerations">
+      
+      
+<section title="The 'pop' OAuth Access Token Type"> 
+
+<t>Section 11.1 of <xref target="RFC6749"/> defines the OAuth Access Token Type Registry and 
+this document adds another token type to this registry.</t> 
+
+<t><list style="hanging"> 
+
+<t hangText="Type name:">pop</t>
+
+<t hangText="Additional Token Endpoint Response Parameters:"> (none)</t>
+
+<t hangText="HTTP Authentication Scheme(s):">Proof-of-possession access token for use with OAuth 2.0 </t>
+
+<t hangText="Change controller:"> IETF</t>
+
+<t hangText="Specification document(s):"> [[ this document ]]</t>
+</list> 
+</t>
+
+</section>
+
+
+      <section title='JSON Web Signature and Encryption Type Values Registration'>
+	  <t>
+	    This specification registers the <spanx style='verb'>pop</spanx>
+	    type value in the
+	    IANA JSON Web Signature and Encryption Type Values registry <xref target="I-D.ietf-jose-json-web-signature"/>:
+
+	    <list style='symbols'>
+	      <t>
+		"typ" Header Parameter Value: <spanx style='verb'>pop</spanx>
+	      </t>
+	      <t>
+		Abbreviation for MIME Type: None
+	      </t>
+	      <t>
+		Change Controller: IETF
+	      </t>
+	      <t>
+		Specification Document(s): [[ this document ]]
+	      </t>
+	    </list>
+	  </t>
+      </section>
+
     </section>
 
     <section anchor="Security" title="Security Considerations">
-      <t>Since all components are only optionally protected by this method,
-      and even some components may be protected only in part (e.g., some
-      headers but not others, it is up to application developers to verify
-      that any key parameters in a request (beit method, query parameters,
-      headers, etc.) are actually covered by the signature container of the
-      JWT. The application verifying this signature MUST NOT assume that any
+      
+   <section title="Offering Confidentiality Protection for Access to Protected
+      Resources"> 
+
+   <t>
+   This specification can be used with and without Transport Layer
+   Security (TLS).</t>
+
+   <t>Without TLS this protocol provides a mechanism for verifying the
+   integrity of requests, it provides no confidentiality
+   protection.  Consequently, eavesdroppers will have full access to
+   communication content and any further messages exchanged between the client and
+   the resource server.  This could be problematic when data is
+   exchanged that requires care, such as personal data.</t>
+
+   <t>When TLS is used then confidentiality can be ensured; this version of
+   the specification does, however, not provide the TLS channel binding feature, 
+   which ensures that the TLS channel is
+   cryptographically bound to the application layer protocol authentication defined in 
+   this document.</t>
+
+   <t>The use of TLS in combination with the signed HTTP request mechanism is highly
+   recommended to ensure the confidentiality of the user's data.</t>
+   
+   </section> 
+   
+   
+   <section title="Authentication of Resource Servers">
+
+    <t>This protocol allows clients to verify the authenticity of resource
+   servers only when TLS is used. With TLS the resource server is authenticated as part of
+       the TLS handshake. The mechanism described in this document does not provide any mechanism 
+       for the client to authenticate the resource server at the application layer.</t>
+
+   </section> 
+   
+
+<section title="Plaintext Storage of Credentials">
+
+   <t>The mechanism described in this document works similar to many 
+   three party authentication and key exchange mechanisms. In order to compute 
+   the signature over the HTTP request, the client must have access to a key 
+   bound to the access token (in plaintext form).</t>
+   
+   <t>If an attacker were to gain access to these stored secrets at the client or (in case of symmetric keys) 
+   at the resource server he or she would be able to perform any action on
+   behalf of any client.</t>
+
+   <t>   It is therefore paramount to the security of the protocol that the private 
+   keys associated with the access tokens are protected from unauthorized access.</t>
+
+</section> 
+
+
+<section title="Entropy of Keys">
+
+   <t>Unless TLS is used between the client and the resource server,
+   eavesdroppers will have full access to requests sent by the client.
+   They will thus be able to mount off-line brute-force attacks to
+   recover the session key or private key used to compute the keyed 
+   message digest or digital signature, respectively.</t>
+   
+   <t>This specification assumes that the keying material for use with 
+   the described HTTP signing mechanism has been distributed via other mechanisms, 
+   such as <xref target="I-D.bradley-oauth-pop-key-distribution"/>. Hence, it is the responsibility of the authorization server 
+   and or the client to be careful when generating fresh and unique
+   keys with sufficient entropy to resist such attacks for at least the 
+   length of time that the session keys (and the access tokens) are valid.</t>
+
+   <t>For example, if the key bound to the access token is valid for one day, 
+   authorization servers must ensure that it is not possible to mount a brute force
+   attack that recovers that key in less than one day.  Of course, servers 
+   are urged to err on the side of caution, and use the longest key length reasonable.</t>
+   
+  </section> 
+     
+
+  <section title="Denial of Service">
+   
+   <t>This specification includes a number of features which may make
+   resource exhaustion attacks against resource servers possible.  For
+   example, a resource server may need to need to  the resource server 
+   has to process the incoming request, verify the access token, 
+   perform signature verification, and might have (in certain 
+   circumstances) consult back-end databases or the authorization server 
+   before granting access to the protected resource.</t>
+
+   <t>An attacker may exploit this to perform a denial of service attack by
+   sending a large number of invalid requests to the server.  The
+   computational overhead of verifying the keyed message digest alone
+   is, however, not sufficient to mount a denial of service attack since
+   keyed message digest functions belong to the computationally fastest
+   cryptographic algorithms. The situation may, however, be different 
+   when using asymmetric cryptography, which is also supported by the 
+   JWS.</t>
+   
+   </section> 
+   
+  <section title="Protecting HTTP Header Fields">
+  
+  <t>This specification provides flexibility for selectively protecting
+   header fields and even the body of the message. Since all components 
+   of the HTTP request are only optionally protected by this method,
+   and even some components may be protected only in part (e.g., some
+   headers but not others) it is up to application developers to verify
+   that any parameters in a request are actually covered by the signature.
+   </t>
+      
+   <t>The application verifying this signature MUST NOT assume that any
       particular parameter is appropriately covered by the signature. Any
       applications that are sensitive of header or query parameter order MUST
-      verify the order of the parameters on their own.</t>
+      verify the order of the parameters on their own. The application MUST 
+      also compare the values in the JSON container with the actual parameters 
+      received with the HTTP request. Failure to make this comparison will 
+      render the signature mechanism useless.</t>
     </section>
-
+    
+  </section> 
+  
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>The authors acknowledge the OAuth Working Group and submit this draft
-      for feedback and input into the ongoing work of signed tokens.</t>
+      for feedback and input into the ongoing work of signed HTTP 
+      requests for the interaction between clients and resource servers.</t>
     </section>
   </middle>
 
   <back>
     <references title="Normative References">
       <?rfc include="reference.RFC.2119"?>
+      <?rfc include="reference.I-D.ietf-jose-json-web-signature"?>
+      <?rfc include="reference.RFC.6750"?>
+      <?rfc include="reference.RFC.6749"?>
+
+      
+      
     </references>
+
+    <references title="Informative References">
+    
+    <?rfc include="reference.I-D.bradley-oauth-pop-key-distribution"?>
+    <?rfc include="reference.I-D.hunt-oauth-pop-architecture"?>
+    </references>
+    
+    
   </back>
 </rfc>
