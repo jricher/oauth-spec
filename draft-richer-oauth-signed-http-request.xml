@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="exp" docName="draft-richer-oauth-signed-http-request-00.txt"
+<rfc category="exp" docName="draft-richer-oauth-signed-http-request-01"
      ipr="trust200902">
   <front>
     <title abbrev="HTTP Signed Messages">A Method for Signing an HTTP Requests
@@ -19,6 +19,10 @@
     <author fullname="Justin Richer" initials="J." role="editor"
             surname="Richer">
       <organization>The MITRE Corporation</organization>
+
+      <address>
+        <email>jricher@mitre.org</email>
+      </address>
     </author>
 
     <author fullname="John Bradley" initials="J." surname="Bradley">
