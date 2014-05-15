@@ -3,7 +3,7 @@
 "http://xml.resource.org/authoring/rfc2629.dtd" [
 <!ENTITY rfc2119 PUBLIC "" "http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml">
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-16" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-17" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -135,10 +135,8 @@
 
         <t><list style="hanging">
             <t hangText="Client Developer">The person or organization that
-            builds a client software package and prepares it for distribution.
-            A client developer obtains a software statement from a software
-            publisher, or self-generates one for the purposes of facilitating
-            client registration.</t>
+            builds a client software package and prepares it for
+            distribution.</t>
 
             <t hangText="Client Instance">A deployed instance of a piece of
             client software.</t>
@@ -171,20 +169,17 @@
             software API that is protected by OAuth 2.0 in a particular
             deployment organization domain. For any particular software API,
             there may be one or more deployments. A software API deployment
-            typically has an associated OAuth 2.0 authorization server
-            endpoint as well as a client registration endpoint. The means by
-            which endpoints are obtained are out of scope for this
-            specification.</t>
+            typically has an associated OAuth 2.0 authorization server as well
+            as a client registration endpoint. The means by which endpoints
+            are obtained are out of scope for this specification.</t>
 
             <t hangText="Software API Publisher">The organization that defines
             a particular web accessible API that may deployed in one or more
             deployment environments. A publisher may be any commercial,
             public, private, or open source organization that is responsible
             for publishing and distributing software that may be protected via
-            OAuth 2.0. A software API publisher may issue software statements
-            which client developers use to distribute with their software to
-            facilitate registration. In some cases a software API publisher
-            and a client developer may be the same organization.</t>
+            OAuth 2.0. In some cases a software API publisher and a client
+            developer may be the same organization.</t>
 
             <t hangText="Software Statement">A JSON Web Token (JWT) <xref
             target="JWT"/> that asserts metadata values about the client
