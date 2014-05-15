@@ -80,7 +80,7 @@
       <t>This specification defines mechanisms used to dynamically register
       OAuth 2.0 clients at authorization servers by a client or developer
       sending a set of desired client metadata values to the authorization
-      server and recieving in turn a client identifier and a record of the
+      server and receiving in turn a client identifier and a record of the
       metadata registered to the client. The client can then use this
       information to communicate with the authorization server using the OAuth
       2.0 protocol. This specification also defines a set of common client
@@ -425,7 +425,7 @@
       target="RegistrationRequest"/>, or included as claims in a software
       statement, as described in <xref target="SoftwareStatement"/>, or a
       mixture of both. If the same client metadata name is present in both
-      locations and the software statement is trusted by the authorizatoin
+      locations and the software statement is trusted by the authorization
       server, the value of a claim in the software statement MUST take
       precedence.</t>
 
@@ -503,20 +503,21 @@
 
         <t>To specify the languages and scripts, <xref
         target="RFC5646">BCP47</xref> language tags are added to client
-        metadata member names, delimited by a # character. Since JSON member
-        names are case sensitive, it is RECOMMENDED that language tag values
-        used in Claim Names be spelled using the character case with which
-        they are registered in the <xref target="IANA.Language">IANA Language
-        Subtag Registry</xref>. In particular, normally language names are
-        spelled with lowercase characters, region names are spelled with
-        uppercase characters, and languages are spelled with mixed case
-        characters. However, since BCP47 language tag values are case
-        insensitive, implementations SHOULD interpret the language tag values
-        supplied in a case insensitive manner. Per the recommendations in
-        BCP47, language tag values used in metadata member names should only
-        be as specific as necessary. For instance, using <spanx style="verb">fr</spanx>
-        might be sufficient in many contexts, rather than <spanx style="verb">fr-CA</spanx>
-        or <spanx style="verb">fr-FR</spanx>.</t>
+        metadata member names, delimited by a # character. Since <xref
+        target="RFC7159">JSON</xref> member names are case sensitive, it is
+        RECOMMENDED that language tag values used in Claim Names be spelled
+        using the character case with which they are registered in the <xref
+        target="IANA.Language">IANA Language Subtag Registry</xref>. In
+        particular, normally language names are spelled with lowercase
+        characters, region names are spelled with uppercase characters, and
+        languages are spelled with mixed case characters. However, since BCP47
+        language tag values are case insensitive, implementations SHOULD
+        interpret the language tag values supplied in a case insensitive
+        manner. Per the recommendations in BCP47, language tag values used in
+        metadata member names should only be as specific as necessary. For
+        instance, using <spanx style="verb">fr</spanx> might be sufficient in
+        many contexts, rather than <spanx style="verb">fr-CA</spanx> or <spanx
+        style="verb">fr-FR</spanx>.</t>
 
         <t>For example, a client could represent its name in English as <spanx
         style="verb">"client_name#en": "My Client"</spanx> and its name in
@@ -632,7 +633,7 @@
         <t>To register, the client or developer sends an HTTP POST to the
         client registration endpoint with a content type of <spanx
         style="verb">application/json</spanx>. The HTTP Entity Payload is a
-        <xref target="RFC4627">JSON</xref> document consisting of a JSON
+        <xref target="RFC7159">JSON</xref> document consisting of a JSON
         object and all requested client metadata values as top-level members
         of that JSON object.</t>
 
@@ -796,7 +797,7 @@
 
         <t>The response is an <spanx style="verb">application/json</spanx>
         document with all parameters as top-level members of a <xref
-        target="RFC4627">JSON object</xref>.</t>
+        target="RFC7159">JSON object</xref>.</t>
 
         <t>If a software statement was used as part of the registration, its
         value MUST be returned in the response along with other metadata.
@@ -845,7 +846,7 @@
         <t>When a registration error condition occurs, the authorization
         server returns an HTTP 400 status code (unless otherwise specified)
         with content type <spanx style="verb">application/json</spanx>
-        consisting of a <xref target="RFC4627">JSON object</xref> describing
+        consisting of a <xref target="RFC7159">JSON object</xref> describing
         the error in the response body.</t>
 
         <t>The JSON object contains two members:</t>
@@ -899,7 +900,8 @@
 
         <figure>
           <preamble>Following is a non-normative example of an error response
-          dealing with an inconsistent combination of (with line wraps for
+          dealing with an inconsistent combination of <spanx style="verb">response_types</spanx>
+          and <spanx style="verb">grant_types</spanx> (with line wraps for
           display purposes only):</preamble>
 
           <artwork><![CDATA[
@@ -909,9 +911,10 @@
   Pragma: no-cache
 
   {
-   "error":"invalid_redirect_uri",
-   "error_description":"The redirect URI http://sketchy.example.com
-     is not allowed for this server."
+   "error":"invalid_client_metadata",
+   "error_description":"The grant type 'authorization_code' must be
+     registered along with the response type 'code', found only 
+    'implicit' instead."
   }
 ]]></artwork>
         </figure>
@@ -1033,8 +1036,8 @@
           <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">client_uri</spanx></t>
 
-              <t>Client Metadata Description: URL of the homepage of the
-              client</t>
+              <t>Client Metadata Description: URL of the webpage contiaining
+              information about the client</t>
 
               <t>Change Controller: IESG</t>
 
@@ -1327,7 +1330,7 @@
       MUST take precedence over those metadata values presented in the plain
       JSON object, which may have been modified en route.</t>
 
-      <t>Since a client identiifier is a public value that can be used to
+      <t>Since a client identifier is a public value that can be used to
       impersonate a client at the authorization endpoint, an authorization
       server that decides to issue the same client identifier to multiple
       registered client instances MUST be very particular about the
@@ -1350,8 +1353,6 @@
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2246.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
-
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
@@ -1363,6 +1364,8 @@
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
 
       <reference anchor="JWT">
         <front>
@@ -1790,14 +1793,15 @@
                  title="Client ID Shared between all Instances of Client Software">
           <t>In some cases, each deployed instance of a piece of client
           software will share a common Client ID value. For instance, this is
-          often the case for native client using implicit flow, when no client
-          secret is involved. Particular authorization servers might choose,
-          for instance, to maintain a mapping between software statement
-          values and Client ID values, and return the same Client ID value for
-          all registration requests for a particular piece of software. The
-          circumstances under which an authorization server would do so, and
-          the specific software statement characteristics required in this
-          case, are beyond the scope of this specification.</t>
+          often the case for in-browser clients using the implicit flow, when
+          no client secret is involved. Particular authorization servers might
+          choose, for instance, to maintain a mapping between software
+          statement values and Client ID values, and return the same Client ID
+          value for all registration requests for a particular piece of
+          software. The circumstances under which an authorization server
+          would do so, and the specific software statement characteristics
+          required in this case, are beyond the scope of this
+          specification.</t>
         </section>
       </section>
 
