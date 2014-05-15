@@ -343,18 +343,18 @@
           extension.</t>
 
           <t hangText="client_name">Human-readable name of the client to be
-          presented to the user. If omitted, the authorization server MAY
-          display the raw <spanx style="verb">client_id</spanx> value to the
-          user instead. It is RECOMMENDED that clients always send this field.
-          The value of this field MAY be internationalized, as described in
-          <xref target="HumanReadableClientMetadata"/>.</t>
+          presented to the user on the authorization page. If omitted, the
+          authorization server MAY display the raw <spanx style="verb">client_id</spanx>
+          value to the user instead. It is RECOMMENDED that clients always
+          send this field. The value of this field MAY be internationalized,
+          as described in <xref target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="client_uri">URL of the homepage of the client. If
-          present, the server SHOULD display this URL to the end user in a
-          clickable fashion. It is RECOMMENDED that clients always send this
-          field. The value of this field MUST point to a valid web page. The
-          value of this field MAY be internationalized, as described in <xref
-          target="HumanReadableClientMetadata"/>.</t>
+          <t hangText="client_uri">URL of a webpage providing information
+          about the client. If present, the server SHOULD display this URL to
+          the end user in a clickable fashion. It is RECOMMENDED that clients
+          always send this field. The value of this field MUST point to a
+          valid web page. The value of this field MAY be internationalized, as
+          described in <xref target="HumanReadableClientMetadata"/>.</t>
 
           <t hangText="logo_uri">URL that references a logo for the client. If
           present, the server SHOULD display this image to the end user during
@@ -369,11 +369,10 @@
           authorization server MAY register a Client with a default set of
           scopes.</t>
 
-          <t hangText="contacts">Array of email addresses for people
-          responsible for this client. The authorization server MAY make these
-          addresses available to end users for support requests for the
-          client. An authorization server MAY use these email addresses as
-          identifiers for an administrative page for this client.</t>
+          <t hangText="contacts">Array of strings representing ways to contact
+          people responsible for this client, typically email addresses. The
+          authorization server MAY make these addresses available to end users
+          for support requests for the client.</t>
 
           <t hangText="tos_uri">URL that points to a human-readable Terms of
           Service document for the client. The Authorization Server SHOULD
@@ -566,8 +565,9 @@
         target="JWS">JWS</xref> and MUST contain an <spanx style="verb">iss</spanx>
         (issuer) claim denoting the party attesting to the claims in the
         software statement. It is RECOMMENDED that software statements be
-        digitally signed using RS256, although particular applications MAY
-        specify the use of different algorithms. </t>
+        digitally signed using the RS256 signature algorithm, although
+        particular applications MAY specify the use of different algorithms.
+        </t>
 
         <t>The means by a which a client or developer obtains a software
         statement are outside the scope of this specification. Some common
@@ -608,10 +608,10 @@
       resource and accept an initial access token in the form of an <xref
       target="RFC6749">OAuth 2.0 </xref> access token to limit registration to
       only previously authorized parties. The method by which the initial
-      access token is obtained by the registrant is generally out-of-band and
-      is out of scope for this specification. The method by which the initial
-      access token is verified and validated by the client registration
-      endpoint is out of scope for this specification.</t>
+      access token is obtained by the client or developer is generally
+      out-of-band and is out of scope for this specification. The method by
+      which the initial access token is verified and validated by the client
+      registration endpoint is out of scope for this specification.</t>
 
       <t>To support open registration and facilitate wider interoperability,
       the client registration endpoint SHOULD allow initial registration
@@ -668,7 +668,13 @@
    "redirect_uris":[
      "https://client.example.org/callback",
      "https://client.example.org/callback2"],
+   "client_name":"My Example Client",
+   "client_name#ja-Jpan-JP":
+      "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D",
    "token_endpoint_auth_method":"client_secret_basic",
+   "scope":"read write dolphin",
+   "logo_uri":"https://client.example.org/logo.png",
+   "jwks_uri":"https://client.example.org/my_public_keys.jwks",
    "example_extension_parameter": "example_value"
   }
 ]]></artwork>
@@ -698,7 +704,13 @@
   {
    "redirect_uris":["https://client.example.org/callback",
       "https://client.example.org/callback2"],
+   "client_name":"My Example Client",
+   "client_name#ja-Jpan-JP":
+      "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D",
    "token_endpoint_auth_method":"client_secret_basic",
+   "scope":"read write dolphin",
+   "policy_uri":"https://client.example.org/policy.html",
+   "jwks":{"keys":[{...omitted for brevity...}]},
    "example_extension_parameter": "example_value"
   }
 ]]></artwork>
@@ -706,8 +718,10 @@
 
         <figure>
           <preamble>In the following example, some registration parameters are
-          conveyed as claims in a software statement (with line wraps within
-          values for display purposes only):</preamble>
+          conveyed as claims in a software statement while some values
+          specific to the client instance are conveyed as regular parameters
+          (with line wraps within values for display purposes
+          only):</preamble>
 
           <artwork><![CDATA[
   POST /register HTTP/1.1
@@ -720,10 +734,11 @@
       "https://client.example.org/callback",
       "https://client.example.org/callback2"
     ],
+    "scope":"read write dolphin",
     "software_statement":"eyJhbGciOiJFUzI1NiJ9.
        eyJpc3Mi[...omitted for brevity...].
        J9l-ZhwP[...omitted for brevity...]",
-    "extension_parameter":"foo"
+    "example_extension_parameter":"example_value"
   }
 ]]></artwork>
         </figure>
@@ -731,12 +746,10 @@
 
       <section anchor="RegistrationResponse"
                title="Client Registration Response">
-        <t>Upon successful registration, the authorization server generates a
-        new client identifier for the client. This client identifier MUST be
-        unique at the server and MUST NOT be in use by any other client. The
-        server responds with an HTTP 201 Created code and a body of type
-        <spanx style="verb">application/json</spanx> with content as described
-        in <xref target="ClientInfoResponse"/>.</t>
+        <t>Upon successful registration, the authorization server returns a
+        client identifier for the client. The server responds with an HTTP 201
+        Created code and a body of type <spanx style="verb">application/json</spanx>
+        with content as described in <xref target="ClientInfoResponse"/>.</t>
 
         <t>Upon an unsuccessful registration, the authorization server
         responds with an error, as described in <xref
@@ -815,7 +828,13 @@
      "https://client.example.org/callback",
      "https://client.example.org/callback2"],
    "grant_types": ["authorization_code", "refresh_token"],
-   "token_endpoint_auth_method": "client_secret_basic",
+   "client_name":"My Example Client",
+   "client_name#ja-Jpan-JP":
+      "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D",
+   "token_endpoint_auth_method":"client_secret_basic",
+   "scope":"read write dolphin",
+   "logo_uri":"https://client.example.org/logo.png",
+   "jwks_uri":"https://client.example.org/my_public_keys.jwks",
    "example_extension_parameter": "example_value"
   }
 ]]></artwork>
@@ -865,7 +884,28 @@
 
         <figure>
           <preamble>Following is a non-normative example of an error response
-          (with line wraps for display purposes only):</preamble>
+          dealing with a redirect URI that has been blacklisted by the
+          authorization server (with line wraps for display purposes
+          only):</preamble>
+
+          <artwork><![CDATA[
+  HTTP/1.1 400 Bad Request
+  Content-Type: application/json
+  Cache-Control: no-store
+  Pragma: no-cache
+
+  {
+   "error":"invalid_redirect_uri",
+   "error_description":"The redirect URI http://sketchy.example.com
+     is not allowed for this server."
+  }
+]]></artwork>
+        </figure>
+
+        <figure>
+          <preamble>Following is a non-normative example of an error response
+          dealing with an inconsistent combination of (with line wraps for
+          display purposes only):</preamble>
 
           <artwork><![CDATA[
   HTTP/1.1 400 Bad Request
@@ -1321,6 +1361,8 @@
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
 
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5646.xml'?>
+
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
@@ -1561,6 +1603,45 @@
                     value="draft-ietf-jose-json-web-signature"/>
 
         <format type="HTML"/>
+      </reference>
+
+      <reference anchor="JWK">
+        <front>
+          <title>JSON Web Key (JWK)</title>
+
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <organization>Microsoft</organization>
+
+            <address>
+              <email>mbj@microsoft.com</email>
+
+              <uri>http://self-issued.info/</uri>
+            </address>
+          </author>
+
+          <date day="20" month="January" year="2014"/>
+        </front>
+
+        <seriesInfo name="Internet-Draft" value="draft-ietf-jose-json-web-key"/>
+
+        <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-key"
+                type="HTML"/>
+      </reference>
+
+      <reference anchor="IANA.Language">
+        <front>
+          <title>Language Subtag Registry</title>
+
+          <author>
+            <organization>Internet Assigned Numbers Authority
+            (IANA)</organization>
+          </author>
+
+          <date year="2005"/>
+        </front>
+
+        <format target="http://www.iana.org/assignments/language-subtag-registry"
+                type="TXT"/>
       </reference>
     </references>
 
