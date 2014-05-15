@@ -78,7 +78,15 @@
 
     <abstract>
       <t>This specification defines mechanisms used to dynamically register
-      OAuth 2.0 clients at authorization servers.</t>
+      OAuth 2.0 clients at authorization servers by a client or developer
+      sending a set of desired client metadata values to the authorization
+      server and recieving in turn a client identifier and a record of the
+      metadata registered to the client. The client can then use this
+      information to communicate with the authorization server using the OAuth
+      2.0 protocol. This specification also defines a set of common client
+      metadata fields and values for clients to use during registration as
+      well as two means for communicating this metadata to the authorization
+      server.</t>
     </abstract>
   </front>
 
@@ -98,10 +106,11 @@
       the case of a digitally signed software statement, the signer is
       vouching for the validity of the data about the client.</t>
 
-      <t>The mechanisms defined in this specification can be used either for a
-      client to dynamically register itself with authorization servers or for
-      a client developer to programmatically register the client with
-      authorization servers.</t>
+      <t>Traditionally, registration of a client with an authorization server
+      is performed manually. The mechanisms defined in this specification can
+      be used either for a client to dynamically register itself with
+      authorization servers or for a client developer to programmatically
+      register the client with authorization servers. </t>
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -114,11 +123,11 @@
       </section>
 
       <section anchor="Terminology" title="Terminology">
-        <t>This specification uses the terms "Access Token", "Refresh Token",
-        "Authorization Code", "Authorization Grant", "Authorization Server",
-        "Authorization Endpoint", "Client", "Client Identifier", "Client
-        Secret", "Protected Resource", "Resource Owner", "Resource Server",
-        "Response Type", and "Token Endpoint" defined by <xref
+        <t>This specification uses the terms "access token", "refresh token",
+        "authorization code", "authorization grant", "authorization server",
+        "authorization endpoint", "client", "client identifier", "client
+        secret", "protected resource", "resource owner", "resource server",
+        "response type", and "token endpoint" defined by <xref
         target="RFC6749">OAuth 2.0</xref> and uses the term "Claim" defined by
         <xref target="JWT">JSON Web Token (JWT)</xref>.</t>
 
@@ -132,11 +141,7 @@
             client registration.</t>
 
             <t hangText="Client Instance">A deployed instance of a piece of
-            client software. Multiple instances of the same piece of client
-            software MAY use the same Client ID value at an authorization
-            server, provided that the Redirection URI values and potentially
-            other values dictated by authorization server policy are the same
-            for all instances.</t>
+            client software.</t>
 
             <t hangText="Client Software">Software implementing an OAuth 2.0
             client.</t>
@@ -168,7 +173,7 @@
             there may be one or more deployments. A software API deployment
             typically has an associated OAuth 2.0 authorization server
             endpoint as well as a client registration endpoint. The means by
-            which endpoints are obtained (discovery) are out of scope for this
+            which endpoints are obtained are out of scope for this
             specification.</t>
 
             <t hangText="Software API Publisher">The organization that defines
@@ -183,9 +188,7 @@
 
             <t hangText="Software Statement">A JSON Web Token (JWT) <xref
             target="JWT"/> that asserts metadata values about the client
-            software. The JWT MUST be digitally signed with <xref
-            target="JWS">JWS</xref> and contain an <spanx style="verb">iss</spanx>
-            (issuer) claim,.</t>
+            software.</t>
           </list></t>
       </section>
 
@@ -446,7 +449,9 @@
         value that includes <spanx style="verb">code</spanx>, as both values
         are defined as part of the OAuth 2.0 authorization code grant. As
         such, a server supporting these fields SHOULD take steps to ensure
-        that a client cannot register itself into an inconsistent state.</t>
+        that a client cannot register itself into an inconsistent state, such
+        as by returning an <spanx style="verb">invalid_client_metadata</spanx>
+        error response.</t>
 
         <t>The correlation between the two fields is listed in the table
         below.</t>
@@ -560,7 +565,9 @@
         software statement MUST be digitally signed using <xref
         target="JWS">JWS</xref> and MUST contain an <spanx style="verb">iss</spanx>
         (issuer) claim denoting the party attesting to the claims in the
-        software statement.</t>
+        software statement. It is RECOMMENDED that software statements be
+        digitally signed using RS256, although particular applications MAY
+        specify the use of different algorithms. </t>
 
         <t>The means by a which a client or developer obtains a software
         statement are outside the scope of this specification. Some common
@@ -1775,6 +1782,10 @@
 
           <t>Added "jwks" metadata parameter to parallel "jwks_uri"
           parameter.</t>
+
+          <t>Removed normative language from terminology.</t>
+
+          <t>Expanded abstract and introduction.</t>
 
           <t>Addressed review comments from several WG members. </t>
         </list></t>
