@@ -94,9 +94,9 @@
       a mechanism for the client to present the authorization server with a
       set of metadata, such as a set of valid redirection URIs. This metadata
       can either be communicated in a self-asserted fashion or as a set of
-      metadata called a software statement, which can be signed; in the case
-      of a signed software statement, the signer is vouching for the validity
-      of the data about the client.</t>
+      metadata called a software statement, which can be digitally signed; in
+      the case of a digitally signed software statement, the signer is
+      vouching for the validity of the data about the client.</t>
 
       <t>The mechanisms defined in this specification can be used either for a
       client to dynamically register itself with authorization servers or for
@@ -183,13 +183,9 @@
 
             <t hangText="Software Statement">A JSON Web Token (JWT) <xref
             target="JWT"/> that asserts metadata values about the client
-            software. The JWT MUST be signed and contain an <spanx
-            style="verb">iss</spanx> (issuer) claim if its metadata values are
-            being attested to by the issuer; if the metadata values are not
-            being attested to, the JWT MAY be unsigned. This can be used by
-            the registration system to qualify clients for eligibility to
-            register. It may also be accepted by some authorization servers
-            directly as a Client ID value, without prior registration.</t>
+            software. The JWT MUST be digitally signed with <xref
+            target="JWS">JWS</xref> and contain an <spanx style="verb">iss</spanx>
+            (issuer) claim,.</t>
           </list></t>
       </section>
 
@@ -561,10 +557,10 @@
         target="ClientMetadata">Client Metadata</xref>. When presented to the
         authorization server as part of a <xref
         target="RegistrationRequest">Client Registration Request</xref>,
-        software statement MUST be signed using <xref target="JWS">JWS</xref>
-        and MUST contain an <spanx style="verb">iss</spanx> (issuer) claim
-        denoting the party attesting to the claims in the software
-        statement.</t>
+        software statement MUST be digitally signed using <xref
+        target="JWS">JWS</xref> and MUST contain an <spanx style="verb">iss</spanx>
+        (issuer) claim denoting the party attesting to the claims in the
+        software statement.</t>
 
         <t>The means by a which a client or developer obtains a software
         statement are outside the scope of this specification. Some common
@@ -631,20 +627,20 @@
         provision default values for any items omitted in the client
         metadata.</t>
 
-        <t>Client metadata values may also be provided in a software
-        statement, as described in <xref target="SoftwareStatement"/>.
-        Software statements are included in registration requests using this
-        registration parameter: <list style="hanging">
-            <t hangText="software_statement">A software statement containing
-            client metadata values about the client software as claims.</t>
-          </list></t>
-
         <t>To register, the client or developer sends an HTTP POST to the
         client registration endpoint with a content type of <spanx
         style="verb">application/json</spanx>. The HTTP Entity Payload is a
         <xref target="RFC4627">JSON</xref> document consisting of a JSON
-        object and all parameters as top-level members of that JSON
-        object.</t>
+        object and all requested client metadata values as top-level members
+        of that JSON object.</t>
+
+        <t>Client metadata values may also be provided in a software
+        statement, as described in <xref target="SoftwareStatement"/>.
+        Software statements are included in the requesting JSON object as this
+        member: <list style="hanging">
+            <t hangText="software_statement">A software statement containing
+            client metadata values about the client software as claims.</t>
+          </list></t>
 
         <t>For example, if the server supports open registration (with no
         initial access token), the client could send the following
@@ -1206,10 +1202,10 @@
       <t>For clients that use redirect-based grant types such as <spanx
       style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>,
       authorization servers SHOULD require clients to register their <spanx
-      style="verb">redirect_uris</spanx>. Requiring clients to do so can help
-      mitigate attacks where rogue actors inject and impersonate a validly
-      registered client and intercept its authorization code or tokens through
-      an invalid redirect URI.</t>
+      style="verb">redirect_uris</spanx> in full. Requiring clients to do so
+      can help mitigate attacks where rogue actors inject and impersonate a
+      validly registered client and intercept its authorization code or tokens
+      through an invalid redirect URI or open redirector.</t>
 
       <t>Public clients MAY register with an authorization server using this
       protocol, if the authorization server's policy allows them. Public
@@ -1247,7 +1243,7 @@
       all of these cases, the authorization server would respond with an
       <spanx style="verb">invalid_client_metadata</spanx> error response.</t>
 
-      <t>Unless used as a claim in a signed software statement, the
+      <t>Unless used as a claim in a digitally signed software statement, the
       authorization server MUST treat all client metadata as self-asserted.
       For instance, a rogue client might use the name and logo for the
       legitimate client which it is trying to impersonate. Additionally, a
@@ -1278,6 +1274,16 @@
       and <spanx style="verb">policy_uri</spanx> have the same host and scheme
       as the those defined in the array of <spanx style="verb">redirect_uris</spanx>
       and that all of these URIs resolve to valid web pages.</t>
+
+      <t>Clients MAY use both the direct JSON object and the JWT-encoded
+      software statement to present client metadata to the authorization
+      server as part of the registration request. A software statement is
+      cryptographically protected and represents the claims of the issuer of
+      the statement, while the JSON object represents the self-asserted claims
+      of the client or developer directly. If the software statement is valid
+      and trusted, the values of client metadata within the software statement
+      MUST take precedence over those metadata values presented in the plain
+      JSON object, which may have been modified en route.</t>
 
       <t>Since a client identiifier is a public value that can be used to
       impersonate a client at the authorization endpoint, an authorization
@@ -1646,10 +1652,10 @@
                  title="Registration Without a Software Statement">
           <t>When a software statement is not used in the registration
           request, the authorization server must be willing to use client
-          metadata values without them being signed (and thereby attested to)
-          by any authority. (Note that this choice is independent of the Open
-          versus Protected choice, and that an initial access token is another
-          possible form of attestation.)</t>
+          metadata values without them being digitally signed (and thereby
+          attested to) by any authority. (Note that this choice is independent
+          of the Open versus Protected choice, and that an initial access
+          token is another possible form of attestation.)</t>
         </section>
 
         <section anchor="WithSoftwareStatement"
