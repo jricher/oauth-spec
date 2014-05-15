@@ -449,9 +449,9 @@
         value that includes <spanx style="verb">code</spanx>, as both values
         are defined as part of the OAuth 2.0 authorization code grant. As
         such, a server supporting these fields SHOULD take steps to ensure
-        that a client cannot register itself into an inconsistent state, such
-        as by returning an <spanx style="verb">invalid_client_metadata</spanx>
-        error response.</t>
+        that a client cannot register itself into an inconsistent state, for
+        example by returning an <spanx style="verb">invalid_client_metadata</spanx>
+        error response to the inconsistent registration request.</t>
 
         <t>The correlation between the two fields is listed in the table
         below.</t>
