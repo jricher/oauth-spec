@@ -110,7 +110,7 @@
       is performed manually. The mechanisms defined in this specification can
       be used either for a client to dynamically register itself with
       authorization servers or for a client developer to programmatically
-      register the client with authorization servers. </t>
+      register the client with authorization servers.</t>
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -181,9 +181,9 @@
             OAuth 2.0. In some cases a software API publisher and a client
             developer may be the same organization.</t>
 
-            <t hangText="Software Statement">A JSON Web Token (JWT) <xref
-            target="JWT"/> that asserts metadata values about the client
-            software.</t>
+            <t hangText="Software Statement">A digitally signed JSON Web Token
+            (JWT) <xref target="JWT"/> that asserts metadata values about the
+            client software.</t>
           </list></t>
       </section>
 
@@ -405,13 +405,13 @@
           by the client software and is intended to be shared between all
           copies of the client software. The identifier SHOULD NOT change when
           software version changes or when a new installation instance is
-          detected. </t>
+          detected.</t>
 
           <t hangText="software_version">Version identifier for the software
           that comprises a client. The value of this field is a string that is
           intended to be compared using string equality matching. The value of
           the <spanx style="verb">software_version</spanx> SHOULD change on
-          any update to the client software. </t>
+          any update to the client software.</t>
         </list></t>
 
       <t>Extensions and profiles of this specification MAY expand this list.
@@ -562,8 +562,8 @@
         (issuer) claim denoting the party attesting to the claims in the
         software statement. It is RECOMMENDED that software statements be
         digitally signed using the RS256 signature algorithm, although
-        particular applications MAY specify the use of different algorithms.
-        </t>
+        particular applications MAY specify the use of different
+        algorithms.</t>
 
         <t>The means by a which a client or developer obtains a software
         statement are outside the scope of this specification. Some common
@@ -1304,8 +1304,8 @@
       different client homepage URI. An authorization server can also present
       warning messages to end users about dynamically registered clients in
       all cases, especially if such clients have been recently registered or
-      have not been trusted by any users at the authorization server
-      before.</t>
+      have not been trusted by any users at the authorization server before.
+      </t>
 
       <t>In a situation where the authorization server is supporting open
       client registration, it must be extremely careful with any URL provided
@@ -1329,6 +1329,18 @@
       and trusted, the values of client metadata within the software statement
       MUST take precedence over those metadata values presented in the plain
       JSON object, which may have been modified en route.</t>
+
+      <t>The software statement is an item that is self-asserted by the
+      client, even though its contents have been signed by the issuer of the
+      software statement. As such, presentation of the software statement is
+      not sufficient in most cases to fully identity a piece of client
+      software. An initial access token, by contrast, does not necessarily
+      contain information about a particular piece of client software but
+      instead represents authorization to call the registration endpoint. An
+      authorization server MUST consider the full registration request,
+      including the software statement, initial access token, and JSON
+      request, when deciding whether to honor a given registration
+      request.</t>
 
       <t>Since a client identifier is a public value that can be used to
       impersonate a client at the authorization endpoint, an authorization
@@ -1867,7 +1879,7 @@
 
           <t>Expanded abstract and introduction.</t>
 
-          <t>Addressed review comments from several WG members. </t>
+          <t>Addressed review comments from several WG members.</t>
         </list></t>
 
       <t>-16 <list style="symbols">
