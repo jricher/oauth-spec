@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-richer-oauth-introspection-04"
+<rfc category="std" docName="draft-richer-oauth-introspection-05"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="1" month="May" year="2013"/>
+    <date day="3" month="July" year="2014"/>
 
     <area>Security</area>
 
@@ -88,14 +88,14 @@
             is asking about.</t>
 
             <t hangText="token_type_hint">OPTIONAL. A hint about the type of
-            the token submitted for revocation. Clients MAY pass this
+            the token submitted for introspection. Clients MAY pass this
             parameter in order to help the authorization server to optimize
             the token lookup. If the server is unable to locate the token
             using the given hint, it MUST extend its search accross all of its
             supported token types. An authorization server MAY ignore this
             parameter, particularly if it is able to detect the token type
             automatically. Values for this field are defined in <xref
-            target="Revocation">OAuth Token Revocation</xref>.</t>
+            target="RFC7009">OAuth Token Revocation</xref>.</t>
           </list></t>
 
         <t hangText="instance_name">The endpoint MAY allow other parameters to
@@ -105,10 +105,11 @@
 
         <t hangText="instance_name">The endpoint SHOULD also require some form
         of authentication to access this endpoint, such as the Client
-        Authentication as described in <xref target="RFC6749">OAuth 2 Core
-        Specification</xref> or a separate OAuth 2.0 Access Token. The methods
-        of managing and validating these authentication credentials are out of
-        scope of this specification.</t>
+        Authentication as described in <xref target="RFC6749">OAuth 2.0</xref>
+        or a separate OAuth 2.0 Access Token such as the Bearer token
+        described in <xref target="RFC6750">OAuth 2.0 Bearer Token
+        Usage</xref>. The methods of managing and validating these
+        authentication credentials are out of scope of this specification.</t>
       </section>
 
       <section title="Introspection Response">
@@ -138,8 +139,11 @@
             <t hangText="client_id">OPTIONAL. Client Identifier for the OAuth
             Client that requested this token.</t>
 
-            <t hangText="sub">OPTIONAL. Local identifier of the Resource Owner
-            who authorized this token.</t>
+            <t hangText="sub">OPTIONAL. Machine-readable identifier local to
+            the AS of the Resource Owner who authorized this token.</t>
+
+            <t hangText="user_id">OPTIONAL. Human-readable identifier for the
+            user who authorized this token.</t>
 
             <t hangText="aud">OPTIONAL. Service-specific string identifier or
             list of string identifiers representing the intended audience for
@@ -168,8 +172,7 @@ Accept: application/x-www-form-urlencoded
 Host: server.example.com
 Authorization: Basic czZCaGRSa3F0Mzo3RmpmcDBaQnIxS3REUmJuZlZkbUl3
 
-token=X3241Affw.4233-99JXJ
-]]></artwork>
+token=X3241Affw.4233-99JXJ]]></artwork>
         </figure>
 
         <t>The Authorization Server validates the client credentials and looks
@@ -196,8 +199,8 @@ Cache-Control: no-store
         <t/>
 
         <t>If the token presented is not currently active (but the
-        authentication presented is valid), it returns the following JSON
-        document.</t>
+        authentication presented during the request is valid), it returns the
+        following JSON document.</t>
 
         <figure>
           <preamble>Following is a non-normative example response to an
@@ -256,18 +259,7 @@ Cache-Control: no-store
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.4627.xml'?>
 
-      <reference anchor="Revocation">
-        <front>
-          <title>OAuth Token Revocation</title>
-
-          <author fullname="Torsten Lodderstedt" initials="T."
-                  surname="Lodderstedt">
-            <organization>Deutsche Telekom AG</organization>
-          </author>
-
-          <date day="15" month="April" year="2013"/>
-        </front>
-      </reference>
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.7009.xml'?>
     </references>
   </back>
 </rfc>
