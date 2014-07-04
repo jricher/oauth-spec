@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-richer-oauth-introspection-05"
+<rfc category="std" docName="draft-richer-oauth-introspection-06"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="3" month="July" year="2014"/>
+    <date day="4" month="July" year="2014"/>
 
     <area>Security</area>
 
@@ -149,13 +149,17 @@
             list of string identifiers representing the intended audience for
             this token.</t>
 
+            <t hangText="iss">OPTIONAL. String representing the issuer of this
+            token.</t>
+
             <t hangText="token_type">OPTIONAL. Type of the token as defined in
             OAuth 2.0 section 5.1.</t>
-          </list></t>
+          </list>The response MAY be cached according to HTTP caching
+        headers.</t>
       </section>
 
       <section title="Non-normative Example">
-        <t hangText="instance_name">For example, a Protected Resource accepts
+        <t hangText="instance_name">For example, a Protected Resource recieves
         a request from a Client carrying an OAuth2 Bearer Token. In order to
         know how and whether to serve the request, the Protected Resource then
         makes the following request to the Introspection Endpoint of the
@@ -164,12 +168,12 @@
         target="RFC6749">OAuth2</xref> Section 2.3.1.</t>
 
         <figure>
-          <preamble>Following is a non-normative example request (with line
-          wraps for display purposes only):</preamble>
+          <preamble>Following is a non-normative example request:</preamble>
 
-          <artwork><![CDATA[POST /register HTTP/1.1
-Accept: application/x-www-form-urlencoded
-Host: server.example.com
+          <artwork><![CDATA[POST /introspect HTTP/1.1
+Host: authserver.example.com
+Content-type: application/x-www-form-urlencoded
+Accept: application/json
 Authorization: Basic czZCaGRSa3F0Mzo3RmpmcDBaQnIxS3REUmJuZlZkbUl3
 
 token=X3241Affw.4233-99JXJ]]></artwork>
@@ -192,7 +196,9 @@ Cache-Control: no-store
  "client_id":"s6BhdRkqt3",
  "scope": "read write dolphin",
  "sub": "2309fj32kl",
- "aud": "http://example.org/protected-resource/*"
+ "user_id": "jdoe",
+ "aud": "https://example.org/protected-resource/*",
+ "iss": "https://authserver.example.com/"
 }]]></artwork>
         </figure>
 
@@ -239,8 +245,11 @@ Cache-Control: no-store
       Introspection Endpoint.</t>
 
       <t>Since the introspection endpoint takes in OAuth 2 tokens as
-      parameters, it MUST be protected by TLS or equivalent. A server MAY
-      require an HTTP POST method only to the endpoint.</t>
+      parameters, it MUST be protected by TLS or equivalent. </t>
+
+      <t>In order to prevent the access tokens being introspected from leaking
+      into server-side logs via query parameters, a server MAY require an HTTP
+      POST method only to the endpoint.</t>
     </section>
 
     <section title="Acknowledgements">
