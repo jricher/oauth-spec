@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
-"http://xml.resource.org/authoring/rfc2629.dtd" [
+"http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd" [
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-management-01"
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-management-02"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -55,7 +55,7 @@
       </address>
     </author>
 
-    <date day="21" month="May" year="2014"/>
+    <date day="3" month="July" year="2014"/>
 
     <area>Security</area>
 
@@ -64,7 +64,11 @@
     <abstract>
       <t>
 	This specification defines methods for management of
-	dynamic OAuth 2.0 client registrations.
+	dynamic OAuth 2.0 client registrations
+	for use cases in which the properties of a registered client
+	may need to be changed during the lifetime of the client.
+	Only some authorization servers supporting dynamic client registration
+	will support these management methods.
       </t>
     </abstract>
   </front>
@@ -102,12 +106,12 @@
 
       <section anchor="Terminology" title="Terminology">
         <t>
-	  This specification uses the terms "access token", "refresh token",
-	  "authorization code", "authorization grant", "authorization server",
-	  "authorization endpoint", "client", "client identifier", "client
-	  secret", "protected resource", "resource owner", "resource server",
-	  "response type", and
-	  "token endpoint" defined by <xref target="RFC6749">OAuth 2.0</xref>
+	  This specification uses the terms "access token", "authorization code",
+	  "authorization endpoint", "authorization grant", "authorization server",
+	  "client", "client identifier", "client secret",
+	  "grant type", "protected resource", "redirection URI", "refresh token",
+	  "resource owner", "resource server", "response type", and "token endpoint"
+	  defined by <xref target="RFC6749">OAuth 2.0</xref>
 	  and the terms defined by
 	  the <xref target="OAuth.Registration">OAuth 2.0 Client Dynamic Registration Protocol</xref>.
 	</t>
@@ -586,45 +590,37 @@
 	  <list style="hanging">
             <t hangText="client_id">
 	      <vspace/>
-	      REQUIRED. The unique client
-            identifier, MUST NOT be currently valid for any other registered
-            client.</t>
+	      REQUIRED. OAuth 2.0 client identifier.</t>
 
             <t hangText="client_secret">
 	      <vspace/>
-	      OPTIONAL. The client secret.
-            If issued, this MUST be unique for each <spanx style="verb">client_id</spanx>.
-            This value is used by confidential clients to authenticate to the
-            token endpoint as described in <xref target="RFC6749">OAuth
-            2.0</xref> Section 2.3.1.</t>
+	      OPTIONAL. OAuth 2.0 client secret.</t>
 
             <t hangText="client_id_issued_at">
 	      <vspace/>
-	      OPTIONAL. Time at which
-            the client identifier was issued. The time is represented as the
-            number of seconds from 1970-01-01T0:0:0Z as measured in UTC until
-            the date/time.</t>
+	      OPTIONAL. Time at which the client identifier was issued,
+	      as defined by <xref target="OAuth.Registration"/>.
+	    </t>
 
             <t hangText="client_secret_expires_at">
 	      <vspace/>
-	      REQUIRED if <spanx
-            style="verb">client_secret</spanx> is issued. Time at which the
-            <spanx style="verb">client_secret</spanx> will expire or 0 if it
-            will not expire. The time is represented as the number of seconds
-            from 1970-01-01T0:0:0Z as measured in UTC until the date/time.</t>
+	      REQUIRED if <spanx style="verb">client_secret</spanx> is issued.
+	      Time at which the
+	      <spanx style="verb">client_secret</spanx> will expire,
+	      as defined by <xref target="OAuth.Registration"/>.
+	    </t>
 
             <t hangText="registration_access_token">
 	      <vspace/>
-	      REQUIRED. Access
-            token that is used at the client configuration endpoint to perform
-            subsequent operations upon the client registration.</t>
+	      REQUIRED. Access token used at the client configuration endpoint
+	      to perform subsequent operations upon the client registration.
+	    </t>
 
             <t hangText="registration_client_uri">
 	      <vspace/>
-	      REQUIRED. The fully qualified URL of the client
-            configuration endpoint for this client. The client MUST use this
-            URL as given when communicating with the client configuration
-            endpoint.</t>
+	      REQUIRED. Fully qualified URL of the
+	      client configuration endpoint for this client.
+	    </t>
           </list>
 	</t>
 
@@ -712,15 +708,15 @@
   <back>
     <references title="Normative References">
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml' ?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
 
       <reference anchor="OAuth.Registration">
 	<front>
-	  <title abbrev="OAuth Dynamic Registration Core">OAuth 2.0 Dynamic Client Registration Protocol</title>
+	  <title abbrev="OAuth 2.0 Dynamic Registration">OAuth 2.0 Dynamic Client Registration Protocol</title>
 
 	  <author fullname="Justin Richer" initials="J" surname="Richer">
 	    <organization>The MITRE Corporation</organization>
@@ -759,7 +755,7 @@
 	    </address>
 	  </author>
 
-	  <date day="21" month="May" year="2014"/>
+	  <date day="3" month="July" year="2014"/>
 	</front>
         <seriesInfo value="draft-ietf-oauth-dyn-reg" name="Internet-Draft"/>
 	<format target="http://tools.ietf.org/html/draft-ietf-oauth-dyn-reg" type="HTML" />
@@ -786,6 +782,15 @@
 
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC ]]</t>
+
+      <t>
+	-02
+	<list style="symbols">
+          <t>
+	    Added more context information to the abstract.
+	  </t>
+        </list>
+      </t>
 
       <t>
 	-01
