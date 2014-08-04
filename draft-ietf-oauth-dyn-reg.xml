@@ -108,7 +108,14 @@
       is performed manually. The mechanisms defined in this specification can
       be used either for a client to dynamically register itself with
       authorization servers or for a client developer to programmatically
-      register the client with authorization servers.</t>
+      register the client with authorization servers. Several OAuth-based
+      protocols have previously developed mechanisms for accomplishing such
+      registrations, and this specficiation is designed as a generalization
+      and abstraction of those protocols for the wider set of OAuth use cases.
+      In particular, this specification retains wire compatibility with the
+      <xref target="OIDC.Registration">OpenID Connect Dynamic Client
+      Registration</xref> and <xref target="UMA">User Managed Access</xref>,
+      which have both contributed to this work.</t>
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -267,18 +274,19 @@
 
       <t>The following client metadata fields are defined by this
       specification. The implementation and use of all client metadata fields
-      is OPTIONAL, other than <spanx style="verb">redirect_uris</spanx>.</t>
+      is OPTIONAL unless stated otherwise.</t>
 
       <t><list style="hanging">
-          <t hangText="redirect_uris"><vspace/> Array of redirection URIs for
+          <t hangText="redirect_uris"><vspace/>Array of redirection URIs for
           use in redirect-based flows such as the authorization code and
           implicit flows. As required by Section 2 of <xref
           target="RFC6749">OAuth 2.0</xref>, clients using flows with
           redirection MUST register their redirection URI values.
-          Authorization servers MUST implement support for this metadata
+          Authorization servers that support dynamic registration for
+          redirect-based flows MUST implement support for this metadata
           value.</t>
 
-          <t hangText="token_endpoint_auth_method"><vspace/> The requested
+          <t hangText="token_endpoint_auth_method"><vspace/>The requested
           authentication method for the token endpoint. Values defined by this
           specification are: <list style="symbols">
               <t><spanx style="verb">none</spanx>: The client is a public
@@ -299,7 +307,7 @@
           denoting HTTP Basic Authentication Scheme as specified in Section
           2.3.1 of OAuth 2.0.</t>
 
-          <t hangText="grant_types"><vspace/> Array of OAuth 2.0 grant types
+          <t hangText="grant_types"><vspace/>Array of OAuth 2.0 grant types
           that the client may use. These grant types are defined as follows:
           <list style="symbols">
               <t><spanx style="verb">authorization_code</spanx>: The
@@ -335,12 +343,7 @@
           the default is that the client will use only the <spanx
           style="verb">authorization_code</spanx> Grant Type.</t>
 
-          <t hangText="application_type"><vspace/> OPTIONAL. Kind of the
-          application. The default, if omitted, is <spanx style="verb">web</spanx>.
-          The defined values are <spanx style="verb">native</spanx> or <spanx
-          style="verb">web</spanx>.</t>
-
-          <t hangText="response_types"><vspace/> Array of the OAuth 2.0
+          <t hangText="response_types"><vspace/>Array of the OAuth 2.0
           response types that the client may use. These response types are
           defined as follows: <list style="symbols">
               <t><spanx style="verb">code</spanx>: The Authorization Code
@@ -348,23 +351,23 @@
 
               <t><spanx style="verb">token</spanx>: The Implicit response
               described in OAuth 2.0 Section 4.2.</t>
-            </list> Authorization servers MAY allow for other values as
-          defined in response type extensions to OAuth 2.0. The extension
-          process is described in OAuth 2.0 Section 2.5. If the authorization
-          endpoint is used by the grant type, the value of this parameter MUST
-          be the same as the value of the <spanx style="verb">response_type</spanx>
+            </list>Authorization servers MAY allow for other values as defined
+          in response type extensions to OAuth 2.0. The extension process is
+          described in OAuth 2.0 Section 2.5. If the authorization endpoint is
+          used by the grant type, the value of this parameter MUST be the same
+          as the value of the <spanx style="verb">response_type</spanx>
           parameter passed to the authorization endpoint defined in the
           extension. If omitted, the default is that the client will use only
           the <spanx style="verb">code</spanx> response type.</t>
 
-          <t hangText="client_name"><vspace/> Human-readable name of the
-          client to be presented to the user during authorization. If omitted,
-          the authorization server MAY display the raw <spanx style="verb">client_id</spanx>
+          <t hangText="client_name"><vspace/>Human-readable name of the client
+          to be presented to the user during authorization. If omitted, the
+          authorization server MAY display the raw <spanx style="verb">client_id</spanx>
           value to the user instead. It is RECOMMENDED that clients always
           send this field. The value of this field MAY be internationalized,
           as described in <xref target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="client_uri"><vspace/> URL of a Web page providing
+          <t hangText="client_uri"><vspace/>URL of a web page providing
           information about the client. If present, the server SHOULD display
           this URL to the end user in a clickable fashion. It is RECOMMENDED
           that clients always send this field. The value of this field MUST
@@ -372,59 +375,62 @@
           internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="logo_uri"><vspace/> URL that references a logo for the
+          <t hangText="logo_uri"><vspace/>URL that references a logo for the
           client. If present, the server SHOULD display this image to the end
           user during approval. The value of this field MUST point to a valid
           image file. The value of this field MAY be internationalized, as
           described in <xref target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="scope"><vspace/> Space separated list of scope values
+          <t hangText="scope"><vspace/>Space separated list of scope values
           (as described in Section 3.3 of <xref target="RFC6749">OAuth
           2.0</xref>) that the client can use when requesting access tokens.
           The semantics of values in this list is service specific. If
           omitted, an authorization server MAY register a client with a
           default set of scopes.</t>
 
-          <t hangText="contacts"><vspace/> Array of strings representing ways
+          <t hangText="contacts"><vspace/>Array of strings representing ways
           to contact people responsible for this client, typically email
           addresses. The authorization server MAY make these addresses
           available to end users for support requests for the client.</t>
 
-          <t hangText="tos_uri"><vspace/> URL that points to a human-readable
-          Terms of Service document for the client. The authorization server
-          SHOULD display this URL to the end-user if it is given. The Terms of
-          Service usually describe a contractual relationship between the
-          end-user and the client that the end-user accepts when authorizing
-          the client. The value of this field MUST point to a valid web page.
-          The value of this field MAY be internationalized, as described in
-          <xref target="HumanReadableClientMetadata"/>.</t>
-
-          <t hangText="policy_uri"><vspace/> URL that points to a
-          human-readable Policy document for the client. The authorization
+          <t hangText="tos_uri"><vspace/>URL that points to a human-readable
+          terms of service document for the client which describes a
+          contractual relationship between the end-user and the client that
+          the end-user accepts when authorizing the client. The authorization
           server SHOULD display this URL to the end-user if it is given. The
-          policy usually describes how an end-user's data will be used by the
-          client. The value of this field MUST point to a valid web page. The
-          value of this field MAY be internationalized, as described in <xref
+          value of this field MUST point to a valid web page. The value of
+          this field MAY be internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="jwks_uri"><vspace/> URL of the client's JSON Web Key
-          Set <xref target="JWK"/> document containing the client's public
-          keys. The value of this field MUST point to a valid JWK Set
-          document. These keys can be used by higher level protocols that use
-          signing or encryption.</t>
+          <t hangText="policy_uri"><vspace/>URL that points to a
+          human-readable privacy policy document which describes how the
+          deployment organization collects, uses, retains, and discloses
+          personal data. The authorization server SHOULD display this URL to
+          the end-user if it is given. The value of this field MUST point to a
+          valid web page. The value of this field MAY be internationalized, as
+          described in <xref target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="jwks"><vspace/> JSON Web Key Set <xref target="JWK"/>
+          <t hangText="jwks_uri"><vspace/>URL of the client's JSON Web Key Set
+          <xref target="JWK"/> document containing the client's public keys.
+          The value of this field MUST point to a valid JWK Set document.
+          These keys can be used by higher level protocols that use signing or
+          encryption. This parameter is preferred over the <spanx
+          style="verb">jwks</spanx> parameter as it allows for easier key
+          rotation from the client. The <spanx style="verb">jwks_uri</spanx>
+          and <spanx style="verb">jwks</spanx> parameters MUST NOT be used
+          together.</t>
+
+          <t hangText="jwks"><vspace/>JSON Web Key Set <xref target="JWK"/>
           value containing the client's public keys. The value of this field
           MUST be a JSON object containing a valid JWK Set. These keys can be
           used by higher level protocols that use signing or encryption. This
           parameter is intended to be used by clients that cannot use the
-          <spanx style="verb">jwks_uri</spanx> parameter. For instance, a
-          native application might not have a location to host the contents of
-          the JWK Set that would be reachable by the authorization server. The
-          <spanx style="verb">jwks_uri</spanx> and <spanx style="verb">jwks</spanx>
-          parameters MUST NOT be used together.</t>
+          <spanx style="verb">jwks_uri</spanx> parameter, such as a native
+          client which cannot host a public URL. The <spanx style="verb">jwks_uri</spanx>
+          and <spanx style="verb">jwks</spanx> parameters MUST NOT be used
+          together.</t>
 
-          <t hangText="software_id"><vspace/> Identifier for the software that
+          <t hangText="software_id"><vspace/>Identifier for the software that
           comprises a client. Unlike <spanx style="verb">client_id</spanx>,
           which is issued by the authorization server and may vary between
           instances, the <spanx style="verb">software_id</spanx> is asserted
@@ -433,7 +439,7 @@
           The identifier SHOULD NOT change when software version changes or
           when a new installation occurs.</t>
 
-          <t hangText="software_version"><vspace/> Version identifier for the
+          <t hangText="software_version"><vspace/>Version identifier for the
           software that comprises a client. The value of this field is a
           string that is intended to be compared using string equality
           matching. The value of the <spanx style="verb">software_version</spanx>
@@ -1315,7 +1321,20 @@
       style="verb">redirect_uri</spanx> values. This can help mitigate attacks
       where rogue actors inject and impersonate a validly registered client
       and intercept its authorization code or tokens through an invalid
-      redirection URI or open redirector.</t>
+      redirection URI or open redirector. Additionally, in order to prevent
+      hijacking of the return values of the redirection, the redirect_uri MUST
+      be one of:</t>
+
+      <t><list style="symbols">
+          <t>A remote website protected by TLS using HTTPS (e.g.:
+          https://client.example.com/oauth_redirect)</t>
+
+          <t>A website hosted on the local machine using HTTP (e.g.:
+          http://localhost:8080/oauth_redirect)</t>
+
+          <t>A non-HTTP application-specific URL that is available only to the
+          client application (e.g.: exampleapp://oauth_redirect)</t>
+        </list></t>
 
       <t>Public clients MAY register with an authorization server using this
       protocol, if the authorization server's policy allows them. Public
@@ -1723,6 +1742,30 @@
         <format target="http://tools.ietf.org/html/draft-ietf-oauth-dyn-reg-management"
                 type="HTML"/>
       </reference>
+
+      <reference anchor="OIDC.Registration">
+        <front>
+          <title/>
+
+          <author>
+            <organization/>
+          </author>
+
+          <date/>
+        </front>
+      </reference>
+
+      <reference anchor="UMA">
+        <front>
+          <title/>
+
+          <author>
+            <organization/>
+          </author>
+
+          <date/>
+        </front>
+      </reference>
     </references>
 
     <section anchor="UseCases" title="Use Cases">
@@ -1870,7 +1913,17 @@
       <t>-19</t>
 
       <t><list style="symbols">
-          <t/>
+          <t>Added OIDC and UMA informative references to introduction
+          section.</t>
+
+          <t>Clarified jwks and jwks_uri usage.</t>
+
+          <t>Removed application_type.</t>
+
+          <t>Added redirect_uri usage restrictions to security considerations
+          section based on client type.</t>
+
+          <t>Expanded policy_uri text.</t>
         </list></t>
 
       <t>-18 <list style="symbols">
