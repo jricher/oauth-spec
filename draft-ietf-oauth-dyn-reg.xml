@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
-"http://xml.resource.org/authoring/rfc2629.dtd" [
+"http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd" [
 ]>
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-17" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-18" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -62,7 +62,7 @@
       </address>
     </author>
 
-    <date day="21" month="May" year="2014"/>
+    <date day="3" month="July" year="2014"/>
 
     <area>Security</area>
 
@@ -95,7 +95,7 @@
       a mechanism for the client to present the authorization server with a
       set of metadata, such as a set of valid redirection URIs. This metadata
       can either be communicated in a self-asserted fashion or as a set of
-      metadata called a software statement, which can be digitally signed or MACed; in
+      metadata called a software statement, which is digitally signed or MACed; in
       the case of a software statement, the issuer is
       vouching for the validity of the data about the client.</t>
 
@@ -116,13 +116,16 @@
       </section>
 
       <section anchor="Terminology" title="Terminology">
-        <t>This specification uses the terms "access token", "refresh token",
-        "authorization code", "authorization grant", "authorization server",
-        "authorization endpoint", "client", "client identifier", "client
-        secret", "protected resource", "resource owner", "resource server",
-        "response type", and "token endpoint" defined by <xref
-        target="RFC6749">OAuth 2.0</xref> and uses the term "Claim" defined by
-        <xref target="JWT">JSON Web Token (JWT)</xref>.</t>
+        <t>
+	  This specification uses the terms "access token", "authorization code",
+	  "authorization endpoint", "authorization grant", "authorization server",
+	  "client", "client identifier", "client secret",
+	  "grant type", "protected resource", "redirection URI", "refresh token",
+	  "resource owner", "resource server", "response type", and "token endpoint"
+	  defined by <xref target="RFC6749">OAuth 2.0</xref>
+	  and uses the term "Claim" defined by
+	  <xref target="JWT">JSON Web Token (JWT)</xref>.
+	</t>
 
         <t>This specification defines the following terms:</t>
 
@@ -153,13 +156,18 @@
             <t hangText="Initial Access Token">
 	      <vspace/>
 	      OAuth 2.0 access token
-            optionally issued by an Authorization Server and used to authorize
-            calls to the client registration endpoint. The type and format of
-            this token are likely service-specific and are out of scope for
-            this specification. The means by which the authorization server
-            issues this token as well as the means by which the registration
-            endpoint validates this token are out of scope for this
-            specification.</t>
+	      optionally issued by an authorization server
+	      to a developer or client
+	      and used to authorize
+	      calls to the client registration endpoint. The type and format of
+	      this token are likely service-specific and are out of scope for
+	      this specification. The means by which the authorization server
+	      issues this token as well as the means by which the registration
+	      endpoint validates this token are out of scope for this
+	      specification.
+	      Use of an initial access token is required when
+	      the authorization server limits the parties that can register a client.
+	    </t>
 
             <t hangText="Deployment Organization">
 	      <vspace/>
@@ -192,9 +200,20 @@
 
             <t hangText="Software Statement">
 	      <vspace/>
-	      A digitally signed or MACed JSON Web Token
-            (JWT) <xref target="JWT"/> that asserts metadata values about the
-            client software.</t>
+	      Digitally signed or MACed JSON Web Token
+	      (JWT) <xref target="JWT"/> that asserts metadata values about the
+	      client software.
+	      In some cases, a software statement will be issued directly by
+	      the organization or developer that creates the client software.
+	      In other cases, a software statement will be issued by
+	      a third party organization for use by
+	      the organization or developer that creates the client software.
+	      In both cases, the trust relationship the authorization server
+	      has with the issuer of the software statement is intended to be used as
+	      an input to the evaluation of whether the registration request is accepted.
+	      A software statement can be presented to an authorization server
+	      as part of a client registration request.
+	    </t>
           </list></t>
       </section>
 
@@ -255,7 +274,7 @@
     <section anchor="ClientMetadata" title="Client Metadata">
       <t>Clients have a set of metadata values associated with their client
       identifier at an authorization server, such as the list of valid
-      redirect URIs or a display name.</t>
+      redirection URIs or a display name.</t>
 
       <t>The client metadata values are used in two ways:</t>
 
@@ -265,19 +284,21 @@
           <t>as output values in registration responses.</t>
         </list></t>
 
-      <t>The following client metadata fields are defined by this
-      specification. All client metadata fields are OPTIONAL.</t>
+      <t>
+	The following client metadata fields are defined by this specification.
+	The implementation and use of all client metadata fields is OPTIONAL,
+	other than <spanx style="verb">redirect_uris</spanx>.
+      </t>
 
       <t><list style="hanging">
           <t hangText="redirect_uris">
 	    <vspace/>
-	    Array of redirect URIs for use in
-          redirect-based flows such as the authorization code and implicit
-          grant types. It is RECOMMENDED that clients using these flows
-          register this parameter, and an authorization server SHOULD require
-          registration of valid redirect URIs for all clients that use these
-          grant types to protect against token and credential theft
-          attacks.</t>
+	    Array of redirection URIs for use in redirect-based flows such as the
+	    authorization code and implicit flows.
+	    As required by Section 2 of <xref target="RFC6749">OAuth 2.0</xref>,
+	    clients using flows with redirection MUST register their redirection URI values.
+	    Authorization servers MUST implement support for this metadata value.
+	  </t>
 
           <t hangText="token_endpoint_auth_method">
 	    <vspace/>
@@ -305,7 +326,7 @@
           <t hangText="grant_types">
 	    <vspace/>
 	    Array of OAuth 2.0 grant types that the
-          Client may use. These grant types are defined as follows: <list
+	    client may use. These grant types are defined as follows: <list
               style="symbols">
               <t><spanx style="verb">authorization_code</spanx>: The
               Authorization Code Grant described in OAuth 2.0 Section 4.1</t>
@@ -336,7 +357,20 @@
           is described in OAuth 2.0 Section 2.5. If the token endpoint is used
           in the grant type, the value of this parameter MUST be the same as
           the value of the <spanx style="verb">grant_type</spanx> parameter
-          passed to the token endpoint defined in the extension.</t>
+          passed to the token endpoint defined in the extension.
+	  If omitted, the default is that the client will use only the
+	  <spanx style="verb">authorization_code</spanx> Grant Type.
+	  </t>
+
+	  <t hangText="application_type">
+	    <vspace/>
+	    OPTIONAL.
+	    Kind of the application.
+	    The default, if omitted, is 
+	    <spanx style="verb">web</spanx>.  The defined values are
+	    <spanx style="verb">native</spanx>
+	    or <spanx style="verb">web</spanx>.
+	  </t>
 
           <t hangText="response_types">
 	    <vspace/>
@@ -354,7 +388,10 @@
           endpoint is used by the grant type, the value of this parameter MUST
           be the same as the value of the <spanx style="verb">response_type</spanx>
           parameter passed to the authorization endpoint defined in the
-          extension.</t>
+          extension.
+	  If omitted, the default is that the client will use only the
+	  <spanx style="verb">code</spanx> response type.
+	  </t>
 
           <t hangText="client_name">
 	    <vspace/>
@@ -388,7 +425,7 @@
           described in Section 3.3 of <xref target="RFC6749">OAuth 2.0</xref>)
           that the client can use when requesting access tokens. The semantics
           of values in this list is service specific. If omitted, an
-          authorization server MAY register a Client with a default set of
+          authorization server MAY register a client with a default set of
           scopes.</t>
 
           <t hangText="contacts">
@@ -401,7 +438,7 @@
           <t hangText="tos_uri">
 	    <vspace/>
 	    URL that points to a human-readable Terms of
-          Service document for the client. The Authorization Server SHOULD
+          Service document for the client. The authorization server SHOULD
           display this URL to the end-user if it is given. The Terms of
           Service usually describe a contractual relationship between the
           end-user and the client that the end-user accepts when authorizing
@@ -436,12 +473,12 @@
           These keys can be used by higher level protocols that use
           signing or encryption.
 	  This parameter is intended to be used by clients that
-	  cannot use the <spanx style="verb">jwk_uri</spanx> parameter.
-	  For instance, a native applications that might not have a location
+	  cannot use the <spanx style="verb">jwks_uri</spanx> parameter.
+	  For instance, a native application might not have a location
 	  to host the contents of the JWK Set that would be reachable by
 	  the authorization server.
-	  The <spanx style="verb">jwk_uri</spanx> and <spanx style="verb">jwk</spanx>
-	  parameters MUST NOT NOT be used together.
+	  The <spanx style="verb">jwks_uri</spanx> and <spanx style="verb">jwks</spanx>
+	  parameters MUST NOT be used together.
 	  </t>
 
           <t hangText="software_id">
@@ -450,7 +487,8 @@
           a client. Unlike <spanx style="verb">client_id</spanx>, which is
           issued by the authorization server and may vary between
           instances, the <spanx style="verb">software_id</spanx> is asserted
-          by the client software and is intended to be shared among all
+          by the client software on behalf of the software developer
+	  and is intended to be shared among all
           instances of the client software. The identifier SHOULD NOT change when
           software version changes or when a new installation occurs.</t>
 
@@ -663,9 +701,6 @@
       otherwise limited to prevent a denial-of-service attack on the client
       registration endpoint.</t>
 
-      <t>The client registration endpoint MUST ignore all parameters it does
-      not understand.</t>
-
       <section anchor="RegistrationRequest"
                title="Client Registration Request">
         <t>This operation registers a client with the authorization server.
@@ -779,6 +814,7 @@
     "software_statement":"eyJhbGciOiJFUzI1NiJ9.
        eyJpc3Mi[...omitted for brevity...].
        J9l-ZhwP[...omitted for brevity...]",
+    "scope":"read write",
     "example_extension_parameter":"example_value"
   }
 ]]></artwork>
@@ -813,7 +849,7 @@
 	      <vspace/>
 	      REQUIRED. OAuth 2.0 client identifier. It
             SHOULD NOT be currently valid for any other registered client,
-            though an Authorization Server MAY issue the same client
+            though an authorization server MAY issue the same client
             identifier to multiple instances of a registered client,
 	    at its discretion.</t>
 
@@ -834,14 +870,14 @@
 
             <t hangText="client_secret_expires_at">
 	      <vspace/>
-	      REQUIRED if <spanx
-            style="verb">client_secret</spanx> is issued. Time at which the
+	      REQUIRED if <spanx style="verb">client_secret</spanx> is issued.
+	      Time at which the
             client secret will expire or 0 if it
             will not expire. The time is represented as the number of seconds
             from 1970-01-01T0:0:0Z as measured in UTC until the date/time.</t>
           </list></t>
 
-        <t>Additionally, the Authorization Server MUST return all registered
+        <t>Additionally, the authorization server MUST return all registered
         metadata about this client, including any fields provisioned by the
         authorization server itself. The authorization server MAY reject or
         replace any of the client's requested metadata values submitted during
@@ -863,7 +899,7 @@
           <preamble>Following is a non-normative example response:</preamble>
 
           <artwork><![CDATA[
-  HTTP/1.1 200 OK
+  HTTP/1.1 201 Created
   Content-Type: application/json
   Cache-Control: no-store
   Pragma: no-cache
@@ -901,18 +937,22 @@
         consisting of a <xref target="RFC7159">JSON object</xref> describing
         the error in the response body.</t>
 
-        <t>The JSON object contains two members:</t>
-
-        <t><list style="hanging">
+        <t>
+	  Two members are defined for inclusion in the JSON object:
+	</t>
+        <t>
+	  <list style="hanging">
             <t hangText="error">
 	      <vspace/>
-	      Single ASCII error code string.</t>
+	      REQUIRED.  Single ASCII error code string.</t>
 
             <t hangText="error_description">
 	      <vspace/>
-	      Human-readable ASCII text
+	      OPTIONAL.  Human-readable ASCII text
             description of the error used for debugging.</t>
-          </list></t>
+          </list>
+	  Other members MAY also be included, and if not understood, MUST be ignored.
+	</t>
 
         <t>This specification defines the following error codes:</t>
 
@@ -925,7 +965,7 @@
 	      <vspace/>
 	      The value of one of the
             client metadata fields is invalid and the server has rejected this
-            request. Note that an Authorization server MAY choose to
+            request. Note that an authorization server MAY choose to
             substitute a valid value for any requested parameter of a client's
             metadata.</t>
 
@@ -943,7 +983,7 @@
 
         <figure>
           <preamble>Following is a non-normative example of an error response
-          resulting from a redirect URI that has been blacklisted by the
+          resulting from a redirection URI that has been blacklisted by the
           authorization server
 	  (with line wraps within values for display purposes only):</preamble>
 
@@ -955,8 +995,8 @@
 
   {
    "error": "invalid_redirect_uri",
-   "error_description": "The redirect URI http://sketchy.example.com
-     is not allowed by this server."
+   "error_description": "The redirection URI
+     http://sketchy.example.com is not allowed by this server."
   }
 ]]></artwork>
         </figure>
@@ -987,7 +1027,7 @@
     <section anchor="IANA" title="IANA Considerations">
       <section anchor="MetadataRegistry"
                title="OAuth Dynamic Registration Client Metadata Registry">
-        <t>This specification establishes the OAuth 2.0 Dynamic Registration Client
+        <t>This specification establishes the OAuth Dynamic Registration Client
         Metadata registry.</t>
 
         <t>OAuth registration client metadata values are registered with a
@@ -1046,13 +1086,13 @@
         </section>
 
         <section anchor="MetadataContents" title="Initial Registry Contents">
-          <t>The initial contents of the OAuth 2.0 Dynamic Registration Client Metadata
+          <t>The initial contents of the OAuth Dynamic Registration Client Metadata
           registry are:</t>
 
           <t><?rfc subcompact="yes"?> <list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">redirect_uris</spanx></t>
 
-              <t>Client Metadata Description: Array of redirect URIs for use
+              <t>Client Metadata Description: Array of redirection URIs for use
               in redirect-based flows</t>
 
               <t>Change controller: IESG</t>
@@ -1075,7 +1115,7 @@
               <t>Client Metadata Name: <spanx style="verb">grant_types</spanx></t>
 
               <t>Client Metadata Description: Array of OAuth 2.0 grant types
-              that the Client may use</t>
+              that the client may use</t>
 
               <t>Change controller: IESG</t>
 
@@ -1086,7 +1126,7 @@
               <t>Client Metadata Name: <spanx style="verb">response_types</spanx></t>
 
               <t>Client Metadata Description: Array of the OAuth 2.0 response
-              types that the Client may use</t>
+              types that the client may use</t>
 
               <t>Change controller: IESG</t>
 
@@ -1173,7 +1213,7 @@
           <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">jwks_uri</spanx></t>
 
-              <t>Client Metadata Description: URL for the Client's <xref
+              <t>Client Metadata Description: URL for the client's <xref
               target="JWK">JSON Web Key Set</xref> document representing the
               client's public keys</t>
 
@@ -1183,7 +1223,7 @@
             </list><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">jwks</spanx></t>
 
-              <t>Client Metadata Description: The Client's <xref
+              <t>Client Metadata Description: The client's <xref
               target="JWK">JSON Web Key Set</xref> document representing the
               client's public keys</t>
 
@@ -1354,22 +1394,22 @@
     <section anchor="Security" title="Security Considerations">
       <t>Since requests to the client registration endpoint result in the
       transmission of clear-text credentials (in the HTTP request and
-      response), the Authorization Server MUST require the use of a
+      response), the authorization server MUST require the use of a
       transport-layer security mechanism when sending requests to the
       registration endpoint. The server MUST support TLS 1.2 <xref
       target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref target="RFC2246"/>
       and MAY support additional transport-layer mechanisms meeting its
-      security requirements. When using TLS, the Client MUST perform a TLS/SSL
+      security requirements. When using TLS, the client MUST perform a TLS/SSL
       server certificate check, per <xref target="RFC6125">RFC
       6125</xref>.</t>
 
       <t>For clients that use redirect-based grant types such as <spanx
       style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>,
-      authorization servers SHOULD require clients to register their <spanx
-      style="verb">redirect_uris</spanx> in full. Requiring clients to do so
+      authorization servers MUST require clients to register their <spanx
+      style="verb">redirect_uri</spanx> values.  This
       can help mitigate attacks where rogue actors inject and impersonate a
       validly registered client and intercept its authorization code or tokens
-      through an invalid redirect URI or open redirector.</t>
+      through an invalid redirection URI or open redirector.</t>
 
       <t>Public clients MAY register with an authorization server using this
       protocol, if the authorization server's policy allows them. Public
@@ -1417,9 +1457,9 @@
       this, an authorization server needs to take steps to mitigate this
       risk by looking at the entire registration request and client
       configuration. For instance, an authorization server could issue a warning if the
-      domain/site of the logo doesn't match the domain/site of redirect URIs.
+      domain/site of the logo doesn't match the domain/site of redirection URIs.
       An authorization server could also refuse registration requests from a known
-      software identifier that is requesting different redirect URIs or a
+      software identifier that is requesting different redirection URIs or a
       different client homepage URI. An authorization server can also present
       warning messages to end users about dynamically registered clients in
       all cases, especially if such clients have been recently registered or
@@ -1462,13 +1502,21 @@
       client metadata values, when deciding whether to honor a given registration
       request.</t>
 
+      <t>
+	If an authorization server receives a registration request for a client
+	that uses the same <spanx style="verb">software_id</spanx> and
+	<spanx style="verb">software_version</spanx> values as another client,
+	the server should treat the new registration as being suspect.
+	It is possible that the new client is trying to impersonate the existing client.
+      </t>
+
       <t>Since a client identifier is a public value that can be used to
       impersonate a client at the authorization endpoint, an authorization
       server that decides to issue the same client identifier to
       multiple instances of a registered client MUST be very particular about the
       circumstances under which this occurs. For instance, the authorization
       server can limit a given client identifier to clients using the same
-      redirect-based flow and the same redirect URIs. An
+      redirect-based flow and the same redirection URIs. An
       authorization server SHOULD NOT issue the same client secret to
       multiple instances of a registered client,
       even if they are issued the same client identifier,
@@ -1481,15 +1529,15 @@
   <back>
     <references title="Normative References">
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml' ?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2246.xml'?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5226.xml'?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5646.xml'?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2246.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5226.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5646.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
 
       <reference anchor="JWT">
         <front>
@@ -1526,7 +1574,7 @@
             </address>
           </author>
 
-          <date day="30" month="April" year="2014"/>
+          <date day="1" month="July" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1659,7 +1707,7 @@
             </address>
           </author>
 
-          <date day="30" month="April" year="2014"/>
+          <date day="1" month="July" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1682,7 +1730,7 @@
             </address>
           </author>
 
-          <date day="30" month="April" year="2014"/>
+          <date day="1" month="July" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-jose-json-web-key"/>
@@ -1712,7 +1760,7 @@
 
       <reference anchor="OAuth.Registration.Management">
         <front>
-          <title abbrev="OAuth Dynamic Registration Management">OAuth 2.0
+          <title abbrev="OAuth 2.0 Dynamic Registration Management">OAuth 2.0
           Dynamic Client Registration Management Protocol</title>
 
           <author fullname="Justin Richer" initials="J" surname="Richer">
@@ -1759,7 +1807,7 @@
             </address>
           </author>
 
-          <date day="21" month="May" year="2014"/>
+          <date day="3" month="July" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1876,8 +1924,8 @@
                title="Stateful or Stateless Registration">
         <section anchor="Stateful" title="Stateful Client Registration">
           <t>In some cases, authorization servers will maintain state about
-          registered clients, typically indexing this state using the Client
-          ID value. This state would typically include the client metadata
+          registered clients, typically indexing this state using the client identifier
+	  value. This state would typically include the client metadata
           values associated with the client registration, and possibly other
           state specific to the authorization server's implementation. When
           stateful registration is used, operations to support retrieving
@@ -1913,9 +1961,52 @@
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
 
-      <t>-17</t>
+      <t>
+	-18
+	<list style="symbols">
+          <t>
+	    Corrected an example HTTP response status code to be 201 Created.
+	  </t>
+	  <t>
+	    Said more about who issues and uses initial access tokens and software statements.
+	  </t>
+	  <t>
+	    Stated that the use of an initial access token is required when
+	    the authorization server limits the parties that can register a client.
+	  </t>
+	  <t>
+	    Stated that the implementation and use of all client metadata fields is OPTIONAL,
+	    other than <spanx style="verb">redirect_uris</spanx>,
+	    which MUST be used for redirect-based flows and implemented
+	    to fulfill the requirement in Section 2 of OAuth 2.0.
+	  </t>
+	  <t>
+	    Added the <spanx style="verb">application_type</spanx> metadata value,
+	    which had somehow been omitted.
+	  </t>
+	  <t>
+	    Added missing default metadata values, which had somehow been omitted.
+	  </t>
+	  <t>
+	    Clarified that the <spanx style="verb">software_id</spanx> is ultimately
+	    asserted by the client developer.
+	  </t>
+	  <t>
+	    Clarified that the <spanx style="verb">error</spanx> member is required in error responses,
+	    <spanx style="verb">error_description</spanx> member is optional,
+	    and other members may be present.
+	  </t>
+	  <t>
+	    Added security consideration about registrations with duplicate
+	    <spanx style="verb">software_id</spanx> and
+	    <spanx style="verb">software_version</spanx> values.
+	  </t>
+        </list>
+      </t>
 
-      <t><list style="symbols">
+      <t>
+	-17
+        <list style="symbols">
           <t>Merged draft-ietf-oauth-dyn-reg-metadata back into this document.</t>
 
           <t>Removed "Core" from the document title.</t>
