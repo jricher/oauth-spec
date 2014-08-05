@@ -68,7 +68,7 @@
       </address>
     </author>
 
-    <date day="4" month="August" year="2014"/>
+    <date day="5" month="August" year="2014"/>
 
     <area>Security</area>
 
@@ -585,10 +585,10 @@
       </section>
 
       <section anchor="SoftwareStatement" title="Software Statement">
-        <t>A software statement is a <xref target="JWT">JSON Web Token
-        (JWT)</xref> that asserts metadata values about the client software as
+        <t>A software statement is a JSON Web Token (JWT) <xref target="JWT"/>
+	that asserts metadata values about the client software as
         a bundle. A set of claims that can be used in a software statement are
-        defined in <xref target="ClientMetadata">Client Metadata</xref>. When
+        defined in <xref target="ClientMetadata"/>. When
         presented to the authorization server as part of a client registration
         request, the software statement MUST be digitally signed or MACed
         using <xref target="JWS">JWS</xref> and MUST contain an <spanx
@@ -1738,7 +1738,7 @@
             </address>
           </author>
 
-          <date day="4" month="August" year="2014"/>
+          <date day="5" month="August" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft"

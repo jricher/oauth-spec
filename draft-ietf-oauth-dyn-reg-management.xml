@@ -69,7 +69,7 @@
       </address>
     </author>
 
-    <date day="4" month="August" year="2014"/>
+    <date day="5" month="August" year="2014"/>
 
     <area>Security</area>
 
@@ -734,7 +734,7 @@
             </address>
           </author>
 
-          <date day="3" month="July" year="2014"/>
+          <date day="5" month="August" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-oauth-dyn-reg"/>
@@ -766,8 +766,7 @@
       <t>-03</t>
 
       <t><list style="symbols">
-          <t>Marked draft as "experimental" track instead of "standards"
-          track.</t>
+          <t>Changed draft to be Experimental instead of Standards Track.</t>
         </list></t>
 
       <t>-02 <list style="symbols">
