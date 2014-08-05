@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-18" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-19" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -108,14 +108,15 @@
       is performed manually. The mechanisms defined in this specification can
       be used either for a client to dynamically register itself with
       authorization servers or for a client developer to programmatically
-      register the client with authorization servers. Several OAuth-based
-      protocols have previously developed mechanisms for accomplishing such
-      registrations, and this specficiation is designed as a generalization
-      and abstraction of those protocols for the wider set of OAuth use cases.
-      In particular, this specification retains wire compatibility with the
-      <xref target="OIDC.Registration">OpenID Connect Dynamic Client
-      Registration</xref> and <xref target="UMA">User Managed Access</xref>,
-      which have both contributed to this work.</t>
+      register the client with authorization servers.
+      Multiple applications using OAuth 2.0 have previously developed mechanisms
+      for accomplishing such registrations.
+      This specficiation generalizes the registration mechanisms defined by the
+      <xref target="OpenID.Registration">OpenID Connect Dynamic Client Registration 1.0</xref>
+      specification and used by the
+      <xref target="I-D.hardjono-oauth-umacore">User Managed Access (UMA) Profile of OAuth 2.0</xref>
+      specification in a way that is compatible with both,
+      while being applicable to a wider set of OAuth 2.0 use cases.</t>
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -274,10 +275,10 @@
 
       <t>The following client metadata fields are defined by this
       specification. The implementation and use of all client metadata fields
-      is OPTIONAL unless stated otherwise.</t>
+      is OPTIONAL, unless stated otherwise.</t>
 
       <t><list style="hanging">
-          <t hangText="redirect_uris"><vspace/>Array of redirection URIs for
+          <t hangText="redirect_uris"><vspace/>Array of redirection URI values for
           use in redirect-based flows such as the authorization code and
           implicit flows. As required by Section 2 of <xref
           target="RFC6749">OAuth 2.0</xref>, clients using flows with
@@ -394,39 +395,43 @@
           available to end users for support requests for the client.</t>
 
           <t hangText="tos_uri"><vspace/>URL that points to a human-readable
-          terms of service document for the client which describes a
+          terms of service document for the client that describes a
           contractual relationship between the end-user and the client that
           the end-user accepts when authorizing the client. The authorization
-          server SHOULD display this URL to the end-user if it is given. The
+          server SHOULD display this URL to the end-user if it is provided. The
           value of this field MUST point to a valid web page. The value of
           this field MAY be internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
           <t hangText="policy_uri"><vspace/>URL that points to a
-          human-readable privacy policy document which describes how the
+          human-readable privacy policy document that describes how the
           deployment organization collects, uses, retains, and discloses
           personal data. The authorization server SHOULD display this URL to
-          the end-user if it is given. The value of this field MUST point to a
+          the end-user if it is provided. The value of this field MUST point to a
           valid web page. The value of this field MAY be internationalized, as
           described in <xref target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="jwks_uri"><vspace/>URL of the client's JSON Web Key Set
-          <xref target="JWK"/> document containing the client's public keys.
+          <t hangText="jwks_uri"><vspace/>URL referencing the client's JSON Web Key Set
+          <xref target="JWK"/> document, which contains the client's public keys.
           The value of this field MUST point to a valid JWK Set document.
           These keys can be used by higher level protocols that use signing or
-          encryption. This parameter is preferred over the <spanx
-          style="verb">jwks</spanx> parameter as it allows for easier key
-          rotation from the client. The <spanx style="verb">jwks_uri</spanx>
+          encryption.
+	  For instance, these keys might be used by some applications for
+	  validating signed requests made to the token endpoint when using
+	  JWTs for client authentication <xref target="OAuth.JWT"/>.
+	  Use of this parameter is preferred over the <spanx
+          style="verb">jwks</spanx> parameter, as it allows for easier key
+          rotation. The <spanx style="verb">jwks_uri</spanx>
           and <spanx style="verb">jwks</spanx> parameters MUST NOT be used
           together.</t>
 
-          <t hangText="jwks"><vspace/>JSON Web Key Set <xref target="JWK"/>
-          value containing the client's public keys. The value of this field
+          <t hangText="jwks"><vspace/>Client's JSON Web Key Set <xref target="JWK"/>
+	  document value, which contains the client's public keys. The value of this field
           MUST be a JSON object containing a valid JWK Set. These keys can be
           used by higher level protocols that use signing or encryption. This
           parameter is intended to be used by clients that cannot use the
-          <spanx style="verb">jwks_uri</spanx> parameter, such as a native
-          client which cannot host a public URL. The <spanx style="verb">jwks_uri</spanx>
+          <spanx style="verb">jwks_uri</spanx> parameter, such as native
+          clients that cannot host public URLs. The <spanx style="verb">jwks_uri</spanx>
           and <spanx style="verb">jwks</spanx> parameters MUST NOT be used
           together.</t>
 
@@ -651,7 +656,7 @@
         <t>This operation registers a client with the authorization server.
         The authorization server assigns this client a unique client
         identifier, optionally assigns a client secret, and associates the
-        metadata given in the request with the issued client identifier. The
+        metadata provided in the request with the issued client identifier. The
         request includes any client metadata parameters being specified for
         the client during the registration. The authorization server MAY
         provision default values for any items omitted in the client
@@ -989,7 +994,7 @@
               description").</t>
 
               <t hangText="Change controller:"><vspace/> For Standards Track
-              RFCs, state "IETF". For others, give the name of the responsible
+              RFCs, state "IESG". For others, give the name of the responsible
               party. Other details (e.g., postal address, email address, home
               page URI) may also be included.</t>
 
@@ -1130,17 +1135,19 @@
           <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">jwks_uri</spanx></t>
 
-              <t>Client Metadata Description: URL for the client's <xref
+              <t>Client Metadata Description: URL referencing the client's <xref
               target="JWK">JSON Web Key Set</xref> document representing the
               client's public keys</t>
 
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): [[ this document ]]</t>
-            </list><list style="symbols">
+            </list></t>
+
+	  <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">jwks</spanx></t>
 
-              <t>Client Metadata Description: The client's <xref
+              <t>Client Metadata Description: Client's <xref
               target="JWK">JSON Web Key Set</xref> document representing the
               client's public keys</t>
 
@@ -1255,7 +1262,7 @@
               insensitive manner SHOULD NOT be accepted.</t>
 
               <t hangText="Change controller:"><vspace/> For Standards Track
-              RFCs, state "IETF". For others, give the name of the responsible
+              RFCs, state "IESG". For others, give the name of the responsible
               party. Other details (e.g., postal address, email address, home
               page URI) may also be included.</t>
 
@@ -1317,23 +1324,23 @@
 
       <t>For clients that use redirect-based grant types such as <spanx
       style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>,
-      authorization servers MUST require clients to register their <spanx
-      style="verb">redirect_uri</spanx> values. This can help mitigate attacks
+      authorization servers MUST require clients to register their
+      redirection URI values. This can help mitigate attacks
       where rogue actors inject and impersonate a validly registered client
       and intercept its authorization code or tokens through an invalid
       redirection URI or open redirector. Additionally, in order to prevent
-      hijacking of the return values of the redirection, the redirect_uri MUST
-      be one of:</t>
+      hijacking of the return values of the redirection, registered
+      redirection URI values MUST be one of:</t>
 
       <t><list style="symbols">
-          <t>A remote website protected by TLS using HTTPS (e.g.:
+          <t>A remote web site protected by TLS (e.g.,
           https://client.example.com/oauth_redirect)</t>
 
-          <t>A website hosted on the local machine using HTTP (e.g.:
+          <t>A web site hosted on the local machine using an HTTP URI (e.g.,
           http://localhost:8080/oauth_redirect)</t>
 
           <t>A non-HTTP application-specific URL that is available only to the
-          client application (e.g.: exampleapp://oauth_redirect)</t>
+          client application (e.g., exampleapp://oauth_redirect)</t>
         </list></t>
 
       <t>Public clients MAY register with an authorization server using this
@@ -1501,7 +1508,7 @@
             </address>
           </author>
 
-          <date day="1" month="July" year="2014"/>
+          <date day="4" month="July" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1547,7 +1554,7 @@
             </address>
           </author>
 
-          <date day="28" month="April" year="2014"/>
+          <date day="23" month="July" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-oauth-jwt-bearer"/>
@@ -1589,7 +1596,7 @@
             </address>
           </author>
 
-          <date day="28" month="April" year="2014"/>
+          <date day="23" month="July" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1634,7 +1641,7 @@
             </address>
           </author>
 
-          <date day="1" month="July" year="2014"/>
+          <date day="4" month="July" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1657,7 +1664,7 @@
             </address>
           </author>
 
-          <date day="1" month="July" year="2014"/>
+          <date day="4" month="July" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-jose-json-web-key"/>
@@ -1733,7 +1740,7 @@
             </address>
           </author>
 
-          <date day="3" month="July" year="2014"/>
+          <date day="4" month="August" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1743,29 +1750,32 @@
                 type="HTML"/>
       </reference>
 
-      <reference anchor="OIDC.Registration">
+      <reference anchor="OpenID.Registration">
         <front>
-          <title/>
+          <title>OpenID Connect Dynamic Client Registration 1.0</title>
 
-          <author>
-            <organization/>
+          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
+            <organization abbrev="NRI">Nomura Research Institute, Ltd.</organization>
           </author>
 
-          <date/>
-        </front>
-      </reference>
-
-      <reference anchor="UMA">
-        <front>
-          <title/>
-
-          <author>
-            <organization/>
+          <author fullname="John Bradley" initials="J." surname="Bradley">
+            <organization abbrev="Ping Identity">Ping Identity</organization>
           </author>
 
-          <date/>
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <organization abbrev="Microsoft">Microsoft</organization>
+          </author>
+
+          <date day="25" month="February" year="2014"/>
         </front>
+
+	<format target="http://openid.net/specs/openid-connect-registration-1_0.html"
+                type="HTML" />
       </reference>
+
+
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-hardjono-oauth-umacore-09.xml' ?>
+
     </references>
 
     <section anchor="UseCases" title="Use Cases">
@@ -1913,17 +1923,20 @@
       <t>-19</t>
 
       <t><list style="symbols">
-          <t>Added OIDC and UMA informative references to introduction
-          section.</t>
+          <t>Added informative references to the OpenID Connect Dynamic Client Registration
+	  and UMA specifications in the introduction.</t>
 
-          <t>Clarified jwks and jwks_uri usage.</t>
+          <t>Clarified the <spanx style="verb">jwks</spanx> and
+	  <spanx style="verb">jwks_uri</spanx> descriptions
+	  and included an example situation in which they might be used.</t>
 
-          <t>Removed application_type.</t>
+          <t>Removed <spanx style="verb">application_type</spanx>.</t>
 
-          <t>Added redirect_uri usage restrictions to security considerations
-          section based on client type.</t>
+          <t>Added redirection URI usage restrictions to the Security Considerations
+          section, based on the client type.</t>
 
-          <t>Expanded policy_uri text.</t>
+          <t>Expanded the <spanx style="verb">tos_uri</spanx> and
+	  <spanx style="verb">policy_uri</spanx> descriptions.</t>
         </list></t>
 
       <t>-18 <list style="symbols">
