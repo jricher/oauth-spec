@@ -108,15 +108,15 @@
       is performed manually. The mechanisms defined in this specification can
       be used either for a client to dynamically register itself with
       authorization servers or for a client developer to programmatically
-      register the client with authorization servers.
-      Multiple applications using OAuth 2.0 have previously developed mechanisms
-      for accomplishing such registrations.
-      This specficiation generalizes the registration mechanisms defined by the
-      <xref target="OpenID.Registration">OpenID Connect Dynamic Client Registration 1.0</xref>
-      specification and used by the
-      <xref target="I-D.hardjono-oauth-umacore">User Managed Access (UMA) Profile of OAuth 2.0</xref>
-      specification in a way that is compatible with both,
-      while being applicable to a wider set of OAuth 2.0 use cases.</t>
+      register the client with authorization servers. Multiple applications
+      using OAuth 2.0 have previously developed mechanisms for accomplishing
+      such registrations. This specficiation generalizes the registration
+      mechanisms defined by the <xref target="OpenID.Registration">OpenID
+      Connect Dynamic Client Registration 1.0</xref> specification and used by
+      the <xref target="I-D.hardjono-oauth-umacore">User Managed Access (UMA)
+      Profile of OAuth 2.0</xref> specification in a way that is compatible
+      with both, while being applicable to a wider set of OAuth 2.0 use
+      cases.</t>
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -247,9 +247,9 @@
             or developer is out of scope for this specification.</t>
 
             <t hangText="(C)">The client or developer calls the client
-            registration endpoint with its desired registration metadata,
-            optionally including the initial access token from (A) if one is
-            required by the authorization server.</t>
+            registration endpoint with the client's desired registration
+            metadata, optionally including the initial access token from (A)
+            if one is required by the authorization server.</t>
 
             <t hangText="(D)">The authorization server registers the client
             and returns the client's registered metadata, a client identifier
@@ -278,8 +278,8 @@
       is OPTIONAL, unless stated otherwise.</t>
 
       <t><list style="hanging">
-          <t hangText="redirect_uris"><vspace/>Array of redirection URI values for
-          use in redirect-based flows such as the authorization code and
+          <t hangText="redirect_uris"><vspace/>Array of redirection URI values
+          for use in redirect-based flows such as the authorization code and
           implicit flows. As required by Section 2 of <xref
           target="RFC6749">OAuth 2.0</xref>, clients using flows with
           redirection MUST register their redirection URI values.
@@ -398,8 +398,8 @@
           terms of service document for the client that describes a
           contractual relationship between the end-user and the client that
           the end-user accepts when authorizing the client. The authorization
-          server SHOULD display this URL to the end-user if it is provided. The
-          value of this field MUST point to a valid web page. The value of
+          server SHOULD display this URL to the end-user if it is provided.
+          The value of this field MUST point to a valid web page. The value of
           this field MAY be internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
@@ -407,33 +407,32 @@
           human-readable privacy policy document that describes how the
           deployment organization collects, uses, retains, and discloses
           personal data. The authorization server SHOULD display this URL to
-          the end-user if it is provided. The value of this field MUST point to a
-          valid web page. The value of this field MAY be internationalized, as
-          described in <xref target="HumanReadableClientMetadata"/>.</t>
+          the end-user if it is provided. The value of this field MUST point
+          to a valid web page. The value of this field MAY be
+          internationalized, as described in <xref
+          target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="jwks_uri"><vspace/>URL referencing the client's JSON Web Key Set
-          <xref target="JWK"/> document, which contains the client's public keys.
-          The value of this field MUST point to a valid JWK Set document.
-          These keys can be used by higher level protocols that use signing or
-          encryption.
-	  For instance, these keys might be used by some applications for
-	  validating signed requests made to the token endpoint when using
-	  JWTs for client authentication <xref target="OAuth.JWT"/>.
-	  Use of this parameter is preferred over the <spanx
-          style="verb">jwks</spanx> parameter, as it allows for easier key
-          rotation. The <spanx style="verb">jwks_uri</spanx>
-          and <spanx style="verb">jwks</spanx> parameters MUST NOT be used
-          together.</t>
+          <t hangText="jwks_uri"><vspace/>URL referencing the client's JSON
+          Web Key Set <xref target="JWK"/> document, which contains the
+          client's public keys. The value of this field MUST point to a valid
+          JWK Set document. These keys can be used by higher level protocols
+          that use signing or encryption. For instance, these keys might be
+          used by some applications for validating signed requests made to the
+          token endpoint when using JWTs for client authentication <xref
+          target="OAuth.JWT"/>. Use of this parameter is preferred over the
+          <spanx style="verb">jwks</spanx> parameter, as it allows for easier
+          key rotation. The <spanx style="verb">jwks_uri</spanx> and <spanx
+          style="verb">jwks</spanx> parameters MUST NOT be used together.</t>
 
-          <t hangText="jwks"><vspace/>Client's JSON Web Key Set <xref target="JWK"/>
-	  document value, which contains the client's public keys. The value of this field
-          MUST be a JSON object containing a valid JWK Set. These keys can be
-          used by higher level protocols that use signing or encryption. This
-          parameter is intended to be used by clients that cannot use the
-          <spanx style="verb">jwks_uri</spanx> parameter, such as native
-          clients that cannot host public URLs. The <spanx style="verb">jwks_uri</spanx>
-          and <spanx style="verb">jwks</spanx> parameters MUST NOT be used
-          together.</t>
+          <t hangText="jwks"><vspace/>Client's JSON Web Key Set <xref
+          target="JWK"/> document value, which contains the client's public
+          keys. The value of this field MUST be a JSON object containing a
+          valid JWK Set. These keys can be used by higher level protocols that
+          use signing or encryption. This parameter is intended to be used by
+          clients that cannot use the <spanx style="verb">jwks_uri</spanx>
+          parameter, such as native clients that cannot host public URLs. The
+          <spanx style="verb">jwks_uri</spanx> and <spanx style="verb">jwks</spanx>
+          parameters MUST NOT be used together.</t>
 
           <t hangText="software_id"><vspace/>Identifier for the software that
           comprises a client. Unlike <spanx style="verb">client_id</spanx>,
@@ -586,18 +585,18 @@
       </section>
 
       <section anchor="SoftwareStatement" title="Software Statement">
-        <t>A software statement is a JSON Web Token (JWT) <xref target="JWT"/>
-        that asserts metadata values about the client software as a bundle. A
-        set of claims that can be used in a software statement are defined
-        <xref target="ClientMetadata"/>. When presented to the authorization
-        server as part of a client registration request, the software
-        statement MUST be digitally signed or MACed using <xref
-        target="JWS">JWS</xref> and MUST contain an <spanx style="verb">iss</spanx>
-        (issuer) claim denoting the party attesting to the claims in the
-        software statement. It is RECOMMENDED that software statements be
-        digitally signed using the <spanx style="verb">RS256</spanx> signature
-        algorithm, although particular applications MAY specify the use of
-        different algorithms.</t>
+        <t>A software statement is a <xref target="JWT">JSON Web Token
+        (JWT)</xref> that asserts metadata values about the client software as
+        a bundle. A set of claims that can be used in a software statement are
+        defined in <xref target="ClientMetadata">Client Metadata</xref>. When
+        presented to the authorization server as part of a client registration
+        request, the software statement MUST be digitally signed or MACed
+        using <xref target="JWS">JWS</xref> and MUST contain an <spanx
+        style="verb">iss</spanx> (issuer) claim denoting the party attesting
+        to the claims in the software statement. It is RECOMMENDED that
+        software statements be digitally signed using the <spanx style="verb">RS256</spanx>
+        signature algorithm, although particular applications MAY specify the
+        use of different algorithms.</t>
 
         <t>The means by which a client or developer obtains a software
         statement are outside the scope of this specification. Some common
@@ -656,9 +655,9 @@
         <t>This operation registers a client with the authorization server.
         The authorization server assigns this client a unique client
         identifier, optionally assigns a client secret, and associates the
-        metadata provided in the request with the issued client identifier. The
-        request includes any client metadata parameters being specified for
-        the client during the registration. The authorization server MAY
+        metadata provided in the request with the issued client identifier.
+        The request includes any client metadata parameters being specified
+        for the client during the registration. The authorization server MAY
         provision default values for any items omitted in the client
         metadata.</t>
 
@@ -1135,21 +1134,21 @@
           <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">jwks_uri</spanx></t>
 
-              <t>Client Metadata Description: URL referencing the client's <xref
-              target="JWK">JSON Web Key Set</xref> document representing the
-              client's public keys</t>
+              <t>Client Metadata Description: URL referencing the client's
+              <xref target="JWK">JSON Web Key Set</xref> document representing
+              the client's public keys</t>
 
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): [[ this document ]]</t>
             </list></t>
 
-	  <t><list style="symbols">
+          <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">jwks</spanx></t>
 
-              <t>Client Metadata Description: Client's <xref
-              target="JWK">JSON Web Key Set</xref> document representing the
-              client's public keys</t>
+              <t>Client Metadata Description: Client's <xref target="JWK">JSON
+              Web Key Set</xref> document representing the client's public
+              keys</t>
 
               <t>Change Controller: IESG</t>
 
@@ -1324,13 +1323,12 @@
 
       <t>For clients that use redirect-based grant types such as <spanx
       style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>,
-      authorization servers MUST require clients to register their
-      redirection URI values. This can help mitigate attacks
-      where rogue actors inject and impersonate a validly registered client
-      and intercept its authorization code or tokens through an invalid
-      redirection URI or open redirector. Additionally, in order to prevent
-      hijacking of the return values of the redirection, registered
-      redirection URI values MUST be one of:</t>
+      authorization servers MUST require clients to register their redirection
+      URI values. This can help mitigate attacks where rogue actors inject and
+      impersonate a validly registered client and intercept its authorization
+      code or tokens through an invalid redirection URI or open redirector.
+      Additionally, in order to prevent hijacking of the return values of the
+      redirection, registered redirection URI values MUST be one of:</t>
 
       <t><list style="symbols">
           <t>A remote web site protected by TLS (e.g.,
@@ -1755,7 +1753,8 @@
           <title>OpenID Connect Dynamic Client Registration 1.0</title>
 
           <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
-            <organization abbrev="NRI">Nomura Research Institute, Ltd.</organization>
+            <organization abbrev="NRI">Nomura Research Institute,
+            Ltd.</organization>
           </author>
 
           <author fullname="John Bradley" initials="J." surname="Bradley">
@@ -1769,13 +1768,11 @@
           <date day="25" month="February" year="2014"/>
         </front>
 
-	<format target="http://openid.net/specs/openid-connect-registration-1_0.html"
-                type="HTML" />
+        <format target="http://openid.net/specs/openid-connect-registration-1_0.html"
+                type="HTML"/>
       </reference>
 
-
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-hardjono-oauth-umacore-09.xml' ?>
-
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-hardjono-oauth-umacore-10.xml' ?>
     </references>
 
     <section anchor="UseCases" title="Use Cases">
@@ -1923,20 +1920,20 @@
       <t>-19</t>
 
       <t><list style="symbols">
-          <t>Added informative references to the OpenID Connect Dynamic Client Registration
-	  and UMA specifications in the introduction.</t>
+          <t>Added informative references to the OpenID Connect Dynamic Client
+          Registration and UMA specifications in the introduction.</t>
 
-          <t>Clarified the <spanx style="verb">jwks</spanx> and
-	  <spanx style="verb">jwks_uri</spanx> descriptions
-	  and included an example situation in which they might be used.</t>
+          <t>Clarified the <spanx style="verb">jwks</spanx> and <spanx
+          style="verb">jwks_uri</spanx> descriptions and included an example
+          situation in which they might be used.</t>
 
           <t>Removed <spanx style="verb">application_type</spanx>.</t>
 
-          <t>Added redirection URI usage restrictions to the Security Considerations
-          section, based on the client type.</t>
+          <t>Added redirection URI usage restrictions to the Security
+          Considerations section, based on the client type.</t>
 
-          <t>Expanded the <spanx style="verb">tos_uri</spanx> and
-	  <spanx style="verb">policy_uri</spanx> descriptions.</t>
+          <t>Expanded the <spanx style="verb">tos_uri</spanx> and <spanx
+          style="verb">policy_uri</spanx> descriptions.</t>
         </list></t>
 
       <t>-18 <list style="symbols">
