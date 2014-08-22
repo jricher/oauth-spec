@@ -61,7 +61,7 @@
       </address>
     </author>
 
-    <date day="12" month="August" year="2014"/>
+    <date day="22" month="August" year="2014"/>
 
     <area>Security</area>
 
@@ -757,6 +757,9 @@
 
       <t>-05<list style="symbols">
           <t>Removed Phil Hunt from authors list, per request.</t>
+
+          <t>Applied various minor editorial changes from working group
+          comments.</t>
         </list></t>
 
       <t>-04</t>
