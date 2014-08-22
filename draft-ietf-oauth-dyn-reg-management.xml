@@ -71,7 +71,7 @@
       <t>This specification defines methods for management of dynamic OAuth
       2.0 client registrations for use cases in which the properties of a
       registered client may need to be changed during the lifetime of the
-      client. Only some authorization servers supporting dynamic client
+      client. Not all authorization servers supporting dynamic client
       registration will support these management methods.</t>
     </abstract>
   </front>
@@ -273,7 +273,7 @@
           <t>The Authorization Server MAY rotate the client's registration
           access token and/or client credentials (such as a <spanx
           style="verb">client_secret</spanx>) throughout the lifetime of the
-          client. The client can discovery that these values have changed by
+          client. The client can discover that these values have changed by
           reading the client information response returned from either a read
           or update request to the client configuration endpoint. The client's
           current registration access token and client credentials (if
@@ -407,7 +407,9 @@
         <t>Valid values of client metadata fields in this request MUST
         replace, not augment, the values previously associated with this
         client. Omitted fields MUST be treated as null or empty values by the
-        server.</t>
+        server, indicating the client's request to delete them from the
+        client's registration. The authorization server MAY ignore any null or
+        empty value in the request just as any other value.</t>
 
         <t>The client MUST include its <spanx style="verb">client_id</spanx>
         field in the request, and it MUST be the same as its currently-issued
@@ -514,7 +516,7 @@
         currently-active tokens associated with this client.</t>
 
         <t>If a client has been successfully deprovisioned, the authorization
-        server responds with an HTTP 204 No Content message.</t>
+        server MUST responsd with an HTTP 204 No Content message.</t>
 
         <t>If the server does not support the delete method, the server MUST
         respond with an HTTP 405 Not Supported.</t>
@@ -634,19 +636,19 @@
 
     <section anchor="Security" title="Security Considerations">
       <t>While the client secret can expire, the registration access token
-      should not expire while a client is still actively registered. If this
+      SHOULD NOT expire while a client is still actively registered. If this
       token were to expire, a developer or client could be left in a situation
       where they have no means of retrieving or updating the client's
       registration information. Were that the case, a new registration would
       be required, thereby generating a new client identifier. However, to
       limit the exposure surface of the registration access token, the
       registration access token MAY be rotated when the developer or client
-      does an update operation on the client's client configuration endpoint.
-      As the registration access tokens are relatively long-term credentials,
-      and since the registration access token is a Bearer token and acts as
-      the sole authentication for use at the client configuration endpoint, it
-      MUST be protected by the developer or client as described in <xref
-      target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
+      does a read or update operation on the client's client configuration
+      endpoint. As the registration access tokens are relatively long-term
+      credentials, and since the registration access token is a Bearer token
+      and acts as the sole authentication for use at the client configuration
+      endpoint, it MUST be protected by the developer or client as described
+      in <xref target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
 
       <t>Since the client configuration endpoint is an OAuth 2.0 protected
       resource, it SHOULD have some rate limiting on failures to prevent the

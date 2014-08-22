@@ -77,10 +77,10 @@
     <abstract>
       <t>This specification defines mechanisms for dynamically registering
       OAuth 2.0 clients with authorization servers. Registration requests send
-      a set of desired client metadata values to the authorization server and
-      the resulting registration responses return a client identifier to use
-      at the authorization server and the client metadata values registered
-      for the client. The client can then use this registration information to
+      a set of desired client metadata values to the authorization server. The
+      resulting registration responses return a client identifier to use at
+      the authorization server and the client metadata values registered for
+      the client. The client can then use this registration information to
       communicate with the authorization server using the OAuth 2.0 protocol.
       This specification also defines a set of common client metadata fields
       and values for clients to use during registration.</t>
@@ -167,7 +167,7 @@
             parties that can register a client.</t>
 
             <t hangText="Deployment Organization"><vspace/> An administrative
-            security domain under which, a software API is deployed and
+            security domain under which a software API is deployed and
             protected by an OAuth 2.0 framework. In simple cloud deployments,
             the software API publisher and the deployment organization may be
             the same. In other scenarios, a software publisher may be working
@@ -335,14 +335,14 @@
               The SAML 2 Bearer Grant defined in <xref
               target="OAuth.SAML2">OAuth SAML 2 Bearer Token
               Profiles</xref>.</t>
-            </list> Authorization Servers MAY allow for other values as
-          defined in grant type extensions to OAuth 2.0. The extension process
-          is described in OAuth 2.0 Section 2.5. If the token endpoint is used
-          in the grant type, the value of this parameter MUST be the same as
-          the value of the <spanx style="verb">grant_type</spanx> parameter
-          passed to the token endpoint defined in the extension. If omitted,
-          the default is that the client will use only the <spanx
-          style="verb">authorization_code</spanx> Grant Type.</t>
+            </list>If the token endpoint is used in the grant type, the value
+          of this parameter MUST be the same as the value of the <spanx
+          style="verb">grant_type</spanx> parameter passed to the token
+          endpoint defined in the grant type definition. Authorization Servers
+          MAY allow for other values as defined in the grant type extension
+          process described in OAuth 2.0 Section 2.5. If omitted, the default
+          behavior is that the client will use only the <spanx style="verb">authorization_code</spanx>
+          Grant Type.</t>
 
           <t hangText="response_types"><vspace/>Array of the OAuth 2.0
           response types that the client may use. These response types are
@@ -352,14 +352,14 @@
 
               <t><spanx style="verb">token</spanx>: The Implicit response
               described in OAuth 2.0 Section 4.2.</t>
-            </list>Authorization servers MAY allow for other values as defined
-          in response type extensions to OAuth 2.0. The extension process is
-          described in OAuth 2.0 Section 2.5. If the authorization endpoint is
-          used by the grant type, the value of this parameter MUST be the same
-          as the value of the <spanx style="verb">response_type</spanx>
-          parameter passed to the authorization endpoint defined in the
-          extension. If omitted, the default is that the client will use only
-          the <spanx style="verb">code</spanx> response type.</t>
+            </list>If the authorization endpoint is used by the grant type,
+          the value of this parameter MUST be the same as the value of the
+          <spanx style="verb">response_type</spanx> parameter passed to the
+          authorization endpoint defined in the grant type definition.
+          Authorization servers MAY allow for other values as defined in the
+          grant type extension process is described in OAuth 2.0 Section 2.5.
+          If omitted, the default is that the client will use only the <spanx
+          style="verb">code</spanx> response type.</t>
 
           <t hangText="client_name"><vspace/>Human-readable name of the client
           to be presented to the user during authorization. If omitted, the
@@ -422,7 +422,8 @@
           target="OAuth.JWT"/>. Use of this parameter is preferred over the
           <spanx style="verb">jwks</spanx> parameter, as it allows for easier
           key rotation. The <spanx style="verb">jwks_uri</spanx> and <spanx
-          style="verb">jwks</spanx> parameters MUST NOT be used together.</t>
+          style="verb">jwks</spanx> parameters MUST NOT both be present in the
+          same request or response.</t>
 
           <t hangText="jwks"><vspace/>Client's JSON Web Key Set <xref
           target="JWK"/> document value, which contains the client's public
@@ -432,7 +433,8 @@
           clients that cannot use the <spanx style="verb">jwks_uri</spanx>
           parameter, such as native clients that cannot host public URLs. The
           <spanx style="verb">jwks_uri</spanx> and <spanx style="verb">jwks</spanx>
-          parameters MUST NOT be used together.</t>
+          parameters MUST NOT both be present in the same request or
+          response.</t>
 
           <t hangText="software_id"><vspace/>Identifier for the software that
           comprises a client. Unlike <spanx style="verb">client_id</spanx>,
@@ -580,8 +582,8 @@
         Therefore, implementations will need to use alternative access forms
         for these claims. For instance, in JavaScript, if one parses the JSON
         as follows, <spanx style="verb">var j = JSON.parse(json);</spanx>,
-        then the member <spanx style="verb">client_name#en-us</spanx> can be
-        accessed using the JavaScript syntax <spanx style="verb">j["client_name#en-us"]</spanx>.</t>
+        then as a workaround the member <spanx style="verb">client_name#en-us</spanx>
+        can be accessed using the JavaScript syntax <spanx style="verb">j["client_name#en-us"]</spanx>.</t>
       </section>
 
       <section anchor="SoftwareStatement" title="Software Statement">
@@ -661,13 +663,6 @@
         provision default values for any items omitted in the client
         metadata.</t>
 
-        <t>To register, the client or developer sends an HTTP POST to the
-        client registration endpoint with a content type of <spanx
-        style="verb">application/json</spanx>. The HTTP Entity Payload is a
-        <xref target="RFC7159">JSON</xref> document consisting of a JSON
-        object and all requested client metadata values as top-level members
-        of that JSON object.</t>
-
         <t>Client metadata values may also be provided in a software
         statement, as described in <xref target="SoftwareStatement"/>.
         Software statements are included in the requesting JSON object using
@@ -676,6 +671,13 @@
             containing client metadata values about the client software as
             claims.</t>
           </list></t>
+
+        <t>To register, the client or developer sends an HTTP POST to the
+        client registration endpoint with a content type of <spanx
+        style="verb">application/json</spanx>. The HTTP Entity Payload is a
+        <xref target="RFC7159">JSON</xref> document consisting of a JSON
+        object and all requested client metadata values as top-level members
+        of that JSON object.</t>
 
         <t>For example, if the server supports open registration (with no
         initial access token), the client could send the following
@@ -798,13 +800,15 @@
             identifier. It SHOULD NOT be currently valid for any other
             registered client, though an authorization server MAY issue the
             same client identifier to multiple instances of a registered
-            client, at its discretion.</t>
+            client at its discretion.</t>
 
             <t hangText="client_secret"><vspace/> OPTIONAL. OAuth 2.0 client
             secret. If issued, this MUST be unique for each <spanx
-            style="verb">client_id</spanx>. This value is used by confidential
-            clients to authenticate to the token endpoint as described in
-            <xref target="RFC6749">OAuth 2.0</xref> Section 2.3.1.</t>
+            style="verb">client_id</spanx> and SHOULD be unique for multiple
+            instances of a client using the same <spanx style="verb">client_id</spanx>.
+            This value is used by confidential clients to authenticate to the
+            token endpoint as described in <xref target="RFC6749">OAuth
+            2.0</xref> Section 2.3.1.</t>
 
             <t hangText="client_id_issued_at"><vspace/> OPTIONAL. Time at
             which the client identifier was issued. The time is represented as
@@ -1440,7 +1444,7 @@
       <t>Since a client identifier is a public value that can be used to
       impersonate a client at the authorization endpoint, an authorization
       server that decides to issue the same client identifier to multiple
-      instances of a registered client MUST be very particular about the
+      instances of a registered client needs to be very particular about the
       circumstances under which this occurs. For instance, the authorization
       server can limit a given client identifier to clients using the same
       redirect-based flow and the same redirection URIs. An authorization
