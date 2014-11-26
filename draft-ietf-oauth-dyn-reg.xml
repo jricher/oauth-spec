@@ -698,15 +698,6 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
         provision default values for any items omitted in the client
         metadata.</t>
 
-        <t>Client metadata values may also be provided in a software
-        statement, as described in <xref target="SoftwareStatement"/>.
-        Software statements are included in the requesting JSON object using
-        this member: <list style="hanging">
-            <t hangText="software_statement"><vspace/> A software statement
-            containing client metadata values about the client software as
-            claims.</t>
-          </list></t>
-
         <t>To register, the client or developer sends an HTTP POST to the
         client registration endpoint with a content type of <spanx
         style="verb">application/json</spanx>. The HTTP Entity Payload is a
@@ -779,14 +770,31 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
 ]]></artwork>
         </figure>
 
-        <figure>
-          <preamble>In the following example, some registration parameters are
-          conveyed as claims in a software statement, while some values
-          specific to the client instance are conveyed as regular parameters
-          (with line wraps within values for display purposes
-          only):</preamble>
+        <section anchor="ClientRegistrationSoftwareStatement"
+                 title="Client Registration Request Using a Software Statement">
+          <t>In addition to JSON elements, client metadata values MAY also be
+          provided in a software statement, as described in <xref
+          target="SoftwareStatement"/>. The authorization server MAY ignore
+          the software statement if it does not support this feature. If the
+          server supports software statements, client metadata values conveyed
+          in the software statement MUST take precedence over those conveyed
+          using plain JSON elements.</t>
 
-          <artwork><![CDATA[
+          <t>Software statements are included in the requesting JSON object
+          using this member: <list style="hanging">
+              <t hangText="software_statement"><vspace/> OPTIONAL A software
+              statement containing client metadata values about the client
+              software as claims.</t>
+            </list></t>
+
+          <figure>
+            <preamble>In the following example, some registration parameters
+            are conveyed as claims in a software statement, while some values
+            specific to the client instance are conveyed as regular parameters
+            (with line wraps within values for display purposes
+            only):</preamble>
+
+            <artwork><![CDATA[
   POST /register HTTP/1.1
   Content-Type: application/json
   Accept: application/json
@@ -804,17 +812,18 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
     "example_extension_parameter":"example_value"
   }
 ]]></artwork>
-        </figure>
+          </figure>
+        </section>
       </section>
 
       <section anchor="RegistrationResponse"
                title="Client Registration Response">
-        <t>Upon successful registration, the authorization server returns a
-        client identifier for the client. The server responds with an HTTP 201
-        Created code and a body of type <spanx style="verb">application/json</spanx>
+        <t>Upon a successful registration request, the authorization server
+        returns a client identifier for the client. The server responds with
+        an HTTP 201 Created code and a body of type <spanx style="verb">application/json</spanx>
         with content as described in <xref target="ClientInfoResponse"/>.</t>
 
-        <t>Upon an unsuccessful registration, the authorization server
+        <t>Upon an unsuccessful registration request, the authorization server
         responds with an error, as described in <xref
         target="ClientRegistrationError"/>.</t>
       </section>
@@ -848,31 +857,31 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
             <t hangText="client_id_issued_at"><vspace/> OPTIONAL. Time at
             which the client identifier was issued. The time is represented as
             the number of seconds from 1970-01-01T0:0:0Z as measured in UTC
-            until the date/time.</t>
+            until the date/time of issuance.</t>
 
             <t hangText="client_secret_expires_at"><vspace/> REQUIRED if
             <spanx style="verb">client_secret</spanx> is issued. Time at which
             the client secret will expire or 0 if it will not expire. The time
             is represented as the number of seconds from 1970-01-01T0:0:0Z as
-            measured in UTC until the date/time.</t>
+            measured in UTC until the date/time of expiration.</t>
           </list></t>
 
         <t>Additionally, the authorization server MUST return all registered
         metadata about this client, including any fields provisioned by the
         authorization server itself. The authorization server MAY reject or
         replace any of the client's requested metadata values submitted during
-        the registration or update requests and substitute them with suitable
-        values.</t>
+        the registration and substitute them with suitable values.</t>
 
         <t>The response is an <spanx style="verb">application/json</spanx>
         document with all parameters as top-level members of a <xref
         target="RFC7159">JSON object</xref>.</t>
 
         <t>If a software statement was used as part of the registration, its
-        value MUST be returned in the response along with other metadata.
-        Client metadata elements used from the software statement MUST also be
-        returned directly as top-level client metadata values in the
-        registration response (possibly with different values, since the
+        value MUST be returned unmodified in the response along with other
+        metadata using the <spanx style="verb">software_statement</spanx>
+        member name. Client metadata elements used from the software statement
+        MUST also be returned directly as top-level client metadata values in
+        the registration response (possibly with different values, since the
         values requested and the values used may differ).</t>
 
         <figure>
@@ -1962,6 +1971,13 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
           <t>Applied minor editorial fixes.</t>
 
           <t>Added software statement examples.</t>
+
+          <t>Moved software statement request details to sub-section.</t>
+
+          <t>Clarified that a server MAY ignore the software statement (as it
+          MAY ignore other metadata values).</t>
+
+          <t/>
         </list></t>
 
       <t>-20</t>
