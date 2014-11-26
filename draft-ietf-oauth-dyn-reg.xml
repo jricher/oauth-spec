@@ -665,11 +665,12 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       using the <spanx style="verb">application/json</spanx> format. The
       client registration endpoint MUST be protected by a transport-layer
       security mechanism, and the server MUST support TLS 1.2 <xref
-      target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref target="RFC2246"/>
-      and MAY support additional transport-layer mechanisms meeting its
-      security requirements. When using TLS, the client MUST perform a TLS/SSL
-      server certificate check, per <xref target="RFC6125">RFC
-      6125</xref>.</t>
+      target="RFC5246">RFC 5246</xref> and MAY support additional
+      transport-layer mechanisms meeting its security requirements. When using
+      TLS, the client MUST perform a TLS/SSL server certificate check, per
+      <xref target="RFC6125">RFC 6125</xref>. Implementation security
+      considerations can be found in Recommendations for Secure Use of TLS and
+      DTLS.</t>
 
       <t>The client registration endpoint MAY be an OAuth 2.0 protected
       resource and accept an initial access token in the form of an <xref
@@ -1462,9 +1463,10 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       cryptographically protected and represents claims made by the issuer of
       the statement, while the JSON object represents the self-asserted claims
       made by the client or developer directly. If the software statement is
-      valid and trusted, the values of client metadata within the software
-      statement MUST take precedence over those metadata values presented in
-      the plain JSON object, which could have been modified en route.</t>
+      valid and signed by an acceptable authority (such as the software API
+      publisher), the values of client metadata within the software statement
+      MUST take precedence over those metadata values presented in the plain
+      JSON object, which could have been modified en route.</t>
 
       <t>The software statement is an item that is self-asserted by the
       client, even though its contents have been digitally signed or MACed by
@@ -1820,6 +1822,65 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
                 type="HTML"/>
       </reference>
 
+      <reference anchor="TLS.BCP">
+        <front>
+          <title>Recommendations for Secure Use of TLS and DTLS</title>
+
+          <author fullname="Yaron Sheffer" initials="Y." surname="Sheffer">
+            <organization>Porticor</organization>
+
+            <address>
+              <postal>
+                <street>29 HaHarash St.</street>
+
+                <city>Hod HaSharon </city>
+
+                <region/>
+
+                <code>4501303</code>
+
+                <country>Israel</country>
+              </postal>
+
+              <email>yaronf.ietf@gmail.com</email>
+            </address>
+          </author>
+
+          <author fullname="Ralph Holz" initials="R." surname="Holz">
+            <organization>Technische Universitaet Muenchen</organization>
+
+            <address>
+              <postal>
+                <street>Boltzmannstr. 3 </street>
+
+                <city>Garching</city>
+
+                <region/>
+
+                <code>85748</code>
+
+                <country>Germany</country>
+              </postal>
+
+              <email>ralph.ietf@gmail.com</email>
+            </address>
+          </author>
+
+          <author fullname="Peter Saint-Andre" initials="P."
+                  surname="Saint-Andre">
+            <organization>&amp;yet</organization>
+
+            <address>
+              <email>peter@andyet.com</email>
+
+              <uri>https://andyet.com/</uri>
+            </address>
+          </author>
+
+          <date day="11" month="November" year="2014"/>
+        </front>
+      </reference>
+
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-hardjono-oauth-umacore-10.xml' ?>
     </references>
 
@@ -1977,7 +2038,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
           <t>Clarified that a server MAY ignore the software statement (as it
           MAY ignore other metadata values).</t>
 
-          <t/>
+          <t>Removed TLS 1.0.</t>
         </list></t>
 
       <t>-20</t>
