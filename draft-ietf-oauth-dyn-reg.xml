@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-20" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-21" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -68,7 +68,7 @@
       </address>
     </author>
 
-    <date day="26" month="August" year="2014"/>
+    <date day="26" month="November" year="2014"/>
 
     <area>Security</area>
 
@@ -261,11 +261,11 @@
     </section>
 
     <section anchor="ClientMetadata" title="Client Metadata">
-      <t>Clients have a set of metadata values associated with their client
-      identifier at an authorization server, such as the list of valid
-      redirection URIs or a display name.</t>
+      <t>Registered clients have a set of metadata values associated with
+      their client identifier at an authorization server, such as the list of
+      valid redirection URIs or a display name.</t>
 
-      <t>The client metadata values are used in two ways:</t>
+      <t>These client metadata values are used in two ways:</t>
 
       <t><list style="symbols">
           <t>as input values to registration requests, and</t>
@@ -345,7 +345,7 @@
           Grant Type.</t>
 
           <t hangText="response_types"><vspace/>Array of the OAuth 2.0
-          response types that the client may use. These response types are
+          response types that the client can use. These response types are
           defined as follows: <list style="symbols">
               <t><spanx style="verb">code</spanx>: The Authorization Code
               response described in OAuth 2.0 Section 4.1.</t>
@@ -599,6 +599,41 @@
         digitally signed using the <spanx style="verb">RS256</spanx> signature
         algorithm, although particular applications MAY specify the use of
         different algorithms.</t>
+
+        <t>For example, the software statement containing the following
+        claims:</t>
+
+        <figure>
+          <artwork><![CDATA[{
+ "client_name": "Example Statement-based Client",
+ "redirect_uris": [ "https://client.example.net/return" ],
+ "client_uri": "https://client.example.net/"
+}]]></artwork>
+        </figure>
+
+        <t/>
+
+        <t>would be represented as a JWT such as the following non-normative
+        example which has been asymetrically signed using RS256:</t>
+
+        <figure>
+          <preamble>Line breaks are for display purposes only</preamble>
+
+          <artwork><![CDATA[eyJhbGciOiJSUzI1NiJ9.
+eyJyZWRpcmVjdF91cmlzIjpbImh0dHBzOlwvXC9jbGllbnQuZXhhbXBsZS5u
+ZXRcL3JldHVybiJdLCJjbGllbnRfdXJpIjoiaHR0cHM6XC9cL2NsaWVudC5l
+eGFtcGxlLm5ldFwvIiwiY2xpZW50X25hbWUiOiJFeGFtcGxlIFN0YXRlbWVu
+dC1iYXNlZCBDbGllbnQifQ.
+GHfL4QNIrQwL18BSRdE595T9jbzqa06R9BT8w409x9oIcKaZo_mt15riEXHa
+zdISUvDIZhtiyNrSHQ8K4TvqWxH6uJgcmoodZdPwmWRIEYbQDLqPNxREtYn0
+5X3AR7ia4FRjQ2ojZjk5fJqJdQ-JcfxyhK-P8BAWBd6I2LLA77IG32xtbhxY
+fHX7VhuU5ProJO8uvu3Ayv4XRhLZJY4yKfmyjiiKiPNe-Ia4SMy_d_QSWxsk
+U5XIQl5Sa2YRPMbDRXttm2TfnZM1xx70DoYi8g6czz-CPGRi4SW_S2RKHIJf
+IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
+]]></artwork>
+        </figure>
+
+        <t/>
 
         <t>The means by which a client or developer obtains a software
         statement are outside the scope of this specification. Some common
@@ -1920,6 +1955,14 @@
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-21</t>
+
+      <t><list style="symbols">
+          <t>Applied minor editorial fixes.</t>
+
+          <t>Added software statement examples.</t>
+        </list></t>
 
       <t>-20</t>
 
