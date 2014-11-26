@@ -669,8 +669,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       transport-layer mechanisms meeting its security requirements. When using
       TLS, the client MUST perform a TLS/SSL server certificate check, per
       <xref target="RFC6125">RFC 6125</xref>. Implementation security
-      considerations can be found in Recommendations for Secure Use of TLS and
-      DTLS.</t>
+      considerations can be found in <xref target="TLS.BCP">Recommendations
+      for Secure Use of TLS and DTLS</xref>.</t>
 
       <t>The client registration endpoint MAY be an OAuth 2.0 protected
       resource and accept an initial access token in the form of an <xref
@@ -1499,6 +1499,24 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       or else the client secret could be leaked, allowing malicious imposters
       to impersonate a confidential client.</t>
     </section>
+
+    <section title="Privacy Considerations">
+      <t>As the protocol described in this specification deals almost
+      exclusively with information about software and not about people, there
+      are very few privacy concerns for its use. The notable exception is the
+      <spanx style="verb">contacts</spanx> field as defined in <xref
+      target="ClientMetadata">Client Metadata</xref>., which contains contact
+      information for the developers or other parties responsible for the
+      client software. These values are intended to be displayed to end users
+      and will be available to the administrators of the authorization server.
+      As such, the developer may wish to provide an email address or other
+      contact information expressly dedicated to the purpose of supporting the
+      client instead of using their personal or professional addresses.
+      Alternatively, the developer may wish to provide a collective email
+      address for the client to allow for continuing contact and support of
+      the client software after the developer moves on and someone else takes
+      over that responsibility. </t>
+    </section>
   </middle>
 
   <back>
@@ -2039,6 +2057,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
           MAY ignore other metadata values).</t>
 
           <t>Removed TLS 1.0.</t>
+
+          <t>Added privacy considerations around "contacts" field.</t>
         </list></t>
 
       <t>-20</t>
