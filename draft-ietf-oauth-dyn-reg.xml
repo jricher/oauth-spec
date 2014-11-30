@@ -1364,11 +1364,12 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       response), the authorization server MUST require the use of a
       transport-layer security mechanism when sending requests to the
       registration endpoint. The server MUST support TLS 1.2 <xref
-      target="RFC5246">RFC 5246</xref> and/or TLS 1.0 <xref target="RFC2246"/>
-      and MAY support additional transport-layer mechanisms meeting its
-      security requirements. When using TLS, the client MUST perform a TLS/SSL
-      server certificate check, per <xref target="RFC6125">RFC
-      6125</xref>.</t>
+      target="RFC5246">RFC 5246</xref> and MAY support additional
+      transport-layer mechanisms meeting its security requirements. When using
+      TLS, the client MUST perform a TLS/SSL server certificate check, per
+      <xref target="RFC6125">RFC 6125</xref>. Implementation security
+      considerations can be found in <xref target="TLS.BCP">Recommendations
+      for Secure Use of TLS and DTLS</xref>.</t>
 
       <t>For clients that use redirect-based grant types such as <spanx
       style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>,
