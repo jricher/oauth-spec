@@ -1516,7 +1516,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       Alternatively, the developer may wish to provide a collective email
       address for the client to allow for continuing contact and support of
       the client software after the developer moves on and someone else takes
-      over that responsibility. </t>
+      over that responsibility.</t>
     </section>
   </middle>
 
@@ -1756,6 +1756,57 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
     </references>
 
     <references title="Informative References">
+      <reference anchor="OAuth.Registration.Management">
+        <front>
+          <title abbrev="OAuth 2.0 Dynamic Registration Management">OAuth 2.0
+          Dynamic Client Registration Management Protocol</title>
+
+          <author fullname="Justin Richer" initials="J" surname="Richer">
+            <organization>The MITRE Corporation</organization>
+
+            <address>
+              <email>jricher@mitre.org</email>
+            </address>
+          </author>
+
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <organization abbrev="Microsoft">Microsoft</organization>
+
+            <address>
+              <email>mbj@microsoft.com</email>
+
+              <uri>http://self-issued.info/</uri>
+            </address>
+          </author>
+
+          <author fullname="John Bradley" initials="J." surname="Bradley">
+            <organization abbrev="Ping Identity">Ping Identity</organization>
+
+            <address>
+              <email>ve7jtb@ve7jtb.com</email>
+            </address>
+          </author>
+
+          <author fullname="Maciej Machulak" initials="M" surname="Machulak">
+            <organization>Newcastle University</organization>
+
+            <address>
+              <email>m.p.machulak@ncl.ac.uk</email>
+
+              <uri>http://ncl.ac.uk/</uri>
+            </address>
+          </author>
+
+          <date day="5" month="August" year="2014"/>
+        </front>
+
+        <seriesInfo name="Internet-Draft"
+                    value="draft-ietf-oauth-dyn-reg-management"/>
+
+        <format target="http://tools.ietf.org/html/draft-ietf-oauth-dyn-reg-management"
+                type="HTML"/>
+      </reference>
+
       <reference anchor="OpenID.Registration">
         <front>
           <title>OpenID Connect Dynamic Client Registration 1.0</title>
@@ -1791,7 +1842,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
               <postal>
                 <street>29 HaHarash St.</street>
 
-                <city>Hod HaSharon </city>
+                <city>Hod HaSharon</city>
 
                 <region/>
 
@@ -1809,7 +1860,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
 
             <address>
               <postal>
-                <street>Boltzmannstr. 3 </street>
+                <street>Boltzmannstr. 3</street>
 
                 <city>Garching</city>
 
