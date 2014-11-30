@@ -110,7 +110,7 @@
       authorization servers or for a client developer to programmatically
       register the client with authorization servers. Multiple applications
       using OAuth 2.0 have previously developed mechanisms for accomplishing
-      such registrations. This specficiation generalizes the registration
+      such registrations. This specification generalizes the registration
       mechanisms defined by the <xref target="OpenID.Registration">OpenID
       Connect Dynamic Client Registration 1.0</xref> specification and used by
       the <xref target="I-D.hardjono-oauth-umacore">User Managed Access (UMA)
@@ -338,7 +338,7 @@
             </list>If the token endpoint is used in the grant type, the value
           of this parameter MUST be the same as the value of the <spanx
           style="verb">grant_type</spanx> parameter passed to the token
-          endpoint defined in the grant type definition. Authorization Servers
+          endpoint defined in the grant type definition. Authorization servers
           MAY allow for other values as defined in the grant type extension
           process described in OAuth 2.0 Section 2.5. If omitted, the default
           behavior is that the client will use only the <spanx style="verb">authorization_code</spanx>
@@ -347,10 +347,10 @@
           <t hangText="response_types"><vspace/>Array of the OAuth 2.0
           response types that the client can use. These response types are
           defined as follows: <list style="symbols">
-              <t><spanx style="verb">code</spanx>: The Authorization Code
+              <t><spanx style="verb">code</spanx>: The authorization code
               response described in OAuth 2.0 Section 4.1.</t>
 
-              <t><spanx style="verb">token</spanx>: The Implicit response
+              <t><spanx style="verb">token</spanx>: The implicit response
               described in OAuth 2.0 Section 4.2.</t>
             </list>If the authorization endpoint is used by the grant type,
           the value of this parameter MUST be the same as the value of the
@@ -614,7 +614,7 @@
         <t/>
 
         <t>would be represented as a JWT such as the following non-normative
-        example which has been asymetrically signed using RS256:</t>
+        example which has been asymmetrically signed using RS256:</t>
 
         <figure>
           <preamble>Line breaks are for display purposes only</preamble>
@@ -1523,8 +1523,6 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
     <references title="Normative References">
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2246.xml'?>
-
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5226.xml'?>
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
@@ -1757,65 +1755,6 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
     </references>
 
     <references title="Informative References">
-      <reference anchor="OAuth.Registration.Management">
-        <front>
-          <title abbrev="OAuth 2.0 Dynamic Registration Management">OAuth 2.0
-          Dynamic Client Registration Management Protocol</title>
-
-          <author fullname="Justin Richer" initials="J" surname="Richer">
-            <organization>The MITRE Corporation</organization>
-
-            <address>
-              <email>jricher@mitre.org</email>
-            </address>
-          </author>
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization abbrev="Microsoft">Microsoft</organization>
-
-            <address>
-              <email>mbj@microsoft.com</email>
-
-              <uri>http://self-issued.info/</uri>
-            </address>
-          </author>
-
-          <author fullname="John Bradley" initials="J." surname="Bradley">
-            <organization abbrev="Ping Identity">Ping Identity</organization>
-
-            <address>
-              <email>ve7jtb@ve7jtb.com</email>
-            </address>
-          </author>
-
-          <author fullname="Maciej Machulak" initials="M" surname="Machulak">
-            <organization>Newcastle University</organization>
-
-            <address>
-              <email>m.p.machulak@ncl.ac.uk</email>
-
-              <uri>http://ncl.ac.uk/</uri>
-            </address>
-          </author>
-
-          <author fullname="Phil Hunt" initials="P" surname="Hunt">
-            <organization>Oracle Corporation</organization>
-
-            <address>
-              <email>phil.hunt@yahoo.com</email>
-            </address>
-          </author>
-
-          <date day="5" month="August" year="2014"/>
-        </front>
-
-        <seriesInfo name="Internet-Draft"
-                    value="draft-ietf-oauth-dyn-reg-management"/>
-
-        <format target="http://tools.ietf.org/html/draft-ietf-oauth-dyn-reg-management"
-                type="HTML"/>
-      </reference>
-
       <reference anchor="OpenID.Registration">
         <front>
           <title>OpenID Connect Dynamic Client Registration 1.0</title>
