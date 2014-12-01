@@ -64,7 +64,7 @@
       <xref target="JWT">JWT</xref> or SAML [[ Editor's Note: Which SAML
       document should we reference here? ]] and proprietary inter-service
       communication mechanisms (such as shared databases and protected
-      enterprise service busses) that convey token information. </t>
+      enterprise service buses) that convey token information. </t>
 
       <t>This specification defines an interoperable web API that allows
       authorized protected resources to query the authorization server to
@@ -129,7 +129,7 @@
             the token submitted for introspection. The protected resource re
             MAY pass this parameter in order to help the authorization server
             to optimize the token lookup. If the server is unable to locate
-            the token using the given hint, it MUST extend its search accross
+            the token using the given hint, it MUST extend its search across
             all of its supported token types. An authorization server MAY
             ignore this parameter, particularly if it is able to detect the
             token type automatically. Values for this field are defined in
@@ -443,13 +443,13 @@
 
     <section title="Non-normative Example">
       <t hangText="instance_name">In this non-normative example, a protected
-      resource recieves a request from a client carrying an OAuth 2.0 bearer
+      resource receives a request from a client carrying an OAuth 2.0 bearer
       token as defined in <xref target="RFC6750">OAuth 2.0 Bearer Token
       Usage</xref>. In order to know how and whether to serve the request
       given this token, the protected resource then makes the following
       request to the introspection endpoint of the authorization server. The
       protected resource authenticates with its own credentials, here re-using
-      the format of client identifer and client secret conveyed as HTTP Basic
+      the format of client identifier and client secret conveyed as HTTP Basic
       authentication as per <xref target="RFC6749">OAuth 2.0</xref> Section
       2.3.1.</t>
 
