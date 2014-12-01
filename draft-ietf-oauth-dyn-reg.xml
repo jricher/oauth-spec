@@ -598,15 +598,18 @@
         software statement. It is RECOMMENDED that software statements be
         digitally signed using the <spanx style="verb">RS256</spanx> signature
         algorithm, although particular applications MAY specify the use of
-        different algorithms.</t>
+        different algorithms. It is RECOMMENDED that software statements
+        contain the <spanx style="verb">software_id</spanx> claim to allow
+        authorization servers to correlate different instances of software
+        using the same software statement.</t>
 
         <t>For example, the software statement containing the following
         claims:</t>
 
         <figure>
           <artwork><![CDATA[{
+ "software_id": "4NRB1-0XZABZI9E6-5SM3R",
  "client_name": "Example Statement-based Client",
- "redirect_uris": [ "https://client.example.net/return" ],
  "client_uri": "https://client.example.net/"
 }]]></artwork>
         </figure>
@@ -620,10 +623,9 @@
           <preamble>Line breaks are for display purposes only</preamble>
 
           <artwork><![CDATA[eyJhbGciOiJSUzI1NiJ9.
-eyJyZWRpcmVjdF91cmlzIjpbImh0dHBzOlwvXC9jbGllbnQuZXhhbXBsZS5u
-ZXRcL3JldHVybiJdLCJjbGllbnRfdXJpIjoiaHR0cHM6XC9cL2NsaWVudC5l
-eGFtcGxlLm5ldFwvIiwiY2xpZW50X25hbWUiOiJFeGFtcGxlIFN0YXRlbWVu
-dC1iYXNlZCBDbGllbnQifQ.
+eyJzb2Z0d2FyZV9pZCI6IjROUkIxLTBYWkFCWkk5RTYtNVNNM1IiLCJjbGll
+bnRfbmFtZSI6IkV4YW1wbGUgU3RhdGVtZW50LWJhc2VkIENsaWVudCIsImNs
+aWVudF91cmkiOiJodHRwczovL2NsaWVudC5leGFtcGxlLm5ldC8ifQ.
 GHfL4QNIrQwL18BSRdE595T9jbzqa06R9BT8w409x9oIcKaZo_mt15riEXHa
 zdISUvDIZhtiyNrSHQ8K4TvqWxH6uJgcmoodZdPwmWRIEYbQDLqPNxREtYn0
 5X3AR7ia4FRjQ2ojZjk5fJqJdQ-JcfxyhK-P8BAWBd6I2LLA77IG32xtbhxY
@@ -782,15 +784,16 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
           using plain JSON elements.</t>
 
           <t>Software statements are included in the requesting JSON object
-          using this member: <list style="hanging">
-              <t hangText="software_statement"><vspace/> OPTIONAL A software
-              statement containing client metadata values about the client
-              software as claims.</t>
+          using this OPTIONAL member: <list style="hanging">
+              <t hangText="software_statement"><vspace/> A software statement
+              containing client metadata values about the client software as
+              claims.</t>
             </list></t>
 
           <figure>
             <preamble>In the following example, some registration parameters
-            are conveyed as claims in a software statement, while some values
+            are conveyed as claims in a software statement from the example in
+            the <xref target="SoftwareStatement"/> section, while some values
             specific to the client instance are conveyed as regular parameters
             (with line wraps within values for display purposes
             only):</preamble>
@@ -806,9 +809,16 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       "https://client.example.org/callback",
       "https://client.example.org/callback2"
     ],
-    "software_statement":"eyJhbGciOiJFUzI1NiJ9.
-       eyJpc3Mi[...omitted for brevity...].
-       J9l-ZhwP[...omitted for brevity...]",
+    "software_statement":"eyJhbGciOiJSUzI1NiJ9.
+eyJzb2Z0d2FyZV9pZCI6IjROUkIxLTBYWkFCWkk5RTYtNVNNM1IiLCJjbGll
+bnRfbmFtZSI6IkV4YW1wbGUgU3RhdGVtZW50LWJhc2VkIENsaWVudCIsImNs
+aWVudF91cmkiOiJodHRwczovL2NsaWVudC5leGFtcGxlLm5ldC8ifQ.
+GHfL4QNIrQwL18BSRdE595T9jbzqa06R9BT8w409x9oIcKaZo_mt15riEXHa
+zdISUvDIZhtiyNrSHQ8K4TvqWxH6uJgcmoodZdPwmWRIEYbQDLqPNxREtYn0
+5X3AR7ia4FRjQ2ojZjk5fJqJdQ-JcfxyhK-P8BAWBd6I2LLA77IG32xtbhxY
+fHX7VhuU5ProJO8uvu3Ayv4XRhLZJY4yKfmyjiiKiPNe-Ia4SMy_d_QSWxsk
+U5XIQl5Sa2YRPMbDRXttm2TfnZM1xx70DoYi8g6czz-CPGRi4SW_S2RKHIJf
+IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
     "scope":"read write",
     "example_extension_parameter":"example_value"
   }
