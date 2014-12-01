@@ -203,7 +203,7 @@
         using applicable HTTP headers.</t>
       </section>
 
-      <section title="Error Response">
+      <section anchor="ErrorResponse" title="Error Response">
         <t>If the protected resource uses OAuth 2.0 client credentials to
         authenticate to the introspection endpoint and its credentials are
         invalid, the authorization server responds with an HTTP 400 (Bad
@@ -269,8 +269,7 @@
       to decrypt and validate the token in order to access this information.
       In cases where the authorization server stores no information about the
       token and has no means of accessing information about the token, it can
-      not likely offer an introspection service. Also note that for
-      proof-of-posession style tokens, </t>
+      not likely offer an introspection service. </t>
     </section>
 
     <section anchor="Privacy" title="Privacy Considerations">
@@ -516,6 +515,20 @@ Cache-Control: no-store
       <t>Note that in order to avoid disclosing too much of the authorization
       server's state to a third party, the authorization server SHOULD NOT
       include any additional information about an inactive token.</t>
+    </section>
+
+    <section anchor="PoP" title="Use with Proof of Posession Tokens">
+      <t>With bearer tokens such as those defined by OAuth 2.0 Bearer Token
+      Usage, the protected resource will have in its posession the entire
+      secret portion of the token for submission to the introspection service.
+      However, for proof-of-posession style tokens, the protected resource
+      will have only a token identifier used during the request, along with
+      the cryptographic signature on the request. The protected resource would
+      be able to submit the token identifier to the authoriation server's
+      token endpoint in order to obtain the necessary key information needed
+      to validate the signature on the request. The details of this usage are
+      outside the scope of this specification and should be defined in an
+      extension to this specification.</t>
     </section>
   </back>
 </rfc>
