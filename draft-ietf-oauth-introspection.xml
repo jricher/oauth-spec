@@ -49,49 +49,46 @@
 
   <middle>
     <section anchor="introduction" title="Introduction">
-      <t>In OAuth, the contents of tokens are opaque to clients. This means
-      that the client does not need to know anything about the content or
-      structure of the token itself, if there is any. However, there is still
-      a large amount of metadata that may be attached to a token, such as its
-      current validity, approved scopes, and extra information about the
-      authentication context in which the token was issued. These pieces of
-      information are often vital to protected resources making authorization
-      decisions based on the tokens being presented. Since <xref
-      target="RFC6749">OAuth 2.0</xref> defines no direct relationship between
-      the authorization server and the protected resource, only that they must
-      have an agreement on the tokens themselves, there have been many
-      different approaches to bridging this gap. These include using
-      structured token formats such as <xref target="JWT">JWT</xref> or SAML
-      [[ Editor's Note: Which SAML document should we reference here? ]] and
-      proprietary inter-service communication mechanisms (such as shared
-      databases and protected enterprise service busses) that convey token
-      information. </t>
+      <t>In OAuth 2.0, the contents of tokens are opaque to clients. This
+      means that the client does not need to know anything about the content
+      or structure of the token itself, if there is any. However, there is
+      still a large amount of metadata that may be attached to a token, such
+      as its current validity, approved scopes, and information about the
+      context in which the token was issued. These pieces of information are
+      often vital to protected resources making authorization decisions based
+      on the tokens being presented. Since <xref target="RFC6749">OAuth
+      2.0</xref> defines no direct relationship between the authorization
+      server and the protected resource, only that they must have an agreement
+      on the tokens themselves, there have been many different approaches to
+      bridging this gap. These include using structured token formats such as
+      <xref target="JWT">JWT</xref> or SAML [[ Editor's Note: Which SAML
+      document should we reference here? ]] and proprietary inter-service
+      communication mechanisms (such as shared databases and protected
+      enterprise service busses) that convey token information. </t>
 
-      <t>This specification defines an interoperable web resource that allows
+      <t>This specification defines an interoperable web API that allows
       authorized protected resources to query the authorization server to
-      determine the set of metadata for a given token. This metadata includes
-      whether or not the token is currently active (or if it has expired or
-      otherwise been revoked), what rights of access the token carries
-      (usually conveyed through OAuth 2.0 scopes), and the authorization
-      context in which the token was granted (including who authorized the
-      token and which client it was issued to). Token introspection allows a
-      protected resource to query this information regardless of whether or
-      not it is carried in the token itself, allowing this method to be used
-      along with or independently of structured token values. Additionally, a
-      protected resource can use the mechanism described in this specification
-      to introspect the token in a particular authorization decision context
-      and ascertain the relevant metadata about the token in order to make
-      this authorization decision appropriately.</t>
+      determine the set of metadata for a given token that was presented to
+      them by an OAuth 2.0 client. This metadata includes whether or not the
+      token is currently active (or if it has expired or otherwise been
+      revoked), what rights of access the token carries (usually conveyed
+      through OAuth 2.0 scopes), and the authorization context in which the
+      token was granted (including who authorized the token and which client
+      it was issued to). Token introspection allows a protected resource to
+      query this information regardless of whether or not it is carried in the
+      token itself, allowing this method to be used along with or
+      independently of structured token values. Additionally, a protected
+      resource can use the mechanism described in this specification to
+      introspect the token in a particular authorization decision context and
+      ascertain the relevant metadata about the token in order to make this
+      authorization decision appropriately.</t>
     </section>
 
     <section anchor="IntrospectionEndpoint" title="Introspection Endpoint">
       <t hangText="instance_name">The introspection endpoint is an OAuth 2.0
-      endpoint that responds to <xref target="RFC2616">HTTP POST</xref>
-      requests (and optionally HTTP GET requests) from token holders,
-      particularly including Resource Servers and Clients. The endpoint takes
-      a parameter representing the token and returns a <xref
-      target="RFC7159">JSON</xref> document representing the meta information
-      surrounding the token.</t>
+      endpoint that takes a parameter representing an OAuth 2.0 token and
+      returns a <xref target="RFC7159">JSON</xref> document representing the
+      meta information surrounding the token.</t>
 
       <t hangText="instance_name">The introspection endpoint MUST be protected
       by TLS of at least version 1.2 <xref target="RFC5246">RFC 5246</xref>
@@ -103,6 +100,14 @@
       TLS and DTLS</xref>.</t>
 
       <section anchor="IntrospectionRequest" title="Introspection Request">
+        <t hangText="instance_name">The protected resource calls the
+        introspection endpoint using an <xref target="RFC2616">HTTP
+        POST</xref> request (or optionally an HTTP GET request). The protected
+        resource sends a parameter representing the token along with optional
+        parameters representing additional context that is known by the
+        protected resource to aid the authorization server in its
+        response.</t>
+
         <t hangText="instance_name"><list style="hanging">
             <t hangText="token">REQUIRED. The string value of the token. For
             access tokens, this is the <spanx style="verb">access_token</spanx>
@@ -212,78 +217,6 @@
         with an HTTP 400 code as described in section 3 of <xref
         target="RFC7650">OAuth 2.0 Bearer Token Usage</xref>.</t>
       </section>
-
-      <section title="Non-normative Example">
-        <t hangText="instance_name">In this non-normative example, a protected
-        resource recieves a request from a client carrying an OAuth 2.0 bearer
-        token as defined in <xref target="RFC6750">OAuth 2.0 Bearer Token
-        Usage</xref>. In order to know how and whether to serve the request
-        given this token, the protected resource then makes the following
-        request to the introspection endpoint of the authorization server. The
-        protected resource authenticates with its own credentials, here
-        re-using the format of client identifer and client secret conveyed as
-        HTTP Basic authentication as per <xref target="RFC6749">OAuth2</xref>
-        Section 2.3.1.</t>
-
-        <figure>
-          <preamble>Following is a non-normative example request:</preamble>
-
-          <artwork><![CDATA[POST /introspect HTTP/1.1
-Host: authserver.example.com
-Content-type: application/x-www-form-urlencoded
-Accept: application/json
-Authorization: Basic czZCaGRSa3F0Mzo3RmpmcDBaQnIxS3REUmJuZlZkbUl3
-
-token=X3241Affw.4233-99JXJ]]></artwork>
-        </figure>
-
-        <t>The authorization server validates the protected resource's
-        credentials and looks up the information in the token. If the token is
-        currently active and the authenticated protected resource is
-        authorized to know information about this token, the authorization
-        server returns the following JSON document.</t>
-
-        <figure>
-          <preamble>Following is a non-normative example active token response
-          (with line wraps for display purposes only):</preamble>
-
-          <artwork><![CDATA[HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-
-{
- "active": true,
- "client_id":"s6BhdRkqt3",
- "scope": "read write dolphin",
- "sub": "2309fj32kl",
- "user_id": "jdoe",
- "aud": "https://example.org/protected-resource/*",
- "iss": "https://authserver.example.com/"
-}]]></artwork>
-        </figure>
-
-        <t/>
-
-        <t>If the token presented is not currently active (but the
-        authorization presented during the request is otherwise valid), the
-        authorization server returns the following JSON document.</t>
-
-        <figure>
-          <preamble>Following is a non-normative example response to an
-          inactive or invalid token (with line wraps for display purposes
-          only):</preamble>
-
-          <artwork><![CDATA[HTTP/1.1 200 OK
-Content-Type: application/json
-Cache-Control: no-store
-
-{
- "active": false
-}]]></artwork>
-        </figure>
-
-        <t/>
-      </section>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -296,14 +229,14 @@ Cache-Control: no-store
       values, fishing for a valid token. The specifics of this authentication
       credentials are out of scope of this specification, but commonly these
       credentials could take the form of any valid client authentication
-      mechanism used with the token endpoint, a special OAuth 2.0 access
-      token, or other HTTP authorization or authentication mechanism. The
-      authorization server SHOULD issue specific credentials to any protected
-      resources that need to access the introspection endpoint, SHOULD require
-      protected resources to be specially authorized to call the introspection
-      endpoint, and SHOULD NOT allow a single piece of software acting as both
-      a client and a protected resource to re-use the same credentials between
-      the token endpoint and the introspection endpoint. </t>
+      mechanism used with the token endpoint, an OAuth 2.0 access token, or
+      other HTTP authorization or authentication mechanism. The authorization
+      server SHOULD issue credentials to any protected resources that need to
+      access the introspection endpoint, SHOULD require protected resources to
+      be specifically authorized to call the introspection endpoint, and
+      SHOULD NOT allow a single piece of software acting as both a client and
+      a protected resource to re-use the same credentials between the token
+      endpoint and the introspection endpoint. </t>
 
       <t>Since the introspection endpoint takes in OAuth 2.0 tokens as
       parameters, the server MUST support TLS 1.2 <xref target="RFC5246">RFC
@@ -320,17 +253,36 @@ Cache-Control: no-store
       an HTTP POST method only to the introspection endpoint.</t>
 
       <t>An authorization server offering token introspection MUST be able to
-      understand the token values being presented to it during this call. For
-      unstructured tokens, this can take the form of a simple server-side hash
-      check or database query against a data store containing the context
-      information for the token. For structured tokens, this can take the form
-      of the server parsing the token, validating its signature or other
-      protection mechanisms, and returning the information contained in the
-      token back to the protected resource (allowing the protected resource to
-      be unaware of the token's contents, much like the client). Note that for
-      an encrypted token carrying information that is to be returned during
-      introspection, the authorization server MUST be able to decrypt and
-      validate the token in order to access this information.</t>
+      understand the token values being presented to it during this call. The
+      exact means by which this happens is an implementation detail and
+      outside the scope of this specification. For unstructured tokens, this
+      could take the form of a simple server-side database query against a
+      data store containing the context information for the token. For
+      structured tokens, this could take the form of the server parsing the
+      token, validating its signature or other protection mechanisms, and
+      returning the information contained in the token back to the protected
+      resource (allowing the protected resource to be unaware of the token's
+      contents, much like the client). </t>
+
+      <t>Note that for a token carrying encrypted information that is needed
+      during the introspection process, the authorization server MUST be able
+      to decrypt and validate the token in order to access this information.
+      In cases where the authorization server stores no information about the
+      token and has no means of accessing information about the token, it can
+      not likely offer an introspection service.</t>
+    </section>
+
+    <section anchor="Privacy" title="Privacy Considerations">
+      <t>The introspection response may contain privacy-sensitive information
+      such as user identifiers. When this is the case, measures MUST be taken
+      to prevent disclosure of this information to unintended parties. One way
+      to limit disclosure is to require authorization to call the
+      introspection endpoint and to limit calls to only registered and trusted
+      protected resource servers. Another method is to transmit user
+      identifiers as opaque service-specific strings, potentially returning
+      different identifiers to each protected resource. Omitting
+      privacy-sensitive information from an introspection response is the
+      simplest way of minimizing privacy issues.</t>
     </section>
 
     <section title="Acknowledgements">
@@ -343,6 +295,12 @@ Cache-Control: no-store
     <references title="Normative References">
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
 
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
+
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
+
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
@@ -352,7 +310,115 @@ Cache-Control: no-store
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
     </references>
 
+    <references title="Informative References">
+      <reference anchor="JWT">
+        <front>
+          <title>JSON Web Token (JWT)</title>
+
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <organization>Microsoft</organization>
+
+            <address>
+              <email>mbj@microsoft.com</email>
+
+              <uri>http://self-issued.info/</uri>
+            </address>
+          </author>
+
+          <author fullname="John Bradley" initials="J." surname="Bradley">
+            <organization abbrev="Ping Identity">Ping Identity</organization>
+
+            <address>
+              <email>ve7jtb@ve7jtb.com</email>
+
+              <uri>http://www.thread-safe.com/</uri>
+            </address>
+          </author>
+
+          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
+            <organization abbrev="NRI">Nomura Research
+            Institute</organization>
+
+            <address>
+              <email>n-sakimura@nri.co.jp</email>
+
+              <uri>http://nat.sakimura.org/</uri>
+            </address>
+          </author>
+
+          <date day="4" month="July" year="2014"/>
+        </front>
+
+        <seriesInfo name="Internet-Draft"
+                    value="draft-ietf-oauth-json-web-token"/>
+
+        <format target="http://tools.ietf.org/html/draft-ietf-oauth-json-web-token"
+                type="HTML"/>
+      </reference>
+
+      <reference anchor="TLS.BCP">
+        <front>
+          <title>Recommendations for Secure Use of TLS and DTLS</title>
+
+          <author fullname="Yaron Sheffer" initials="Y." surname="Sheffer">
+            <organization>Porticor</organization>
+
+            <address>
+              <postal>
+                <street>29 HaHarash St.</street>
+
+                <city>Hod HaSharon</city>
+
+                <region/>
+
+                <code>4501303</code>
+
+                <country>Israel</country>
+              </postal>
+
+              <email>yaronf.ietf@gmail.com</email>
+            </address>
+          </author>
+
+          <author fullname="Ralph Holz" initials="R." surname="Holz">
+            <organization>Technische Universitaet Muenchen</organization>
+
+            <address>
+              <postal>
+                <street>Boltzmannstr. 3</street>
+
+                <city>Garching</city>
+
+                <region/>
+
+                <code>85748</code>
+
+                <country>Germany</country>
+              </postal>
+
+              <email>ralph.ietf@gmail.com</email>
+            </address>
+          </author>
+
+          <author fullname="Peter Saint-Andre" initials="P."
+                  surname="Saint-Andre">
+            <organization>&amp;yet</organization>
+
+            <address>
+              <email>peter@andyet.com</email>
+
+              <uri>https://andyet.com/</uri>
+            </address>
+          </author>
+
+          <date day="11" month="November" year="2014"/>
+        </front>
+      </reference>
+    </references>
+
     <section title="Document History">
+      <t>[[ To be removed by the RFC Editor. ]]</t>
+
       <t>- 01</t>
 
       <t><list style="symbols">
@@ -369,6 +435,83 @@ Cache-Control: no-store
           <t>Created initial IETF drafted based on
           draft-richer-oauth-introspection-06 with no normative changes.</t>
         </list></t>
+    </section>
+
+    <section title="Non-normative Example">
+      <t hangText="instance_name">In this non-normative example, a protected
+      resource recieves a request from a client carrying an OAuth 2.0 bearer
+      token as defined in <xref target="RFC6750">OAuth 2.0 Bearer Token
+      Usage</xref>. In order to know how and whether to serve the request
+      given this token, the protected resource then makes the following
+      request to the introspection endpoint of the authorization server. The
+      protected resource authenticates with its own credentials, here re-using
+      the format of client identifer and client secret conveyed as HTTP Basic
+      authentication as per <xref target="RFC6749">OAuth 2.0</xref> Section
+      2.3.1.</t>
+
+      <figure>
+        <preamble>Following is a non-normative example request:</preamble>
+
+        <artwork><![CDATA[POST /introspect HTTP/1.1
+Host: authserver.example.com
+Content-type: application/x-www-form-urlencoded
+Accept: application/json
+Authorization: Basic czZCaGRSa3F0Mzo3RmpmcDBaQnIxS3REUmJuZlZkbUl3
+
+token=X3241Affw.4233-99JXJ]]></artwork>
+      </figure>
+
+      <t>The authorization server validates the protected resource's
+      credentials and looks up the information in the token. If the token is
+      currently active and the authenticated protected resource is authorized
+      to know information about this token, the authorization server returns
+      the following JSON document.</t>
+
+      <figure>
+        <preamble>Following is a non-normative example active token response
+        (with line wraps for display purposes only):</preamble>
+
+        <artwork><![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+ "active": true,
+ "client_id":"s6BhdRkqt3",
+ "scope": "read write dolphin",
+ "sub": "2309fj32kl",
+ "user_id": "jdoe",
+ "aud": "https://example.org/protected-resource/*",
+ "iss": "https://authserver.example.com/"
+}]]></artwork>
+      </figure>
+
+      <t/>
+
+      <t>If the token presented is not currently active for any reason (for
+      instance, it has been revoked by the resource owner) but the
+      authorization presented during the request is otherwise valid, the
+      authorization server returns the following JSON document.</t>
+
+      <figure>
+        <preamble>Following is a non-normative example response to an inactive
+        or invalid token (with line wraps for display purposes
+        only):</preamble>
+
+        <artwork><![CDATA[HTTP/1.1 200 OK
+Content-Type: application/json
+Cache-Control: no-store
+
+{
+ "active": false
+}]]></artwork>
+      </figure>
+
+      <t/>
+
+      <t>Note that in order to avoid disclosing too much of the authorization
+      server's state to a third party, the authorization server SHOULD NOT
+      include any additional information about an inactive token.</t>
     </section>
   </back>
 </rfc>
