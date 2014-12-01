@@ -603,7 +603,7 @@
         authorization servers to correlate different instances of software
         using the same software statement.</t>
 
-        <t>For example, the software statement containing the following
+        <t>For example, a software statement could contain the following
         claims:</t>
 
         <figure>
@@ -616,8 +616,8 @@
 
         <t/>
 
-        <t>would be represented as a JWT such as the following non-normative
-        example which has been asymmetrically signed using RS256:</t>
+        <t>The following non-normative example JWT includes these claims and
+        has been asymmetrically signed using RS256:</t>
 
         <figure>
           <preamble>Line breaks are for display purposes only</preamble>
@@ -1516,7 +1516,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       exclusively with information about software and not about people, there
       are very few privacy concerns for its use. The notable exception is the
       <spanx style="verb">contacts</spanx> field as defined in <xref
-      target="ClientMetadata">Client Metadata</xref>., which contains contact
+      target="ClientMetadata">Client Metadata</xref>, which contains contact
       information for the developers or other parties responsible for the
       client software. These values are intended to be displayed to end users
       and will be available to the administrators of the authorization server.
@@ -2054,12 +2054,15 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
           <t>Moved software statement request details to sub-section.</t>
 
-          <t>Clarified that a server MAY ignore the software statement (as it
-          MAY ignore other metadata values).</t>
+          <t>Clarified that a server MAY ignore the software statement (just
+          as it MAY ignore other metadata values).</t>
 
           <t>Removed TLS 1.0.</t>
 
           <t>Added privacy considerations around "contacts" field.</t>
+
+          <t>Marked software_id as RECOMMENDED inside of a software
+          statement.</t>
         </list></t>
 
       <t>-20</t>
