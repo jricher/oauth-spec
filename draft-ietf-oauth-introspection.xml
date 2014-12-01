@@ -215,7 +215,7 @@
         for authorization does not contain sufficient privileges or is
         otherwise invalid for this request, the authorization server responds
         with an HTTP 400 code as described in section 3 of <xref
-        target="RFC7650">OAuth 2.0 Bearer Token Usage</xref>.</t>
+        target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
       </section>
     </section>
 
@@ -262,27 +262,28 @@
       token, validating its signature or other protection mechanisms, and
       returning the information contained in the token back to the protected
       resource (allowing the protected resource to be unaware of the token's
-      contents, much like the client). </t>
+      contents, much like the client).</t>
 
       <t>Note that for a token carrying encrypted information that is needed
       during the introspection process, the authorization server MUST be able
       to decrypt and validate the token in order to access this information.
       In cases where the authorization server stores no information about the
       token and has no means of accessing information about the token, it can
-      not likely offer an introspection service.</t>
+      not likely offer an introspection service. Also note that for
+      proof-of-posession style tokens, </t>
     </section>
 
     <section anchor="Privacy" title="Privacy Considerations">
       <t>The introspection response may contain privacy-sensitive information
-      such as user identifiers. When this is the case, measures MUST be taken
-      to prevent disclosure of this information to unintended parties. One way
-      to limit disclosure is to require authorization to call the
-      introspection endpoint and to limit calls to only registered and trusted
-      protected resource servers. Another method is to transmit user
-      identifiers as opaque service-specific strings, potentially returning
-      different identifiers to each protected resource. Omitting
-      privacy-sensitive information from an introspection response is the
-      simplest way of minimizing privacy issues.</t>
+      such as user identifiers for resource owners. When this is the case,
+      measures MUST be taken to prevent disclosure of this information to
+      unintended parties. One way to limit disclosure is to require
+      authorization to call the introspection endpoint and to limit calls to
+      only registered and trusted protected resource servers. Another method
+      is to transmit user identifiers as opaque service-specific strings,
+      potentially returning different identifiers to each protected resource.
+      Omitting privacy-sensitive information from an introspection response is
+      the simplest way of minimizing privacy issues.</t>
     </section>
 
     <section title="Acknowledgements">
@@ -425,6 +426,9 @@
           <t>Fixed casing and consistent term usage.</t>
 
           <t>Incorporated working group comments.</t>
+
+          <t>Clarified that authorization servers need to be able to
+          understand the token if they're to introspect it.</t>
 
           <t>Various editorial cleanups.</t>
         </list></t>
