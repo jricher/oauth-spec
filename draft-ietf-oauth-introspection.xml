@@ -92,8 +92,8 @@
       <t hangText="instance_name">The introspection endpoint MUST be protected
       by TLS of at least version 1.2 <xref target="RFC5246">RFC 5246</xref>
       and MAY support additional transport-layer mechanisms meeting its
-      security requirements. When using TLS, the client or protected resource
-      MUST perform a TLS/SSL server certificate check, per <xref
+      security requirements. When using TLS, the protected resource MUST
+      perform a TLS/SSL server certificate check, per <xref
       target="RFC6125">RFC 6125</xref>. Implementation security considerations
       can be found in <xref target="TLS.BCP">Recommendations for Secure Use of
       TLS and DTLS</xref>.</t>
@@ -101,12 +101,14 @@
       <section anchor="IntrospectionRequest" title="Introspection Request">
         <t hangText="instance_name">The protected resource calls the
         introspection endpoint using an <xref target="RFC2616">HTTP
-        POST</xref> request. The protected resource sends a parameter
+        POST</xref> request with parameters sent as <spanx style="verb">application/x-www-form-urlencoded</spanx>
+        data as defined in <xref target="RFC1866"/>. The authorization server
+        MAY allow an <xref target="RFC2616">HTTP GET</xref> request with
+        parameters passed in the query string as defined in <xref
+        target="RFC1866"/>. The protected resource sends a parameter
         representing the token along with optional parameters representing
         additional context that is known by the protected resource to aid the
-        authorization server in its response. These parameters are sent as
-        <spanx style="verb">application/x-www-form-urlencoded</spanx> data as
-        defined in <xref target="RFC1866"/>.</t>
+        authorization server in its response. These parameters </t>
 
         <t hangText="instance_name"><list style="hanging">
             <t hangText="token">REQUIRED. The string value of the token. For
@@ -143,15 +145,13 @@
         token being presented.</t>
 
         <t hangText="instance_name">To prevent unauthorized token scanning
-        attacks, the endpoint SHOULD also require some form of authorization
-        to access this endpoint, such as client authentication as described in
+        attacks, the endpoint MUST also require some form of authorization to
+        access this endpoint, such as client authentication as described in
         <xref target="RFC6749">OAuth 2.0</xref> or a separate OAuth 2.0 access
         token such as the bearer token described in <xref
         target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>. The methods of
         managing and validating these authentication credentials are out of
-        scope of this specification, though it is RECOMMENDED that these
-        credentials be distinct from those used at an authorization server's
-        token endpoint.</t>
+        scope of this specification.</t>
       </section>
 
       <section anchor="IntrospectionResponse" title="Introspection Response">
@@ -205,6 +205,11 @@
 
         <t>The authorization server MAY respond differently to different
         protected resources making the same request.</t>
+
+        <t>Note that in order to avoid disclosing too much of the
+        authorization server's state to a third party, the authorization
+        server SHOULD NOT include any additional information about an inactive
+        token, including why the token is inactive.</t>
       </section>
 
       <section anchor="ErrorResponse" title="Error Response">
@@ -230,17 +235,20 @@
     <section anchor="Security" title="Security Considerations">
       <t>If left unprotected and un-throttled, the introspection endpoint
       could present a means for an attacker to poll a series of possible token
-      values, fishing for a valid token. The specifics of this authentication
-      credentials are out of scope of this specification, but commonly these
-      credentials could take the form of any valid client authentication
-      mechanism used with the token endpoint, an OAuth 2.0 access token, or
-      other HTTP authorization or authentication mechanism. The authorization
-      server SHOULD issue credentials to any protected resources that need to
-      access the introspection endpoint, SHOULD require protected resources to
-      be specifically authorized to call the introspection endpoint, and
-      SHOULD NOT allow a single piece of software acting as both a client and
-      a protected resource to re-use the same credentials between the token
-      endpoint and the introspection endpoint.</t>
+      values, fishing for a valid token. To prevent this, the authorization
+      server MUST require authentication of protected resources that need to
+      access the introspection endpoint and SHOULD require protected resources
+      to be specifically authorized to call the introspection endpoint. The
+      specifics of this authentication credentials are out of scope of this
+      specification, but commonly these credentials could take the form of any
+      valid client authentication mechanism used with the token endpoint, an
+      OAuth 2.0 access token, or other HTTP authorization or authentication
+      mechanism. A single piece of software acting as both a client and a
+      protected resource MAY re-use the same credentials between the token
+      endpoint and the introspection endpoint, though doing so potentially
+      conflates the activities of the client and protected resource portions
+      of the software and the authorization server MAY require separate
+      credentials for each mode.</t>
 
       <t>Since the introspection endpoint takes in OAuth 2.0 tokens as
       parameters, the server MUST support TLS 1.2 <xref target="RFC5246">RFC
@@ -268,12 +276,13 @@
       resource (allowing the protected resource to be unaware of the token's
       contents, much like the client).</t>
 
-      <t>Note that for a token carrying encrypted information that is needed
+      <t>Note that for tokens carrying encrypted information that is needed
       during the introspection process, the authorization server MUST be able
       to decrypt and validate the token in order to access this information.
-      In cases where the authorization server stores no information about the
-      token and has no means of accessing information about the token, it can
-      not likely offer an introspection service.</t>
+      Also note that in cases where the authorization server stores no
+      information about the token and has no means of accessing information
+      about the token by parsing the token itself, it can not likely offer an
+      introspection service.</t>
     </section>
 
     <section anchor="Privacy" title="Privacy Considerations">
@@ -436,6 +445,8 @@
           format.</t>
 
           <t>Added extended example.</t>
+
+          <t>Made protected resource authentication a MUST.</t>
         </list></t>
 
       <t>- 01</t>
@@ -552,10 +563,6 @@ Content-Type: application/json
       </figure>
 
       <t/>
-
-      <t>Note that in order to avoid disclosing too much of the authorization
-      server's state to a third party, the authorization server SHOULD NOT
-      include any additional information about an inactive token.</t>
     </section>
 
     <section anchor="PoP" title="Use with Proof of Posession Tokens">
