@@ -434,6 +434,8 @@
 
           <t>Explicitly declare introspection request as x-www-form-urlencoded
           format.</t>
+
+          <t>Added extended example.</t>
         </list></t>
 
       <t>- 01</t>
@@ -457,7 +459,7 @@
         </list></t>
     </section>
 
-    <section title="Non-normative Example">
+    <section title="Non-normative Examples">
       <t hangText="instance_name">In this non-normative example, a protected
       resource receives a request from a client carrying an OAuth 2.0 bearer
       token as defined in <xref target="RFC6750">OAuth 2.0 Bearer Token
@@ -481,6 +483,29 @@ Authorization: Basic czZCaGRSa3F0Mzo3RmpmcDBaQnIxS3REUmJuZlZkbUl3
 token=X3241Affw.4233-99JXJ]]></artwork>
       </figure>
 
+      <t/>
+
+      <t>In this non-normative example, the protected resource also sends a
+      resource identifier and token type hint to the authorization server to
+      aid the authorization server's response:</t>
+
+      <figure>
+        <preamble>Following is a non-normative example request (with line
+        wraps for display purposes only):</preamble>
+
+        <artwork><![CDATA[POST /introspect HTTP/1.1
+Host: authserver.example.com
+Content-type: application/x-www-form-urlencoded
+Accept: application/json
+Authorization: Basic czZCaGRSa3F0Mzo3RmpmcDBaQnIxS3REUmJuZlZkbUl3
+
+token=X3241Affw.4233-99JXJ
+&resource_id=rsid-2348e.2381k3
+&token_type_hint=access_token]]></artwork>
+      </figure>
+
+      <t/>
+
       <t>The authorization server validates the protected resource's
       credentials and looks up the information in the token. If the token is
       currently active and the authenticated protected resource is authorized
@@ -493,7 +518,6 @@ token=X3241Affw.4233-99JXJ]]></artwork>
 
         <artwork><![CDATA[HTTP/1.1 200 OK
 Content-Type: application/json
-Cache-Control: no-store
 
 {
  "active": true,
@@ -509,9 +533,10 @@ Cache-Control: no-store
       <t/>
 
       <t>If the token presented is not currently active for any reason (for
-      instance, it has been revoked by the resource owner) but the
-      authorization presented during the request is otherwise valid, the
-      authorization server returns the following JSON document.</t>
+      instance, it has been revoked by the resource owner, it has expired, or
+      the protected resource is not allowed to ask about this particular
+      token) but the authorization presented during the request is otherwise
+      valid, the authorization server returns the following JSON document.</t>
 
       <figure>
         <preamble>Following is a non-normative example response to an inactive
@@ -520,7 +545,6 @@ Cache-Control: no-store
 
         <artwork><![CDATA[HTTP/1.1 200 OK
 Content-Type: application/json
-Cache-Control: no-store
 
 {
  "active": false
