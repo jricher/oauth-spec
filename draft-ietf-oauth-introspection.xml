@@ -176,9 +176,10 @@
       <section anchor="IntrospectionResponse" title="Introspection Response">
         <t>The server responds with a <xref target="RFC7159">JSON
         object</xref> in <spanx style="verb">application/json</spanx> format
-        with the following top-level members. Specific implementations MAY
-        extend this structure with their own service-specific pieces of
-        information.</t>
+        with the following top-level members. Several of these claims are
+        defined as <xref target="JWT">JWT</xref> claim names and carry the
+        same semantics and syntax. Specific implementations MAY extend this
+        structure with their own service-specific pieces of information.</t>
 
         <t><list style="hanging">
             <t hangText="active">REQUIRED. Boolean indicator of whether or not
@@ -188,11 +189,13 @@
 
             <t hangText="exp">OPTIONAL. Integer timestamp, measured in the
             number of seconds since January 1 1970 UTC, indicating when this
-            token will expire.</t>
+            token will expire, as defined in <xref
+            target="JWT">JWT</xref>.</t>
 
             <t hangText="iat">OPTIONAL. Integer timestamp, measured in the
             number of seconds since January 1 1970 UTC, indicating when this
-            token was originally issued.</t>
+            token was originally issued, as defined in <xref
+            target="JWT">JWT</xref>.</t>
 
             <t hangText="scope">OPTIONAL. A space-separated list of strings
             representing the scopes associated with this token, in the format
@@ -203,17 +206,18 @@
             2.0 client that requested this token.</t>
 
             <t hangText="sub">OPTIONAL. Machine-readable identifier of the
-            resource owner who authorized this token.</t>
+            resource owner who authorized this token, as defined in <xref
+            target="JWT">JWT</xref>.</t>
 
             <t hangText="user_id">OPTIONAL. Human-readable identifier for the
             user who authorized this token.</t>
 
             <t hangText="aud">OPTIONAL. Service-specific string identifier or
             list of string identifiers representing the intended audience for
-            this token.</t>
+            this token, as defined in <xref target="JWT">JWT</xref>.</t>
 
             <t hangText="iss">OPTIONAL. String representing the issuer of this
-            token.</t>
+            token, as defined in <xref target="JWT">JWT</xref>.</t>
 
             <t hangText="token_type">OPTIONAL. Type of the token as defined in
             section 5.1 of <xref target="RFC6749">OAuth 2.0</xref>.</t>
@@ -245,7 +249,8 @@
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This document makes no request of IANA.</t>
+      <t>[[ This document will register several claims in the JWT registry.
+      ]]</t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
