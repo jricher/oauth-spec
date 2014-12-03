@@ -81,13 +81,32 @@
       introspect the token in a particular authorization decision context and
       ascertain the relevant metadata about the token in order to make this
       authorization decision appropriately.</t>
+
+      <section title="Terminology">
+        <t>This section defines the terminology used by this specification.
+        This section is a normative portion of this specification, imposing
+        requirements upon implementations. </t>
+
+        <t>This specification uses the terms "access token", "authorization
+        endpoint", "authorization grant", "authorization server", "client",
+        "client identifier", "protected resource", "refresh token", "resource
+        owner", "resource server", and "token endpoint" defined by <xref
+        target="RFC6749">OAuth 2.0</xref>, and the terms "claim names" and
+        "claim values" defined by <xref target="JWT">JSON Web Token
+        (JWT)</xref>.</t>
+      </section>
     </section>
 
     <section anchor="IntrospectionEndpoint" title="Introspection Endpoint">
       <t hangText="instance_name">The introspection endpoint is an OAuth 2.0
       endpoint that takes a parameter representing an OAuth 2.0 token and
       returns a <xref target="RFC7159">JSON</xref> document representing the
-      meta information surrounding the token.</t>
+      meta information surrounding the token, including whether this token is
+      currently active. The definition of an active token is up to the
+      authorization server, but this is commonly a token that has been issued
+      by this authorization server, is not expired, has not been revoked, and
+      is within the purview of the protected resource making the introspection
+      call.</t>
 
       <t hangText="instance_name">The introspection endpoint MUST be protected
       by TLS of at least version 1.2 <xref target="RFC5246">RFC 5246</xref>
@@ -165,10 +184,7 @@
             <t hangText="active">REQUIRED. Boolean indicator of whether or not
             the presented token is currently active. The authorization server
             determines whether and when a given token is in an active state.
-            This is commonly a token that has been issued by this
-            authorization server, is not expired, has not been revoked, and is
-            within the purview of the protected resource making the
-            introspection call.</t>
+            </t>
 
             <t hangText="exp">OPTIONAL. Integer timestamp, measured in the
             number of seconds since January 1 1970 UTC, indicating when this
