@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-introspection-01"
+<rfc category="std" docName="draft-ietf-oauth-introspection-02"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth 2.0 Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="30" month="November" year="2014"/>
+    <date day="3" month="December" year="2014"/>
 
     <area>Security</area>
 
@@ -61,10 +61,9 @@
       server and the protected resource, only that they must have an agreement
       on the tokens themselves, there have been many different approaches to
       bridging this gap. These include using structured token formats such as
-      <xref target="JWT">JWT</xref> or SAML [[ Editor's Note: Which SAML
-      document should we reference here? ]] and proprietary inter-service
-      communication mechanisms (such as shared databases and protected
-      enterprise service buses) that convey token information. </t>
+      <xref target="JWT">JWT</xref> or proprietary inter-service communication
+      mechanisms (such as shared databases and protected enterprise service
+      buses) that convey token information.</t>
 
       <t>This specification defines an interoperable web API that allows
       authorized protected resources to query the authorization server to
@@ -102,11 +101,12 @@
       <section anchor="IntrospectionRequest" title="Introspection Request">
         <t hangText="instance_name">The protected resource calls the
         introspection endpoint using an <xref target="RFC2616">HTTP
-        POST</xref> request (or optionally an HTTP GET request). The protected
-        resource sends a parameter representing the token along with optional
-        parameters representing additional context that is known by the
-        protected resource to aid the authorization server in its
-        response.</t>
+        POST</xref> request. The protected resource sends a parameter
+        representing the token along with optional parameters representing
+        additional context that is known by the protected resource to aid the
+        authorization server in its response. These parameters are sent as
+        <spanx style="verb">application/x-www-form-urlencoded</spanx> data as
+        defined in <xref target="RFC1866"/>.</t>
 
         <t hangText="instance_name"><list style="hanging">
             <t hangText="token">REQUIRED. The string value of the token. For
@@ -116,7 +116,7 @@
             this is the <spanx style="verb">refresh_token</spanx> value
             returned from the token endpoint as defined in <xref
             target="RFC6749">OAuth 2.0</xref> section 5.1. Other token types
-            are outside the scope of this specification. </t>
+            are outside the scope of this specification.</t>
 
             <t hangText="resource_id">OPTIONAL. A service-specific string
             identifying the resource that the token is being used for. This
@@ -164,8 +164,11 @@
         <t><list style="hanging">
             <t hangText="active">REQUIRED. Boolean indicator of whether or not
             the presented token is currently active. The authorization server
-            determines whether and when a given token is in an active
-            state.</t>
+            determines whether and when a given token is in an active state.
+            This is commonly a token that has been issued by this
+            authorization server, is not expired, has not been revoked, and is
+            within the purview of the protected resource making the
+            introspection call.</t>
 
             <t hangText="exp">OPTIONAL. Integer timestamp, measured in the
             number of seconds since January 1 1970 UTC, indicating when this
@@ -198,23 +201,24 @@
 
             <t hangText="token_type">OPTIONAL. Type of the token as defined in
             section 5.1 of <xref target="RFC6749">OAuth 2.0</xref>.</t>
-          </list>The response MAY be cached by the protected resource, and the
-        authorization server SHOULD communicate appropriate cache controls
-        using applicable HTTP headers.</t>
+          </list>The response MAY be cached by the protected resource.</t>
+
+        <t>The authorization server MAY respond differently to different
+        protected resources making the same request.</t>
       </section>
 
       <section anchor="ErrorResponse" title="Error Response">
         <t>If the protected resource uses OAuth 2.0 client credentials to
         authenticate to the introspection endpoint and its credentials are
-        invalid, the authorization server responds with an HTTP 400 (Bad
-        Request) as described in section 5.2 of <xref target="RFC6749">OAuth
-        2.0 </xref>.</t>
+        invalid, the authorization server responds with an HTTP 401
+        (Unauthorized) as described in section 5.2 of <xref
+        target="RFC6749">OAuth 2.0 </xref>.</t>
 
         <t>If the protected resource uses an OAuth 2.0 bearer token to
         authorize its call to the introspection endpoint and the token used
         for authorization does not contain sufficient privileges or is
         otherwise invalid for this request, the authorization server responds
-        with an HTTP 400 code as described in section 3 of <xref
+        with an HTTP 401 code as described in section 3 of <xref
         target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
       </section>
     </section>
@@ -236,7 +240,7 @@
       be specifically authorized to call the introspection endpoint, and
       SHOULD NOT allow a single piece of software acting as both a client and
       a protected resource to re-use the same credentials between the token
-      endpoint and the introspection endpoint. </t>
+      endpoint and the introspection endpoint.</t>
 
       <t>Since the introspection endpoint takes in OAuth 2.0 tokens as
       parameters, the server MUST support TLS 1.2 <xref target="RFC5246">RFC
@@ -269,7 +273,7 @@
       to decrypt and validate the token in order to access this information.
       In cases where the authorization server stores no information about the
       token and has no means of accessing information about the token, it can
-      not likely offer an introspection service. </t>
+      not likely offer an introspection service.</t>
     </section>
 
     <section anchor="Privacy" title="Privacy Considerations">
@@ -293,6 +297,8 @@
 
   <back>
     <references title="Normative References">
+      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.1866.xml'?>
+
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
 
       <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
@@ -418,6 +424,17 @@
 
     <section title="Document History">
       <t>[[ To be removed by the RFC Editor. ]]</t>
+
+      <t>- 02</t>
+
+      <t><list style="symbols">
+          <t>Removed SAML pointer.</t>
+
+          <t>Clarified what an "active" token could be.</t>
+
+          <t>Explicitly declare introspection request as x-www-form-urlencoded
+          format.</t>
+        </list></t>
 
       <t>- 01</t>
 
