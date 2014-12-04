@@ -589,12 +589,12 @@ Content-Type: application/json
     <section anchor="PoP" title="Use with Proof of Posession Tokens">
       <t>With bearer tokens such as those defined by <xref
       target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>, the protected
-      resource will have in its posession the entire secret portion of the
+      resource will have in its possession the entire secret portion of the
       token for submission to the introspection service. However, for
-      proof-of-posession style tokens, the protected resource will have only a
-      token identifier used during the request, along with the cryptographic
+      proof-of-possession style tokens, the protected resource will have only
+      a token identifier used during the request, along with the cryptographic
       signature on the request. The protected resource would be able to submit
-      the token identifier to the authoriation server's token endpoint in
+      the token identifier to the authorization server's token endpoint in
       order to obtain the necessary key information needed to validate the
       signature on the request. The details of this usage are outside the
       scope of this specification and should be defined in an extension to
