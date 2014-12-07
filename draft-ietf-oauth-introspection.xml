@@ -180,24 +180,25 @@
         with the following top-level members.</t>
 
         <t><list style="hanging">
-            <t hangText="active">REQUIRED. Boolean indicator of whether or not
-            the presented token is currently active. The authorization server
-            determines whether and when a given token is in an active
-            state.</t>
+            <t hangText="active"><vspace/>REQUIRED. Boolean indicator of
+            whether or not the presented token is currently active. The
+            authorization server determines whether and when a given token is
+            in an active state.</t>
 
-            <t hangText="scope">OPTIONAL. A space-separated list of strings
-            representing the scopes associated with this token, in the format
-            described in section 3.3 of <xref target="RFC6749">OAuth
+            <t hangText="scope"><vspace/>OPTIONAL. A space-separated list of
+            strings representing the scopes associated with this token, in the
+            format described in section 3.3 of <xref target="RFC6749">OAuth
             2.0</xref>.</t>
 
-            <t hangText="client_id">OPTIONAL. Client identifier for the OAuth
-            2.0 client that requested this token.</t>
+            <t hangText="client_id"><vspace/>OPTIONAL. Client identifier for
+            the OAuth 2.0 client that requested this token.</t>
 
-            <t hangText="user_id">OPTIONAL. Human-readable identifier for the
-            user who authorized this token.</t>
+            <t hangText="user_id"><vspace/>OPTIONAL. Human-readable identifier
+            for the user who authorized this token.</t>
 
-            <t hangText="token_type">OPTIONAL. Type of the token as defined in
-            section 5.1 of <xref target="RFC6749">OAuth 2.0</xref>.</t>
+            <t hangText="token_type"><vspace/>OPTIONAL. Type of the token as
+            defined in section 5.1 of <xref target="RFC6749">OAuth
+            2.0</xref>.</t>
           </list></t>
 
         <t>The response MAY include any claims defined as <xref
@@ -205,30 +206,31 @@
         syntax, such as the following:</t>
 
         <t><list style="hanging">
-            <t hangText="exp">OPTIONAL. Integer timestamp, measured in the
-            number of seconds since January 1 1970 UTC, indicating when this
-            token will expire.</t>
+            <t hangText="exp"><vspace/>OPTIONAL. Integer timestamp, measured
+            in the number of seconds since January 1 1970 UTC, indicating when
+            this token will expire.</t>
 
-            <t hangText="iat">OPTIONAL. Integer timestamp, measured in the
-            number of seconds since January 1 1970 UTC, indicating when this
-            token was originally issued.</t>
+            <t hangText="iat"><vspace/>OPTIONAL. Integer timestamp, measured
+            in the number of seconds since January 1 1970 UTC, indicating when
+            this token was originally issued.</t>
 
-            <t hangText="nbf">OPTIONAL. Integer timestamp, measured in the
-            number of seconds since January 1 1970 UTC, indicating when this
-            token is not to be used before.</t>
+            <t hangText="nbf"><vspace/>OPTIONAL. Integer timestamp, measured
+            in the number of seconds since January 1 1970 UTC, indicating when
+            this token is not to be used before.</t>
 
-            <t hangText="sub">OPTIONAL. Subject of the token. Usually a
-            machine-readable identifier of the resource owner who authorized
+            <t hangText="sub"><vspace/>OPTIONAL. Subject of the token. Usually
+            a machine-readable identifier of the resource owner who authorized
             this token</t>
 
-            <t hangText="aud">OPTIONAL. Service-specific string identifier or
-            list of string identifiers representing the intended audience for
-            this token.</t>
+            <t hangText="aud"><vspace/>OPTIONAL. Service-specific string
+            identifier or list of string identifiers representing the intended
+            audience for this token.</t>
 
-            <t hangText="iss">OPTIONAL. String representing the issuer of this
+            <t hangText="iss"><vspace/>OPTIONAL. String representing the
+            issuer of this token.</t>
+
+            <t hangText="jti"><vspace/>OPTIONAL. String identifier for the
             token.</t>
-
-            <t hangText="jti">OPTIONAL. String identifier for the token.</t>
           </list></t>
 
         <t>Specific implementations MAY extend this structure with their own
