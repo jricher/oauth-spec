@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-introspection-02"
+<rfc category="std" docName="draft-ietf-oauth-introspection-03"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth 2.0 Token Introspection</title>
@@ -85,7 +85,7 @@
       <section title="Terminology">
         <t>This section defines the terminology used by this specification.
         This section is a normative portion of this specification, imposing
-        requirements upon implementations. </t>
+        requirements upon implementations.</t>
 
         <t>This specification uses the terms "access token", "authorization
         endpoint", "authorization grant", "authorization server", "client",
@@ -119,15 +119,16 @@
 
       <section anchor="IntrospectionRequest" title="Introspection Request">
         <t hangText="instance_name">The protected resource calls the
-        introspection endpoint using an <xref target="RFC2616">HTTP
+        introspection endpoint using an <xref target="RFC7231">HTTP
         POST</xref> request with parameters sent as <spanx style="verb">application/x-www-form-urlencoded</spanx>
-        data as defined in <xref target="RFC1866"/>. The authorization server
-        MAY allow an <xref target="RFC2616">HTTP GET</xref> request with
-        parameters passed in the query string as defined in <xref
-        target="RFC1866"/>. The protected resource sends a parameter
-        representing the token along with optional parameters representing
-        additional context that is known by the protected resource to aid the
-        authorization server in its response. These parameters </t>
+        data as defined in <xref target="W3C.REC-html5-20141028"/>. The
+        authorization server MAY allow an <xref target="RFC7231">HTTP
+        GET</xref> request with parameters passed in the query string as
+        defined in <xref target="W3C.REC-html5-20141028"/>. The protected
+        resource sends a parameter representing the token along with optional
+        parameters representing additional context that is known by the
+        protected resource to aid the authorization server in its response.
+        These parameters</t>
 
         <t hangText="instance_name"><list style="hanging">
             <t hangText="token">REQUIRED. The string value of the token. For
@@ -176,26 +177,13 @@
       <section anchor="IntrospectionResponse" title="Introspection Response">
         <t>The server responds with a <xref target="RFC7159">JSON
         object</xref> in <spanx style="verb">application/json</spanx> format
-        with the following top-level members. Several of these claims are
-        defined as <xref target="JWT">JWT</xref> claim names and carry the
-        same semantics and syntax. Specific implementations MAY extend this
-        structure with their own service-specific pieces of information.</t>
+        with the following top-level members. Several of these </t>
 
         <t><list style="hanging">
             <t hangText="active">REQUIRED. Boolean indicator of whether or not
             the presented token is currently active. The authorization server
-            determines whether and when a given token is in an active state.
-            </t>
-
-            <t hangText="exp">OPTIONAL. Integer timestamp, measured in the
-            number of seconds since January 1 1970 UTC, indicating when this
-            token will expire, as defined in <xref
-            target="JWT">JWT</xref>.</t>
-
-            <t hangText="iat">OPTIONAL. Integer timestamp, measured in the
-            number of seconds since January 1 1970 UTC, indicating when this
-            token was originally issued, as defined in <xref
-            target="JWT">JWT</xref>.</t>
+            determines whether and when a given token is in an active
+            state.</t>
 
             <t hangText="scope">OPTIONAL. A space-separated list of strings
             representing the scopes associated with this token, in the format
@@ -205,23 +193,48 @@
             <t hangText="client_id">OPTIONAL. Client identifier for the OAuth
             2.0 client that requested this token.</t>
 
-            <t hangText="sub">OPTIONAL. Machine-readable identifier of the
-            resource owner who authorized this token, as defined in <xref
-            target="JWT">JWT</xref>.</t>
-
             <t hangText="user_id">OPTIONAL. Human-readable identifier for the
             user who authorized this token.</t>
 
-            <t hangText="aud">OPTIONAL. Service-specific string identifier or
-            list of string identifiers representing the intended audience for
-            this token, as defined in <xref target="JWT">JWT</xref>.</t>
-
-            <t hangText="iss">OPTIONAL. String representing the issuer of this
-            token, as defined in <xref target="JWT">JWT</xref>.</t>
-
             <t hangText="token_type">OPTIONAL. Type of the token as defined in
             section 5.1 of <xref target="RFC6749">OAuth 2.0</xref>.</t>
-          </list>The response MAY be cached by the protected resource.</t>
+          </list></t>
+
+        <t>The response MAY include any claims defined as <xref
+        target="JWT">JWT</xref> claim names and carry the same semantics and
+        syntax, such as the following:</t>
+
+        <t><list style="hanging">
+            <t hangText="exp">OPTIONAL. Integer timestamp, measured in the
+            number of seconds since January 1 1970 UTC, indicating when this
+            token will expire.</t>
+
+            <t hangText="iat">OPTIONAL. Integer timestamp, measured in the
+            number of seconds since January 1 1970 UTC, indicating when this
+            token was originally issued.</t>
+
+            <t hangText="nbf">OPTIONAL. Integer timestamp, measured in the
+            number of seconds since January 1 1970 UTC, indicating when this
+            token is not to be used before.</t>
+
+            <t hangText="sub">OPTIONAL. Subject of the token. Usually a
+            machine-readable identifier of the resource owner who authorized
+            this token</t>
+
+            <t hangText="aud">OPTIONAL. Service-specific string identifier or
+            list of string identifiers representing the intended audience for
+            this token.</t>
+
+            <t hangText="iss">OPTIONAL. String representing the issuer of this
+            token.</t>
+
+            <t hangText="jti">OPTIONAL. String identifier for the token.</t>
+          </list></t>
+
+        <t>Specific implementations MAY extend this structure with their own
+        service-specific pieces of information.</t>
+
+        <t>The response MAY be cached by the protected resource.</t>
 
         <t>The authorization server MAY respond differently to different
         protected resources making the same request.</t>
@@ -249,8 +262,55 @@
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>[[ This document will register several claims in the JWT registry.
-      ]]</t>
+      <t>This specification requests IANA to register the following values
+      into the IANA JSON Web Token Claims registry for JWT Claim Names.</t>
+
+      <t><?rfc subcompact="yes"?><list style="symbols">
+          <t>Claim Name: <spanx style="verb">active</spanx></t>
+
+          <t>Claim Description: Token active status</t>
+
+          <t>Change Controller: IESG</t>
+
+          <t>Specification Document(s): <xref target="IntrospectionResponse"/>
+          of [[ this document ]].</t>
+        </list><list style="symbols">
+          <t>Claim Name: <spanx style="verb">user_id</spanx></t>
+
+          <t>Claim Description: User identifier of the resource owner</t>
+
+          <t>Change Controller: IESG</t>
+
+          <t>Specification Document(s): <xref target="IntrospectionResponse"/>
+          of [[ this document ]].</t>
+        </list><list style="symbols">
+          <t>Claim Name: <spanx style="verb">client_id</spanx></t>
+
+          <t>Claim Description: Client identifier of the client</t>
+
+          <t>Change Controller: IESG</t>
+
+          <t>Specification Document(s): <xref target="IntrospectionResponse"/>
+          of [[ this document ]].</t>
+        </list><list style="symbols">
+          <t>Claim Name: <spanx style="verb">scope</spanx></t>
+
+          <t>Claim Description: Authorized scopes of the token</t>
+
+          <t>Change Controller: IESG</t>
+
+          <t>Specification Document(s): <xref target="IntrospectionResponse"/>
+          of [[ this document ]].</t>
+        </list><list style="symbols">
+          <t>Claim Name: <spanx style="verb">token_type</spanx></t>
+
+          <t>Claim Description: Type of the token</t>
+
+          <t>Change Controller: IESG</t>
+
+          <t>Specification Document(s): <xref target="IntrospectionResponse"/>
+          of [[ this document ]].</t>
+        </list><?rfc subcompact="no"?></t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -284,6 +344,11 @@
       into server-side logs via query parameters, an authorization server
       offering token introspection MAY disallow HTTP GET and instead require
       an HTTP POST method only to the introspection endpoint.</t>
+
+      <t>In order to avoid disclosing internal server state, an introspection
+      response for an inactive token SHOULD NOT contain any additional claims
+      beyond the required <spanx style="verb">active</spanx> claim (with its
+      value set to <spanx style="verb">false</spanx>).</t>
 
       <t>An authorization server offering token introspection MUST be able to
       understand the token values being presented to it during this call. The
@@ -327,23 +392,23 @@
 
   <back>
     <references title="Normative References">
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.1866.xml'?>
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7009.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.7009.xml'?>
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7231.xml'?>
 
-      <?rfc include='http://xml.resource.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml4/reference.W3C.REC-html5-20141028.xml'?>
     </references>
 
     <references title="Informative References">
@@ -454,6 +519,14 @@
 
     <section title="Document History">
       <t>[[ To be removed by the RFC Editor. ]]</t>
+
+      <t>- 03</t>
+
+      <t><list style="symbols">
+          <t>Updated HTML and HTTP references.</t>
+
+          <t>Call for registration of parameters in the JWT registry.</t>
+        </list></t>
 
       <t>- 02</t>
 
