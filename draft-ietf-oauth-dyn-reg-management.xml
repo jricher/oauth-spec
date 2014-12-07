@@ -216,78 +216,6 @@
             place.</t>
           </list></t>
       </section>
-
-      <section anchor="Credentials"
-               title="Registration Tokens and Client Credentials">
-        <t>Throughout the course of the dynamic registration protocol, there
-        are three different classes of credentials in play, each with
-        different properties and targets.</t>
-
-        <t><list style="symbols">
-            <t>The initial access token is optionally used by the client or
-            developer at the registration endpoint. This is an OAuth 2.0 token
-            that is used to authorize the initial client registration request.
-            The content, structure, generation, and validation of this token
-            are out of scope for this specification. The authorization server
-            can use this token to verify that the presenter is allowed to
-            dynamically register new clients. This token may be shared among
-            multiple instances of a client to allow them to each register
-            separately, thereby letting the authorization server use this
-            token to tie multiple instances of registered clients (each with
-            their own distinct client identifier) back to the party to whom
-            the initial access token was issued, usually an application
-            developer. This token should be used only at the client
-            registration endpoint.</t>
-
-            <t>The registration access token is used by the client or
-            developer at the client configuration endpoint and represents the
-            holder's authorization to manage the registration of a client.
-            This is an OAuth 2.0 bearer token that is issued from the client
-            registration endpoint in response to a client registration request
-            and is returned in a client information response. The registration
-            access token is uniquely bound to the client identifier and is
-            required to be presented with all calls to the client
-            configuration endpoint. The registration access token should be
-            protected and should not be shared between instances of a client
-            (otherwise, one instance could change or delete registration
-            values for all instances of the client). The registration access
-            token can be rotated through the use of the client update method
-            on the client configuration endpoint. The registration access
-            token should be used only at the client configuration
-            endpoint.</t>
-
-            <t>The client credentials (such as <spanx style="verb">client_secret</spanx>)
-            are optional depending on the type of client and are used to
-            retrieve OAuth tokens. Client credentials are most often bound to
-            particular instances of a client and should not be shared between
-            instances. Note that since not all types of clients have client
-            credentials, they cannot be used to manage client registrations at
-            the client configuration endpoint. The client credentials can be
-            rotated through the use of the client update method on the client
-            configuration endpoint. The client credentials cannot be used for
-            authentication at the client registration endpoint or at the
-            client configuration endpoint.</t>
-          </list></t>
-
-        <section anchor="CredentialRotation" title="Credential Rotation">
-          <t>The Authorization Server MAY rotate the client's registration
-          access token and/or client credentials (such as a <spanx
-          style="verb">client_secret</spanx>) throughout the lifetime of the
-          client. The client can discover that these values have changed by
-          reading the client information response returned from either a read
-          or update request to the client configuration endpoint. The client's
-          current registration access token and client credentials (if
-          applicable) MUST be included in this response.</t>
-
-          <t>The registration access token SHOULD be rotated only in response
-          to an update request to the client configuration endpoint, at which
-          point the new registration access token is returned to the client
-          and the old registration access token SHOULD be discarded by both
-          parties. If the registration access token were to expire or be
-          rotated outside of such requests, the client or developer might be
-          locked out of managing the client's configuration.</t>
-        </section>
-      </section>
     </section>
 
     <section anchor="ClientConfigEndpoint"
@@ -296,54 +224,30 @@
       that is provisioned by the server to facilitate viewing, updating, and
       deleting a client's registered information. The location of this
       endpoint is communicated to the client through the <spanx style="verb">registration_client_uri</spanx>
-      member of the Client Information Response, as specified in <xref
+      member of the client information response, as specified in <xref
       target="ClientInfoResponse"/>. The client MUST use its registration
       access token in all calls to this endpoint as an OAuth 2.0 Bearer Token
       <xref target="RFC6750"/>.</t>
+
+      <t>The client configuration endpoint MUST require transport-layer
+      security. The server MUST support TLS 1.2 <xref target="RFC5246">RFC
+      5246</xref> and MAY support additional transport-layer mechanisms
+      meeting its security requirements. When using TLS, the client MUST
+      perform a TLS/SSL server certificate check, per <xref
+      target="RFC6125">RFC 6125</xref>. Implementation security considerations
+      can be found in <xref target="TLS.BCP">Recommendations for Secure Use of
+      TLS and DTLS</xref>.</t>
 
       <t>Operations on this endpoint are switched through the use of different
       <xref target="RFC2616">HTTP methods</xref>. If an authorization server
       does not support a particular method on the client configuration
       endpoint, it MUST respond with the appropriate error code.</t>
 
-      <section anchor="ClientConfigEndpointURL"
-               title="Forming the Client Configuration Endpoint URL">
-        <t>The authorization server MUST provide the client with the fully
-        qualified URL in the <spanx style="verb">registration_client_uri</spanx>
-        element of the Client Information Response, as specified in <xref
-        target="ClientInfoResponse"/>. The authorization server MUST NOT
-        expect the client to construct or discover this URL on its own. The
-        client MUST use the URL as given by the server and MUST NOT construct
-        this URL from component pieces.</t>
-
-        <t>Depending on deployment characteristics, the client configuration
-        endpoint URL may take any number of forms. It is RECOMMENDED that this
-        endpoint URL be formed through the use of a server-constructed URL
-        string which combines the client registration endpoint's URL and the
-        issued <spanx style="verb">client_id</spanx> for this client, with the
-        latter as either a path parameter or a query parameter. For example, a
-        client with the client identifier <spanx style="verb">s6BhdRkqt3</spanx>
-        could be given a client configuration endpoint URL of <spanx
-        style="verb">https://server.example.com/register/s6BhdRkqt3</spanx>
-        (path parameter) or of <spanx style="verb">https://server.example.com/register?client_id=s6BhdRkqt3</spanx>
-        (query parameter). In both of these cases, the client simply uses the
-        URL as given by the authorization server.</t>
-
-        <t>These common patterns can help the server to more easily determine
-        the client to which the request pertains, which MUST be matched
-        against the client to which the registration access token was issued.
-        If desired, the server MAY simply return the client registration
-        endpoint URL as the client configuration endpoint URL and change
-        behavior based on the authentication context provided by the
-        registration access token.</t>
-      </section>
-
       <section anchor="ReadRequest" title="Client Read Request">
         <t>To read the current configuration of the client on the
         authorization server, the client makes an HTTP GET request to the
         client configuration endpoint, authenticating with its registration
-        access token. This operation SHOULD be idempotent -- not causing
-        changes to the client configuration.</t>
+        access token.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -365,14 +269,12 @@
         payload, as described in <xref target="ClientInfoResponse"/>. Some
         values in the response, including the <spanx style="verb">client_secret</spanx>
         and <spanx style="verb">registration_access_token</spanx>, MAY be
-        different from those in the initial registration response. However,
-        since read operations are intended to be idempotent, the read request
-        itself SHOULD NOT cause changes to the client's registered metadata
-        values. If the authorization server includes a new client secret
-        and/or registration access token in its response, the client MUST
-        immediately discard its previous client secret and/or registration
-        access token. The value of the <spanx style="verb">client_id</spanx>
-        MUST NOT change from the initial registration response.</t>
+        different from those in the initial registration response. If the
+        authorization server includes a new client secret and/or registration
+        access token in its response, the client MUST immediately discard its
+        previous client secret and/or registration access token. The value of
+        the <spanx style="verb">client_id</spanx> MUST NOT change from the
+        initial registration response.</t>
 
         <t>If the registration access token used to make this request is not
         valid, the server MUST respond with an error as described in <xref
@@ -463,7 +365,7 @@
         HTTP 200 OK Message with content type <spanx style="verb">application/json</spanx>
         and a payload, as described in <xref target="ClientInfoResponse"/>.
         Some values in the response, including the <spanx style="verb">client_secret</spanx>
-        and r<spanx style="verb">egistration_access_token</spanx>, MAY be
+        and <spanx style="verb">registration_access_token</spanx>, MAY be
         different from those in the initial registration response. If the
         authorization server includes a new client secret and/or registration
         access token in its response, the client MUST immediately discard its
@@ -492,7 +394,7 @@
         <t>To deprovision itself on the authorization server, the client makes
         an HTTP DELETE request to the client configuration endpoint. This
         request is authenticated by the registration access token issued to
-        the client.</t>
+        the client as described in <xref target="RFC6749"/>.</t>
 
         <figure>
           <preamble>Following is a non-normative example request (with line
@@ -511,9 +413,10 @@
         <spanx style="verb">client_secret</spanx>, and <spanx style="verb">registration_access_token</spanx>
         for this client, thereby preventing the <spanx style="verb">client_id</spanx>
         from being used at either the authorization endpoint or token endpoint
-        of the authorization server. The authorization server SHOULD
-        immediately invalidate all existing authorization grants and
-        currently-active tokens associated with this client.</t>
+        of the authorization server. If possible, the authorization server
+        SHOULD immediately invalidate all existing authorization grants and
+        currently-active access tokens, refresh tokens, and other tokens
+        associated with this client.</t>
 
         <t>If a client has been successfully deprovisioned, the authorization
         server MUST responsd with an HTTP 204 No Content message.</t>
@@ -552,14 +455,15 @@
 
       <section anchor="ClientInfoResponse" title="Client Information Response">
         <t>This specification extends the client information response defined
-        in OAuth 2.0 Core Client Dynamic Registration. The response contains
-        the client identifier as well as the client secret, if the client is a
-        confidential client. The response also contains the fully qualified
-        URL of the client configuration endpoint for this specific client that
-        the client may use to obtain and update information about itself. The
-        response also contains a registration access token that is to be used
-        by the client to perform subsequent operations at the client
-        configuration endpoint.</t>
+        in <xref target="OAuth.Registration">OAuth 2.0 Client Dynamic
+        Registration</xref>. The response contains the client identifier as
+        well as the client secret, if the client is a confidential client. The
+        response also contains the fully qualified URL of the <xref
+        target="ClientConfigEndpoint">client configuration endpoint</xref> for
+        this specific client that the client may use to obtain and update
+        information about itself. The response also contains a registration
+        access token that is to be used by the client to perform subsequent
+        operations at the client configuration endpoint.</t>
 
         <t><list style="hanging">
             <t hangText="client_id"><vspace/> REQUIRED. OAuth 2.0 client
@@ -586,7 +490,7 @@
             client.</t>
           </list></t>
 
-        <t>Additionally, the Authorization Server MUST return all registered
+        <t>Additionally, the authorization server MUST return all registered
         metadata about this client, including any fields provisioned by the
         authorization server itself. The authorization server MAY reject or
         replace any of the client's requested metadata values submitted during
@@ -631,7 +535,28 @@
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This specification makes no requests of IANA.</t>
+      <t>This specification requests that IANA extend the OAuth Dynamic Client
+      Metadata registry with the following entries:</t>
+
+      <t><list style="symbols">
+          <t>Client Metadata Name: <spanx style="verb">registration_access_token</spanx></t>
+
+          <t>Client Metadata Description: OAuth 2.0 bearer token used to
+          access the client configuration endpoint</t>
+
+          <t>Change controller: IESG</t>
+
+          <t>Specification document(s): [[ this document ]]</t>
+        </list><list style="symbols">
+          <t>Client Metadata Name: <spanx style="verb">registration_client_uri</spanx></t>
+
+          <t>Client Metadata Description: Fully qualified URI of the client
+          registration endpoint</t>
+
+          <t>Change controller: IESG</t>
+
+          <t>Specification document(s): [[ this document ]]</t>
+        </list></t>
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -649,6 +574,18 @@
       and acts as the sole authentication for use at the client configuration
       endpoint, it MUST be protected by the developer or client as described
       in <xref target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
+
+      <t>Since requests to the client configuration endpoint result in the
+      transmission of clear-text credentials (in the HTTP request and
+      response), the authorization server MUST require the use of a
+      transport-layer security mechanism when sending requests to the
+      endpoint. The server MUST support TLS 1.2 <xref target="RFC5246">RFC
+      5246</xref> and MAY support additional transport-layer mechanisms
+      meeting its security requirements. When using TLS, the client MUST
+      perform a TLS/SSL server certificate check, per <xref
+      target="RFC6125">RFC 6125</xref>. Implementation security considerations
+      can be found in <xref target="TLS.BCP">Recommendations for Secure Use of
+      TLS and DTLS</xref>.</t>
 
       <t>Since the client configuration endpoint is an OAuth 2.0 protected
       resource, it SHOULD have some rate limiting on failures to prevent the
@@ -673,11 +610,74 @@
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
 
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
+
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
+
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
+
+      <reference anchor="TLS.BCP">
+        <front>
+          <title>Recommendations for Secure Use of TLS and DTLS</title>
+
+          <author fullname="Yaron Sheffer" initials="Y." surname="Sheffer">
+            <organization>Porticor</organization>
+
+            <address>
+              <postal>
+                <street>29 HaHarash St.</street>
+
+                <city>Hod HaSharon</city>
+
+                <region/>
+
+                <code>4501303</code>
+
+                <country>Israel</country>
+              </postal>
+
+              <email>yaronf.ietf@gmail.com</email>
+            </address>
+          </author>
+
+          <author fullname="Ralph Holz" initials="R." surname="Holz">
+            <organization>Technische Universitaet Muenchen</organization>
+
+            <address>
+              <postal>
+                <street>Boltzmannstr. 3</street>
+
+                <city>Garching</city>
+
+                <region/>
+
+                <code>85748</code>
+
+                <country>Germany</country>
+              </postal>
+
+              <email>ralph.ietf@gmail.com</email>
+            </address>
+          </author>
+
+          <author fullname="Peter Saint-Andre" initials="P."
+                  surname="Saint-Andre">
+            <organization>&amp;yet</organization>
+
+            <address>
+              <email>peter@andyet.com</email>
+
+              <uri>https://andyet.com/</uri>
+            </address>
+          </author>
+
+          <date day="11" month="November" year="2014"/>
+        </front>
+      </reference>
 
       <reference anchor="OAuth.Registration">
         <front>
@@ -738,9 +738,6 @@
       </reference>
     </references>
 
-    <!-- <references title="Informative References">
-	 </references> -->
-
     <section anchor="Acknowledgments" title="Acknowledgments">
       <t>The authors thank the OAuth Working Group, the User-Managed Access
       Working Group, and the OpenID Connect Working Group participants for
@@ -751,6 +748,112 @@
       Thomas Hardjono, Phil Hunt, William Kim, Torsten Lodderstedt, Eve Maler,
       Josh Mandel, Nov Matake, Tony Nadalin, Nat Sakimura, Christian Scholz,
       and Hannes Tschofenig.</t>
+    </section>
+
+    <section anchor="Credentials"
+             title="Registration Tokens and Client Credentials">
+      <t>Throughout the course of the dynamic registration protocol, there are
+      three different classes of credentials in play, each with different
+      properties and targets.</t>
+
+      <t><list style="symbols">
+          <t>The initial access token is optionally used by the client or
+          developer at the registration endpoint. This is an OAuth 2.0 token
+          that is used to authorize the initial client registration request.
+          The content, structure, generation, and validation of this token are
+          out of scope for this specification. The authorization server can
+          use this token to verify that the presenter is allowed to
+          dynamically register new clients. This token may be shared among
+          multiple instances of a client to allow them to each register
+          separately, thereby letting the authorization server use this token
+          to tie multiple instances of registered clients (each with their own
+          distinct client identifier) back to the party to whom the initial
+          access token was issued, usually an application developer. This
+          token should be used only at the client registration endpoint.</t>
+
+          <t>The registration access token is used by the client or developer
+          at the client configuration endpoint and represents the holder's
+          authorization to manage the registration of a client. This is an
+          OAuth 2.0 bearer token that is issued from the client registration
+          endpoint in response to a client registration request and is
+          returned in a client information response. The registration access
+          token is uniquely bound to the client identifier and is required to
+          be presented with all calls to the client configuration endpoint.
+          The registration access token should be protected and should not be
+          shared between instances of a client (otherwise, one instance could
+          change or delete registration values for all instances of the
+          client). The registration access token can be rotated through the
+          use of the client update method on the client configuration
+          endpoint. The registration access token should be used only at the
+          client configuration endpoint.</t>
+
+          <t>The client credentials (such as <spanx style="verb">client_secret</spanx>)
+          are optional depending on the type of client and are used to
+          retrieve OAuth tokens. Client credentials are most often bound to
+          particular instances of a client and should not be shared between
+          instances. Note that since not all types of clients have client
+          credentials, they cannot be used to manage client registrations at
+          the client configuration endpoint. The client credentials can be
+          rotated through the use of the client update method on the client
+          configuration endpoint. The client credentials cannot be used for
+          authentication at the client registration endpoint or at the client
+          configuration endpoint.</t>
+        </list></t>
+
+      <section anchor="CredentialRotation" title="Credential Rotation">
+        <t>The authorization server MAY rotate the client's registration
+        access token and/or client credentials (such as a <spanx style="verb">client_secret</spanx>)
+        throughout the lifetime of the client in order to minimize the risk of
+        leakage of these credentials. The client can discover that these
+        values have changed by reading the client information response
+        returned from either a read or update request to the client
+        configuration endpoint. The client's current registration access token
+        and client credentials (if applicable) MUST be included in this
+        response.</t>
+
+        <t>The registration access token SHOULD be rotated only in response to
+        an update request to the client configuration endpoint, at which point
+        the new registration access token is returned to the client and the
+        old registration access token SHOULD be discarded by both parties. If
+        the registration access token were to expire or be rotated outside of
+        such requests, the client or developer might be locked out of managing
+        the client's configuration.</t>
+
+        <t>Methods by which the client can request credential rotation are
+        outside the scope of this document.</t>
+      </section>
+    </section>
+
+    <section anchor="ClientConfigEndpointURL"
+             title="Forming the Client Configuration Endpoint URL">
+      <t>The authorization server MUST provide the client with the fully
+      qualified URL in the <spanx style="verb">registration_client_uri</spanx>
+      element of the Client Information Response, as specified in <xref
+      target="ClientInfoResponse"/>. The authorization server MUST NOT expect
+      the client to construct or discover this URL on its own. The client MUST
+      use the URL as given by the server and MUST NOT construct this URL from
+      component pieces.</t>
+
+      <t>Depending on deployment characteristics, the client configuration
+      endpoint URL may take any number of forms. It is RECOMMENDED that this
+      endpoint URL be formed through the use of a server-constructed URL
+      string which combines the client registration endpoint's URL and the
+      issued <spanx style="verb">client_id</spanx> for this client, with the
+      latter as either a path parameter or a query parameter. For example, a
+      client with the client identifier <spanx style="verb">s6BhdRkqt3</spanx>
+      could be given a client configuration endpoint URL of <spanx
+      style="verb">https://server.example.com/register/s6BhdRkqt3</spanx>
+      (path parameter) or of <spanx style="verb">https://server.example.com/register?client_id=s6BhdRkqt3</spanx>
+      (query parameter). In both of these cases, the client simply uses the
+      URL as given by the authorization server.</t>
+
+      <t>These common patterns can help the server to more easily determine
+      the client to which the request pertains, which MUST be matched against
+      the client to which the registration access token was issued. If
+      desired, the server MAY simply return the client registration endpoint
+      URL as the client configuration endpoint URL and change behavior based
+      on the authentication context provided by the registration access
+      token.</t>
     </section>
 
     <section anchor="History" title="Document History">
