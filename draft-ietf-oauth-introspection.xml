@@ -127,8 +127,8 @@
         defined in <xref target="W3C.REC-html5-20141028"/>. The protected
         resource sends a parameter representing the token along with optional
         parameters representing additional context that is known by the
-        protected resource to aid the authorization server in its response.
-        These parameters</t>
+        protected resource to aid the authorization server in its
+        response.</t>
 
         <t hangText="instance_name"><list style="hanging">
             <t hangText="token">REQUIRED. The string value of the token. For
