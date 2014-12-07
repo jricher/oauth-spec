@@ -177,7 +177,7 @@
       <section anchor="IntrospectionResponse" title="Introspection Response">
         <t>The server responds with a <xref target="RFC7159">JSON
         object</xref> in <spanx style="verb">application/json</spanx> format
-        with the following top-level members. Several of these </t>
+        with the following top-level members.</t>
 
         <t><list style="hanging">
             <t hangText="active">REQUIRED. Boolean indicator of whether or not
