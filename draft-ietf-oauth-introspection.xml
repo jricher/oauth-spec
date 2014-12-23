@@ -177,9 +177,9 @@
 
           <artwork><![CDATA[
   POST /introspect HTTP/1.1
+  Host: server.example.com
   Accept: application/json
   Content-Type: application/x-www-form-urlencoded
-  Host: server.example.com
   Authorization: Bearer 23410913-abewfq.123483
 
   token=2YotnFZFEjr1zCsicMWpAA
@@ -197,8 +197,9 @@
 
           <artwork><![CDATA[
   POST /introspect HTTP/1.1
-  Accept: application/json
   Host: server.example.com
+  Accept: application/json
+  Content-Type: application/x-www-form-urlencoded
   Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
 
   token=mF_9.B5f-4.1JqM&token_type_hint=access_token
