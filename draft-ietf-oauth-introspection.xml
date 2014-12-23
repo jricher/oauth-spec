@@ -140,13 +140,6 @@
             target="RFC6749">OAuth 2.0</xref> section 5.1. Other token types
             are outside the scope of this specification.</t>
 
-            <t hangText="resource_id">OPTIONAL. A service-specific string
-            identifying the resource that the token is being used for. This
-            value allows the protected resource to convey to the authorization
-            server the context in which the token is being used at the
-            protected resource, allowing the authorization server to tailor
-            its response accordingly if desired.</t>
-
             <t hangText="token_type_hint">OPTIONAL. A hint about the type of
             the token submitted for introspection. The protected resource re
             MAY pass this parameter in order to help the authorization server
@@ -523,6 +516,11 @@
       <t>[[ To be removed by the RFC Editor. ]]</t>
 
       <t>- 04</t>
+
+      <t><list style="symbols">
+          <t>Removed <spanx style="verb">resource_id</spanx> from request.</t>
+        </list></t>
+
       <t>- 03</t>
 
       <t><list style="symbols">
