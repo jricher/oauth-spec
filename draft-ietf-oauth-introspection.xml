@@ -165,6 +165,46 @@
         target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>. The methods of
         managing and validating these authentication credentials are out of
         scope of this specification.</t>
+
+        <t>For example, the following example shows a protected resource
+        calling the token introspection endpoint to query about an OAuth 2.0
+        bearer. The protected resource is using a separate OAuth 2.0 bearer
+        token to authorize this call.</t>
+
+        <figure>
+          <preamble>Following is a non-normative example request (with line
+          wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[
+  POST /introspect HTTP/1.1
+  Accept: application/json
+  Content-Type: application/x-www-form-urlencoded
+  Host: server.example.com
+  Authorization: Bearer 23410913-abewfq.123483
+
+  token=2YotnFZFEjr1zCsicMWpAA
+
+]]></artwork>
+        </figure>
+
+        <t>In this example, the protected resource uses a client identifier
+        and client secret to authenticate itself to the introspection endpoint
+        as well as send a token type hint.</t>
+
+        <figure>
+          <preamble>Following is a non-normative example request (with line
+          wraps for display purposes only):</preamble>
+
+          <artwork><![CDATA[
+  POST /introspect HTTP/1.1
+  Accept: application/json
+  Host: server.example.com
+  Authorization: Basic czZCaGRSa3F0MzpnWDFmQmF0M2JW
+
+  token=mF_9.B5f-4.1JqM&token_type_hint=access_token
+
+]]></artwork>
+        </figure>
       </section>
 
       <section anchor="IntrospectionResponse" title="Introspection Response">
@@ -227,17 +267,70 @@
           </list></t>
 
         <t>Specific implementations MAY extend this structure with their own
-        service-specific pieces of information.</t>
+        service-specific pieces of information as top-level members of this
+        JSON object.</t>
+
+        <t>The authorization server MAY respond differently to different
+        protected resources making the same request. For instance, an
+        authorization server MAY limit which scopes from a given token for
+        each protected resources in order to prevent protected resources from
+        learning more about the larger network than is necessary for their
+        function.</t>
 
         <t>The response MAY be cached by the protected resource.</t>
 
-        <t>The authorization server MAY respond differently to different
-        protected resources making the same request.</t>
+        <t>For example, the following response contains a set of information
+        about an active token:</t>
 
-        <t>Note that in order to avoid disclosing too much of the
+        <figure>
+          <preamble>Following is a non-normative example response:</preamble>
+
+          <artwork><![CDATA[
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+
+  {
+   "active": true,
+   "client_id": "l238j323ds-23ij4",
+   "user_id": "jdoe",
+   "scope": "read write dolphin",
+   "sub": "Z5O3upPC88QrAjx00dis",
+   "aud": "https://protected.example.net/resource",
+   "iss": "https://server.example.com/",
+   "exp": 1419356238,
+   "iat": 1419350238,
+   "extension_field": "twenty-seven"
+  }
+
+]]></artwork>
+        </figure>
+
+        <t/>
+
+        <t>If the introspection call is properly authorized but the token is
+        not active, does not exist on this server, or the protected resource
+        is not allowed to introspect this particular token, the authorization
+        server MUST return an introspection response with the active field set
+        to false. Note that in order to avoid disclosing too much of the
         authorization server's state to a third party, the authorization
         server SHOULD NOT include any additional information about an inactive
-        token, including why the token is inactive.</t>
+        token, including why the token is inactive. For example, the response
+        for a token that has been revoked or is otherwise invalid would look
+        like the following:</t>
+
+        <figure>
+          <preamble>Following is a non-normative example response:</preamble>
+
+          <artwork><![CDATA[
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+
+  {
+   "active": false
+  }
+
+]]></artwork>
+        </figure>
       </section>
 
       <section anchor="ErrorResponse" title="Error Response">
@@ -253,6 +346,14 @@
         otherwise invalid for this request, the authorization server responds
         with an HTTP 401 code as described in section 3 of <xref
         target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
+
+        <t>Note that a properly formed and authorized query for an inactive or
+        otherwise invalid token (or a token the protected resource is not
+        allowed to know about) is not considered an error response by this
+        specification. In these cases, the authorization server MUST instead
+        respond with an introspection response with the <spanx style="verb">active</spanx>
+        field set to <spanx style="verb">false</spanx> as described in <xref
+        target="IntrospectionResponse"/>.</t>
       </section>
     </section>
 
@@ -519,6 +620,8 @@
 
       <t><list style="symbols">
           <t>Removed <spanx style="verb">resource_id</spanx> from request.</t>
+
+          <t>Added examples.</t>
         </list></t>
 
       <t>- 03</t>
