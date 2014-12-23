@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-introspection-03"
+<rfc category="std" docName="draft-ietf-oauth-introspection-04"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth 2.0 Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="6" month="December" year="2014"/>
+    <date day="23" month="December" year="2014"/>
 
     <area>Security</area>
 
@@ -522,6 +522,7 @@
     <section title="Document History">
       <t>[[ To be removed by the RFC Editor. ]]</t>
 
+      <t>- 04</t>
       <t>- 03</t>
 
       <t><list style="symbols">
