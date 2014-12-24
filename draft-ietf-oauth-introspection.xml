@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-introspection-04"
+<rfc category="std" docName="draft-ietf-oauth-introspection-05"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth 2.0 Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="23" month="December" year="2014"/>
+    <date day="24" month="December" year="2014"/>
 
     <area>Security</area>
 
@@ -172,8 +172,7 @@
         token to authorize this call.</t>
 
         <figure>
-          <preamble>Following is a non-normative example request (with line
-          wraps for display purposes only):</preamble>
+          <preamble>Following is a non-normative example request:</preamble>
 
           <artwork><![CDATA[
   POST /introspect HTTP/1.1
@@ -192,8 +191,7 @@
         as well as send a token type hint.</t>
 
         <figure>
-          <preamble>Following is a non-normative example request (with line
-          wraps for display purposes only):</preamble>
+          <preamble>Following is a non-normative example request:</preamble>
 
           <artwork><![CDATA[
   POST /introspect HTTP/1.1
@@ -616,6 +614,12 @@
 
     <section title="Document History">
       <t>[[ To be removed by the RFC Editor. ]]</t>
+
+      <t>-05</t>
+
+      <t><list style="symbols">
+          <t>Removed extraneous "linewrap" note from examples.</t>
+        </list></t>
 
       <t>- 04</t>
 
