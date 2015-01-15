@@ -140,24 +140,24 @@
         <t>This specification defines the following terms:</t>
 
         <t><list style="hanging">
-            <t hangText="Client Developer"><vspace/> The person or
-            organization that builds a client software package and prepares it
-            for distribution.</t>
+            <t hangText="Client Developer"><vspace/>The person or organization
+            that builds a client software package and prepares it for
+            distribution.</t>
 
-            <t hangText="Client Instance"><vspace/> A deployed instance of a
+            <t hangText="Client Instance"><vspace/>A deployed instance of a
             piece of client software.</t>
 
-            <t hangText="Client Software"><vspace/> Software implementing an
+            <t hangText="Client Software"><vspace/>Software implementing an
             OAuth 2.0 client.</t>
 
-            <t hangText="Client Registration Endpoint"><vspace/> OAuth 2.0
+            <t hangText="Client Registration Endpoint"><vspace/>OAuth 2.0
             endpoint through which a client can be registered at an
             authorization server. The means by which the URL for this endpoint
             is obtained are out of scope for this specification.</t>
 
-            <t hangText="Initial Access Token"><vspace/> OAuth 2.0 access
-            token optionally issued by an authorization server to a developer
-            or client and used to authorize calls to the client registration
+            <t hangText="Initial Access Token"><vspace/>OAuth 2.0 access token
+            optionally issued by an authorization server to a developer or
+            client and used to authorize calls to the client registration
             endpoint. The type and format of this token are likely
             service-specific and are out of scope for this specification. The
             means by which the authorization server issues this token as well
@@ -166,23 +166,22 @@
             access token is required when the authorization server limits the
             parties that can register a client.</t>
 
-            <t hangText="Deployment Organization"><vspace/> An administrative
+            <t hangText="Deployment Organization"><vspace/>An administrative
             security domain under which a software API is deployed and
             protected by an OAuth 2.0 framework. In simple cloud deployments,
             the software API publisher and the deployment organization may be
             the same. In other scenarios, a software publisher may be working
             with many different deployment organizations.</t>
 
-            <t hangText="Software API Deployment"><vspace/> A deployed
-            instance of a software API that is protected by OAuth 2.0 in a
-            particular deployment organization domain. For any particular
-            software API, there may be one or more deployments. A software API
-            deployment typically has an associated OAuth 2.0 authorization
-            server as well as a client registration endpoint. The means by
-            which endpoints are obtained are out of scope for this
-            specification.</t>
+            <t hangText="Software API Deployment"><vspace/>A deployed instance
+            of a software API that is protected by OAuth 2.0 in a particular
+            deployment organization domain. For any particular software API,
+            there may be one or more deployments. A software API deployment
+            typically has an associated OAuth 2.0 authorization server as well
+            as a client registration endpoint. The means by which endpoints
+            are obtained are out of scope for this specification.</t>
 
-            <t hangText="Software API Publisher"><vspace/> The organization
+            <t hangText="Software API Publisher"><vspace/>The organization
             that defines a particular web accessible API that may deployed in
             one or more deployment environments. A publisher may be any
             commercial, public, private, or open source organization that is
@@ -190,7 +189,7 @@
             protected via OAuth 2.0. In some cases a software API publisher
             and a client developer may be the same organization.</t>
 
-            <t hangText="Software Statement"><vspace/> Digitally signed or
+            <t hangText="Software Statement"><vspace/>Digitally signed or
             MACed JSON Web Token (JWT) <xref target="JWT"/> that asserts
             metadata values about the client software. In some cases, a
             software statement will be issued directly by the organization or
@@ -2044,6 +2043,12 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-22</t>
+
+      <t><list style="symbols">
+          <t/>
+        </list></t>
 
       <t>-21</t>
 
