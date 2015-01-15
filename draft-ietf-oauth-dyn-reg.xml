@@ -192,16 +192,14 @@
             <t hangText="Software Statement"><vspace/>Digitally signed or
             MACed JSON Web Token (JWT) <xref target="JWT"/> that asserts
             metadata values about the client software. In some cases, a
-            software statement will be issued directly by the organization or
-            developer that creates the client software. In other cases, a
-            software statement will be issued by a third party organization
-            for use by the organization or developer that creates the client
-            software. In both cases, the trust relationship the authorization
-            server has with the issuer of the software statement is intended
-            to be used as an input to the evaluation of whether the
-            registration request is accepted. A software statement can be
-            presented to an authorization server as part of a client
-            registration request.</t>
+            software statement will be issued directly by the client
+            developer. In other cases, a software statement will be issued by
+            a third party organization for use by the client developer. In
+            both cases, the trust relationship the authorization server has
+            with the issuer of the software statement is intended to be used
+            as an input to the evaluation of whether the registration request
+            is accepted. A software statement can be presented to an
+            authorization server as part of a client registration request.</t>
           </list></t>
       </section>
 
@@ -752,8 +750,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
 
         <figure>
           <preamble>The following is a non-normative example request using an
-          initial access token (with line wraps within values for display
-          purposes only):</preamble>
+          initial access token and registering a JWK set by value (with line
+          wraps within values for display purposes only):</preamble>
 
           <artwork><![CDATA[
   POST /register HTTP/1.1
@@ -770,7 +768,16 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D",
    "token_endpoint_auth_method":"client_secret_basic",
    "policy_uri":"https://client.example.org/policy.html",
-   "jwks":{"keys":[{...omitted for brevity...}]},
+   "jwks":{"keys":[{
+      "e": "AQAB",
+      "n": "nj3YJwsLUFl9BmpAbkOswCNVx17Eh9wMO-_AReZwBqfaWFcfGHrZXsIV2V
+MCNVNU8Tpb4obUaSXcRcQ-VMsfQPJm9IzgtRdAY8NN8Xb7PEcYyklBjvTtuPbpzIaqyiUe
+pzUXNDFuAOOkrIol3WmflPUUgMKULBN0EUd1fpOD70pRM0rlp_gg_WNUKoW1V-3keYUJoX
+H9NztEDm_D2MQXj9eGOJJ8yPgGL8PAZMLe2R7jb9TxOCPDED7tY_TU4nFPlxptw59A42ml
+dEmViXsKQt60s1SLboazxFKveqXC_jpLUt22OC6GUG63p-REw-ZOr3r845z50wMuzifQrM
+I9bQ",
+      "kty": "RSA"
+   }]},
    "example_extension_parameter": "example_value"
   }
 ]]></artwork>
@@ -1512,7 +1519,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       redirect-based flow and the same redirection URIs. An authorization
       server SHOULD NOT issue the same client secret to multiple instances of
       a registered client, even if they are issued the same client identifier,
-      or else the client secret could be leaked, allowing malicious imposters
+      or else the client secret could be leaked, allowing malicious impostors
       to impersonate a confidential client.</t>
     </section>
 
@@ -2053,7 +2060,11 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <t>-22</t>
 
       <t><list style="symbols">
-          <t>Reorganized retigstraiton response sections.</t>
+          <t>Reorganized registration response sections.</t>
+
+          <t>Addressed shepherd comments.</t>
+
+          <t>Added concrete JWK set to example.</t>
         </list></t>
 
       <t>-21</t>
