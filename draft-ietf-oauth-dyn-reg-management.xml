@@ -115,12 +115,12 @@
         <t>This specification defines the following terms:</t>
 
         <t><list style="hanging">
-            <t hangText="Client Configuration Endpoint"><vspace/> OAuth 2.0
+            <t hangText="Client Configuration Endpoint"><vspace/>OAuth 2.0
             endpoint through which registration information for a registered
             client can be managed. This URL for this endpoint is returned by
             the authorization server in the client information response.</t>
 
-            <t hangText="Registration Access Token"><vspace/> OAuth 2.0 bearer
+            <t hangText="Registration Access Token"><vspace/>OAuth 2.0 bearer
             token issued by the authorization server through the client
             registration endpoint that is used to authenticate the caller when
             accessing the client's registration information at the client
@@ -419,7 +419,7 @@
         associated with this client.</t>
 
         <t>If a client has been successfully deprovisioned, the authorization
-        server MUST responsd with an HTTP 204 No Content message.</t>
+        server MUST respond with an HTTP 204 No Content message.</t>
 
         <t>If the server does not support the delete method, the server MUST
         respond with an HTTP 405 Not Supported.</t>
@@ -447,64 +447,44 @@
       </section>
     </section>
 
-    <section anchor="Responses" title="Responses">
-      <t>In response to certain requests from the client to either the client
-      registration endpoint or the client configuration endpoint as described
-      in this specification, the authorization server sends the following
-      response bodies.</t>
+    <section anchor="ClientInfoResponse" title="Client Information Response">
+      <t>This specification extends the client information response defined in
+      <xref target="OAuth.Registration">OAuth 2.0 Client Dynamic
+      Registration</xref>, which states that the response contains the client
+      identifier as well as the client secret, if the client is a confidential
+      client. When used with this specification, the client information
+      response also contains the fully qualified URL of the <xref
+      target="ClientConfigEndpoint">client configuration endpoint</xref> for
+      this specific client that the client or developer may use to manage the
+      client's registration configuration, as well as a registration access
+      token that is to be used by the client or developer to perform
+      subsequent operations at the client configuration endpoint.</t>
 
-      <section anchor="ClientInfoResponse" title="Client Information Response">
-        <t>This specification extends the client information response defined
-        in <xref target="OAuth.Registration">OAuth 2.0 Client Dynamic
-        Registration</xref>. The response contains the client identifier as
-        well as the client secret, if the client is a confidential client. The
-        response also contains the fully qualified URL of the <xref
-        target="ClientConfigEndpoint">client configuration endpoint</xref> for
-        this specific client that the client may use to obtain and update
-        information about itself. The response also contains a registration
-        access token that is to be used by the client to perform subsequent
-        operations at the client configuration endpoint.</t>
+      <t><list style="hanging">
+          <t hangText="registration_access_token"><vspace/> REQUIRED. Access
+          token used at the client configuration endpoint to perform
+          subsequent operations upon the client registration.</t>
 
-        <t><list style="hanging">
-            <t hangText="client_id"><vspace/> REQUIRED. OAuth 2.0 client
-            identifier.</t>
+          <t hangText="registration_client_uri"><vspace/> REQUIRED. Fully
+          qualified URL of the client configuration endpoint for this
+          client.</t>
+        </list></t>
 
-            <t hangText="client_secret"><vspace/> OPTIONAL. OAuth 2.0 client
-            secret.</t>
+      <t>Additionally, the authorization server MUST return all registered
+      metadata about this client, including any fields provisioned by the
+      authorization server itself. The authorization server MAY reject or
+      replace any of the client's requested metadata values submitted during
+      the registration or update requests and substitute them with suitable
+      values.</t>
 
-            <t hangText="client_id_issued_at"><vspace/> OPTIONAL. Time at
-            which the client identifier was issued, as defined by <xref
-            target="OAuth.Registration"/>.</t>
+      <t>The response is an <spanx style="verb">application/json</spanx>
+      document with all parameters as top-level members of a <xref
+      target="RFC7159">JSON object</xref>.</t>
 
-            <t hangText="client_secret_expires_at"><vspace/> REQUIRED if
-            <spanx style="verb">client_secret</spanx> is issued. Time at which
-            the <spanx style="verb">client_secret</spanx> will expire, as
-            defined by <xref target="OAuth.Registration"/>.</t>
+      <figure>
+        <preamble>Following is a non-normative example response:</preamble>
 
-            <t hangText="registration_access_token"><vspace/> REQUIRED. Access
-            token used at the client configuration endpoint to perform
-            subsequent operations upon the client registration.</t>
-
-            <t hangText="registration_client_uri"><vspace/> REQUIRED. Fully
-            qualified URL of the client configuration endpoint for this
-            client.</t>
-          </list></t>
-
-        <t>Additionally, the authorization server MUST return all registered
-        metadata about this client, including any fields provisioned by the
-        authorization server itself. The authorization server MAY reject or
-        replace any of the client's requested metadata values submitted during
-        the registration or update requests and substitute them with suitable
-        values.</t>
-
-        <t>The response is an <spanx style="verb">application/json</spanx>
-        document with all parameters as top-level members of a <xref
-        target="RFC7159">JSON object</xref>.</t>
-
-        <figure>
-          <preamble>Following is a non-normative example response:</preamble>
-
-          <artwork><![CDATA[
+        <artwork><![CDATA[
   HTTP/1.1 200 OK
   Content-Type: application/json
   Cache-Control: no-store
@@ -530,8 +510,7 @@
    "jwks_uri": "https://client.example.org/my_public_keys.jwks"
   }
 ]]></artwork>
-        </figure>
-      </section>
+      </figure>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -769,7 +748,8 @@
           to tie multiple instances of registered clients (each with their own
           distinct client identifier) back to the party to whom the initial
           access token was issued, usually an application developer. This
-          token should be used only at the client registration endpoint.</t>
+          token is usually intended to be used only at the client registration
+          endpoint.</t>
 
           <t>The registration access token is used by the client or developer
           at the client configuration endpoint and represents the holder's
@@ -779,13 +759,15 @@
           returned in a client information response. The registration access
           token is uniquely bound to the client identifier and is required to
           be presented with all calls to the client configuration endpoint.
-          The registration access token should be protected and should not be
-          shared between instances of a client (otherwise, one instance could
-          change or delete registration values for all instances of the
-          client). The registration access token can be rotated through the
-          use of the client update method on the client configuration
-          endpoint. The registration access token should be used only at the
-          client configuration endpoint.</t>
+          The registration access token should be protected as described in
+          <xref target="RFC6750"/> and should not be shared between instances
+          of a client. If a registration access token is shared between client
+          instances, one instance could change or delete registration values
+          for all other instances of the client. The registration access token
+          can be rotated through the use of the client read or update method
+          on the client configuration endpoint. The registration access token
+          is intended to be used only at the client configuration
+          endpoint.</t>
 
           <t>The client credentials (such as <spanx style="verb">client_secret</spanx>)
           are optional depending on the type of client and are used to
@@ -794,33 +776,36 @@
           instances. Note that since not all types of clients have client
           credentials, they cannot be used to manage client registrations at
           the client configuration endpoint. The client credentials can be
-          rotated through the use of the client update method on the client
-          configuration endpoint. The client credentials cannot be used for
-          authentication at the client registration endpoint or at the client
-          configuration endpoint.</t>
+          rotated through the use of the client read or update method on the
+          client configuration endpoint. The client credentials are intended
+          to be used only at the token endpoint.</t>
         </list></t>
 
       <section anchor="CredentialRotation" title="Credential Rotation">
-        <t>The authorization server MAY rotate the client's registration
-        access token and/or client credentials (such as a <spanx style="verb">client_secret</spanx>)
-        throughout the lifetime of the client in order to minimize the risk of
-        leakage of these credentials. The client can discover that these
-        values have changed by reading the client information response
-        returned from either a read or update request to the client
+        <t>The authorization server may be configured to issue new
+        registration access token and/or client credentials (such as a <spanx
+        style="verb">client_secret</spanx>) throughout the lifetime of the
+        client. This map help minimize the impact of exposed credentials. The
+        authorization server conveys new registration access tokens and client
+        credentials (if applicable) to the client in the client information
+        response of either a read or update request to the client
         configuration endpoint. The client's current registration access token
-        and client credentials (if applicable) MUST be included in this
-        response.</t>
+        and client credentials (if applicable) MUST be included in the client
+        information response.</t>
 
         <t>The registration access token SHOULD be rotated only in response to
-        an update request to the client configuration endpoint, at which point
-        the new registration access token is returned to the client and the
-        old registration access token SHOULD be discarded by both parties. If
-        the registration access token were to expire or be rotated outside of
-        such requests, the client or developer might be locked out of managing
-        the client's configuration.</t>
+        a read or update request to the client configuration endpoint, at
+        which point the new registration access token is returned to the
+        client and the old registration access token MUST be discarded by the
+        client and SHOULD be discarded by the server, if possible. If instead
+        the registration access token were to expire or be invalidated outside
+        of such requests, the client or developer might be locked out of
+        managing the client's configuration.</t>
 
-        <t>Methods by which the client can request credential rotation are
-        outside the scope of this document.</t>
+        <t>Note that the authorization server decides the frequency of the
+        credential rotation and not the client. Methods by which the client
+        can request credential rotation are outside the scope of this
+        document.</t>
       </section>
     </section>
 
@@ -863,7 +848,7 @@
       <t>-07</t>
 
       <t><list style="symbols">
-          <t/>
+          <t>Editorial clarifications due to document shepherd feedback.</t>
         </list></t>
 
       <t>-06</t>
@@ -873,7 +858,7 @@
 
           <t>Moved several explanatory sections to the appendix.</t>
 
-          <t>Clarified read opertaions.</t>
+          <t>Clarified read operations.</t>
 
           <t>Added IANA request.</t>
         </list></t>
