@@ -219,8 +219,9 @@
  |           |--(C)- Client Registration Request -->|    Client     |
  | Client or |                                      | Registration  |
  | Developer |<-(D)- Client Information Response ---|   Endpoint    |
- |           |                                      +---------------+
+ |           |        or Client Error Response      +---------------+
  +-----------+
+
 ]]></artwork>
 
           <postamble>Figure 1: Abstract Dynamic Client Registration
@@ -256,6 +257,9 @@
             a client secret if applicable for this client, and possibly other
             values.</t>
           </list></t>
+
+        <t>Examples of different configurations and usages are included in
+        <xref target="UseCases"/>.</t>
       </section>
     </section>
 
@@ -826,8 +830,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         </section>
       </section>
 
-      <section anchor="RegistrationResponse"
-               title="Client Registration Response">
+      <section anchor="Responses" title="Responses">
         <t>Upon a successful registration request, the authorization server
         returns a client identifier for the client. The server responds with
         an HTTP 201 Created code and a body of type <spanx style="verb">application/json</spanx>
@@ -836,68 +839,67 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         <t>Upon an unsuccessful registration request, the authorization server
         responds with an error, as described in <xref
         target="ClientRegistrationError"/>.</t>
-      </section>
-    </section>
 
-    <section anchor="Responses" title="Responses">
-      <t>The following responses are sent in response to registration
-      requests.</t>
+        <section anchor="ClientInfoResponse"
+                 title="Client Information Response">
+          <t>The response contains the client identifier as well as the client
+          secret, if the client is a confidential client. The response MAY
+          contain additional fields as specified by extensions to this
+          specification.</t>
 
-      <section anchor="ClientInfoResponse" title="Client Information Response">
-        <t>The response contains the client identifier as well as the client
-        secret, if the client is a confidential client. The response MAY
-        contain additional fields as specified by extensions to this
-        specification.</t>
+          <t><list style="hanging">
+              <t hangText="client_id"><vspace/> REQUIRED. OAuth 2.0 client
+              identifier. It SHOULD NOT be currently valid for any other
+              registered client, though an authorization server MAY issue the
+              same client identifier to multiple instances of a registered
+              client at its discretion.</t>
 
-        <t><list style="hanging">
-            <t hangText="client_id"><vspace/> REQUIRED. OAuth 2.0 client
-            identifier. It SHOULD NOT be currently valid for any other
-            registered client, though an authorization server MAY issue the
-            same client identifier to multiple instances of a registered
-            client at its discretion.</t>
+              <t hangText="client_secret"><vspace/> OPTIONAL. OAuth 2.0 client
+              secret. If issued, this MUST be unique for each <spanx
+              style="verb">client_id</spanx> and SHOULD be unique for multiple
+              instances of a client using the same <spanx style="verb">client_id</spanx>.
+              This value is used by confidential clients to authenticate to
+              the token endpoint as described in <xref target="RFC6749">OAuth
+              2.0</xref> Section 2.3.1.</t>
 
-            <t hangText="client_secret"><vspace/> OPTIONAL. OAuth 2.0 client
-            secret. If issued, this MUST be unique for each <spanx
-            style="verb">client_id</spanx> and SHOULD be unique for multiple
-            instances of a client using the same <spanx style="verb">client_id</spanx>.
-            This value is used by confidential clients to authenticate to the
-            token endpoint as described in <xref target="RFC6749">OAuth
-            2.0</xref> Section 2.3.1.</t>
+              <t hangText="client_id_issued_at"><vspace/> OPTIONAL. Time at
+              which the client identifier was issued. The time is represented
+              as the number of seconds from 1970-01-01T0:0:0Z as measured in
+              UTC until the date/time of issuance.</t>
 
-            <t hangText="client_id_issued_at"><vspace/> OPTIONAL. Time at
-            which the client identifier was issued. The time is represented as
-            the number of seconds from 1970-01-01T0:0:0Z as measured in UTC
-            until the date/time of issuance.</t>
+              <t hangText="client_secret_expires_at"><vspace/> REQUIRED if
+              <spanx style="verb">client_secret</spanx> is issued. Time at
+              which the client secret will expire or 0 if it will not expire.
+              The time is represented as the number of seconds from
+              1970-01-01T0:0:0Z as measured in UTC until the date/time of
+              expiration.</t>
+            </list></t>
 
-            <t hangText="client_secret_expires_at"><vspace/> REQUIRED if
-            <spanx style="verb">client_secret</spanx> is issued. Time at which
-            the client secret will expire or 0 if it will not expire. The time
-            is represented as the number of seconds from 1970-01-01T0:0:0Z as
-            measured in UTC until the date/time of expiration.</t>
-          </list></t>
+          <t>Additionally, the authorization server MUST return all registered
+          metadata about this client, including any fields provisioned by the
+          authorization server itself. The authorization server MAY reject or
+          replace any of the client's requested metadata values submitted
+          during the registration and substitute them with suitable
+          values.</t>
 
-        <t>Additionally, the authorization server MUST return all registered
-        metadata about this client, including any fields provisioned by the
-        authorization server itself. The authorization server MAY reject or
-        replace any of the client's requested metadata values submitted during
-        the registration and substitute them with suitable values.</t>
+          <t>The response is an <spanx style="verb">application/json</spanx>
+          document with all parameters as top-level members of a <xref
+          target="RFC7159">JSON object</xref>.</t>
 
-        <t>The response is an <spanx style="verb">application/json</spanx>
-        document with all parameters as top-level members of a <xref
-        target="RFC7159">JSON object</xref>.</t>
+          <t>If a software statement was used as part of the registration, its
+          value MUST be returned unmodified in the response along with other
+          metadata using the <spanx style="verb">software_statement</spanx>
+          member name. Client metadata elements used from the software
+          statement MUST also be returned directly as top-level client
+          metadata values in the registration response (possibly with
+          different values, since the values requested and the values used may
+          differ).</t>
 
-        <t>If a software statement was used as part of the registration, its
-        value MUST be returned unmodified in the response along with other
-        metadata using the <spanx style="verb">software_statement</spanx>
-        member name. Client metadata elements used from the software statement
-        MUST also be returned directly as top-level client metadata values in
-        the registration response (possibly with different values, since the
-        values requested and the values used may differ).</t>
+          <figure>
+            <preamble>Following is a non-normative example
+            response:</preamble>
 
-        <figure>
-          <preamble>Following is a non-normative example response:</preamble>
-
-          <artwork><![CDATA[
+            <artwork><![CDATA[
   HTTP/1.1 201 Created
   Content-Type: application/json
   Cache-Control: no-store
@@ -921,59 +923,61 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
    "example_extension_parameter": "example_value"
   }
 ]]></artwork>
-        </figure>
-      </section>
+          </figure>
+        </section>
 
-      <section anchor="ClientRegistrationError"
-               title="Client Registration Error Response">
-        <t>When an OAuth 2.0 error condition occurs, such as the client
-        presenting an invalid initial access token, the authorization server
-        returns an error response appropriate to the OAuth 2.0 token type.</t>
+        <section anchor="ClientRegistrationError"
+                 title="Client Registration Error Response">
+          <t>When an OAuth 2.0 error condition occurs, such as the client
+          presenting an invalid initial access token, the authorization server
+          returns an error response appropriate to the OAuth 2.0 token
+          type.</t>
 
-        <t>When a registration error condition occurs, the authorization
-        server returns an HTTP 400 status code (unless otherwise specified)
-        with content type <spanx style="verb">application/json</spanx>
-        consisting of a <xref target="RFC7159">JSON object</xref> describing
-        the error in the response body.</t>
+          <t>When a registration error condition occurs, the authorization
+          server returns an HTTP 400 status code (unless otherwise specified)
+          with content type <spanx style="verb">application/json</spanx>
+          consisting of a <xref target="RFC7159">JSON object</xref> describing
+          the error in the response body.</t>
 
-        <t>Two members are defined for inclusion in the JSON object:</t>
+          <t>Two members are defined for inclusion in the JSON object:</t>
 
-        <t><list style="hanging">
-            <t hangText="error"><vspace/> REQUIRED. Single ASCII error code
-            string.</t>
+          <t><list style="hanging">
+              <t hangText="error"><vspace/> REQUIRED. Single ASCII error code
+              string.</t>
 
-            <t hangText="error_description"><vspace/> OPTIONAL. Human-readable
-            ASCII text description of the error used for debugging.</t>
-          </list> Other members MAY also be included, and if not understood,
-        MUST be ignored.</t>
+              <t hangText="error_description"><vspace/> OPTIONAL.
+              Human-readable ASCII text description of the error used for
+              debugging.</t>
+            </list> Other members MAY also be included, and if not understood,
+          MUST be ignored.</t>
 
-        <t>This specification defines the following error codes:</t>
+          <t>This specification defines the following error codes:</t>
 
-        <t><list style="hanging">
-            <t hangText="invalid_redirect_uri"><vspace/> The value of one or
-            more redirection URIs is invalid.</t>
+          <t><list style="hanging">
+              <t hangText="invalid_redirect_uri"><vspace/> The value of one or
+              more redirection URIs is invalid.</t>
 
-            <t hangText="invalid_client_metadata"><vspace/> The value of one
-            of the client metadata fields is invalid and the server has
-            rejected this request. Note that an authorization server MAY
-            choose to substitute a valid value for any requested parameter of
-            a client's metadata.</t>
+              <t hangText="invalid_client_metadata"><vspace/> The value of one
+              of the client metadata fields is invalid and the server has
+              rejected this request. Note that an authorization server MAY
+              choose to substitute a valid value for any requested parameter
+              of a client's metadata.</t>
 
-            <t hangText="invalid_software_statement"><vspace/> The software
-            statement presented is invalid.</t>
+              <t hangText="invalid_software_statement"><vspace/> The software
+              statement presented is invalid.</t>
 
-            <t hangText="unapproved_software_statement"><vspace/> The software
-            statement presented is not approved for use by this authorization
-            server.</t>
-          </list></t>
+              <t hangText="unapproved_software_statement"><vspace/> The
+              software statement presented is not approved for use by this
+              authorization server.</t>
+            </list></t>
 
-        <figure>
-          <preamble>Following is a non-normative example of an error response
-          resulting from a redirection URI that has been blacklisted by the
-          authorization server (with line wraps within values for display
-          purposes only):</preamble>
+          <figure>
+            <preamble>Following is a non-normative example of an error
+            response resulting from a redirection URI that has been
+            blacklisted by the authorization server (with line wraps within
+            values for display purposes only):</preamble>
 
-          <artwork><![CDATA[
+            <artwork><![CDATA[
   HTTP/1.1 400 Bad Request
   Content-Type: application/json
   Cache-Control: no-store
@@ -985,15 +989,16 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
      http://sketchy.example.com is not allowed by this server."
   }
 ]]></artwork>
-        </figure>
+          </figure>
 
-        <figure>
-          <preamble>Following is a non-normative example of an error response
-          resulting from an inconsistent combination of <spanx style="verb">response_types</spanx>
-          and <spanx style="verb">grant_types</spanx> values (with line wraps
-          within values for display purposes only):</preamble>
+          <figure>
+            <preamble>Following is a non-normative example of an error
+            response resulting from an inconsistent combination of <spanx
+            style="verb">response_types</spanx> and <spanx style="verb">grant_types</spanx>
+            values (with line wraps within values for display purposes
+            only):</preamble>
 
-          <artwork><![CDATA[
+            <artwork><![CDATA[
   HTTP/1.1 400 Bad Request
   Content-Type: application/json
   Cache-Control: no-store
@@ -1006,7 +1011,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
     'implicit' instead."
   }
 ]]></artwork>
-        </figure>
+          </figure>
+        </section>
       </section>
     </section>
 
@@ -2047,7 +2053,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <t>-22</t>
 
       <t><list style="symbols">
-          <t/>
+          <t>Reorganized retigstraiton response sections.</t>
         </list></t>
 
       <t>-21</t>
