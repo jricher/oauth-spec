@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-06"
+<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-07"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -859,6 +859,24 @@
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-07</t>
+
+      <t><list style="symbols">
+          <t/>
+        </list></t>
+
+      <t>-06</t>
+
+      <t><list style="symbols">
+          <t>Removed TLS 1.0.</t>
+
+          <t>Moved several explanatory sections to the appendix.</t>
+
+          <t>Clarified read opertaions.</t>
+
+          <t>Added IANA request.</t>
+        </list></t>
 
       <t>-05<list style="symbols">
           <t>Removed Phil Hunt from authors list, per request.</t>
