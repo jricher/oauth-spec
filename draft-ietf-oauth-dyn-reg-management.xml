@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-07"
+<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-08"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -61,7 +61,7 @@
       </address>
     </author>
 
-    <date day="15" month="January" year="2015"/>
+    <date day="27" month="January" year="2015"/>
 
     <area>Security</area>
 
@@ -239,7 +239,7 @@
       TLS and DTLS</xref>.</t>
 
       <t>Operations on this endpoint are switched through the use of different
-      <xref target="RFC2616">HTTP methods</xref>. If an authorization server
+      <xref target="RFC7231">HTTP methods</xref>. If an authorization server
       does not support a particular method on the client configuration
       endpoint, it MUST respond with the appropriate error code.</t>
 
@@ -587,8 +587,6 @@
     <references title="Normative References">
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2616.xml'?>
-
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
@@ -598,6 +596,8 @@
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
+
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7231.xml'?>
 
       <reference anchor="TLS.BCP">
         <front>
@@ -844,6 +844,12 @@
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-08</t>
+
+      <t><list style="symbols">
+          <t>Updated HTTP RFC reference.</t>
+        </list></t>
 
       <t>-07</t>
 
