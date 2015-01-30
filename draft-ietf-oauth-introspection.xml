@@ -141,7 +141,7 @@
             are outside the scope of this specification.</t>
 
             <t hangText="token_type_hint">OPTIONAL. A hint about the type of
-            the token submitted for introspection. The protected resource re
+            the token submitted for introspection. The protected resource 
             MAY pass this parameter in order to help the authorization server
             to optimize the token lookup. If the server is unable to locate
             the token using the given hint, it MUST extend its search across
