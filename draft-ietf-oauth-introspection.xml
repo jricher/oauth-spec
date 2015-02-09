@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-introspection-06"
+<rfc category="std" docName="draft-ietf-oauth-introspection-05"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth 2.0 Token Introspection</title>
@@ -615,17 +615,13 @@
     <section title="Document History">
       <t>[[ To be removed by the RFC Editor. ]]</t>
 
-      <t>-06</t>
+      <t>-05</t>
 
       <t><list style="symbols">
           <t>Typo fix.</t>
 
           <t>Updated author information.</t>
-        </list></t>
 
-      <t>-05</t>
-
-      <t><list style="symbols">
           <t>Removed extraneous "linewrap" note from examples.</t>
         </list></t>
 
