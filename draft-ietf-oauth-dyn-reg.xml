@@ -24,7 +24,8 @@
     <title abbrev="OAuth 2.0 Dynamic Registration">OAuth 2.0 Dynamic Client
     Registration Protocol</title>
 
-    <author fullname="Justin Richer" initials="J" surname="Richer">
+    <author fullname="Justin Richer" initials="J" role="editor"
+            surname="Richer">
       <organization/>
 
       <address>
