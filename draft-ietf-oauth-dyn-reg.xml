@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-22" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-23" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -25,10 +25,10 @@
     Registration Protocol</title>
 
     <author fullname="Justin Richer" initials="J" surname="Richer">
-      <organization>The MITRE Corporation</organization>
+      <organization/>
 
       <address>
-        <email>jricher@mitre.org</email>
+        <email>ietf@justin.richer.org</email>
       </address>
     </author>
 
@@ -68,7 +68,7 @@
       </address>
     </author>
 
-    <date day="15" month="January" year="2015"/>
+    <date day="9" month="February" year="2015"/>
 
     <area>Security</area>
 
@@ -2056,6 +2056,12 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-23</t>
+
+      <t><list style="symbols">
+          <t>Updated author information.</t>
+        </list></t>
 
       <t>-22</t>
 
