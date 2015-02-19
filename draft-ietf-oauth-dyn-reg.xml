@@ -409,8 +409,10 @@
 
           <t hangText="contacts"><vspace/>Array of strings representing ways
           to contact people responsible for this client, typically email
-          addresses. The authorization server MAY make these addresses
-          available to end users for support requests for the client.</t>
+          addresses. The authorization server MAY make these contact addresses
+          available to end users for support requests for the client, see the
+          <xref target="Privacy">Privacy Considerations</xref> section for
+          more information.</t>
 
           <t hangText="tos_uri"><vspace/>URL that points to a human-readable
           terms of service document for the client that describes a
@@ -1542,7 +1544,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       to impersonate a confidential client.</t>
     </section>
 
-    <section title="Privacy Considerations">
+    <section anchor="Privacy" title="Privacy Considerations">
       <t>As the protocol described in this specification deals almost
       exclusively with information about software and not about people, there
       are very few privacy concerns for its use. The notable exception is the
@@ -1558,6 +1560,32 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       address for the client to allow for continuing contact and support of
       the client software after the developer moves on and someone else takes
       over that responsibility.</t>
+
+      <t>In general, the metadata for a client, such as the client name and
+      software identifier, are common across all instances of a piece of
+      client software and therefore pose no privacy issues for end users.
+      Client identifiers on the other hand are usually unique to a specific
+      instance of a client. If this instance is used by many users (such as a
+      web site), there are no additional privacy concerns, but if an instance
+      is installed on a single user's device (such as a native application)
+      then the client identifier could be tracked during OAuth 2.0
+      transactions and its use be tied to the single end user. However, as the
+      client software still needs to be authorized by a resource owner through
+      an OAuth 2.0 authorization grant, this type of tracking can occur
+      whether or not the client identifier is unique by correlating the
+      authenticated resource owner with the requesting client identifier. </t>
+
+      <t>Note that clients are forbidden by this specification from asserting
+      their own client identifier. If the client were able to do so, an
+      individual client instance could be tracked across multiple colluding
+      authorization servers, leading to privacy and security issues.
+      Additionally, client identifiers are generally issued uniquely per
+      registration request, even for the same instance of software. In this
+      way, an application could marginally improve privacy by registering
+      multiple times and appearing to be completely separate applications.
+      However, this technique does incur significant usability cost in the
+      form of requiring multiple authorizations per resource owner and is
+      therefore unlikely to be used in practice.</t>
     </section>
   </middle>
 
@@ -2083,7 +2111,13 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
           <t>Clarified opaqueness of software_id and software_statement.</t>
 
-          <t>Created forward pointer for TLS considerations.</t>
+          <t>Created forward pointer to security considerations section for
+          TLS requirements on registration endpoint.</t>
+
+          <t>Added forward pointer to privacy considerations section for the
+          contacts field.</t>
+
+          <t>Wrote privacy considerations around client_id tracking.</t>
         </list></t>
 
       <t>-23</t>
