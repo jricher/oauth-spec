@@ -1483,10 +1483,10 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       logo doesn't match the domain/site of redirection URIs. An authorization
       server could also refuse registration requests from a known software
       identifier that is requesting different redirection URIs or a different
-      client homepage URI. An authorization server can also present warning
-      messages to end users about dynamically registered clients in all cases,
-      especially if such clients have been recently registered or have not
-      been trusted by any users at the authorization server before.</t>
+      client URI. An authorization server can also present warning messages to
+      end users about dynamically registered clients in all cases, especially
+      if such clients have been recently registered or have not been trusted
+      by any users at the authorization server before.</t>
 
       <t>In a situation where the authorization server is supporting open
       client registration, it must be extremely careful with any URL provided
