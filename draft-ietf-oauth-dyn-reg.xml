@@ -141,15 +141,21 @@
         <t>This specification defines the following terms:</t>
 
         <t><list style="hanging">
-            <t hangText="Client Developer"><vspace/>The person or organization
-            that builds a client software package and prepares it for
-            distribution.</t>
+            <t hangText="Client Software"><vspace/>Software implementing an
+            OAuth 2.0 client.</t>
 
             <t hangText="Client Instance"><vspace/>A deployed instance of a
             piece of client software.</t>
 
-            <t hangText="Client Software"><vspace/>Software implementing an
-            OAuth 2.0 client.</t>
+            <t hangText="Client Developer"><vspace/>The person or organization
+            that builds a client software package and prepares it for
+            distribution. At the time of building the client, the developer is
+            often not aware of who the deploying service provider
+            organizations will be. Client developers will need to use dynamic
+            registration when they are unable to predict aspects of the
+            software, such as the deployment URLs, at compile time. For
+            instance, this can occur when the software API publisher and the
+            deploying organization are not the same.</t>
 
             <t hangText="Client Registration Endpoint"><vspace/>OAuth 2.0
             endpoint through which a client can be registered at an
@@ -168,27 +174,37 @@
             parties that can register a client.</t>
 
             <t hangText="Deployment Organization"><vspace/>An administrative
-            security domain under which a software API is deployed and
-            protected by an OAuth 2.0 framework. In simple cloud deployments,
-            the software API publisher and the deployment organization may be
-            the same. In other scenarios, a software publisher may be working
-            with many different deployment organizations.</t>
+            security domain under which a software API (service) is deployed
+            and protected by an OAuth 2.0 framework. In some OAuth scenarios,
+            the deployment organization and the software API publisher are the
+            same. In these cases, the deploying organization will often have a
+            close relationship with client software developers. In many other
+            cases, the definer of the service may be an independent
+            third-party publisher or a standards organization. When working to
+            a published specification for an API, the client software
+            developer is unable to have a prior relationship with the
+            potentially many deployment organizations deploying the software
+            API (service).</t>
 
             <t hangText="Software API Deployment"><vspace/>A deployed instance
-            of a software API that is protected by OAuth 2.0 in a particular
-            deployment organization domain. For any particular software API,
-            there may be one or more deployments. A software API deployment
-            typically has an associated OAuth 2.0 authorization server as well
-            as a client registration endpoint. The means by which endpoints
-            are obtained are out of scope for this specification.</t>
+            of a software API that is protected by OAuth 2.0 (a protected
+            resource) in a particular deployment organization domain. For any
+            particular software API, there may be one or more deployments. A
+            software API deployment typically has an associated OAuth 2.0
+            authorization server as well as a client registration endpoint.
+            The means by which endpoints are obtained are out of scope for
+            this specification.</t>
 
             <t hangText="Software API Publisher"><vspace/>The organization
-            that defines a particular web accessible API that may deployed in
-            one or more deployment environments. A publisher may be any
-            commercial, public, private, or open source organization that is
-            responsible for publishing and distributing software that may be
-            protected via OAuth 2.0. In some cases a software API publisher
-            and a client developer may be the same organization.</t>
+            that defines a particular web accessible API that may be deployed
+            in one or more deployment environments. A publisher may be any
+            standards body, commercial, public, private, or open source
+            organization that is responsible for publishing and distributing
+            software and API specifications that may be protected via OAuth
+            2.0. In some cases a software API publisher and a client developer
+            may be the same organization. At the time of publication of a web
+            accessible API, the software publisher often does not have a prior
+            relationship with deploying organizations. </t>
 
             <t hangText="Software Statement"><vspace/>Digitally signed or
             MACed JSON Web Token (JWT) <xref target="JWT"/> that asserts
