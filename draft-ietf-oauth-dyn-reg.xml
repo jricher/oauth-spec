@@ -691,13 +691,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       HTTP POST messages with request parameters encoded in the entity body
       using the <spanx style="verb">application/json</spanx> format. The
       client registration endpoint MUST be protected by a transport-layer
-      security mechanism, and the server MUST support TLS 1.2 <xref
-      target="RFC5246">RFC 5246</xref> and MAY support additional
-      transport-layer mechanisms meeting its security requirements. When using
-      TLS, the client MUST perform a TLS/SSL server certificate check, per
-      <xref target="RFC6125">RFC 6125</xref>. Implementation security
-      considerations can be found in <xref target="TLS.BCP">Recommendations
-      for Secure Use of TLS and DTLS</xref>.</t>
+      security mechanism as described in <xref target="Security">Security
+      Considerations</xref>.</t>
 
       <t>The client registration endpoint MAY be an OAuth 2.0 protected
       resource and accept an initial access token in the form of an <xref
