@@ -454,20 +454,27 @@
           parameters MUST NOT both be present in the same request or
           response.</t>
 
-          <t hangText="software_id"><vspace/>Identifier for the software that
-          comprises a client. Unlike <spanx style="verb">client_id</spanx>,
-          which is issued by the authorization server and may vary between
-          instances, the <spanx style="verb">software_id</spanx> is asserted
-          by the client software on behalf of the software developer and is
-          intended to be shared among all instances of the client software.
-          The identifier SHOULD NOT change when software version changes or
-          when a new installation occurs.</t>
+          <t hangText="software_id"><vspace/>A unique identifier (e.g. a UUID)
+          assigned by the client developer or software publisher used by
+          registration endpoints to identify the client software to be
+          dynamically registered. Unlike <spanx style="verb">client_id</spanx>,
+          which is issued by the authorization server and SHOULD vary between
+          instances, the <spanx style="verb">software_id</spanx> SHOULD remain
+          the same for all instances of the client software. The <spanx
+          style="verb">software_id</spanx> SHOULD remain the same across
+          multiple updates or versions of the same piece of software. The
+          value of this field is not intended to be human readable and is
+          usually opaque to the client and authorization server.</t>
 
-          <t hangText="software_version"><vspace/>Version identifier for the
-          software that comprises a client. The value of this field is a
-          string that is intended to be compared using string equality
-          matching. The value of the <spanx style="verb">software_version</spanx>
-          SHOULD change on any update to the client software.</t>
+          <t hangText="software_version"><vspace/>A version identifier for the
+          client software identified by <spanx style="verb">software_id</spanx>.
+          The value of the <spanx style="verb">software_version</spanx> SHOULD
+          change on any update to the client software identified by the same
+          <spanx style="verb">software_id</spanx>. The value of this field is
+          a string that is intended to be compared using string equality
+          matching. The value of this field is not intended to be human
+          readable and is usually opaque to the client and authorization
+          server.</t>
         </list></t>
 
       <t>Extensions and profiles of this specification MAY expand this list.
