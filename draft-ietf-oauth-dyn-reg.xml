@@ -222,8 +222,6 @@
 
       <section anchor="ProtocolFlow" title="Protocol Flow">
         <figure>
-          <preamble/>
-
           <artwork><![CDATA[
      +--------(A)- Initial Access Token (OPTIONAL)
      |
@@ -242,6 +240,8 @@
           <postamble>Figure 1: Abstract Dynamic Client Registration
           Flow</postamble>
         </figure>
+
+        <t/>
 
         <t>The abstract OAuth 2.0 client dynamic registration flow illustrated
         in Figure 1 describes the interaction between the client or developer
@@ -2079,7 +2079,11 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <t>-24</t>
 
       <t><list style="symbols">
-          <t/>
+          <t>Clarified some party definitions.</t>
+
+          <t>Clarified opaqueness of software_id and software_statement.</t>
+
+          <t>Created forward pointer for TLS considerations.</t>
         </list></t>
 
       <t>-23</t>
