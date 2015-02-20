@@ -1564,15 +1564,16 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       software identifier, are common across all instances of a piece of
       client software and therefore pose no privacy issues for end-users.
       Client identifiers, on the other hand, are often unique to a specific
-      instance of a client. If this instance (such as a web site) is used by
-      many users, there are may not be significant privacy concerns, but if an instance
-      is installed on a single user's device (such as a native application),
-      then the client identifier could be tracked during OAuth 2.0
-      transactions and its use be tied to the single end-user. However, as the
-      client software still needs to be authorized by a resource owner through
-      an OAuth 2.0 authorization grant, this type of tracking can occur
-      whether or not the client identifier is unique by correlating the
-      authenticated resource owner with the requesting client identifier. </t>
+      instance of a client. For clients such as web sites that are used by
+      many users, there may not be significant privacy concerns regarding the
+      client identifier, but for clients such as native applications that are
+      installed on a single end-user's device, the client identifier could be
+      uniquely tracked during OAuth 2.0 transactions and its use tied to that
+      single end-user. However, as the client software still needs to be
+      authorized by a resource owner through an OAuth 2.0 authorization grant,
+      this type of tracking can occur whether or not the client identifier is
+      unique by correlating the authenticated resource owner with the
+      requesting client identifier.</t>
 
       <t>Note that clients are forbidden by this specification from creating
       their own client identifier. If the client were able to do so, an
