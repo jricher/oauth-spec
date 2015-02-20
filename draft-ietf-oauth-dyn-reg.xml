@@ -201,10 +201,10 @@
             standards body, commercial, public, private, or open source
             organization that is responsible for publishing and distributing
             software and API specifications that may be protected via OAuth
-            2.0. In some cases a software API publisher and a client developer
+            2.0. In some cases, a software API publisher and a client developer
             may be the same organization. At the time of publication of a web
             accessible API, the software publisher often does not have a prior
-            relationship with deploying organizations. </t>
+            relationship with the deploying organizations.</t>
 
             <t hangText="Software Statement"><vspace/>Digitally signed or
             MACed JSON Web Token (JWT) <xref target="JWT"/> that asserts
@@ -380,23 +380,23 @@
           style="verb">code</spanx> response type.</t>
 
           <t hangText="client_name"><vspace/>Human-readable name of the client
-          to be presented to the user during authorization. If omitted, the
+          to be presented to the end-user during authorization. If omitted, the
           authorization server MAY display the raw <spanx style="verb">client_id</spanx>
-          value to the user instead. It is RECOMMENDED that clients always
+          value to the end-user instead. It is RECOMMENDED that clients always
           send this field. The value of this field MAY be internationalized,
           as described in <xref target="HumanReadableClientMetadata"/>.</t>
 
           <t hangText="client_uri"><vspace/>URL of a web page providing
           information about the client. If present, the server SHOULD display
-          this URL to the end user in a clickable fashion. It is RECOMMENDED
+          this URL to the end-user in a clickable fashion. It is RECOMMENDED
           that clients always send this field. The value of this field MUST
           point to a valid web page. The value of this field MAY be
           internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
           <t hangText="logo_uri"><vspace/>URL that references a logo for the
-          client. If present, the server SHOULD display this image to the end
-          user during approval. The value of this field MUST point to a valid
+          client. If present, the server SHOULD display this image to the
+          end-user during approval. The value of this field MUST point to a valid
           image file. The value of this field MAY be internationalized, as
           described in <xref target="HumanReadableClientMetadata"/>.</t>
 
@@ -410,9 +410,8 @@
           <t hangText="contacts"><vspace/>Array of strings representing ways
           to contact people responsible for this client, typically email
           addresses. The authorization server MAY make these contact addresses
-          available to end users for support requests for the client, see the
-          <xref target="Privacy">Privacy Considerations</xref> section for
-          more information.</t>
+          available to end-users for support requests for the client.  See
+          <xref target="Privacy"/> for information on Privacy Considerations.</t>
 
           <t hangText="tos_uri"><vspace/>URL that points to a human-readable
           terms of service document for the client that describes a
@@ -465,7 +464,7 @@
           the same for all instances of the client software. The <spanx
           style="verb">software_id</spanx> SHOULD remain the same across
           multiple updates or versions of the same piece of software. The
-          value of this field is not intended to be human readable and is
+          value of this field is not intended to be human-readable and is
           usually opaque to the client and authorization server.</t>
 
           <t hangText="software_version"><vspace/>A version identifier for the
@@ -554,7 +553,7 @@
       </section>
 
       <section anchor="HumanReadableClientMetadata"
-               title="Human Readable Client Metadata">
+               title="Human-Readable Client Metadata">
         <t>Human-readable client metadata values and client metadata values
         that reference human-readable values MAY be represented in multiple
         languages and scripts. For example, the values of fields such as
@@ -693,8 +692,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       HTTP POST messages with request parameters encoded in the entity body
       using the <spanx style="verb">application/json</spanx> format. The
       client registration endpoint MUST be protected by a transport-layer
-      security mechanism as described in <xref target="Security">Security
-      Considerations</xref>.</t>
+      security mechanism, as described in <xref target="Security"/>.</t>
 
       <t>The client registration endpoint MAY be an OAuth 2.0 protected
       resource and accept an initial access token in the form of an <xref
@@ -824,7 +822,7 @@ qXC_jpLUt22OC6GUG63p-REw-ZOr3r845z50wMuzifQrMI9bQ",
           <figure>
             <preamble>In the following example, some registration parameters
             are conveyed as claims in a software statement from the example in
-            the <xref target="SoftwareStatement"/> section, while some values
+            <xref target="SoftwareStatement"/>, while some values
             specific to the client instance are conveyed as regular parameters
             (with line wraps within values for display purposes
             only):</preamble>
@@ -1411,7 +1409,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       transport-layer mechanisms meeting its security requirements. When using
       TLS, the client MUST perform a TLS/SSL server certificate check, per
       <xref target="RFC6125">RFC 6125</xref>. Implementation security
-      considerations can be found in <xref target="TLS.BCP">Recommendations
+      considerations can be found in <xref target="I-D.ietf-uta-tls-bcp">Recommendations
       for Secure Use of TLS and DTLS</xref>.</t>
 
       <t>For clients that use redirect-based grant types such as <spanx
@@ -1461,7 +1459,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       situation, a server MAY disallow clients from registering for both the
       <spanx style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>
       grant types simultaneously. Similarly, the <spanx style="verb">authorization_code</spanx>
-      grant type is used to represent access on behalf of an end user, but the
+      grant type is used to represent access on behalf of an end-user, but the
       <spanx style="verb">client_credentials</spanx> grant type represents
       access on behalf of the client itself. For security reasons, an
       authorization server could require that different scopes be used for
@@ -1484,7 +1482,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       server could also refuse registration requests from a known software
       identifier that is requesting different redirection URIs or a different
       client URI. An authorization server can also present warning messages to
-      end users about dynamically registered clients in all cases, especially
+      end-users about dynamically registered clients in all cases, especially
       if such clients have been recently registered or have not been trusted
       by any users at the authorization server before.</t>
 
@@ -1551,7 +1549,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <spanx style="verb">contacts</spanx> field as defined in <xref
       target="ClientMetadata">Client Metadata</xref>, which contains contact
       information for the developers or other parties responsible for the
-      client software. These values are intended to be displayed to end users
+      client software. These values are intended to be displayed to end-users
       and will be available to the administrators of the authorization server.
       As such, the developer may wish to provide an email address or other
       contact information expressly dedicated to the purpose of supporting the
@@ -1563,19 +1561,19 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
       <t>In general, the metadata for a client, such as the client name and
       software identifier, are common across all instances of a piece of
-      client software and therefore pose no privacy issues for end users.
-      Client identifiers on the other hand are usually unique to a specific
-      instance of a client. If this instance is used by many users (such as a
-      web site), there are no additional privacy concerns, but if an instance
-      is installed on a single user's device (such as a native application)
+      client software and therefore pose no privacy issues for end-users.
+      Client identifiers, on the other hand, are often unique to a specific
+      instance of a client. If this instance (such as a web site) is used by
+      many users, there are may not be significant privacy concerns, but if an instance
+      is installed on a single user's device (such as a native application),
       then the client identifier could be tracked during OAuth 2.0
-      transactions and its use be tied to the single end user. However, as the
+      transactions and its use be tied to the single end-user. However, as the
       client software still needs to be authorized by a resource owner through
       an OAuth 2.0 authorization grant, this type of tracking can occur
       whether or not the client identifier is unique by correlating the
       authenticated resource owner with the requesting client identifier. </t>
 
-      <t>Note that clients are forbidden by this specification from asserting
+      <t>Note that clients are forbidden by this specification from creating
       their own client identifier. If the client were able to do so, an
       individual client instance could be tracked across multiple colluding
       authorization servers, leading to privacy and security issues.
@@ -1642,7 +1640,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <date day="4" month="July" year="2014"/>
+          <date day="15" month="January" year="2015"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1688,7 +1686,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <date day="23" month="July" year="2014"/>
+          <date day="12" month="November" year="2015"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-oauth-jwt-bearer"/>
@@ -1730,7 +1728,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <date day="23" month="July" year="2014"/>
+          <date day="12" month="November" year="2015"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1775,7 +1773,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <date day="4" month="July" year="2014"/>
+          <date day="16" month="January" year="2015"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1798,7 +1796,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <date day="4" month="July" year="2014"/>
+          <date day="16" month="January" year="2015"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-jose-json-web-key"/>
@@ -1866,7 +1864,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <date day="26" month="August" year="2014"/>
+          <date day="9" month="February" year="2015"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1893,71 +1891,14 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             <organization abbrev="Microsoft">Microsoft</organization>
           </author>
 
-          <date day="25" month="February" year="2014"/>
+          <date day="8" month="November" year="2014" />
         </front>
 
         <format target="http://openid.net/specs/openid-connect-registration-1_0.html"
                 type="HTML"/>
       </reference>
 
-      <reference anchor="TLS.BCP">
-        <front>
-          <title>Recommendations for Secure Use of TLS and DTLS</title>
-
-          <author fullname="Yaron Sheffer" initials="Y." surname="Sheffer">
-            <organization>Porticor</organization>
-
-            <address>
-              <postal>
-                <street>29 HaHarash St.</street>
-
-                <city>Hod HaSharon</city>
-
-                <region/>
-
-                <code>4501303</code>
-
-                <country>Israel</country>
-              </postal>
-
-              <email>yaronf.ietf@gmail.com</email>
-            </address>
-          </author>
-
-          <author fullname="Ralph Holz" initials="R." surname="Holz">
-            <organization>Technische Universitaet Muenchen</organization>
-
-            <address>
-              <postal>
-                <street>Boltzmannstr. 3</street>
-
-                <city>Garching</city>
-
-                <region/>
-
-                <code>85748</code>
-
-                <country>Germany</country>
-              </postal>
-
-              <email>ralph.ietf@gmail.com</email>
-            </address>
-          </author>
-
-          <author fullname="Peter Saint-Andre" initials="P."
-                  surname="Saint-Andre">
-            <organization>&amp;yet</organization>
-
-            <address>
-              <email>peter@andyet.com</email>
-
-              <uri>https://andyet.com/</uri>
-            </address>
-          </author>
-
-          <date day="11" month="November" year="2014"/>
-        </front>
-      </reference>
+      <?rfc include="http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-uta-tls-bcp-09.xml" ?>
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-hardjono-oauth-umacore-10.xml' ?>
     </references>
@@ -2109,15 +2050,15 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <t><list style="symbols">
           <t>Clarified some party definitions.</t>
 
-          <t>Clarified opaqueness of software_id and software_statement.</t>
+          <t>Clarified the opaqueness of software_id and software_statement.</t>
 
-          <t>Created forward pointer to security considerations section for
-          TLS requirements on registration endpoint.</t>
+          <t>Created a forward pointer to the Security Considerations section for
+          TLS requirements on the registration endpoint.</t>
 
-          <t>Added forward pointer to privacy considerations section for the
+          <t>Added a forward pointer to the Privacy Considerations section for the
           contacts field.</t>
 
-          <t>Wrote privacy considerations around client_id tracking.</t>
+          <t>Wrote privacy considerations about client_id tracking.</t>
         </list></t>
 
       <t>-23</t>
