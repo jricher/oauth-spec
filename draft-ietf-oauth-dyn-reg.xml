@@ -201,10 +201,10 @@
             standards body, commercial, public, private, or open source
             organization that is responsible for publishing and distributing
             software and API specifications that may be protected via OAuth
-            2.0. In some cases, a software API publisher and a client developer
-            may be the same organization. At the time of publication of a web
-            accessible API, the software publisher often does not have a prior
-            relationship with the deploying organizations.</t>
+            2.0. In some cases, a software API publisher and a client
+            developer may be the same organization. At the time of publication
+            of a web accessible API, the software publisher often does not
+            have a prior relationship with the deploying organizations.</t>
 
             <t hangText="Software Statement"><vspace/>Digitally signed or
             MACed JSON Web Token (JWT) <xref target="JWT"/> that asserts
@@ -380,8 +380,8 @@
           style="verb">code</spanx> response type.</t>
 
           <t hangText="client_name"><vspace/>Human-readable name of the client
-          to be presented to the end-user during authorization. If omitted, the
-          authorization server MAY display the raw <spanx style="verb">client_id</spanx>
+          to be presented to the end-user during authorization. If omitted,
+          the authorization server MAY display the raw <spanx style="verb">client_id</spanx>
           value to the end-user instead. It is RECOMMENDED that clients always
           send this field. The value of this field MAY be internationalized,
           as described in <xref target="HumanReadableClientMetadata"/>.</t>
@@ -396,9 +396,9 @@
 
           <t hangText="logo_uri"><vspace/>URL that references a logo for the
           client. If present, the server SHOULD display this image to the
-          end-user during approval. The value of this field MUST point to a valid
-          image file. The value of this field MAY be internationalized, as
-          described in <xref target="HumanReadableClientMetadata"/>.</t>
+          end-user during approval. The value of this field MUST point to a
+          valid image file. The value of this field MAY be internationalized,
+          as described in <xref target="HumanReadableClientMetadata"/>.</t>
 
           <t hangText="scope"><vspace/>Space separated list of scope values
           (as described in Section 3.3 of <xref target="RFC6749">OAuth
@@ -410,8 +410,9 @@
           <t hangText="contacts"><vspace/>Array of strings representing ways
           to contact people responsible for this client, typically email
           addresses. The authorization server MAY make these contact addresses
-          available to end-users for support requests for the client.  See
-          <xref target="Privacy"/> for information on Privacy Considerations.</t>
+          available to end-users for support requests for the client. See
+          <xref target="Privacy"/> for information on Privacy
+          Considerations.</t>
 
           <t hangText="tos_uri"><vspace/>URL that points to a human-readable
           terms of service document for the client that describes a
@@ -822,10 +823,9 @@ qXC_jpLUt22OC6GUG63p-REw-ZOr3r845z50wMuzifQrMI9bQ",
           <figure>
             <preamble>In the following example, some registration parameters
             are conveyed as claims in a software statement from the example in
-            <xref target="SoftwareStatement"/>, while some values
-            specific to the client instance are conveyed as regular parameters
-            (with line wraps within values for display purposes
-            only):</preamble>
+            <xref target="SoftwareStatement"/>, while some values specific to
+            the client instance are conveyed as regular parameters (with line
+            wraps within values for display purposes only):</preamble>
 
             <artwork><![CDATA[
   POST /register HTTP/1.1
@@ -1409,8 +1409,9 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       transport-layer mechanisms meeting its security requirements. When using
       TLS, the client MUST perform a TLS/SSL server certificate check, per
       <xref target="RFC6125">RFC 6125</xref>. Implementation security
-      considerations can be found in <xref target="I-D.ietf-uta-tls-bcp">Recommendations
-      for Secure Use of TLS and DTLS</xref>.</t>
+      considerations can be found in <xref
+      target="I-D.ietf-uta-tls-bcp">Recommendations for Secure Use of TLS and
+      DTLS</xref>.</t>
 
       <t>For clients that use redirect-based grant types such as <spanx
       style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>,
@@ -1891,7 +1892,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             <organization abbrev="Microsoft">Microsoft</organization>
           </author>
 
-          <date day="8" month="November" year="2014" />
+          <date day="8" month="November" year="2014"/>
         </front>
 
         <format target="http://openid.net/specs/openid-connect-registration-1_0.html"
@@ -2050,13 +2051,14 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <t><list style="symbols">
           <t>Clarified some party definitions.</t>
 
-          <t>Clarified the opaqueness of software_id and software_statement.</t>
+          <t>Clarified the opaqueness of software_id and
+          software_statement.</t>
 
-          <t>Created a forward pointer to the Security Considerations section for
-          TLS requirements on the registration endpoint.</t>
+          <t>Created a forward pointer to the Security Considerations section
+          for TLS requirements on the registration endpoint.</t>
 
-          <t>Added a forward pointer to the Privacy Considerations section for the
-          contacts field.</t>
+          <t>Added a forward pointer to the Privacy Considerations section for
+          the contacts field.</t>
 
           <t>Wrote privacy considerations about client_id tracking.</t>
         </list></t>
