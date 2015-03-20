@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-24" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-25" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -55,9 +55,7 @@
       <organization>Newcastle University</organization>
 
       <address>
-        <email>m.p.machulak@ncl.ac.uk</email>
-
-        <uri>http://ncl.ac.uk/</uri>
+        <email>maciej.machulak@gmail.com</email>
       </address>
     </author>
 
@@ -69,7 +67,7 @@
       </address>
     </author>
 
-    <date day="20" month="February" year="2015"/>
+    <date day="20" month="March" year="2015"/>
 
     <area>Security</area>
 
@@ -90,12 +88,12 @@
 
   <middle>
     <section anchor="Introduction" title="Introduction">
-      <t>In order for an OAuth 2.0 client to utilize an OAuth 2.0
-      authorization server, the client needs specific information to interact
-      with the server, including an OAuth 2.0 client identifier to use at that
-      server. This specification describes how an OAuth 2.0 client can be
-      dynamically registered with an authorization server to obtain this
-      information.</t>
+      <t>In order for an <xref target="RFC6749">OAuth 2.0</xref> client to
+      utilize an OAuth 2.0 authorization server, the client needs specific
+      information to interact with the server, including an OAuth 2.0 client
+      identifier to use at that server. This specification describes how an
+      OAuth 2.0 client can be dynamically registered with an authorization
+      server to obtain this information.</t>
 
       <t>As part of the registration process, this specification also defines
       a mechanism for the client to present the authorization server with a
@@ -479,9 +477,12 @@
           server.</t>
         </list></t>
 
-      <t>Extensions and profiles of this specification MAY expand this list.
-      The authorization server MUST ignore any client metadata values sent by
-      the client that it does not understand.</t>
+      <t>Extensions and profiles of this specification MAY expand this list
+      with metadata names and descriptions registered in accordance with the
+      IANA Considerations in <xref target="IANA"/> of this document. The
+      authorization server MUST ignore any client metadata sent by the client
+      that it does not understand (for instance, by silently removing unknown
+      metadata from the client's registration record during processing).</t>
 
       <t>Client metadata values can either be communicated directly in the
       body of a registration request, as described in <xref
@@ -667,7 +668,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
         <t>The means by which a client or developer obtains a software
         statement are outside the scope of this specification. Some common
         methods could include a client developer generating a client-specific
-        JWT registering with a software API publisher to obtain a software
+        JWT by registering with a software API publisher to obtain a software
         statement for a class of clients. The software statement is typically
         distributed with all instances of a client application.</t>
 
@@ -1048,13 +1049,13 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         <t>This specification establishes the OAuth Dynamic Registration
         Client Metadata registry.</t>
 
-        <t>OAuth registration client metadata values are registered with a
-        Specification Required (<xref target="RFC5226"/>) after a two-week
-        review period on the oauth-ext-review@ietf.org mailing list, on the
-        advice of one or more Designated Experts. However, to allow for the
-        allocation of values prior to publication, the Designated Expert(s)
-        may approve registration once they are satisfied that such a
-        specification will be published.</t>
+        <t>OAuth registration client metadata names and descriptions are
+        registered with a Specification Required (<xref target="RFC5226"/>)
+        after a two-week review period on the oauth-ext-review@ietf.org
+        mailing list, on the advice of one or more Designated Experts.
+        However, to allow for the allocation of names prior to publication,
+        the Designated Expert(s) may approve registration once they are
+        satisfied that such a specification will be published.</t>
 
         <t>Registration requests must be sent to the oauth-ext-review@ietf.org
         mailing list for review and comment, with an appropriate subject
@@ -1179,8 +1180,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">scope</spanx></t>
 
-              <t>Client Metadata Description: Space separated list of scope
-              values</t>
+              <t>Client Metadata Description: Space separated list of OAuth
+              2.0 scope values</t>
 
               <t>Change Controller: IESG</t>
 
@@ -1319,7 +1320,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         Authentication Methods registry.</t>
 
         <t>Additional values for use as <spanx style="verb">token_endpoint_auth_method</spanx>
-        metadata values are registered with a Specification Required (<xref
+        values are registered with a Specification Required (<xref
         target="RFC5226"/>) after a two-week review period on the
         oauth-ext-review@ietf.org mailing list, on the advice of one or more
         Designated Experts. However, to allow for the allocation of values
@@ -2046,6 +2047,18 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-25</t>
+
+      <t><list style="symbols">
+          <t>Updated author information.</t>
+
+          <t>Clarified registry contents.</t>
+
+          <t>Added forward pointer to IANA from metadata section.</t>
+
+          <t>Clarified how to silently ignore errors.</t>
+        </list></t>
 
       <t>-24</t>
 
