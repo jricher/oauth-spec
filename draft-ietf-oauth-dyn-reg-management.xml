@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-09"
+<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-10"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -56,13 +56,11 @@
       <organization>Newcastle University</organization>
 
       <address>
-        <email>m.p.machulak@ncl.ac.uk</email>
-
-        <uri>http://ncl.ac.uk/</uri>
+        <email>maciej.machulak@gmail.com</email>
       </address>
     </author>
 
-    <date day="9" month="February" year="2015"/>
+    <date day="20" month="March" year="2015"/>
 
     <area>Security</area>
 
@@ -91,7 +89,13 @@
       <t>This specification extends the core registration specification by
       defining a set of methods for management of dynamic OAuth 2.0 client
       registrations beyond those defined in the core registration
-      specification.</t>
+      specification. In some situations, the registered metadata of a client
+      can change over time, either by modification at the authorization server
+      or by a change in the client software itself. This specification
+      provides methods for the current registration state of a client to be
+      queried at the authorization server, methods for the registration of a
+      client to be updated at the authorization server, and methods for the
+      client to be unregistered from the authorization server. </t>
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -189,11 +193,19 @@
             required by the authorization server.</t>
 
             <t hangText="(D)">The authorization server registers the client
-            and returns the client's registered metadata, a client identifier
-            that is unique at the server, a set of client credentials such as
-            a client secret if applicable for this client, a URI pointing to
-            the client configuration endpoint, and a registration access token
-            to be used when calling the client configuration endpoint.</t>
+            and returns:<list style="symbols">
+                <t>the client's registered metadata</t>
+
+                <t>a client identifier that is unique at the server</t>
+
+                <t>a set of client credentials such as a client secret if
+                applicable for this client</t>
+
+                <t>a URI pointing to the client configuration endpoint</t>
+
+                <t>a registration access token to be used when calling the
+                client configuration endpoint</t>
+              </list></t>
 
             <t hangText="(E)">The client or developer optionally calls the
             client configuration endpoint with a read or update request using
@@ -230,14 +242,9 @@
       access token in all calls to this endpoint as an OAuth 2.0 Bearer Token
       <xref target="RFC6750"/>.</t>
 
-      <t>The client configuration endpoint MUST require transport-layer
-      security. The server MUST support TLS 1.2 <xref target="RFC5246">RFC
-      5246</xref> and MAY support additional transport-layer mechanisms
-      meeting its security requirements. When using TLS, the client MUST
-      perform a TLS/SSL server certificate check, per <xref
-      target="RFC6125">RFC 6125</xref>. Implementation security considerations
-      can be found in <xref target="TLS.BCP">Recommendations for Secure Use of
-      TLS and DTLS</xref>.</t>
+      <t>The client configuration endpoint MUST be protected by a
+      transport-layer security mechanism, as described in <xref
+      target="Security"/>.</t>
 
       <t>Operations on this endpoint are switched through the use of different
       <xref target="RFC7231">HTTP methods</xref>. If an authorization server
@@ -431,7 +438,8 @@
 
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized and the registration access token
-        used to make this request SHOULD be immediately revoked.</t>
+        used to make this request SHOULD be immediately revoked if
+        possible.</t>
 
         <t>If the client is not allowed to delete itself, the server MUST
         respond with HTTP 403 Forbidden.</t>
@@ -581,6 +589,12 @@
       erroneous situation, the authorization server MUST treat all such
       requests as if the registration access token was invalid (by returning
       an HTTP 401 Unauthorized error, as described).</t>
+    </section>
+
+    <section anchor="Privacy" title="Privacy Considerations">
+      <t>This specification poses no additional privacy considerations beyond
+      those described in the core <xref target="OAuth.Registration">OAuth 2.0
+      Dynamic Client Registration</xref> specification.</t>
     </section>
   </middle>
 
@@ -845,6 +859,21 @@
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-10</t>
+
+      <t><list style="symbols">
+          <t>Updated author information.</t>
+
+          <t>Updated TLS information, imported from Dynamic Registration
+          core.</t>
+
+          <t>Expanded introduction.</t>
+
+          <t>Reformatted diagram text.</t>
+
+          <t>Added privacy considerations section.</t>
+        </list></t>
 
       <t>-09</t>
 

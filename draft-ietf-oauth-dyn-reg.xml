@@ -265,10 +265,14 @@
             if one is required by the authorization server.</t>
 
             <t hangText="(D)">The authorization server registers the client
-            and returns the client's registered metadata, a client identifier
-            that is unique at the server, a set of client credentials such as
-            a client secret if applicable for this client, and possibly other
-            values.</t>
+            and returns: <list style="symbols">
+                <t>the client's registered metadata</t>
+
+                <t>a client identifier that is unique at the server</t>
+
+                <t>a set of client credentials such as a client secret if
+                applicable for this client</t>
+              </list></t>
           </list></t>
 
         <t>Examples of different configurations and usages are included in
@@ -2058,6 +2062,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           <t>Added forward pointer to IANA from metadata section.</t>
 
           <t>Clarified how to silently ignore errors.</t>
+
+          <t>Reformatted diagram text.</t>
         </list></t>
 
       <t>-24</t>
