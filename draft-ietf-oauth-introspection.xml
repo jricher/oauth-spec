@@ -209,14 +209,16 @@
         <t><list style="hanging">
             <t hangText="active"><vspace/>REQUIRED. Boolean indicator of
             whether or not the presented token is currently active. The
-            specifics of a token&rsquo;s active state will vary depending on
-            the implementation of the authorization server, and the
-            information it keeps about its tokens, but a <spanx style="verb">true</spanx>
-            value return for the <spanx style="verb">active</spanx> property
-            will generally indicate that a given token has been issued by this
-            authorization server, has not been revoked by the resource owner,
-            and is within its given time window of validity (e.g. After its
-            issuance time but not yet expired). </t>
+            specifics of a token&rsquo;s <spanx style="verb">active</spanx>
+            state will vary depending on the implementation of the
+            authorization server, and the information it keeps about its
+            tokens, but a <spanx style="verb">true</spanx> value return for
+            the <spanx style="verb">active</spanx> property will generally
+            indicate that a given token has been issued by this authorization
+            server, has not been revoked by the resource owner, and is within
+            its given time window of validity (e.g. After its issuance time
+            but not yet expired). See <xref target="Security"/> for
+            information on implementation of such checks.</t>
 
             <t hangText="scope"><vspace/>OPTIONAL. A space-separated list of
             strings representing the scopes associated with this token, in the
@@ -414,6 +416,22 @@
     </section>
 
     <section anchor="Security" title="Security Considerations">
+      <t>Since there are many different and valid ways to implement an OAuth
+      2.0 system, there are consequently many ways for an authorization server
+      to determine whether or not a token is currently <spanx style="verb">active</spanx>
+      or not. Since resource servers using token introspection rely on the
+      authorization server to determine the state of a token, the
+      authorization server MUST perform all available checks against a token's
+      state. For instance, if the token can expire, the authorization server
+      MUST determine whether or not the token has expired. If the token can be
+      issued before it is able to be used, the authorization server MUST
+      determine whether or nto a token's valid period has started yet. If the
+      token can be revoked after it was issued, the authorization server MUST
+      determine whether or not such a revocation has taken place. If an
+      authorization server fails to perform any applicable check, the resource
+      server could make an errant security decision based on that
+      response.</t>
+
       <t>If left unprotected and un-throttled, the introspection endpoint
       could present a means for an attacker to poll a series of possible token
       values, fishing for a valid token. To prevent this, the authorization
@@ -666,6 +684,8 @@
           <t>Clarified definition of active state.</t>
 
           <t>Added some advice on caching responses.</t>
+
+          <t>Added security considerations on active state implementation.</t>
         </list></t>
 
       <t>-05</t>
