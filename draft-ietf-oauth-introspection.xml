@@ -228,8 +228,8 @@
             <t hangText="client_id"><vspace/>OPTIONAL. Client identifier for
             the OAuth 2.0 client that requested this token.</t>
 
-            <t hangText="user_id"><vspace/>OPTIONAL. Human-readable identifier
-            for the user who authorized this token.</t>
+            <t hangText="username"><vspace/>OPTIONAL. Human-readable
+            identifier for the resource owner who authorized this token.</t>
 
             <t hangText="token_type"><vspace/>OPTIONAL. Type of the token as
             defined in section 5.1 of <xref target="RFC6749">OAuth
@@ -298,7 +298,7 @@
   {
    "active": true,
    "client_id": "l238j323ds-23ij4",
-   "user_id": "jdoe",
+   "username": "jdoe",
    "scope": "read write dolphin",
    "sub": "Z5O3upPC88QrAjx00dis",
    "aud": "https://protected.example.net/resource",
@@ -377,7 +377,7 @@
           <t>Specification Document(s): <xref target="IntrospectionResponse"/>
           of [[ this document ]].</t>
         </list><list style="symbols">
-          <t>Claim Name: <spanx style="verb">user_id</spanx></t>
+          <t>Claim Name: <spanx style="verb">username</spanx></t>
 
           <t>Claim Description: User identifier of the resource owner</t>
 
@@ -419,18 +419,28 @@
       <t>Since there are many different and valid ways to implement an OAuth
       2.0 system, there are consequently many ways for an authorization server
       to determine whether or not a token is currently <spanx style="verb">active</spanx>
-      or not. Since resource servers using token introspection rely on the
-      authorization server to determine the state of a token, the
-      authorization server MUST perform all available checks against a token's
-      state. For instance, if the token can expire, the authorization server
-      MUST determine whether or not the token has expired. If the token can be
-      issued before it is able to be used, the authorization server MUST
-      determine whether or not a token's valid period has started yet. If the
-      token can be revoked after it was issued, the authorization server MUST
-      determine whether or not such a revocation has taken place. If an
-      authorization server fails to perform any applicable check, the resource
-      server could make an errant security decision based on that
-      response.</t>
+      or not. However, since resource servers using token introspection rely
+      on the authorization server to determine the state of a token, the
+      authorization server MUST perform all applicable checks against a
+      token's state. For instance: <list style="symbols">
+          <t>If the token can expire, the authorization server MUST determine
+          whether or not the token has expired.</t>
+
+          <t>If the token can be issued before it is able to be used, the
+          authorization server MUST determine whether or not a token's valid
+          period has started yet.</t>
+
+          <t>If the token can be revoked after it was issued, the
+          authorization server MUST determine whether or not such a revocation
+          has taken place.</t>
+
+          <t>If the token has been signed, the authorization server MUST
+          validate the signature.</t>
+        </list>If an authorization server fails to perform any applicable
+      check, the resource server could make an errant security decision based
+      on that response. Note that not all of these checks will be applicable
+      to all OAuth 2.0 deployments and it is up to the authorization server to
+      determine which of these checks (and any other checks) apply. </t>
 
       <t>If left unprotected and un-throttled, the introspection endpoint
       could present a means for an attacker to poll a series of possible token
@@ -686,6 +696,8 @@
           <t>Added some advice on caching responses.</t>
 
           <t>Added security considerations on active state implementation.</t>
+
+          <t>Changed user_id to username based on WG feedback.</t>
         </list></t>
 
       <t>-05</t>
