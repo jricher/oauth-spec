@@ -425,7 +425,7 @@
       state. For instance, if the token can expire, the authorization server
       MUST determine whether or not the token has expired. If the token can be
       issued before it is able to be used, the authorization server MUST
-      determine whether or nto a token's valid period has started yet. If the
+      determine whether or not a token's valid period has started yet. If the
       token can be revoked after it was issued, the authorization server MUST
       determine whether or not such a revocation has taken place. If an
       authorization server fails to perform any applicable check, the resource
