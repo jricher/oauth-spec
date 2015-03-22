@@ -60,7 +60,7 @@
       </address>
     </author>
 
-    <date day="20" month="March" year="2015"/>
+    <date day="23" month="March" year="2015"/>
 
     <area>Security</area>
 
@@ -95,7 +95,7 @@
       provides methods for the current registration state of a client to be
       queried at the authorization server, methods for the registration of a
       client to be updated at the authorization server, and methods for the
-      client to be unregistered from the authorization server. </t>
+      client to be unregistered from the authorization server.</t>
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
