@@ -194,17 +194,17 @@
 
             <t hangText="(D)">The authorization server registers the client
             and returns:<list style="symbols">
-                <t>the client's registered metadata</t>
+                <t>the client's registered metadata,</t>
 
-                <t>a client identifier that is unique at the server</t>
+                <t>a client identifier that is unique at the server,</t>
 
-                <t>a set of client credentials such as a client secret if
-                applicable for this client</t>
+                <t>a set of client credentials such as a client secret, if
+                applicable for this client,</t>
 
-                <t>a URI pointing to the client configuration endpoint</t>
+                <t>a URI pointing to the client configuration endpoint, and</t>
 
                 <t>a registration access token to be used when calling the
-                client configuration endpoint</t>
+                client configuration endpoint.</t>
               </list></t>
 
             <t hangText="(E)">The client or developer optionally calls the
@@ -438,7 +438,7 @@
 
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized and the registration access token
-        used to make this request SHOULD be immediately revoked if
+        used to make this request SHOULD be immediately revoked, if
         possible.</t>
 
         <t>If the client is not allowed to delete itself, the server MUST
