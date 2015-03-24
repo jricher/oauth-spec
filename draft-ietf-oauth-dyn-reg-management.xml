@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-11"
+<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-12"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -60,7 +60,7 @@
       </address>
     </author>
 
-    <date day="23" month="March" year="2015"/>
+    <date day="24" month="March" year="2015"/>
 
     <area>Security</area>
 
@@ -525,7 +525,7 @@
 
     <section anchor="IANA" title="IANA Considerations">
       <t>This specification requests that IANA extend the OAuth Dynamic Client
-      Metadata registry with the following entries:</t>
+      Registration Metadata registry with the following entries:</t>
 
       <t><list style="symbols">
           <t>Client Metadata Name: <spanx style="verb">registration_access_token</spanx></t>
@@ -859,6 +859,12 @@
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-12</t>
+
+      <t><list style="symbols">
+          <t>Renamed registry to be consistent.</t>
+        </list></t>
 
       <t>-11</t>
 
