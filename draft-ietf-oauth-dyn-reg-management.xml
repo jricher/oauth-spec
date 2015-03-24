@@ -524,8 +524,9 @@
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
-      <t>This specification requests that IANA extend the OAuth Dynamic Client
-      Registration Metadata registry with the following entries:</t>
+      <t>This specification registers the following client metadata names and
+      descriptions in the OAuth Dynamic Client Registration Metadata registry
+      established by <xref target="OAuth.Registration"/>:</t>
 
       <t><list style="symbols">
           <t>Client Metadata Name: <spanx style="verb">registration_access_token</spanx></t>
