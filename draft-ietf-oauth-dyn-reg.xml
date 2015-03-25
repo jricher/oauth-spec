@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-26" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-27" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -67,7 +67,7 @@
       </address>
     </author>
 
-    <date day="24" month="March" year="2015"/>
+    <date day="25" month="March" year="2015"/>
 
     <area>Security</area>
 
@@ -1100,7 +1100,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         </section>
 
         <section anchor="MetadataContents" title="Initial Registry Contents">
-          <t>The initial contents of the OAuth Dynamic Registration Client
+          <t>The initial contents of the OAuth Dynamic Client Registration
           Metadata registry are:</t>
 
           <t><?rfc subcompact="yes"?> <list style="symbols">
@@ -2050,6 +2050,12 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-27</t>
+
+      <t><list style="format %d:">
+          <t>Changed a registry name missed in -26.</t>
+        </list></t>
 
       <t>-26</t>
 
