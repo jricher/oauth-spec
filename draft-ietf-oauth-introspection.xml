@@ -419,8 +419,8 @@
         </section>
 
         <section anchor="MetadataContents" title="Initial Registry Contents">
-          <t>The initial contents of the OAuth Dynamic Client Registration
-          Metadata registry are:</t>
+          <t>The initial contents of the OAuth Token Introspection Response
+          registry are:</t>
 
           <t><?rfc subcompact="yes"?> </t>
 
