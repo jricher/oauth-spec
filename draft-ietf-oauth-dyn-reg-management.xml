@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-12"
+<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-13"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -60,7 +60,7 @@
       </address>
     </author>
 
-    <date day="24" month="March" year="2015"/>
+    <date day="6" month="April" year="2015"/>
 
     <area>Security</area>
 
@@ -577,10 +577,13 @@
       can be found in <xref target="TLS.BCP">Recommendations for Secure Use of
       TLS and DTLS</xref>.</t>
 
-      <t>Since the client configuration endpoint is an OAuth 2.0 protected
-      resource, it SHOULD have some rate limiting on failures to prevent the
-      registration access token from being disclosed though repeated access
-      attempts.</t>
+      <t>Since possession of the registration access token authorizes the
+      holder to potentially read, modify, or delete a client&rsquo;s
+      registration (including its credentials such as a client_secret), the
+      registration access token MUST contain sufficient entropy to prevent a
+      random guessing attack of this token, such as described in <xref
+      target="RFC6750"/> Section 5.2 and <xref target="RFC6819"/> Section
+      5.1.4.2.2.</t>
 
       <t>If a client is deprovisioned from a server, any outstanding
       registration access token for that client MUST be invalidated at the
@@ -610,6 +613,8 @@
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
+
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6819.xml'?>
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
 
@@ -860,6 +865,12 @@
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-13</t>
+
+      <t><list style="symbols">
+          <t>Changed rate-limiting suggestion to a complexity requirement.</t>
+        </list></t>
 
       <t>-12</t>
 
