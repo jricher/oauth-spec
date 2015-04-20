@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-13"
+<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-14"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -865,6 +865,12 @@
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-14</t>
+
+      <t><list style="symbols">
+          <t/>
+        </list></t>
 
       <t>-13</t>
 

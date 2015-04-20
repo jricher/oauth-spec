@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-introspection-07"
+<rfc category="std" docName="draft-ietf-oauth-introspection-08"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth 2.0 Token Introspection</title>
@@ -422,7 +422,7 @@
           <t>The initial contents of the OAuth Token Introspection Response
           registry are:</t>
 
-          <t><?rfc subcompact="yes"?> </t>
+          <t><?rfc subcompact="yes"?></t>
 
           <t><list style="symbols">
               <t>Name: <spanx style="verb">active</spanx></t>
@@ -812,6 +812,12 @@
 
     <section title="Document History">
       <t>[[ To be removed by the RFC Editor. ]]</t>
+
+      <t>-08</t>
+
+      <t><list style="symbols">
+          <t/>
+        </list></t>
 
       <t>-07</t>
 
