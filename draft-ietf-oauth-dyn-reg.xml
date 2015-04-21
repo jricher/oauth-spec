@@ -920,12 +920,20 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           metadata about this client, including any fields provisioned by the
           authorization server itself. The authorization server MAY reject or
           replace any of the client's requested metadata values submitted
-          during the registration and substitute them with suitable
-          values.</t>
+          during the registration and substitute them with suitable values.
+          The client or developer can check the values in the response to
+          determine if the registration is sufficient for use (e.g., the
+          registered <spanx style="verb">token_endpoint_auth_method</spanx> is
+          supported by the client software) and determine a course of action
+          appropriate for the client software. The response to such a
+          situation is out of scope for this specification but could include
+          filing a report with the application devleoper or authorization
+          server provider.</t>
 
-          <t>The response is an <spanx style="verb">application/json</spanx>
-          document with all parameters as top-level members of a <xref
-          target="RFC7159">JSON object</xref>.</t>
+          <t>The successful registration response uses an HTTP 201 Created
+          status code with a body of type <spanx style="verb">application/json</spanx>
+          consisting of a single <xref target="RFC7159">JSON object</xref>
+          with all parameters as top-level members of the object.</t>
 
           <t>If a software statement was used as part of the registration, its
           value MUST be returned unmodified in the response along with other
@@ -937,8 +945,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           differ).</t>
 
           <figure>
-            <preamble>Following is a non-normative example
-            response:</preamble>
+            <preamble>Following is a non-normative example response of a
+            successful registration:</preamble>
 
             <artwork><![CDATA[
   HTTP/1.1 201 Created
@@ -2087,6 +2095,12 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           integers.</t>
 
           <t>Expanded security considerations advice around external URLs.</t>
+
+          <t>Added text to say what happens if the client doesn't get back the
+          registration it expected in the response.</t>
+
+          <t>Added more explicit references to HTTP 201 response from
+          registration.</t>
         </list></t>
 
       <t>-27</t>
