@@ -482,11 +482,15 @@
           <spanx style="verb">software_id</spanx>. The value of this field is
           intended to be compared using string equality matching and no other
           comparison semantics are defined by this specification. The value of
-          this field is not intended to be human readable and is usually
-          opaque to the client and authorization server.</t>
+          this field is outside the scope of this speicification, but it is
+          not intended to be human readable and is usually opaque to the
+          client and authorization server. The definition of what constitutes
+          an update to client software that would trigger a change to this
+          value is specific to the software itself and is outside the scope of
+          this specification. </t>
         </list></t>
 
-      <t>Extensions and profiles of this specification MAY expand this list
+      <t>Extensions and profiles of this specification can expand this list
       with metadata names and descriptions registered in accordance with the
       IANA Considerations in <xref target="IANA"/> of this document. The
       authorization server MUST ignore any client metadata sent by the client
@@ -1499,8 +1503,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       the software identifier or software version of a legitimate client to
       attempt to associate itself on the authorization server with instances
       of the legitimate client. To counteract this, an authorization server
-      needs to take steps to mitigate this risk by looking at the entire
-      registration request and client configuration. For instance, an
+      MUST take appropriate steps to mitigate this risk by looking at the
+      entire registration request and client configuration. For instance, an
       authorization server could issue a warning if the domain/site of the
       logo doesn't match the domain/site of redirection URIs. An authorization
       server could also refuse registration requests from a known software
@@ -1565,11 +1569,17 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       honor a given registration request.</t>
 
       <t>If an authorization server receives a registration request for a
-      client that uses the same <spanx style="verb">software_id</spanx> and
-      <spanx style="verb">software_version</spanx> values as another client,
-      the server should treat the new registration as being suspect. It is
-      possible that the new client is trying to impersonate the existing
-      client.</t>
+      client that is not intended to have multiple instances registered
+      simultaneously and the authorization server can infer a duplication of
+      registration (e.g., it uses the same <spanx style="verb">software_id</spanx>
+      and <spanx style="verb">software_version</spanx> values as another
+      existing client), the server SHOULD treat the new registration as being
+      suspect and reject the registration. It is possible that the new client
+      is trying to impersonate the existing client in order to trick users
+      into authorizing it, or that the original registration is no longer
+      valid. The details of managing this situation are specific to the
+      authorization server deployment and outside the scope of this
+      specification.</t>
 
       <t>Since a client identifier is a public value that can be used to
       impersonate a client at the authorization endpoint, an authorization
@@ -2101,6 +2111,16 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
           <t>Added more explicit references to HTTP 201 response from
           registration.</t>
+
+          <t>Clarified client version definition.</t>
+
+          <t>Removed spurious reference to "delete action".</t>
+
+          <t>Fixed intended normative and non-normative language in several
+          sections.</t>
+
+          <t>Stated what a server should do if a suspected duplicate client
+          tries to register.</t>
         </list></t>
 
       <t>-27</t>
