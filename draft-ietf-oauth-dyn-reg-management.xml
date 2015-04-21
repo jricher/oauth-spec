@@ -472,11 +472,11 @@
 
       <t><list style="hanging">
           <t hangText="registration_access_token"><vspace/> REQUIRED. Access
-          token used at the client configuration endpoint to perform
+          token string used at the client configuration endpoint to perform
           subsequent operations upon the client registration.</t>
 
           <t hangText="registration_client_uri"><vspace/> REQUIRED. Fully
-          qualified URL of the client configuration endpoint for this
+          qualified URL string of the client configuration endpoint for this
           client.</t>
         </list></t>
 
@@ -869,7 +869,8 @@
       <t>-14</t>
 
       <t><list style="symbols">
-          <t/>
+          <t>Clarified all client metadata as JSON arrays, strings, or
+          integers.</t>
         </list></t>
 
       <t>-13</t>

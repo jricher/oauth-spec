@@ -295,21 +295,23 @@
 
       <t>The following client metadata fields are defined by this
       specification. The implementation and use of all client metadata fields
-      is OPTIONAL, unless stated otherwise.</t>
+      is OPTIONAL, unless stated otherwise. All data member types (strings,
+      arrays, numbers) are defined in terms of their <xref
+      target="RFC7159">JSON</xref> representations.</t>
 
       <t><list style="hanging">
-          <t hangText="redirect_uris"><vspace/>Array of redirection URI values
-          for use in redirect-based flows such as the authorization code and
-          implicit flows. As required by Section 2 of <xref
+          <t hangText="redirect_uris"><vspace/>Array of redirection URI
+          strings for use in redirect-based flows such as the authorization
+          code and implicit flows. As required by Section 2 of <xref
           target="RFC6749">OAuth 2.0</xref>, clients using flows with
           redirection MUST register their redirection URI values.
           Authorization servers that support dynamic registration for
           redirect-based flows MUST implement support for this metadata
           value.</t>
 
-          <t hangText="token_endpoint_auth_method"><vspace/>The requested
-          authentication method for the token endpoint. Values defined by this
-          specification are: <list style="symbols">
+          <t hangText="token_endpoint_auth_method"><vspace/>String indicator
+          of the requested authentication method for the token endpoint.
+          Values defined by this specification are: <list style="symbols">
               <t><spanx style="verb">none</spanx>: The client is a public
               client as defined in OAuth 2.0 and does not have a client
               secret.</t>
@@ -320,7 +322,7 @@
 
               <t><spanx style="verb">client_secret_basic</spanx>: the client
               uses HTTP Basic defined in OAuth 2.0 section 2.3.1</t>
-            </list> Additional values can be defined via the IANA OAuth Token
+            </list>Additional values can be defined via the IANA OAuth Token
           Endpoint Authentication Methods Registry established in <xref
           target="TEAMRegistry"/>. Absolute URIs can also be used as values
           for this parameter without being registered. If unspecified or
@@ -328,9 +330,9 @@
           denoting HTTP Basic Authentication Scheme as specified in Section
           2.3.1 of OAuth 2.0.</t>
 
-          <t hangText="grant_types"><vspace/>Array of OAuth 2.0 grant types
-          that the client may use. These grant types are defined as follows:
-          <list style="symbols">
+          <t hangText="grant_types"><vspace/>Array of OAuth 2.0 grant type
+          strings that the client can use at the token endpoint. These grant
+          types are defined as follows: <list style="symbols">
               <t><spanx style="verb">authorization_code</spanx>: The
               Authorization Code Grant described in OAuth 2.0 Section 4.1</t>
 
@@ -365,8 +367,9 @@
           Grant Type.</t>
 
           <t hangText="response_types"><vspace/>Array of the OAuth 2.0
-          response types that the client can use. These response types are
-          defined as follows: <list style="symbols">
+          response type strings that the client can use at the authorization
+          endpoint. These response types are defined as follows: <list
+              style="symbols">
               <t><spanx style="verb">code</spanx>: The authorization code
               response described in OAuth 2.0 Section 4.1.</t>
 
@@ -381,14 +384,15 @@
           If omitted, the default is that the client will use only the <spanx
           style="verb">code</spanx> response type.</t>
 
-          <t hangText="client_name"><vspace/>Human-readable name of the client
-          to be presented to the end-user during authorization. If omitted,
-          the authorization server MAY display the raw <spanx style="verb">client_id</spanx>
-          value to the end-user instead. It is RECOMMENDED that clients always
-          send this field. The value of this field MAY be internationalized,
-          as described in <xref target="HumanReadableClientMetadata"/>.</t>
+          <t hangText="client_name"><vspace/>Human-readable string name of the
+          client to be presented to the end-user during authorization. If
+          omitted, the authorization server MAY display the raw <spanx
+          style="verb">client_id</spanx> value to the end-user instead. It is
+          RECOMMENDED that clients always send this field. The value of this
+          field MAY be internationalized, as described in <xref
+          target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="client_uri"><vspace/>URL of a web page providing
+          <t hangText="client_uri"><vspace/>URL string of a web page providing
           information about the client. If present, the server SHOULD display
           this URL to the end-user in a clickable fashion. It is RECOMMENDED
           that clients always send this field. The value of this field MUST
@@ -396,18 +400,19 @@
           internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="logo_uri"><vspace/>URL that references a logo for the
-          client. If present, the server SHOULD display this image to the
-          end-user during approval. The value of this field MUST point to a
-          valid image file. The value of this field MAY be internationalized,
-          as described in <xref target="HumanReadableClientMetadata"/>.</t>
+          <t hangText="logo_uri"><vspace/>URL string that references a logo
+          for the client. If present, the server SHOULD display this image to
+          the end-user during approval. The value of this field MUST point to
+          a valid image file. The value of this field MAY be
+          internationalized, as described in <xref
+          target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="scope"><vspace/>Space separated list of scope values
-          (as described in Section 3.3 of <xref target="RFC6749">OAuth
-          2.0</xref>) that the client can use when requesting access tokens.
-          The semantics of values in this list is service specific. If
-          omitted, an authorization server MAY register a client with a
-          default set of scopes.</t>
+          <t hangText="scope"><vspace/>String containing a space separated
+          list of scope values (as described in Section 3.3 of <xref
+          target="RFC6749">OAuth 2.0</xref>) that the client can use when
+          requesting access tokens. The semantics of values in this list is
+          service specific. If omitted, an authorization server MAY register a
+          client with a default set of scopes.</t>
 
           <t hangText="contacts"><vspace/>Array of strings representing ways
           to contact people responsible for this client, typically email
@@ -416,16 +421,16 @@
           <xref target="Privacy"/> for information on Privacy
           Considerations.</t>
 
-          <t hangText="tos_uri"><vspace/>URL that points to a human-readable
-          terms of service document for the client that describes a
-          contractual relationship between the end-user and the client that
-          the end-user accepts when authorizing the client. The authorization
-          server SHOULD display this URL to the end-user if it is provided.
-          The value of this field MUST point to a valid web page. The value of
-          this field MAY be internationalized, as described in <xref
-          target="HumanReadableClientMetadata"/>.</t>
+          <t hangText="tos_uri"><vspace/>URL string that points to a
+          human-readable terms of service document for the client that
+          describes a contractual relationship between the end-user and the
+          client that the end-user accepts when authorizing the client. The
+          authorization server SHOULD display this URL to the end-user if it
+          is provided. The value of this field MUST point to a valid web page.
+          The value of this field MAY be internationalized, as described in
+          <xref target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="policy_uri"><vspace/>URL that points to a
+          <t hangText="policy_uri"><vspace/>URL string that points to a
           human-readable privacy policy document that describes how the
           deployment organization collects, uses, retains, and discloses
           personal data. The authorization server SHOULD display this URL to
@@ -434,8 +439,8 @@
           internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="jwks_uri"><vspace/>URL referencing the client's JSON
-          Web Key Set <xref target="JWK"/> document, which contains the
+          <t hangText="jwks_uri"><vspace/>URL string referencing the client's
+          JSON Web Key Set <xref target="JWK"/> document, which contains the
           client's public keys. The value of this field MUST point to a valid
           JWK Set document. These keys can be used by higher level protocols
           that use signing or encryption. For instance, these keys might be
@@ -458,9 +463,9 @@
           parameters MUST NOT both be present in the same request or
           response.</t>
 
-          <t hangText="software_id"><vspace/>A unique identifier (e.g. a UUID)
-          assigned by the client developer or software publisher used by
-          registration endpoints to identify the client software to be
+          <t hangText="software_id"><vspace/>A unique identifier string (e.g.
+          a UUID) assigned by the client developer or software publisher used
+          by registration endpoints to identify the client software to be
           dynamically registered. Unlike <spanx style="verb">client_id</spanx>,
           which is issued by the authorization server and SHOULD vary between
           instances, the <spanx style="verb">software_id</spanx> SHOULD remain
@@ -470,15 +475,15 @@
           value of this field is not intended to be human-readable and is
           usually opaque to the client and authorization server.</t>
 
-          <t hangText="software_version"><vspace/>A version identifier for the
-          client software identified by <spanx style="verb">software_id</spanx>.
+          <t hangText="software_version"><vspace/>A version identifier string
+          for the client software identified by <spanx style="verb">software_id</spanx>.
           The value of the <spanx style="verb">software_version</spanx> SHOULD
           change on any update to the client software identified by the same
           <spanx style="verb">software_id</spanx>. The value of this field is
-          a string that is intended to be compared using string equality
-          matching. The value of this field is not intended to be human
-          readable and is usually opaque to the client and authorization
-          server.</t>
+          intended to be compared using string equality matching and no other
+          comparison semantics are defined by this specification. The value of
+          this field is not intended to be human readable and is usually
+          opaque to the client and authorization server.</t>
         </list></t>
 
       <t>Extensions and profiles of this specification MAY expand this list
@@ -486,7 +491,11 @@
       IANA Considerations in <xref target="IANA"/> of this document. The
       authorization server MUST ignore any client metadata sent by the client
       that it does not understand (for instance, by silently removing unknown
-      metadata from the client's registration record during processing).</t>
+      metadata from the client's registration record during processing). The
+      authorization server MAY reject any requested client metadata values by
+      replacing requested values with suitable defaults as described in <xref
+      target="ClientInfoResponse"/> or by returning an error response as
+      described in <xref target="ClientRegistrationError"/>.</t>
 
       <t>Client metadata values can either be communicated directly in the
       body of a registration request, as described in <xref
@@ -822,7 +831,8 @@ qXC_jpLUt22OC6GUG63p-REw-ZOr3r845z50wMuzifQrMI9bQ",
           using this OPTIONAL member: <list style="hanging">
               <t hangText="software_statement"><vspace/> A software statement
               containing client metadata values about the client software as
-              claims.</t>
+              claims. This is a string value containing the entire signed
+              JWT.</t>
             </list></t>
 
           <figure>
@@ -880,13 +890,13 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
           <t><list style="hanging">
               <t hangText="client_id"><vspace/> REQUIRED. OAuth 2.0 client
-              identifier. It SHOULD NOT be currently valid for any other
-              registered client, though an authorization server MAY issue the
-              same client identifier to multiple instances of a registered
-              client at its discretion.</t>
+              identifier string. It SHOULD NOT be currently valid for any
+              other registered client, though an authorization server MAY
+              issue the same client identifier to multiple instances of a
+              registered client at its discretion.</t>
 
               <t hangText="client_secret"><vspace/> OPTIONAL. OAuth 2.0 client
-              secret. If issued, this MUST be unique for each <spanx
+              secret string. If issued, this MUST be unique for each <spanx
               style="verb">client_id</spanx> and SHOULD be unique for multiple
               instances of a client using the same <spanx style="verb">client_id</spanx>.
               This value is used by confidential clients to authenticate to
@@ -2054,7 +2064,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <t>-28</t>
 
       <t><list style="symbols">
-          <t/>
+          <t>Clarified all client metadata as JSON arrays, strings, or
+          integers.</t>
         </list></t>
 
       <t>-27</t>
