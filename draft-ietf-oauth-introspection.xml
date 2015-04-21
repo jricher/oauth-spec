@@ -656,8 +656,17 @@
       only registered and trusted protected resource servers. Another method
       is to transmit user identifiers as opaque service-specific strings,
       potentially returning different identifiers to each protected resource.
-      Omitting privacy-sensitive information from an introspection response is
-      the simplest way of minimizing privacy issues.</t>
+      </t>
+
+      <t>If the protected resource sends additional information about the
+      client's request to the authorization server (such as the client's IP
+      address) using an extension of this specification, such information
+      could have have additional privacy considerations. However, the nature
+      and implications of such extensions are outside the scope of this
+      specification.</t>
+
+      <t>Omitting privacy-sensitive information from an introspection response
+      is the simplest way of minimizing privacy issues.</t>
     </section>
 
     <section title="Acknowledgements">
@@ -816,7 +825,7 @@
       <t>-08</t>
 
       <t><list style="symbols">
-          <t/>
+          <t>Added privacy considerations note about extensions.</t>
         </list></t>
 
       <t>-07</t>
