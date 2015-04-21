@@ -1456,12 +1456,13 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       requesting access to a user's resources and access is tied to a user's
       active session at the authorization server. Since such clients often do
       not have long-term storage, it is possible that such clients would need
-      to re-register every time the browser application is loaded.
-      Additionally, such clients may not have ample opportunity to unregister
-      themselves using the delete action before the browser closes. To avoid
+      to re-register every time the browser application is loaded. To avoid
       the resulting proliferation of dead client identifiers, an authorization
       server MAY decide to expire registrations for existing clients meeting
-      certain criteria after a period of time has elapsed.</t>
+      certain criteria after a period of time has elapsed. Alternatively, such
+      clients could be registered on the server where the in-browser
+      application's code is served from, and the client's configuration pushed
+      to the browser along side the code.</t>
 
       <t>Since different OAuth 2.0 grant types have different security and
       usage parameters, an authorization server MAY require separate
@@ -1507,12 +1508,30 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       style="verb">logo_uri</spanx>, <spanx style="verb">tos_uri</spanx>,
       <spanx style="verb">client_uri</spanx>, and <spanx style="verb">policy_uri</spanx>).
       For instance, a rogue client could specify a registration request with a
-      reference to a drive-by download in the <spanx style="verb">policy_uri</spanx>.
-      The authorization server SHOULD check to see if the <spanx style="verb">logo_uri</spanx>,
+      reference to a drive-by download in the <spanx style="verb">policy_uri</spanx>,
+      enticing the user to click on it during the authorization. The
+      authorization server SHOULD check to see if the <spanx style="verb">logo_uri</spanx>,
       <spanx style="verb">tos_uri</spanx>, <spanx style="verb">client_uri</spanx>,
       and <spanx style="verb">policy_uri</spanx> have the same host and scheme
       as the those defined in the array of <spanx style="verb">redirect_uris</spanx>
-      and that all of these URIs resolve to valid web pages.</t>
+      and that all of these URIs resolve to valid web pages. Since these URI
+      values that are intended to be displayed to the user at the
+      authorization page, the authorization server SHOULD protect the user
+      from malicious content hosted at the URLs where possible possible. For
+      instance, before presenting the URLs to the user at the authorization
+      page, the authorization server could download the content hosted at the
+      URLs, check the content against a malware scanner and blacklist filter,
+      determine whether or not there is mixed secure and non-secure content at
+      the URL, and other possible server-side mitigations. Note that the
+      content in these URLs can change at any time and the authorization
+      server cannot provide complete confidence in the safety of the URLs, but
+      these practices could help. To further mitigate this kind of threat, the
+      authorization server can also warn the user that the URL links have been
+      provided by a third party, should be treated with caution, and are not
+      hosted by the authorization server itself. For instance, instead of
+      providing the links directly in an HTML anchor, the authorization server
+      can direct the user to an interstitial warning page before allowing the
+      user to continue to the target URL.</t>
 
       <t>Clients MAY use both the direct JSON object and the JWT-encoded
       software statement to present client metadata to the authorization
@@ -1523,19 +1542,19 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       valid and signed by an acceptable authority (such as the software API
       publisher), the values of client metadata within the software statement
       MUST take precedence over those metadata values presented in the plain
-      JSON object, which could have been modified en route.</t>
+      JSON object, which could have been intercepted and modified.</t>
 
-      <t>The software statement is an item that is self-asserted by the
-      client, even though its contents have been digitally signed or MACed by
-      the issuer of the software statement. As such, presentation of the
-      software statement is not sufficient in most cases to fully identity a
-      piece of client software. An initial access token, in contrast, does not
-      necessarily contain information about a particular piece of client
-      software but instead represents authorization to use the registration
-      endpoint. An authorization server MUST consider the full registration
-      request, including the software statement, initial access token, and
-      JSON client metadata values, when deciding whether to honor a given
-      registration request.</t>
+      <t>Like all metadata values, the software statement is an item that is
+      self-asserted by the client, even though its contents have been
+      digitally signed or MACed by the issuer of the software statement. As
+      such, presentation of the software statement is not sufficient in most
+      cases to fully identify a piece of client software. An initial access
+      token, in contrast, does not necessarily contain information about a
+      particular piece of client software but instead represents authorization
+      to use the registration endpoint. An authorization server MUST consider
+      the full registration request, including the software statement, initial
+      access token, and JSON client metadata values, when deciding whether to
+      honor a given registration request.</t>
 
       <t>If an authorization server receives a registration request for a
       client that uses the same <spanx style="verb">software_id</spanx> and
@@ -2066,6 +2085,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <t><list style="symbols">
           <t>Clarified all client metadata as JSON arrays, strings, or
           integers.</t>
+
+          <t>Expanded security considerations advice around external URLs.</t>
         </list></t>
 
       <t>-27</t>
