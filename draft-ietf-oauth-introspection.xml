@@ -670,8 +670,11 @@
     </section>
 
     <section title="Acknowledgements">
-      <t>Thanks to the OAuth Working Group and the UMA Working Group for
-      feedback.</t>
+      <t>Thanks to the OAuth Working Group and the User Managed Access Working
+      Group for feedback. In particular, the author would like to thank Amanda
+      Anganes, John Bradley, Thomas Broyer, Brian Campbell, George Fletcher,
+      Paul Freemantle, Thomas Hardjono, Eve Maler, Josh Mandel, Steve Moore,
+      Mike Schwartz, Prabath Siriwardena, and Hannes Tschofennig,</t>
     </section>
   </middle>
 
@@ -826,6 +829,8 @@
 
       <t><list style="symbols">
           <t>Added privacy considerations note about extensions.</t>
+
+          <t>Added acknowledgements (finally).</t>
         </list></t>
 
       <t>-07</t>
