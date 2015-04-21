@@ -870,7 +870,7 @@
 
       <t><list style="symbols">
           <t>Clarified all client metadata as JSON arrays, strings, or
-          integers.</t>
+          numbers.</t>
         </list></t>
 
       <t>-13</t>

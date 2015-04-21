@@ -2092,7 +2092,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
       <t><list style="symbols">
           <t>Clarified all client metadata as JSON arrays, strings, or
-          integers.</t>
+          numbers.</t>
 
           <t>Expanded security considerations advice around external URLs.</t>
 
