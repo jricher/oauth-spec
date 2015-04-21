@@ -97,6 +97,10 @@
       client to be updated at the authorization server, and methods for the
       client to be unregistered from the authorization server.</t>
 
+      <t>This experimental draft is intended to encourage development and
+      deployment of interoperable solutions with the intent that feedback from
+      this experience will inform a future standard.</t>
+
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
         'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', and 'OPTIONAL' in this
@@ -871,6 +875,8 @@
       <t><list style="symbols">
           <t>Clarified all client metadata as JSON arrays, strings, or
           numbers.</t>
+
+          <t>Clarified experimental nature of the draft.</t>
         </list></t>
 
       <t>-13</t>
