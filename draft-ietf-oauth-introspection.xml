@@ -216,8 +216,8 @@
             the <spanx style="verb">active</spanx> property will generally
             indicate that a given token has been issued by this authorization
             server, has not been revoked by the resource owner, and is within
-            its given time window of validity (e.g. After its issuance time
-            but not yet expired). See <xref target="Security"/> for
+            its given time window of validity (e.g. after its issuance time
+            and before its expiration time). See <xref target="Security"/> for
             information on implementation of such checks.</t>
 
             <t hangText="scope"><vspace/>OPTIONAL. A space-separated list of
@@ -596,10 +596,10 @@
       considerations can be found in <xref target="TLS.BCP">Recommendations
       for Secure Use of TLS and DTLS</xref>.</t>
 
-      <t>In order to prevent the values of access tokens being from leaking
-      into server-side logs via query parameters, an authorization server
-      offering token introspection MAY disallow HTTP GET and instead require
-      an HTTP POST method to be used at the introspection endpoint.</t>
+      <t>In order to prevent the values of access tokens from leaking into
+      server-side logs via query parameters, an authorization server offering
+      token introspection MAY disallow HTTP GET and instead require an HTTP
+      POST method to be used at the introspection endpoint.</t>
 
       <t>In order to avoid disclosing internal server state, an introspection
       response for an inactive token SHOULD NOT contain any additional claims
@@ -615,8 +615,8 @@
       more often) at the cost of increased network traffic and load on the
       introspection endpoint. A more aggressive cache with a longer duration
       will minimize network traffic and load on the introspection endpoint,
-      but at the cost of liveness of information about the token. For example,
-      the token may be revoked while the protected resource is relying on the
+      but at the risk of stale information about the token. For example, the
+      token may be revoked while the protected resource is relying on the
       value of the cached response to make authorization decisions. This
       creates a window during which a revoked token could be used at the
       protected resource. Consequently, an acceptable cache validity duration
@@ -624,7 +624,9 @@
       the protected resource being accessed and the likelihood of a token
       being revoked or invalidated in the interim period. Highly sensitive
       environments can opt to disable caching entirely on the protected
-      resource in order to maximize liveness of information.</t>
+      resource in order to eliminate the risk of stale cached information
+      entirely, again at the cost of increased network traffic and server
+      load.</t>
 
       <t>An authorization server offering token introspection MUST be able to
       understand the token values being presented to it during this call. The
@@ -671,10 +673,13 @@
 
     <section title="Acknowledgements">
       <t>Thanks to the OAuth Working Group and the User Managed Access Working
-      Group for feedback. In particular, the author would like to thank Amanda
+      Group for feedback and review of this document, and to the various
+      implementors of both the client and server components of this
+      specification. In particular, the author would like to thank Amanda
       Anganes, John Bradley, Thomas Broyer, Brian Campbell, George Fletcher,
       Paul Freemantle, Thomas Hardjono, Eve Maler, Josh Mandel, Steve Moore,
-      Mike Schwartz, Prabath Siriwardena, and Hannes Tschofennig,</t>
+      Mike Schwartz, Prabath Siriwardena, Sarah Squire, and Hannes
+      Tschofennig,</t>
     </section>
   </middle>
 

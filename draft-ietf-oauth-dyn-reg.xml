@@ -67,7 +67,7 @@
       </address>
     </author>
 
-    <date day="25" month="March" year="2015"/>
+    <date day="21" month="April" year="2015"/>
 
     <area>Security</area>
 
@@ -931,7 +931,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           supported by the client software) and determine a course of action
           appropriate for the client software. The response to such a
           situation is out of scope for this specification but could include
-          filing a report with the application devleoper or authorization
+          filing a report with the application developer or authorization
           server provider.</t>
 
           <t>The successful registration response uses an HTTP 201 Created
@@ -1529,10 +1529,10 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       and that all of these URIs resolve to valid web pages. Since these URI
       values that are intended to be displayed to the user at the
       authorization page, the authorization server SHOULD protect the user
-      from malicious content hosted at the URLs where possible possible. For
-      instance, before presenting the URLs to the user at the authorization
-      page, the authorization server could download the content hosted at the
-      URLs, check the content against a malware scanner and blacklist filter,
+      from malicious content hosted at the URLs where possible. For instance,
+      before presenting the URLs to the user at the authorization page, the
+      authorization server could download the content hosted at the URLs,
+      check the content against a malware scanner and blacklist filter,
       determine whether or not there is mixed secure and non-secure content at
       the URL, and other possible server-side mitigations. Note that the
       content in these URLs can change at any time and the authorization
