@@ -465,8 +465,8 @@
       <t>This specification extends the client information response defined in
       <xref target="OAuth.Registration">OAuth 2.0 Client Dynamic
       Registration</xref>, which states that the response contains the client
-      identifier as well as the client secret, if the client is a confidential
-      client. When used with this specification, the client information
+      identifier (as well as the client secret if the client is a confidential
+      client). When used with this specification, the client information
       response also contains the fully qualified URL of the <xref
       target="ClientConfigEndpoint">client configuration endpoint</xref> for
       this specific client that the client or developer may use to manage the
@@ -557,17 +557,18 @@
       <t>While the client secret can expire, the registration access token
       SHOULD NOT expire while a client is still actively registered. If this
       token were to expire, a developer or client could be left in a situation
-      where they have no means of retrieving or updating the client's
-      registration information. Were that the case, a new registration would
-      be required, thereby generating a new client identifier. However, to
-      limit the exposure surface of the registration access token, the
-      registration access token MAY be rotated when the developer or client
-      does a read or update operation on the client's client configuration
-      endpoint. As the registration access tokens are relatively long-term
-      credentials, and since the registration access token is a Bearer token
-      and acts as the sole authentication for use at the client configuration
-      endpoint, it MUST be protected by the developer or client as described
-      in <xref target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
+      where they have no means of retrieving, updating, or deleting the
+      client's registration information. Were that the case, a new
+      registration would be required, thereby generating a new client
+      identifier. However, to limit the exposure surface of the registration
+      access token, the registration access token MAY be rotated when the
+      developer or client does a read or update operation on the client's
+      client configuration endpoint. As the registration access tokens are
+      relatively long-term credentials, and since the registration access
+      token is a Bearer token and acts as the sole authentication for use at
+      the client configuration endpoint, it MUST be protected by the developer
+      or client as described in <xref target="RFC6750">OAuth 2.0 Bearer Token
+      Usage</xref>.</t>
 
       <t>Since requests to the client configuration endpoint result in the
       transmission of clear-text credentials (in the HTTP request and
