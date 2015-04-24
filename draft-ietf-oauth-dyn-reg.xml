@@ -932,7 +932,17 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           appropriate for the client software. The response to such a
           situation is out of scope for this specification but could include
           filing a report with the application developer or authorization
-          server provider.</t>
+          server provider, attempted re-registration with different metadata
+          values, or various other methods. For instance, if the server also
+          supports a registration management mechanism such as that defined in
+          <xref target="OAuth.Registration.Management"/>, the client or
+          developer could attempt to update the registration with different
+          metadata values. This process could also be aided by a service
+          discovery protocol such as <xref target="OpenID.Discovery"/> which
+          can list a server's capabilities, allowing a client to make a more
+          informed registration request. The use of any such management or
+          discovery system is OPTIONAL and outside the scope of this
+          specification.</t>
 
           <t>The successful registration response uses an HTTP 201 Created
           status code with a body of type <spanx style="verb">application/json</spanx>
@@ -1942,6 +1952,34 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
           <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
             <organization abbrev="Microsoft">Microsoft</organization>
+          </author>
+
+          <date day="8" month="November" year="2014"/>
+        </front>
+
+        <format target="http://openid.net/specs/openid-connect-registration-1_0.html"
+                type="HTML"/>
+      </reference>
+
+      <reference anchor="OpenID.Discovery">
+        <front>
+          <title>OpenID Connect Discovery 1.0</title>
+
+          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
+            <organization abbrev="NRI">Nomura Research Institute,
+            Ltd.</organization>
+          </author>
+
+          <author fullname="John Bradley" initials="J." surname="Bradley">
+            <organization abbrev="Ping Identity">Ping Identity</organization>
+          </author>
+
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <organization abbrev="Microsoft">Microsoft</organization>
+          </author>
+
+          <author fullname="Edmund Jay" initials="E." surname="Jay">
+            <organization>Illumila</organization>
           </author>
 
           <date day="8" month="November" year="2014"/>
