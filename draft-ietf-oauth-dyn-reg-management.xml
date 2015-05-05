@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-14"
+<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-15"
      ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
@@ -25,7 +25,7 @@
     <title abbrev="OAuth 2.0 Dynamic Registration Management">OAuth 2.0
     Dynamic Client Registration Management Protocol</title>
 
-    <author fullname="Justin Richer" initials="J" role="editor"
+    <author fullname="Justin Richer" initials="J." role="editor"
             surname="Richer">
       <organization/>
 
@@ -52,7 +52,7 @@
       </address>
     </author>
 
-    <author fullname="Maciej Machulak" initials="M" surname="Machulak">
+    <author fullname="Maciej Machulak" initials="M." surname="Machulak">
       <organization>Newcastle University</organization>
 
       <address>
@@ -60,7 +60,7 @@
       </address>
     </author>
 
-    <date day="21" month="April" year="2015"/>
+    <date day="5" month="May" year="2015"/>
 
     <area>Security</area>
 
@@ -579,7 +579,7 @@
       meeting its security requirements. When using TLS, the client MUST
       perform a TLS/SSL server certificate check, per <xref
       target="RFC6125">RFC 6125</xref>. Implementation security considerations
-      can be found in <xref target="TLS.BCP">Recommendations for Secure Use of
+      can be found in <xref target="RFC7525">Recommendations for Secure Use of
       TLS and DTLS</xref>.</t>
 
       <t>Since possession of the registration access token authorizes the
@@ -625,75 +625,19 @@
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7231.xml'?>
 
-      <reference anchor="TLS.BCP">
-        <front>
-          <title>Recommendations for Secure Use of TLS and DTLS</title>
-
-          <author fullname="Yaron Sheffer" initials="Y." surname="Sheffer">
-            <organization>Porticor</organization>
-
-            <address>
-              <postal>
-                <street>29 HaHarash St.</street>
-
-                <city>Hod HaSharon</city>
-
-                <region/>
-
-                <code>4501303</code>
-
-                <country>Israel</country>
-              </postal>
-
-              <email>yaronf.ietf@gmail.com</email>
-            </address>
-          </author>
-
-          <author fullname="Ralph Holz" initials="R." surname="Holz">
-            <organization>Technische Universitaet Muenchen</organization>
-
-            <address>
-              <postal>
-                <street>Boltzmannstr. 3</street>
-
-                <city>Garching</city>
-
-                <region/>
-
-                <code>85748</code>
-
-                <country>Germany</country>
-              </postal>
-
-              <email>ralph.ietf@gmail.com</email>
-            </address>
-          </author>
-
-          <author fullname="Peter Saint-Andre" initials="P."
-                  surname="Saint-Andre">
-            <organization>&amp;yet</organization>
-
-            <address>
-              <email>peter@andyet.com</email>
-
-              <uri>https://andyet.com/</uri>
-            </address>
-          </author>
-
-          <date day="11" month="November" year="2014"/>
-        </front>
-      </reference>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7525.xml'?>
 
       <reference anchor="OAuth.Registration">
         <front>
           <title abbrev="OAuth 2.0 Dynamic Registration">OAuth 2.0 Dynamic
           Client Registration Protocol</title>
 
-          <author fullname="Justin Richer" initials="J" surname="Richer">
-            <organization>The MITRE Corporation</organization>
+          <author fullname="Justin Richer" initials="J." role="editor"
+                  surname="Richer">
+            <organization/>
 
             <address>
-              <email>jricher@mitre.org</email>
+              <email>ietf@justin.richer.org</email>
             </address>
           </author>
 
@@ -715,17 +659,15 @@
             </address>
           </author>
 
-          <author fullname="Maciej Machulak" initials="M" surname="Machulak">
+          <author fullname="Maciej Machulak" initials="M." surname="Machulak">
             <organization>Newcastle University</organization>
 
             <address>
-              <email>m.p.machulak@ncl.ac.uk</email>
-
-              <uri>http://ncl.ac.uk/</uri>
+              <email>maciej.machulak@gmail.com</email>
             </address>
           </author>
 
-          <author fullname="Phil Hunt" initials="P" surname="Hunt">
+          <author fullname="Phil Hunt" initials="P." surname="Hunt">
             <organization>Oracle Corporation</organization>
 
             <address>
@@ -733,7 +675,7 @@
             </address>
           </author>
 
-          <date day="5" month="August" year="2014"/>
+          <date day="5" month="May" year="2015"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-oauth-dyn-reg"/>
@@ -870,6 +812,12 @@
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-15</t>
+
+      <t><list style="symbols">
+          <t>Added RFC 7525/BCP 195 reference to replace draft reference.</t>
+        </list></t>
 
       <t>-14</t>
 
