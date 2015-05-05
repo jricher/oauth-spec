@@ -24,7 +24,7 @@
     <title abbrev="OAuth 2.0 Dynamic Registration">OAuth 2.0 Dynamic Client
     Registration Protocol</title>
 
-    <author fullname="Justin Richer" initials="J" role="editor"
+    <author fullname="Justin Richer" initials="J." role="editor"
             surname="Richer">
       <organization/>
 
@@ -51,7 +51,7 @@
       </address>
     </author>
 
-    <author fullname="Maciej Machulak" initials="M" surname="Machulak">
+    <author fullname="Maciej Machulak" initials="M." surname="Machulak">
       <organization>Newcastle University</organization>
 
       <address>
@@ -59,7 +59,7 @@
       </address>
     </author>
 
-    <author fullname="Phil Hunt" initials="P" surname="Hunt">
+    <author fullname="Phil Hunt" initials="P." surname="Hunt">
       <organization>Oracle Corporation</organization>
 
       <address>
@@ -1896,11 +1896,11 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           <title abbrev="OAuth 2.0 Dynamic Registration Management">OAuth 2.0
           Dynamic Client Registration Management Protocol</title>
 
-          <author fullname="Justin Richer" initials="J" surname="Richer">
-            <organization>The MITRE Corporation</organization>
+          <author fullname="Justin Richer" initials="J." surname="Richer">
+            <organization/>
 
             <address>
-              <email>jricher@mitre.org</email>
+              <email>ietf@justin.richer.org</email>
             </address>
           </author>
 
@@ -1922,17 +1922,15 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <author fullname="Maciej Machulak" initials="M" surname="Machulak">
+          <author fullname="Maciej Machulak" initials="M." surname="Machulak">
             <organization>Newcastle University</organization>
 
             <address>
-              <email>m.p.machulak@ncl.ac.uk</email>
-
-              <uri>http://ncl.ac.uk/</uri>
+              <email>maciej.machulak@gmail.com</email>
             </address>
           </author>
 
-          <date day="21" month="April" year="2015"/>
+          <date day="5" month="May" year="2015"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
