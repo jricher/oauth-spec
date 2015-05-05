@@ -1446,9 +1446,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       transport-layer mechanisms meeting its security requirements. When using
       TLS, the client MUST perform a TLS/SSL server certificate check, per
       <xref target="RFC6125">RFC 6125</xref>. Implementation security
-      considerations can be found in <xref
-      target="I-D.ietf-uta-tls-bcp">Recommendations for Secure Use of TLS and
-      DTLS</xref>.</t>
+      considerations can be found in <xref target="RFC7525">Recommendations
+      for Secure Use of TLS and DTLS</xref>.</t>
 
       <t>For clients that use redirect-based grant types such as <spanx
       style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>,
@@ -1670,6 +1669,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7120.xml'?>
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
+
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7525.xml'?>
 
       <reference anchor="JWT">
         <front>
@@ -1993,8 +1994,6 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
                 type="HTML"/>
       </reference>
 
-      <?rfc include="http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-uta-tls-bcp-11.xml" ?>
-
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-hardjono-oauth-umacore-13.xml' ?>
     </references>
 
@@ -2147,6 +2146,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           returned by the server being different than those requested.</t>
 
           <t>Added RFC 7120/BCP 100 references.</t>
+
+          <t>Added RFC 7525/BCP 195 reference to replace draft reference.</t>
         </list></t>
 
       <t>-28</t>
