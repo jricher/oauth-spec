@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-28" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-29" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -67,7 +67,7 @@
       </address>
     </author>
 
-    <date day="21" month="April" year="2015"/>
+    <date day="5" month="May" year="2015"/>
 
     <area>Security</area>
 
@@ -941,7 +941,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           discovery protocol such as <xref target="OpenID.Discovery"/> which
           can list a server's capabilities, allowing a client to make a more
           informed registration request. The use of any such management or
-          discovery system is OPTIONAL and outside the scope of this
+          discovery system is optional and outside the scope of this
           specification.</t>
 
           <t>The successful registration response uses an HTTP 201 Created
@@ -1091,7 +1091,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         mailing list, on the advice of one or more Designated Experts.
         However, to allow for the allocation of names prior to publication,
         the Designated Expert(s) may approve registration once they are
-        satisfied that such a specification will be published.</t>
+        satisfied that such a specification will be published,
+	per <xref target="rfc7120"/>.</t>
 
         <t>Registration requests sent to the mailing list for review should
         use an appropriate subject (e.g., "Request to register OAuth Dynamic
@@ -1361,7 +1362,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         Designated Experts. However, to allow for the allocation of values
         prior to publication, the Designated Expert(s) may approve
         registration once they are satisfied that such a specification will be
-        published.</t>
+        published, per <xref target="rfc7120"/>.</t>
 
         <t>Registration requests must be sent to the oauth-ext-review@ietf.org
         mailing list for review and comment, with an appropriate subject
@@ -1666,6 +1667,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
 
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7120.xml'?>
+
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
 
       <reference anchor="JWT">
@@ -1749,7 +1752,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <date day="12" month="November" year="2015"/>
+          <date day="12" month="November" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft" value="draft-ietf-oauth-jwt-bearer"/>
@@ -1791,7 +1794,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <date day="12" month="November" year="2015"/>
+          <date day="12" month="November" year="2014"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1868,7 +1871,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
                 type="HTML"/>
       </reference>
 
-      <reference anchor="IANA.Language">
+      <reference anchor="IANA.Language"
+		 target="http://www.iana.org/assignments/language-subtag-registry">
         <front>
           <title>Language Subtag Registry</title>
 
@@ -1877,7 +1881,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             (IANA)</organization>
           </author>
 
-          <date year="2005"/>
+          <date />
         </front>
 
         <format target="http://www.iana.org/assignments/language-subtag-registry"
@@ -1927,7 +1931,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <date day="9" month="February" year="2015"/>
+          <date day="21" month="April" year="2015"/>
         </front>
 
         <seriesInfo name="Internet-Draft"
@@ -1989,9 +1993,9 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
                 type="HTML"/>
       </reference>
 
-      <?rfc include="http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-uta-tls-bcp-09.xml" ?>
+      <?rfc include="http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-uta-tls-bcp-11.xml" ?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-hardjono-oauth-umacore-10.xml' ?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-hardjono-oauth-umacore-13.xml' ?>
     </references>
 
     <section anchor="UseCases" title="Use Cases">
@@ -2135,6 +2139,18 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-29</t>
+
+      <t><list style="symbols">
+          <t>
+	    Descrbed more possible client responses to the metadata fields returned
+	    by the server being different than those requested.
+	  </t>
+	  <t>
+	    Added RFC 7120/BCP 100 references.
+	  </t>
+        </list></t>
 
       <t>-28</t>
 
