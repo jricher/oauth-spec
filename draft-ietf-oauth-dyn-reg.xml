@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
 "http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-29" ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-dyn-reg-30" ipr="trust200902">
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
@@ -67,7 +67,7 @@
       </address>
     </author>
 
-    <date day="5" month="May" year="2015"/>
+    <date day="28" month="May" year="2015"/>
 
     <area>Security</area>
 
@@ -134,7 +134,8 @@
         "protected resource", "redirection URI", "refresh token", "resource
         owner", "resource server", "response type", and "token endpoint"
         defined by <xref target="RFC6749">OAuth 2.0</xref> and uses the term
-        "Claim" defined by <xref target="JWT">JSON Web Token (JWT)</xref>.</t>
+        "Claim" defined by <xref target="RFC7519">JSON Web Token
+        (JWT)</xref>.</t>
 
         <t>This specification defines the following terms:</t>
 
@@ -205,7 +206,7 @@
             have a prior relationship with the deploying organizations.</t>
 
             <t hangText="Software Statement"><vspace/>Digitally signed or
-            MACed JSON Web Token (JWT) <xref target="JWT"/> that asserts
+            MACed JSON Web Token (JWT) <xref target="RFC7519"/> that asserts
             metadata values about the client software. In some cases, a
             software statement will be issued directly by the client
             developer. In other cases, a software statement will be issued by
@@ -350,13 +351,12 @@
               Grant described in OAuth 2.0 Section 6.</t>
 
               <t><spanx style="verb">urn:ietf:params:oauth:grant-type:jwt-bearer</spanx>:
-              The JWT Bearer Grant defined in <xref target="OAuth.JWT">OAuth
-              JWT Bearer Token Profiles</xref>.</t>
+              The JWT Bearer Grant defined in <xref target="RFC7523">OAuth JWT
+              Bearer Token Profiles</xref>.</t>
 
               <t><spanx style="verb">urn:ietf:params:oauth:grant-type:saml2-bearer</spanx>:
-              The SAML 2 Bearer Grant defined in <xref
-              target="OAuth.SAML2">OAuth SAML 2 Bearer Token
-              Profiles</xref>.</t>
+              The SAML 2 Bearer Grant defined in <xref target="RFC7522">OAuth
+              SAML 2 Bearer Token Profiles</xref>.</t>
             </list>If the token endpoint is used in the grant type, the value
           of this parameter MUST be the same as the value of the <spanx
           style="verb">grant_type</spanx> parameter passed to the token
@@ -440,24 +440,24 @@
           target="HumanReadableClientMetadata"/>.</t>
 
           <t hangText="jwks_uri"><vspace/>URL string referencing the client's
-          JSON Web Key Set <xref target="JWK"/> document, which contains the
-          client's public keys. The value of this field MUST point to a valid
-          JWK Set document. These keys can be used by higher level protocols
-          that use signing or encryption. For instance, these keys might be
-          used by some applications for validating signed requests made to the
-          token endpoint when using JWTs for client authentication <xref
-          target="OAuth.JWT"/>. Use of this parameter is preferred over the
-          <spanx style="verb">jwks</spanx> parameter, as it allows for easier
-          key rotation. The <spanx style="verb">jwks_uri</spanx> and <spanx
-          style="verb">jwks</spanx> parameters MUST NOT both be present in the
-          same request or response.</t>
+          JSON Web Key Set <xref target="RFC7517"/> document, which contains
+          the client's public keys. The value of this field MUST point to a
+          valid JWK Set document. These keys can be used by higher level
+          protocols that use signing or encryption. For instance, these keys
+          might be used by some applications for validating signed requests
+          made to the token endpoint when using JWTs for client authentication
+          <xref target="RFC7523"/>. Use of this parameter is preferred over
+          the <spanx style="verb">jwks</spanx> parameter, as it allows for
+          easier key rotation. The <spanx style="verb">jwks_uri</spanx> and
+          <spanx style="verb">jwks</spanx> parameters MUST NOT both be present
+          in the same request or response.</t>
 
           <t hangText="jwks"><vspace/>Client's JSON Web Key Set <xref
-          target="JWK"/> document value, which contains the client's public
-          keys. The value of this field MUST be a JSON object containing a
-          valid JWK Set. These keys can be used by higher level protocols that
-          use signing or encryption. This parameter is intended to be used by
-          clients that cannot use the <spanx style="verb">jwks_uri</spanx>
+          target="RFC7517"/> document value, which contains the client's
+          public keys. The value of this field MUST be a JSON object
+          containing a valid JWK Set. These keys can be used by higher level
+          protocols that use signing or encryption. This parameter is intended
+          to be used by clients that cannot use the <spanx style="verb">jwks_uri</spanx>
           parameter, such as native clients that cannot host public URLs. The
           <spanx style="verb">jwks_uri</spanx> and <spanx style="verb">jwks</spanx>
           parameters MUST NOT both be present in the same request or
@@ -632,21 +632,21 @@
       </section>
 
       <section anchor="SoftwareStatement" title="Software Statement">
-        <t>A software statement is a JSON Web Token (JWT) <xref target="JWT"/>
-        that asserts metadata values about the client software as a bundle. A
-        set of claims that can be used in a software statement are defined in
-        <xref target="ClientMetadata"/>. When presented to the authorization
-        server as part of a client registration request, the software
-        statement MUST be digitally signed or MACed using <xref
-        target="JWS">JWS</xref> and MUST contain an <spanx style="verb">iss</spanx>
-        (issuer) claim denoting the party attesting to the claims in the
-        software statement. It is RECOMMENDED that software statements be
-        digitally signed using the <spanx style="verb">RS256</spanx> signature
-        algorithm, although particular applications MAY specify the use of
-        different algorithms. It is RECOMMENDED that software statements
-        contain the <spanx style="verb">software_id</spanx> claim to allow
-        authorization servers to correlate different instances of software
-        using the same software statement.</t>
+        <t>A software statement is a JSON Web Token (JWT) <xref
+        target="RFC7519"/> that asserts metadata values about the client
+        software as a bundle. A set of claims that can be used in a software
+        statement are defined in <xref target="ClientMetadata"/>. When
+        presented to the authorization server as part of a client registration
+        request, the software statement MUST be digitally signed or MACed
+        using <xref target="RFC7515">JWS</xref> and MUST contain an <spanx
+        style="verb">iss</spanx> (issuer) claim denoting the party attesting
+        to the claims in the software statement. It is RECOMMENDED that
+        software statements be digitally signed using the <spanx style="verb">RS256</spanx>
+        signature algorithm, although particular applications MAY specify the
+        use of different algorithms. It is RECOMMENDED that software
+        statements contain the <spanx style="verb">software_id</spanx> claim
+        to allow authorization servers to correlate different instances of
+        software using the same software statement.</t>
 
         <t>For example, a software statement could contain the following
         claims:</t>
@@ -1262,8 +1262,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
               <t>Client Metadata Name: <spanx style="verb">jwks_uri</spanx></t>
 
               <t>Client Metadata Description: URL referencing the client's
-              <xref target="JWK">JSON Web Key Set</xref> document representing
-              the client's public keys</t>
+              <xref target="RFC7517">JSON Web Key Set</xref> document
+              representing the client's public keys</t>
 
               <t>Change Controller: IESG</t>
 
@@ -1273,9 +1273,9 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">jwks</spanx></t>
 
-              <t>Client Metadata Description: Client's <xref target="JWK">JSON
-              Web Key Set</xref> document representing the client's public
-              keys</t>
+              <t>Client Metadata Description: Client's <xref
+              target="RFC7517">JSON Web Key Set</xref> document representing
+              the client's public keys</t>
 
               <t>Change Controller: IESG</t>
 
@@ -1670,207 +1670,17 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
 
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7515.xml'?>
+
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7517.xml'?>
+
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7519.xml'?>
+
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7522.xml'?>
+
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7523.xml'?>
+
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7525.xml'?>
-
-      <reference anchor="JWT">
-        <front>
-          <title>JSON Web Token (JWT)</title>
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization>Microsoft</organization>
-
-            <address>
-              <email>mbj@microsoft.com</email>
-
-              <uri>http://self-issued.info/</uri>
-            </address>
-          </author>
-
-          <author fullname="John Bradley" initials="J." surname="Bradley">
-            <organization abbrev="Ping Identity">Ping Identity</organization>
-
-            <address>
-              <email>ve7jtb@ve7jtb.com</email>
-
-              <uri>http://www.thread-safe.com/</uri>
-            </address>
-          </author>
-
-          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
-            <organization abbrev="NRI">Nomura Research
-            Institute</organization>
-
-            <address>
-              <email>n-sakimura@nri.co.jp</email>
-
-              <uri>http://nat.sakimura.org/</uri>
-            </address>
-          </author>
-
-          <date day="15" month="January" year="2015"/>
-        </front>
-
-        <seriesInfo name="Internet-Draft"
-                    value="draft-ietf-oauth-json-web-token"/>
-
-        <format target="http://tools.ietf.org/html/draft-ietf-oauth-json-web-token"
-                type="HTML"/>
-      </reference>
-
-      <reference anchor="OAuth.JWT">
-        <front>
-          <title abbrev="OAuth JWT Assertion Profiles">JSON Web Token (JWT)
-          Profile for OAuth 2.0 Client Authentication and Authorization
-          Grants</title>
-
-          <!-- add 'role="editor"' below for the editors if appropriate -->
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <!-- role="editor" -->
-
-            <organization>Microsoft</organization>
-
-            <address>
-              <email>mbj@microsoft.com</email>
-
-              <uri>http://self-issued.info/</uri>
-            </address>
-          </author>
-
-          <author fullname="Brian Campbell" initials="B." surname="Campbell">
-            <organization abbrev="Ping Identity">Ping Identity</organization>
-
-            <address>
-              <email>brian.d.campbell@gmail.com</email>
-            </address>
-          </author>
-
-          <author fullname="Chuck Mortimore" initials="C." surname="Mortimore">
-            <organization abbrev="Salesforce">Salesforce</organization>
-
-            <address>
-              <email>cmortimore@salesforce.com</email>
-            </address>
-          </author>
-
-          <date day="12" month="November" year="2014"/>
-        </front>
-
-        <seriesInfo name="Internet-Draft" value="draft-ietf-oauth-jwt-bearer"/>
-
-        <format target="http://tools.ietf.org/html/draft-ietf-oauth-jwt-bearer"
-                type="HTML"/>
-      </reference>
-
-      <reference anchor="OAuth.SAML2">
-        <front>
-          <title abbrev="OAuth SAML Assertion Profiles">SAML 2.0 Profile for
-          OAuth 2.0 Client Authentication and Authorization Grants</title>
-
-          <!-- add 'role="editor"' below for the editors if appropriate -->
-
-          <author fullname="Brian Campbell" initials="B." surname="Campbell">
-            <organization abbrev="Ping Identity">Ping Identity</organization>
-
-            <address>
-              <email>brian.d.campbell@gmail.com</email>
-            </address>
-          </author>
-
-          <author fullname="Chuck Mortimore" initials="C." surname="Mortimore">
-            <organization abbrev="Salesforce">Salesforce.com</organization>
-
-            <address>
-              <email>cmortimore@salesforce.com</email>
-            </address>
-          </author>
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization>Microsoft</organization>
-
-            <address>
-              <email>mbj@microsoft.com</email>
-
-              <uri>http://self-issued.info/</uri>
-            </address>
-          </author>
-
-          <date day="12" month="November" year="2014"/>
-        </front>
-
-        <seriesInfo name="Internet-Draft"
-                    value="draft-ietf-oauth-saml2-bearer"/>
-
-        <format target="http://tools.ietf.org/html/draft-ietf-oauth-saml2-bearer"
-                type="HTML"/>
-      </reference>
-
-      <reference anchor="JWS">
-        <front>
-          <title>JSON Web Signature (JWS)</title>
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization>Microsoft</organization>
-
-            <address>
-              <email>mbj@microsoft.com</email>
-
-              <uri>http://self-issued.info/</uri>
-            </address>
-          </author>
-
-          <author fullname="John Bradley" initials="J." surname="Bradley">
-            <organization abbrev="Ping Identity">Ping Identity</organization>
-
-            <address>
-              <email>ve7jtb@ve7jtb.com</email>
-
-              <uri>http://www.thread-safe.com/</uri>
-            </address>
-          </author>
-
-          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
-            <organization abbrev="NRI">Nomura Research
-            Institute</organization>
-
-            <address>
-              <email>n-sakimura@nri.co.jp</email>
-
-              <uri>http://nat.sakimura.org/</uri>
-            </address>
-          </author>
-
-          <date day="16" month="January" year="2015"/>
-        </front>
-
-        <seriesInfo name="Internet-Draft"
-                    value="draft-ietf-jose-json-web-signature"/>
-
-        <format type="HTML"/>
-      </reference>
-
-      <reference anchor="JWK">
-        <front>
-          <title>JSON Web Key (JWK)</title>
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization>Microsoft</organization>
-
-            <address>
-              <email>mbj@microsoft.com</email>
-
-              <uri>http://self-issued.info/</uri>
-            </address>
-          </author>
-
-          <date day="16" month="January" year="2015"/>
-        </front>
-
-        <seriesInfo name="Internet-Draft" value="draft-ietf-jose-json-web-key"/>
-
-        <format target="http://tools.ietf.org/html/draft-ietf-jose-json-web-key"
-                type="HTML"/>
-      </reference>
 
       <reference anchor="IANA.Language"
                  target="http://www.iana.org/assignments/language-subtag-registry">
@@ -2136,6 +1946,13 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
     <section anchor="History" title="Document History">
       <t>[[ to be removed by the RFC editor before publication as an RFC
       ]]</t>
+
+      <t>-30</t>
+
+      <t><list style="symbols">
+          <t>Updated JOSE, JWT, and OAuth Assertion draft references to final
+          RFC numbers.</t>
+        </list></t>
 
       <t>-29</t>
 

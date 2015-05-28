@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-introspection-08"
+<rfc category="std" docName="draft-ietf-oauth-introspection-09"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth 2.0 Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="21" month="April" year="2015"/>
+    <date day="28" month="May" year="2015"/>
 
     <area>Security</area>
 
@@ -61,9 +61,9 @@
       meta-information about a token that is has received from an
       authorization server, several different approaches have been developed
       to bridge this gap. These include using structured token formats such as
-      <xref target="JWT">JWT</xref> or proprietary inter-service communication
-      mechanisms (such as shared databases and protected enterprise service
-      buses) that convey token information.</t>
+      <xref target="RFC7519">JWT</xref> or proprietary inter-service
+      communication mechanisms (such as shared databases and protected
+      enterprise service buses) that convey token information.</t>
 
       <t>This specification defines an interoperable web API that allows
       authorized protected resources to query the authorization server to
@@ -92,7 +92,7 @@
         "client identifier", "protected resource", "refresh token", "resource
         owner", "resource server", and "token endpoint" defined by <xref
         target="RFC6749">OAuth 2.0</xref>, and the terms "claim names" and
-        "claim values" defined by <xref target="JWT">JSON Web Token
+        "claim values" defined by <xref target="RFC7519">JSON Web Token
         (JWT)</xref>.</t>
       </section>
     </section>
@@ -238,34 +238,34 @@
             <t hangText="exp"><vspace/>OPTIONAL. Integer timestamp, measured
             in the number of seconds since January 1 1970 UTC, indicating when
             this token will expire, as defined in <xref
-            target="JWT">JWT</xref>.</t>
+            target="RFC7519">JWT</xref>.</t>
 
             <t hangText="iat"><vspace/>OPTIONAL. Integer timestamp, measured
             in the number of seconds since January 1 1970 UTC, indicating when
             this token was originally issued, as defined in <xref
-            target="JWT">JWT</xref>.</t>
+            target="RFC7519">JWT</xref>.</t>
 
             <t hangText="nbf"><vspace/>OPTIONAL. Integer timestamp, measured
             in the number of seconds since January 1 1970 UTC, indicating when
             this token is not to be used before, as defined in <xref
-            target="JWT">JWT</xref>.</t>
+            target="RFC7519">JWT</xref>.</t>
 
             <t hangText="sub"><vspace/>OPTIONAL. Subject of the token, as
-            defined in <xref target="JWT">JWT</xref>. Usually a
+            defined in <xref target="RFC7519">JWT</xref>. Usually a
             machine-readable identifier of the resource owner who authorized
             this token.</t>
 
             <t hangText="aud"><vspace/>OPTIONAL. Service-specific string
             identifier or list of string identifiers representing the intended
             audience for this token, as defined in <xref
-            target="JWT">JWT</xref>.</t>
+            target="RFC7519">JWT</xref>.</t>
 
             <t hangText="iss"><vspace/>OPTIONAL. String representing the
             issuer of this token, as defined in <xref
-            target="JWT">JWT</xref>.</t>
+            target="RFC7519">JWT</xref>.</t>
 
             <t hangText="jti"><vspace/>OPTIONAL. String identifier for the
-            token, as defined in <xref target="JWT">JWT</xref>.</t>
+            token, as defined in <xref target="RFC7519">JWT</xref>.</t>
           </list></t>
 
         <t>Specific implementations MAY extend this structure with their own
@@ -399,8 +399,8 @@
               "example"). This name is case sensitive. Names that match other
               registered names in a case insensitive manner SHOULD NOT be
               accepted. Names that match claims registered in the JSON Web
-              Token Claims registry established by <xref target="JWT"/> SHOULD
-              have comparable definitions and semantics.</t>
+              Token Claims registry established by <xref target="RFC7519"/>
+              SHOULD have comparable definitions and semantics.</t>
 
               <t hangText="Description:"><vspace/> Brief description of the
               metadata value (e.g., "Example description").</t>
@@ -657,8 +657,8 @@
       authorization to call the introspection endpoint and to limit calls to
       only registered and trusted protected resource servers. Another method
       is to transmit user identifiers as opaque service-specific strings,
-      potentially returning different identifiers to each protected resource.
-      </t>
+      potentially returning different identifiers to each protected
+      resource.</t>
 
       <t>If the protected resource sends additional information about the
       client's request to the authorization server (such as the client's IP
@@ -707,50 +707,7 @@
     </references>
 
     <references title="Informative References">
-      <reference anchor="JWT">
-        <front>
-          <title>JSON Web Token (JWT)</title>
-
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization>Microsoft</organization>
-
-            <address>
-              <email>mbj@microsoft.com</email>
-
-              <uri>http://self-issued.info/</uri>
-            </address>
-          </author>
-
-          <author fullname="John Bradley" initials="J." surname="Bradley">
-            <organization abbrev="Ping Identity">Ping Identity</organization>
-
-            <address>
-              <email>ve7jtb@ve7jtb.com</email>
-
-              <uri>http://www.thread-safe.com/</uri>
-            </address>
-          </author>
-
-          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
-            <organization abbrev="NRI">Nomura Research
-            Institute</organization>
-
-            <address>
-              <email>n-sakimura@nri.co.jp</email>
-
-              <uri>http://nat.sakimura.org/</uri>
-            </address>
-          </author>
-
-          <date day="4" month="July" year="2014"/>
-        </front>
-
-        <seriesInfo name="Internet-Draft"
-                    value="draft-ietf-oauth-json-web-token"/>
-
-        <format target="http://tools.ietf.org/html/draft-ietf-oauth-json-web-token"
-                type="HTML"/>
-      </reference>
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7519.xml'?>
 
       <reference anchor="TLS.BCP">
         <front>
@@ -829,6 +786,13 @@
 
     <section title="Document History">
       <t>[[ To be removed by the RFC Editor. ]]</t>
+
+      <t>-09</t>
+
+      <t><list style="symbols">
+          <t>Updated JOSE, JWT, and OAuth Assertion draft references to final
+          RFC numbers.</t>
+        </list></t>
 
       <t>-08</t>
 
