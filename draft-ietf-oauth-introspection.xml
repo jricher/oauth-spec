@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-introspection-09"
+<rfc category="std" docName="draft-ietf-oauth-introspection-10"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth 2.0 Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="28" month="May" year="2015"/>
+    <date day="22" month="June" year="2015"/>
 
     <area>Security</area>
 
