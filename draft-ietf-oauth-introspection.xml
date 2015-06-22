@@ -65,22 +65,22 @@
       communication mechanisms (such as shared databases and protected
       enterprise service buses) that convey token information.</t>
 
-      <t>This specification defines an interoperable web API that allows
-      authorized protected resources to query the authorization server to
-      determine the set of metadata for a given token that was presented to
-      them by an OAuth 2.0 client. This metadata includes whether or not the
-      token is currently active (or if it has expired or otherwise been
-      revoked), what rights of access the token carries (usually conveyed
-      through OAuth 2.0 scopes), and the authorization context in which the
-      token was granted (including who authorized the token and which client
-      it was issued to). Token introspection allows a protected resource to
-      query this information regardless of whether or not it is carried in the
-      token itself, allowing this method to be used along with or
-      independently of structured token values. Additionally, a protected
-      resource can use the mechanism described in this specification to
-      introspect the token in a particular authorization decision context and
-      ascertain the relevant metadata about the token in order to make this
-      authorization decision appropriately.</t>
+      <t>This specification defines a protocol that allows authorized
+      protected resources to query the authorization server to determine the
+      set of metadata for a given token that was presented to them by an OAuth
+      2.0 client. This metadata includes whether or not the token is currently
+      active (or if it has expired or otherwise been revoked), what rights of
+      access the token carries (usually conveyed through OAuth 2.0 scopes),
+      and the authorization context in which the token was granted (including
+      who authorized the token and which client it was issued to). Token
+      introspection allows a protected resource to query this information
+      regardless of whether or not it is carried in the token itself, allowing
+      this method to be used along with or independently of structured token
+      values. Additionally, a protected resource can use the mechanism
+      described in this specification to introspect the token in a particular
+      authorization decision context and ascertain the relevant metadata about
+      the token in order to make this authorization decision
+      appropriately.</t>
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -239,8 +239,8 @@
             and before its expiration time). See <xref target="Security"/> for
             information on implementation of such checks.</t>
 
-            <t hangText="scope"><vspace/>OPTIONAL. A space-separated list of
-            strings representing the scopes associated with this token, in the
+            <t hangText="scope"><vspace/>OPTIONAL. A JSON string containing a
+            space-separated list of scopes associated with this token, in the
             format described in section 3.3 of <xref target="RFC6749">OAuth
             2.0</xref>.</t>
 
@@ -618,7 +618,7 @@
       <t>In order to prevent the values of access tokens from leaking into
       server-side logs via query parameters, an authorization server offering
       token introspection MAY disallow the use of HTTP GET on the
-      introspection endpoint and instead require an HTTP POST method to be
+      introspection endpoint and instead require the HTTP POST method to be
       used at the introspection endpoint.</t>
 
       <t>In order to avoid disclosing internal server state, an introspection
@@ -648,7 +648,7 @@
       entirely, again at the cost of increased network traffic and server
       load.</t>
 
-      <t>An authorization server offering token introspection MUST be able to
+      <t>An authorization server offering token introspection must be able to
       understand the token values being presented to it during this call. The
       exact means by which this happens is an implementation detail and
       outside the scope of this specification. For unstructured tokens, this
@@ -658,15 +658,13 @@
       token, validating its signature or other protection mechanisms, and
       returning the information contained in the token back to the protected
       resource (allowing the protected resource to be unaware of the token's
-      contents, much like the client).</t>
-
-      <t>Note that for tokens carrying encrypted information that is needed
-      during the introspection process, the authorization server MUST be able
-      to decrypt and validate the token in order to access this information.
-      Also note that in cases where the authorization server stores no
-      information about the token and has no means of accessing information
-      about the token by parsing the token itself, it can not likely offer an
-      introspection service.</t>
+      contents, much like the client). Note that for tokens carrying encrypted
+      information that is needed during the introspection process, the
+      authorization server must be able to decrypt and validate the token in
+      order to access this information. Also note that in cases where the
+      authorization server stores no information about the token and has no
+      means of accessing information about the token by parsing the token
+      itself, it can not likely offer an introspection service.</t>
     </section>
 
     <section anchor="Privacy" title="Privacy Considerations">
@@ -815,6 +813,12 @@
           <t>Removed optional HTTP GET at introspection endpoint.</t>
 
           <t>Added terminology.</t>
+
+          <t>Renamed this "a protocol" instead of "web API".</t>
+
+          <t>Moved JWT to normative reference.</t>
+
+          <t>Reworded definition of "scope" value.</t>
         </list></t>
 
       <t>-09</t>
