@@ -131,7 +131,9 @@
 
       <t hangText="instance_name">The introspection endpoint MUST be protected
       by a transport-layer security mechanism as described in <xref
-      target="Security"/>.</t>
+      target="Security"/>. The means by which the protected resource discovers
+      the location of the introspection endpoint are outside the scope of this
+      specification.</t>
 
       <section anchor="IntrospectionRequest" title="Introspection Request">
         <t hangText="instance_name">The protected resource calls the
@@ -831,6 +833,8 @@
           <t>Reworded definition of "scope" value.</t>
 
           <t>Clarified extensibility of input parameters.</t>
+
+          <t>Noted that discover is out of scope.</t>
 
           <t>Fixed serveal typos and imprecise references.</t>
         </list></t>
