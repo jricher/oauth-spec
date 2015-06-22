@@ -675,11 +675,11 @@
       resource (allowing the protected resource to be unaware of the token's
       contents, much like the client). Note that for tokens carrying encrypted
       information that is needed during the introspection process, the
-      authorization server must be able to decrypt and validate the token in
-      to access this information. Also note that in cases where the
-      authorization server stores no information about the token and has no
-      means of accessing information about the token by parsing the token
-      itself, it can not likely offer an introspection service.</t>
+      authorization server must be able to decrypt and validate the token to
+      access this information. Also note that in cases where the authorization
+      server stores no information about the token and has no means of
+      accessing information about the token by parsing the token itself, it
+      can not likely offer an introspection service.</t>
     </section>
 
     <section anchor="Privacy" title="Privacy Considerations">
@@ -836,7 +836,7 @@
 
           <t>Noted that discover is out of scope.</t>
 
-          <t>Fixed serveal typos and imprecise references.</t>
+          <t>Fixed several typos and imprecise references.</t>
         </list></t>
 
       <t>-09</t>
