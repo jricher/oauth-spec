@@ -79,8 +79,7 @@
       values. Additionally, a protected resource can use the mechanism
       described in this specification to introspect the token in a particular
       authorization decision context and ascertain the relevant metadata about
-      the token in order to make this authorization decision
-      appropriately.</t>
+      the token to make this authorization decision appropriately.</t>
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
@@ -156,41 +155,41 @@
 
             <t hangText="token_type_hint">OPTIONAL. A hint about the type of
             the token submitted for introspection. The protected resource MAY
-            pass this parameter in order to help the authorization server to
-            optimize the token lookup. If the server is unable to locate the
-            token using the given hint, it MUST extend its search across all
-            of its supported token types. An authorization server MAY ignore
-            this parameter, particularly if it is able to detect the token
-            type automatically. Values for this field are defined in the OAuth
+            pass this parameter to help the authorization server to optimize
+            the token lookup. If the server is unable to locate the token
+            using the given hint, it MUST extend its search across all of its
+            supported token types. An authorization server MAY ignore this
+            parameter, particularly if it is able to detect the token type
+            automatically. Values for this field are defined in the OAuth
             Token Type Hints registry defined in <xref target="RFC7009">OAuth
             Token Revocation</xref>.</t>
           </list></t>
 
-        <t hangText="instance_name">The endpoint MAY allow other OPTIONAL
+        <t hangText="instance_name">The endpoint MAY accept other OPTIONAL
         parameters to provide further context to the query. For instance, an
         authorization server may desire to know the IP address of the client
-        accessing the protected resource in order to determine the
-        appropriateness of the token being presented. The definition of any
-        other parameters are outside the scope of this specification, to be
-        defined by service documentation or extensions to this specification.
-        If the authorization server is unable to determine the state of the
-        token without additional information, it SHOULD return an
-        introspection response indicating the token is not active as described
-        in <xref target="IntrospectionResponse"/>.</t>
+        accessing the protected resource to determine the appropriateness of
+        the token being presented. The definition of any other parameters are
+        outside the scope of this specification, to be defined by service
+        documentation or extensions to this specification. If the
+        authorization server is unable to determine the state of the token
+        without additional information, it SHOULD return an introspection
+        response indicating the token is not active as described in <xref
+        target="IntrospectionResponse"/>.</t>
 
-        <t hangText="instance_name">To prevent unauthorized token scanning
-        attacks, the endpoint MUST also require some form of authorization to
-        access this endpoint, such as client authentication as described in
-        <xref target="RFC6749">OAuth 2.0</xref> or a separate OAuth 2.0 access
-        token such as the bearer token described in <xref
-        target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>. The methods of
-        managing and validating these authentication credentials are out of
-        scope of this specification.</t>
+        <t hangText="instance_name">To prevent token scanning attacks, the
+        endpoint MUST also require some form of authorization to access this
+        endpoint, such as client authentication as described in <xref
+        target="RFC6749">OAuth 2.0</xref> or a separate OAuth 2.0 access token
+        such as the bearer token described in <xref target="RFC6750">OAuth 2.0
+        Bearer Token Usage</xref>. The methods of managing and validating
+        these authentication credentials are out of scope of this
+        specification.</t>
 
         <t>For example, the following example shows a protected resource
         calling the token introspection endpoint to query about an OAuth 2.0
-        bearer. The protected resource is using a separate OAuth 2.0 bearer
-        token to authorize this call.</t>
+        bearer token. The protected resource is using a separate OAuth 2.0
+        bearer token to authorize this call.</t>
 
         <figure>
           <preamble>Following is a non-normative example request:</preamble>
@@ -303,9 +302,9 @@
         <t>The authorization server MAY respond differently to different
         protected resources making the same request. For instance, an
         authorization server MAY limit which scopes from a given token are
-        returned for each protected resource in order to prevent protected
-        resources from learning more about the larger network than is
-        necessary for their function.</t>
+        returned for each protected resource to prevent protected resources
+        from learning more about the larger network than is necessary for its
+        operation.</t>
 
         <t>The response MAY be cached by the protected resource to improve
         performance and reduce load on the introspection endpoint, but at the
@@ -345,12 +344,12 @@
         not active, does not exist on this server, or the protected resource
         is not allowed to introspect this particular token, the authorization
         server MUST return an introspection response with the active field set
-        to false. Note that in order to avoid disclosing too much of the
-        authorization server's state to a third party, the authorization
-        server SHOULD NOT include any additional information about an inactive
-        token, including why the token is inactive. For example, the response
-        for a token that has been revoked or is otherwise invalid would look
-        like the following:</t>
+        to false. Note that to avoid disclosing too much of the authorization
+        server's state to a third party, the authorization server SHOULD NOT
+        include any additional information about an inactive token, including
+        why the token is inactive. For example, the response for a token that
+        has been revoked or is otherwise invalid would look like the
+        following:</t>
 
         <figure>
           <preamble>Following is a non-normative example response:</preamble>
@@ -594,7 +593,7 @@
         </list></t>
 
       <t>If an authorization server fails to perform any applicable check, the
-      resource server could make an errant security decision based on that
+      resource server could make an erroneous security decision based on that
       response. Note that not all of these checks will be applicable to all
       OAuth 2.0 deployments and it is up to the authorization server to
       determine which of these checks (and any other checks) apply.</t>
@@ -621,21 +620,22 @@
       decisions, the server MUST support TLS 1.2 <xref target="RFC5246">RFC
       5246</xref> and MAY support additional transport-layer mechanisms
       meeting its security requirements. When using TLS, the client or
-      protected resource MUST perform a TLS/SSL server certificate check, per
-      <xref target="RFC6125">RFC 6125</xref>. Implementation security
-      considerations can be found in <xref target="TLS.BCP">Recommendations
-      for Secure Use of TLS and DTLS</xref>.</t>
+      protected resource MUST perform a TLS/SSL server certificate check, as
+      specified in <xref target="RFC6125">RFC 6125</xref>. Implementation
+      security considerations can be found in <xref
+      target="TLS.BCP">Recommendations for Secure Use of TLS and
+      DTLS</xref>.</t>
 
-      <t>In order to prevent the values of access tokens from leaking into
-      server-side logs via query parameters, an authorization server offering
-      token introspection MAY disallow the use of HTTP GET on the
-      introspection endpoint and instead require the HTTP POST method to be
-      used at the introspection endpoint.</t>
+      <t>To prevent the values of access tokens from leaking into server-side
+      logs via query parameters, an authorization server offering token
+      introspection MAY disallow the use of HTTP GET on the introspection
+      endpoint and instead require the HTTP POST method to be used at the
+      introspection endpoint.</t>
 
-      <t>In order to avoid disclosing internal server state, an introspection
-      response for an inactive token SHOULD NOT contain any additional claims
-      beyond the required <spanx style="verb">active</spanx> claim (with its
-      value set to <spanx style="verb">false</spanx>).</t>
+      <t>To avoid disclosing internal server state, an introspection response
+      for an inactive token SHOULD NOT contain any additional claims beyond
+      the required <spanx style="verb">active</spanx> claim (with its value
+      set to <spanx style="verb">false</spanx>).</t>
 
       <t>Since a protected resource MAY cache the response of the
       introspection endpoint, designers of an OAuth 2.0 system using this
@@ -655,9 +655,11 @@
       the protected resource being accessed and the likelihood of a token
       being revoked or invalidated in the interim period. Highly sensitive
       environments can opt to disable caching entirely on the protected
-      resource in order to eliminate the risk of stale cached information
-      entirely, again at the cost of increased network traffic and server
-      load.</t>
+      resource to eliminate the risk of stale cached information entirely,
+      again at the cost of increased network traffic and server load. If the
+      response contains the <spanx style="verb">exp</spanx> parameter
+      (expiration), the response MUST NOT be cached beyond the time indicated
+      therein. </t>
 
       <t>An authorization server offering token introspection must be able to
       understand the token values being presented to it during this call. The
@@ -672,7 +674,7 @@
       contents, much like the client). Note that for tokens carrying encrypted
       information that is needed during the introspection process, the
       authorization server must be able to decrypt and validate the token in
-      order to access this information. Also note that in cases where the
+      to access this information. Also note that in cases where the
       authorization server stores no information about the token and has no
       means of accessing information about the token by parsing the token
       itself, it can not likely offer an introspection service.</t>
@@ -803,10 +805,10 @@
       proof-of-possession style tokens, the protected resource will have only
       a token identifier used during the request, along with the cryptographic
       signature on the request. The protected resource would be able to submit
-      the token identifier to the authorization server's token endpoint in
-      order to obtain the necessary key information needed to validate the
-      signature on the request. The details of this usage are outside the
-      scope of this specification and will be defined in an extension to this
+      the token identifier to the authorization server's token endpoint to
+      obtain the necessary key information needed to validate the signature on
+      the request. The details of this usage are outside the scope of this
+      specification and will be defined in an extension to this
       specification.</t>
     </section>
 
