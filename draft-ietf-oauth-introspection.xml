@@ -82,6 +82,16 @@
       ascertain the relevant metadata about the token in order to make this
       authorization decision appropriately.</t>
 
+      <section anchor="Notation" title="Notational Conventions">
+        <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
+        'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', and 'OPTIONAL' in this
+        document are to be interpreted as described in <xref
+        target="RFC2119"/>.</t>
+
+        <t>Unless otherwise noted, all the protocol parameter names and values
+        are case sensitive.</t>
+      </section>
+
       <section title="Terminology">
         <t>This section defines the terminology used by this specification.
         This section is a normative portion of this specification, imposing
@@ -94,6 +104,18 @@
         target="RFC6749">OAuth 2.0</xref>, and the terms "claim names" and
         "claim values" defined by <xref target="RFC7519">JSON Web Token
         (JWT)</xref>.</t>
+
+        <t>This specification defines the following terms:</t>
+
+        <t><list style="hanging">
+            <t hangText="Token Introspection"><vspace/>The act of inquiring
+            about the current state of an OAuth 2.0 token through use of the
+            network protocol defined in this document.</t>
+
+            <t hangText="Introspection Endpoint"><vspace/>The OAuth 2.0
+            endpoint through which the token introspection operation is
+            accomplished..</t>
+          </list></t>
       </section>
     </section>
 
@@ -102,11 +124,11 @@
       endpoint that takes a parameter representing an OAuth 2.0 token and
       returns a <xref target="RFC7159">JSON</xref> document representing the
       meta information surrounding the token, including whether this token is
-      currently active. The definition of an active token is up to the
-      authorization server, but this is commonly a token that has been issued
-      by this authorization server, is not expired, has not been revoked, and
-      is within the purview of the protected resource making the introspection
-      call.</t>
+      currently active. The definition of an active token is dependent upon
+      the authorization server, but this is commonly a token that has been
+      issued by this authorization server, is not expired, has not been
+      revoked, and is within the purview of the protected resource making the
+      introspection call.</t>
 
       <t hangText="instance_name">The introspection endpoint MUST be protected
       by a transport-layer security mechanism as described in <xref
@@ -117,12 +139,9 @@
         introspection endpoint using an <xref target="RFC7231">HTTP
         POST</xref> request with parameters sent as <spanx style="verb">application/x-www-form-urlencoded</spanx>
         data as defined in <xref target="W3C.REC-html5-20141028"/>. The
-        authorization server MAY allow an <xref target="RFC7231">HTTP
-        GET</xref> request with parameters passed in the query string as
-        defined in <xref target="W3C.REC-html5-20141028"/>. The protected
-        resource sends a parameter representing the token along with optional
-        parameters representing additional context that is known by the
-        protected resource to aid the authorization server in its
+        protected resource sends a parameter representing the token along with
+        optional parameters representing additional context that is known by
+        the protected resource to aid the authorization server in its
         response.</t>
 
         <t hangText="instance_name"><list style="hanging">
@@ -598,8 +617,9 @@
 
       <t>In order to prevent the values of access tokens from leaking into
       server-side logs via query parameters, an authorization server offering
-      token introspection MAY disallow HTTP GET and instead require an HTTP
-      POST method to be used at the introspection endpoint.</t>
+      token introspection MAY disallow the use of HTTP GET on the
+      introspection endpoint and instead require an HTTP POST method to be
+      used at the introspection endpoint.</t>
 
       <t>In order to avoid disclosing internal server state, an introspection
       response for an inactive token SHOULD NOT contain any additional claims
@@ -703,12 +723,12 @@
 
       <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7231.xml'?>
 
+      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7519.xml'?>
+
       <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml4/reference.W3C.REC-html5-20141028.xml'?>
     </references>
 
     <references title="Informative References">
-      <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7519.xml'?>
-
       <reference anchor="TLS.BCP">
         <front>
           <title>Recommendations for Secure Use of TLS and DTLS</title>
@@ -786,6 +806,16 @@
 
     <section title="Document History">
       <t>[[ To be removed by the RFC Editor. ]]</t>
+
+      <t>-10</t>
+
+      <t><list style="symbols">
+          <t>Added missing 2119 section to terminology.</t>
+
+          <t>Removed optional HTTP GET at introspection endpoint.</t>
+
+          <t>Added terminology.</t>
+        </list></t>
 
       <t>-09</t>
 
