@@ -127,7 +127,7 @@
       currently active. The definition of an active token is dependent upon
       the authorization server, but this is commonly a token that has been
       issued by this authorization server, is not expired, has not been
-      revoked, and is within the purview of the protected resource making the
+      revoked, and valid for use at the protected resource making the
       introspection call.</t>
 
       <t hangText="instance_name">The introspection endpoint MUST be protected
@@ -161,15 +161,22 @@
             token using the given hint, it MUST extend its search across all
             of its supported token types. An authorization server MAY ignore
             this parameter, particularly if it is able to detect the token
-            type automatically. Values for this field are defined in <xref
-            target="RFC7009">OAuth Token Revocation</xref>.</t>
+            type automatically. Values for this field are defined in the OAuth
+            Token Type Hints registry defined in <xref target="RFC7009">OAuth
+            Token Revocation</xref>.</t>
           </list></t>
 
-        <t hangText="instance_name">The endpoint MAY allow other parameters to
-        provide further context to the query. For instance, an authorization
-        service may need to know the IP address of the client accessing the
-        protected resource in order to determine the appropriateness of the
-        token being presented.</t>
+        <t hangText="instance_name">The endpoint MAY allow other OPTIONAL
+        parameters to provide further context to the query. For instance, an
+        authorization server may desire to know the IP address of the client
+        accessing the protected resource in order to determine the
+        appropriateness of the token being presented. The definition of any
+        other parameters are outside the scope of this specification, to be
+        defined by service documentation or extensions to this specification.
+        If the authorization server is unable to determine the state of the
+        token without additional information, it SHOULD return an
+        introspection response indicating the token is not active as described
+        in <xref target="IntrospectionResponse"/>.</t>
 
         <t hangText="instance_name">To prevent unauthorized token scanning
         attacks, the endpoint MUST also require some form of authorization to
@@ -441,9 +448,7 @@
           <t>The initial contents of the OAuth Token Introspection Response
           registry are:</t>
 
-          <t><?rfc subcompact="yes"?></t>
-
-          <t><list style="symbols">
+          <t><?rfc subcompact="yes"?><list style="symbols">
               <t>Name: <spanx style="verb">active</spanx></t>
 
               <t>Description: Token active status</t>
@@ -582,10 +587,16 @@
 
           <t>If the token has been signed, the authorization server MUST
           validate the signature.</t>
-        </list>If an authorization server fails to perform any applicable
-      check, the resource server could make an errant security decision based
-      on that response. Note that not all of these checks will be applicable
-      to all OAuth 2.0 deployments and it is up to the authorization server to
+
+          <t>If the token can be used only at certain resource servers, the
+          authorization server MUST determine whether or not the token can be
+          used at the resource server making the introspection call.</t>
+        </list></t>
+
+      <t>If an authorization server fails to perform any applicable check, the
+      resource server could make an errant security decision based on that
+      response. Note that not all of these checks will be applicable to all
+      OAuth 2.0 deployments and it is up to the authorization server to
       determine which of these checks (and any other checks) apply.</t>
 
       <t>If left unprotected and un-throttled, the introspection endpoint
@@ -671,12 +682,9 @@
       <t>The introspection response may contain privacy-sensitive information
       such as user identifiers for resource owners. When this is the case,
       measures MUST be taken to prevent disclosure of this information to
-      unintended parties. One way to limit disclosure is to require
-      authorization to call the introspection endpoint and to limit calls to
-      only registered and trusted protected resource servers. Another method
-      is to transmit user identifiers as opaque service-specific strings,
-      potentially returning different identifiers to each protected
-      resource.</t>
+      unintended parties. One method is to transmit user identifiers as opaque
+      service-specific strings, potentially returning different identifiers to
+      each protected resource.</t>
 
       <t>If the protected resource sends additional information about the
       client's request to the authorization server (such as the client's IP
@@ -819,6 +827,10 @@
           <t>Moved JWT to normative reference.</t>
 
           <t>Reworded definition of "scope" value.</t>
+
+          <t>Clarified extensibility of input parameters.</t>
+
+          <t>Fixed serveal typos and imprecise references.</t>
         </list></t>
 
       <t>-09</t>
