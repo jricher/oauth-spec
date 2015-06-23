@@ -167,17 +167,17 @@
             Token Revocation</xref>.</t>
           </list></t>
 
-        <t hangText="instance_name">The endpoint MAY accept other OPTIONAL
-        parameters to provide further context to the query. For instance, an
-        authorization server may desire to know the IP address of the client
-        accessing the protected resource to determine the appropriateness of
-        the token being presented. The definition of any other parameters are
-        outside the scope of this specification, to be defined by service
-        documentation or extensions to this specification. If the
-        authorization server is unable to determine the state of the token
-        without additional information, it SHOULD return an introspection
-        response indicating the token is not active as described in <xref
-        target="IntrospectionResponse"/>.</t>
+        <t hangText="instance_name">The introspection endpoint MAY accept
+        other OPTIONAL parameters to provide further context to the query. For
+        instance, an authorization server may desire to know the IP address of
+        the client accessing the protected resource to determine if the
+        correct client is likely to be presenting the token. The definition of
+        any other parameters are outside the scope of this specification, to
+        be defined by service documentation or extensions to this
+        specification. If the authorization server is unable to determine the
+        state of the token without additional information, it SHOULD return an
+        introspection response indicating the token is not active as described
+        in <xref target="IntrospectionResponse"/>.</t>
 
         <t hangText="instance_name">To prevent token scanning attacks, the
         endpoint MUST also require some form of authorization to access this
@@ -661,7 +661,7 @@
       again at the cost of increased network traffic and server load. If the
       response contains the <spanx style="verb">exp</spanx> parameter
       (expiration), the response MUST NOT be cached beyond the time indicated
-      therein. </t>
+      therein.</t>
 
       <t>An authorization server offering token introspection must be able to
       understand the token values being presented to it during this call. The
