@@ -708,11 +708,11 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
         <t/>
 
         <t>The software statement is typically distributed with all instances 
-   of a client application.The means by which a client or developer 
+   of a client application. The means by which a client or developer 
    obtains a software statement are outside the scope of this 
    specification.  Some common methods could include a client developer 
    generating a client-specific JWT by registering with a software 
-   API publisher to obtain a software statement for a class of clients. </t>
+   API publisher to obtain a software statement for a class of clients.</t>
 
         <t>The criteria by which authorization servers determine whether to
    trust and utilize the information in a software statement are outside
@@ -827,9 +827,9 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
    "client_name": "My Example Client",
    "client_name#ja-Jpan-JP":
       "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D",
-   "token_endpoint_auth_method":"client_secret_basic",
+   "token_endpoint_auth_method": "client_secret_basic",
    "policy_uri": "https://client.example.org/policy.html",
-   "jwks":{"keys": [{
+   "jwks": {"keys": [{
       "e": "AQAB",
       "n": "nj3YJwsLUFl9BmpAbkOswCNVx17Eh9wMO-_AReZwBqfaWFcfG
 HrZXsIV2VMCNVNU8Tpb4obUaSXcRcQ-VMsfQPJm9IzgtRdAY8NN8Xb7PEcYyk
@@ -1444,7 +1444,7 @@ to match the minor changes made in the descriptions below.
         <section anchor="TEAMTemplate" title="Registration Template">
           <t><list style="hanging">
               <t
-              hangText="Token Endpoint Authorization Method Name:"><vspace/>
+              hangText="Token Endpoint Authentication Method Name:"><vspace/>
               The name requested (e.g., "example"). This name is case
               sensitive. Names that match other registered names in a case-insensitive manner SHOULD NOT be accepted.</t>
 
@@ -1466,7 +1466,7 @@ to match the minor changes made in the descriptions below.
           Methods Registry are:</t>
 
           <t><?rfc subcompact="yes"?> <list style="symbols">
-              <t>Token Endpoint Authorization Method Name: <spanx
+              <t>Token Endpoint Authentication Method Name: <spanx
               style="verb">none</spanx></t>
 
               <t>Change Controller: IESG</t>
@@ -1475,7 +1475,7 @@ to match the minor changes made in the descriptions below.
             </list></t>
 
           <t><list style="symbols">
-              <t>Token Endpoint Authorization Method Name: <spanx
+              <t>Token Endpoint Authentication Method Name: <spanx
               style="verb">client_secret_post</spanx></t>
 
               <t>Change Controller: IESG</t>
@@ -1484,7 +1484,7 @@ to match the minor changes made in the descriptions below.
             </list></t>
 
           <t><list style="symbols">
-              <t>Token Endpoint Authorization Method Name: <spanx
+              <t>Token Endpoint Authentication Method Name: <spanx
               style="verb">client_secret_basic</spanx></t>
 
               <t>Change Controller: IESG</t>
@@ -1504,7 +1504,7 @@ to match the minor changes made in the descriptions below.
       transport-layer security mechanism when sending requests to the
       registration endpoint. The server MUST support TLS 1.2 <xref
       target="RFC5246"></xref> and MAY support additional
-      transport-layer mechanisms meeting its security requirements. When using
+      transport-layer security mechanisms meeting its security requirements. When using
       TLS, the client MUST perform a TLS/SSL server certificate check, per
       <xref target="RFC6125">RFC 6125</xref>. Implementation security
       considerations can be found in <xref target="BCP195">Recommendations
@@ -1569,7 +1569,7 @@ NEW:
       to the browser alongside the code.</t>
 
       <t>Since different OAuth 2.0 grant types have different security and
-      usage aspects, an authorization server MAY require separate
+      usage properties, an authorization server MAY require separate
       registrations for a piece of software to support multiple grant types.
       For instance, an authorization server might require that all clients
       using the <spanx style="verb">authorization_code</spanx> grant type make
