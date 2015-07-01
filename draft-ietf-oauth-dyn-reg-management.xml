@@ -1,25 +1,17 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
-"http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="exp" docName="draft-ietf-oauth-dyn-reg-management-15"
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<rfc submissionType="IETF" category="exp" consensus="yes" number="7592"
      ipr="trust200902">
+
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
-
   <?rfc tocdepth='3' ?>
-
   <?rfc symrefs='yes' ?>
-
   <?rfc sortrefs='yes' ?>
-
   <?rfc compact='yes' ?>
-
   <?rfc subcompact='no' ?>
-
-  <?rfc strict='yes' ?>
-
-  <?rfc notedraftinprogress='yes' ?>
+  <?rfc rfcedstyle="yes"?>
 
   <front>
     <title abbrev="OAuth 2.0 Dynamic Registration Management">OAuth 2.0
@@ -60,11 +52,23 @@
       </address>
     </author>
 
-    <date day="5" month="May" year="2015"/>
+    <date month="July" year="2015"/>
 
     <area>Security</area>
 
     <workgroup>OAuth Working Group</workgroup>
+
+<!-- [rfced] Please insert any keywords (beyond those that appear in 
+the title) for use on http://www.rfc-editor.org/search.
+-->
+
+<keyword>example</keyword>
+
+<!--[rfced] We note that RFC 6750 uses "bearer token" and RFC 7523 uses
+"Bearer Token".  We went with initial caps to match RFC 7523 as it is
+another document in this cluster.  Please let us know if you prefer 
+otherwise.
+-->
 
     <abstract>
       <t>This specification defines methods for management of dynamic OAuth
@@ -80,8 +84,8 @@
       <t>In order for an OAuth 2.0 client to utilize an OAuth 2.0
       authorization server, the client needs specific information to interact
       with the server, including an OAuth 2.0 client identifier to use with
-      that server. The <xref target="OAuth.Registration">OAuth 2.0 Dynamic
-      Client Registration Protocol</xref> specification describes how an OAuth
+      that server. <xref target="RFC7591">"OAuth 2.0 Dynamic
+      Client Registration Protocol"</xref> describes how an OAuth
       2.0 client can be dynamically registered with an authorization server to
       obtain this information and how metadata about the client can be
       registered with the server.</t>
@@ -97,7 +101,7 @@
       client to be updated at the authorization server, and methods for the
       client to be unregistered from the authorization server.</t>
 
-      <t>This experimental draft is intended to encourage development and
+      <t>This Experimental RFC is intended to encourage development and
       deployment of interoperable solutions with the intent that feedback from
       this experience will inform a future standard.</t>
 
@@ -118,8 +122,8 @@
         "protected resource", "redirection URI", "refresh token", "resource
         owner", "resource server", "response type", and "token endpoint"
         defined by <xref target="RFC6749">OAuth 2.0</xref> and the terms
-        defined by the <xref target="OAuth.Registration">OAuth 2.0 Client
-        Dynamic Registration Protocol</xref>.</t>
+        defined by <xref target="RFC7591">"OAuth 2.0 Client
+        Dynamic Registration Protocol"</xref>.</t>
 
         <t>This specification defines the following terms:</t>
 
@@ -129,8 +133,8 @@
             client can be managed. This URL for this endpoint is returned by
             the authorization server in the client information response.</t>
 
-            <t hangText="Registration Access Token"><vspace/>OAuth 2.0 bearer
-            token issued by the authorization server through the client
+            <t hangText="Registration Access Token"><vspace/>OAuth 2.0 Bearer
+            Token issued by the authorization server through the client
             registration endpoint that is used to authenticate the caller when
             accessing the client's registration information at the client
             configuration endpoint. This access token is associated with a
@@ -140,9 +144,9 @@
 
       <section anchor="ProtocolFlow" title="Protocol Flow">
         <figure>
-          <preamble>This extends the flow in the <xref
-          target="OAuth.Registration">OAuth 2.0 Dynamic Client Registration
-          Protocol</xref> specification as follows:</preamble>
+          <preamble>This extends the flow in <xref
+          target="RFC7591">"OAuth 2.0 Dynamic Client Registration
+          Protocol"</xref> as follows:</preamble>
 
           <artwork><![CDATA[
      +--------(A)- Initial Access Token (OPTIONAL)
@@ -179,7 +183,7 @@
         figure does not demonstrate error conditions. This flow includes the
         following steps:</t>
 
-        <t><list style="hanging">
+        <t><list style="hanging" hangIndent="6">
             <t hangText="(A)">Optionally, the client or developer is issued an
             initial access token for use with the client registration
             endpoint. The method by which the initial access token is issued
@@ -263,7 +267,7 @@
         access token.</t>
 
         <figure>
-          <preamble>Following is a non-normative example request (with line
+          <preamble>The following is a non-normative example request (with line
           wraps for display purposes only):</preamble>
 
           <artwork><![CDATA[
@@ -290,8 +294,8 @@
         initial registration response.</t>
 
         <t>If the registration access token used to make this request is not
-        valid, the server MUST respond with an error as described in <xref
-        target="RFC6750">OAuth Bearer Token Usage</xref>.</t>
+        valid, the server MUST respond with an error as described in the <xref
+        target="RFC6750">OAuth Bearer Token Usage specification</xref>.</t>
 
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized and the registration access token
@@ -302,7 +306,7 @@
       </section>
 
       <section anchor="UpdateRequest" title="Client Update Request">
-        <t>To update previously-registered client's registration with an
+        <t>To update previously registered client's registration with an
         authorization server, the client makes an HTTP PUT request to the
         client configuration endpoint with a content type of <spanx
         style="verb">application/json</spanx>. The HTTP entity payload is a
@@ -327,10 +331,10 @@
         empty value in the request just as any other value.</t>
 
         <t>The client MUST include its <spanx style="verb">client_id</spanx>
-        field in the request, and it MUST be the same as its currently-issued
+        field in the request, and it MUST be the same as its currently issued
         client identifier. If the client includes the <spanx style="verb">client_secret</spanx>
         field in the request, the value of this field MUST match the
-        currently-issued client secret for that client. The client MUST NOT be
+        currently issued client secret for that client. The client MUST NOT be
         allowed to overwrite its existing client secret with its own chosen
         value.</t>
 
@@ -343,7 +347,7 @@
         above example with new information:</t>
 
         <figure>
-          <preamble>Following is a non-normative example request (with line
+          <preamble>The following is a non-normative example request (with line
           wraps for display purposes only):</preamble>
 
           <artwork><![CDATA[
@@ -369,13 +373,13 @@
 ]]></artwork>
 
           <postamble>This example uses client metadata values defined in <xref
-          target="OAuth.Registration"/>.</postamble>
+          target="RFC7591"/>.</postamble>
         </figure>
 
         <t/>
 
         <t>Upon successful update, the authorization server responds with an
-        HTTP 200 OK Message with content type <spanx style="verb">application/json</spanx>
+        HTTP 200 OK message with content type <spanx style="verb">application/json</spanx>
         and a payload, as described in <xref target="ClientInfoResponse"/>.
         Some values in the response, including the <spanx style="verb">client_secret</spanx>
         and <spanx style="verb">registration_access_token</spanx>, MAY be
@@ -387,8 +391,8 @@
         initial registration response.</t>
 
         <t>If the registration access token used to make this request is not
-        valid, the server MUST respond with an error as described in <xref
-        target="RFC6750">OAuth Bearer Token Usage</xref>.</t>
+        valid, the server MUST respond with an error as described in the <xref
+        target="RFC6750">OAuth Bearer Token Usage specification</xref>.</t>
 
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized, and the registration access token
@@ -400,7 +404,7 @@
         <t>If the client attempts to set an invalid metadata field and the
         authorization server does not set a default value, the authorization
         server responds with an error as described in <xref
-        target="OAuth.Registration"/>.</t>
+        target="RFC7591"/>.</t>
       </section>
 
       <section anchor="DeleteRequest" title="Client Delete Request">
@@ -410,7 +414,7 @@
         the client as described in <xref target="RFC6749"/>.</t>
 
         <figure>
-          <preamble>Following is a non-normative example request (with line
+          <preamble>The following is a non-normative example request (with line
           wraps for display purposes only):</preamble>
 
           <artwork><![CDATA[
@@ -428,18 +432,18 @@
         from being used at either the authorization endpoint or token endpoint
         of the authorization server. If possible, the authorization server
         SHOULD immediately invalidate all existing authorization grants and
-        currently-active access tokens, refresh tokens, and other tokens
+        currently active access tokens, all refresh tokens, and all other tokens
         associated with this client.</t>
 
         <t>If a client has been successfully deprovisioned, the authorization
         server MUST respond with an HTTP 204 No Content message.</t>
 
         <t>If the server does not support the delete method, the server MUST
-        respond with an HTTP 405 Not Supported.</t>
+        respond with HTTP 405 Not Supported.</t>
 
         <t>If the registration access token used to make this request is not
-        valid, the server MUST respond with an error as described in <xref
-        target="RFC6750">OAuth Bearer Token Usage</xref>.</t>
+        valid, the server MUST respond with an error as described in the <xref
+        target="RFC6750">OAuth Bearer Token Usage specification</xref>.</t>
 
         <t>If the client does not exist on this server, the server MUST
         respond with HTTP 401 Unauthorized and the registration access token
@@ -450,7 +454,7 @@
         respond with HTTP 403 Forbidden.</t>
 
         <figure>
-          <preamble>Following is a non-normative example response:</preamble>
+          <preamble>The following is a non-normative example response:</preamble>
 
           <artwork><![CDATA[
   HTTP/1.1 204 No Content
@@ -463,8 +467,8 @@
 
     <section anchor="ClientInfoResponse" title="Client Information Response">
       <t>This specification extends the client information response defined in
-      <xref target="OAuth.Registration">OAuth 2.0 Client Dynamic
-      Registration</xref>, which states that the response contains the client
+      <xref target="RFC7591">"OAuth 2.0 Client Dynamic
+      Registration"</xref>, which states that the response contains the client
       identifier (as well as the client secret if the client is a confidential
       client). When used with this specification, the client information
       response also contains the fully qualified URL of the <xref
@@ -496,7 +500,7 @@
       target="RFC7159">JSON object</xref>.</t>
 
       <figure>
-        <preamble>Following is a non-normative example response:</preamble>
+        <preamble>The following is a non-normative example response:</preamble>
 
         <artwork><![CDATA[
   HTTP/1.1 200 OK
@@ -529,27 +533,32 @@
 
     <section anchor="IANA" title="IANA Considerations">
       <t>This specification registers the following client metadata names and
-      descriptions in the OAuth Dynamic Client Registration Metadata registry
-      established by <xref target="OAuth.Registration"/>:</t>
+      descriptions in the OAuth Dynamic Client Registration Metadata Registry
+      established by <xref target="RFC7591"/>:</t>
+
+<!-- [rfced] FYI, we will send a request to IANA to update the registry
+to match the minor change made in the description below. (Text was updated 
+to 'Bearer Token' as mentioned above.)
+-->
 
       <t><list style="symbols">
           <t>Client Metadata Name: <spanx style="verb">registration_access_token</spanx></t>
 
-          <t>Client Metadata Description: OAuth 2.0 bearer token used to
+          <t>Client Metadata Description: OAuth 2.0 Bearer Token used to
           access the client configuration endpoint</t>
 
-          <t>Change controller: IESG</t>
+          <t>Change Controller: IESG</t>
 
-          <t>Specification document(s): [[ this document ]]</t>
+          <t>Specification Document(s): this document (RFC 7592)</t>
         </list><list style="symbols">
           <t>Client Metadata Name: <spanx style="verb">registration_client_uri</spanx></t>
 
           <t>Client Metadata Description: Fully qualified URI of the client
           registration endpoint</t>
 
-          <t>Change controller: IESG</t>
+          <t>Change Controller: IESG</t>
 
-          <t>Specification document(s): [[ this document ]]</t>
+          <t>Specification Document(s): this document (RFC 7592)</t>
         </list></t>
     </section>
 
@@ -565,30 +574,28 @@
       developer or client does a read or update operation on the client's
       client configuration endpoint. As the registration access tokens are
       relatively long-term credentials, and since the registration access
-      token is a Bearer token and acts as the sole authentication for use at
+      token is a Bearer Token and acts as the sole authentication for use at
       the client configuration endpoint, it MUST be protected by the developer
-      or client as described in <xref target="RFC6750">OAuth 2.0 Bearer Token
-      Usage</xref>.</t>
+      or client as described in the <xref target="RFC6750">OAuth 2.0 Bearer Token
+      Usage specification</xref>.</t>
 
       <t>Since requests to the client configuration endpoint result in the
       transmission of clear-text credentials (in the HTTP request and
       response), the authorization server MUST require the use of a
-      transport-layer security mechanism when sending requests to the
-      endpoint. The server MUST support TLS 1.2 <xref target="RFC5246">RFC
-      5246</xref> and MAY support additional transport-layer mechanisms
+      transport-layer security  mechanism when sending requests to the
+      endpoint. The server MUST support TLS 1.2 <xref target="RFC5246"></xref> and MAY support additional transport-layer mechanisms
       meeting its security requirements. When using TLS, the client MUST
       perform a TLS/SSL server certificate check, per <xref
       target="RFC6125">RFC 6125</xref>. Implementation security considerations
-      can be found in <xref target="RFC7525">Recommendations for Secure Use of
+      can be found in <xref target="BCP195">Recommendations for Secure Use of
       TLS and DTLS</xref>.</t>
 
       <t>Since possession of the registration access token authorizes the
-      holder to potentially read, modify, or delete a client&rsquo;s
+      holder to potentially read, modify, or delete a client's
       registration (including its credentials such as a client_secret), the
       registration access token MUST contain sufficient entropy to prevent a
-      random guessing attack of this token, such as described in <xref
-      target="RFC6750"/> Section 5.2 and <xref target="RFC6819"/> Section
-      5.1.4.2.2.</t>
+      random guessing attack of this token, such as described in Section 5.2 of <xref
+      target="RFC6750"/> and Section 5.1.4.2.2 of <xref target="RFC6819"/>.</t>
 
       <t>If a client is deprovisioned from a server, any outstanding
       registration access token for that client MUST be invalidated at the
@@ -602,32 +609,44 @@
 
     <section anchor="Privacy" title="Privacy Considerations">
       <t>This specification poses no additional privacy considerations beyond
-      those described in the core <xref target="OAuth.Registration">OAuth 2.0
-      Dynamic Client Registration</xref> specification.</t>
+      those described in the core <xref target="RFC7591">"OAuth 2.0
+      Dynamic Client Registration Protocol"</xref>.</t>
     </section>
   </middle>
 
   <back>
     <references title="Normative References">
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
+<?rfc include="reference.RFC.2119.xml"?>
+<?rfc include="reference.RFC.5246.xml"?>
+<?rfc include="reference.RFC.6125.xml"?>
+<?rfc include="reference.RFC.6749.xml"?>
+<?rfc include="reference.RFC.6750.xml"?>
+<?rfc include="reference.RFC.6819.xml"?>
+<?rfc include="reference.RFC.7159.xml"?>
+<?rfc include="reference.RFC.7231.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
+    <reference  anchor='BCP195' target='http://www.rfc-editor.org/info/bcp195'>
+    <front>
+    <title>Recommendations for Secure Use of Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)</title>
+    <author initials='Y.' surname='Sheffer' fullname='Y. Sheffer'><organization /></author>
+    <author initials='R.' surname='Holz' fullname='R. Holz'><organization /></author>
+    <author initials='P.' surname='Saint-Andre' fullname='P. Saint-Andre'><organization /></author>
+    <date year='2015' month='May' />
+    <abstract><t>Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS) are widely used to protect data exchanged over application protocols such as HTTP, SMTP, IMAP, POP, SIP, and XMPP.  Over the last few years, several serious attacks on TLS have emerged, including attacks on its most commonly used cipher suites and their modes of operation.  This document provides recommendations for improving the security of deployed services that use TLS and DTLS. The recommendations are applicable to the majority of use cases.</t></abstract>
+    </front>
+    <seriesInfo name='BCP' value='195'/>
+    <seriesInfo name='RFC' value='7525'/>
+    <seriesInfo name='DOI' value='10.17487/RFC7525'/>
+    <format type='ASCII' octets='60283'/>
+    </reference>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6819.xml'?>
+<!--draft-ietf-oauth-dyn-reg-30; companion doc -->
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7231.xml'?>
-
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7525.xml'?>
-
-      <reference anchor="OAuth.Registration">
+      <reference anchor="RFC7591" target="http://www.rfc-editor.org/info/rfc7591">
         <front>
           <title abbrev="OAuth 2.0 Dynamic Registration">OAuth 2.0 Dynamic
           Client Registration Protocol</title>
@@ -675,27 +694,15 @@
             </address>
           </author>
 
-          <date day="5" month="May" year="2015"/>
+          <date month="July" year="2015"/>
         </front>
 
-        <seriesInfo name="Internet-Draft" value="draft-ietf-oauth-dyn-reg"/>
+        <seriesInfo name="RFC" value="7591"/>
+<seriesInfo name="DOI" value="10.17487/RFC7591"/>
 
-        <format target="http://tools.ietf.org/html/draft-ietf-oauth-dyn-reg"
-                type="HTML"/>
       </reference>
     </references>
 
-    <section anchor="Acknowledgments" title="Acknowledgments">
-      <t>The authors thank the OAuth Working Group, the User-Managed Access
-      Working Group, and the OpenID Connect Working Group participants for
-      their input to this document. In particular, the following individuals
-      have been instrumental in their review and contribution to various
-      versions of this document: Amanda Anganes, Derek Atkins, Tim Bray,
-      Domenico Catalano, Donald Coffin, Vladimir Dzhuvinov, George Fletcher,
-      Thomas Hardjono, Phil Hunt, William Kim, Torsten Lodderstedt, Eve Maler,
-      Josh Mandel, Nov Matake, Tony Nadalin, Nat Sakimura, Christian Scholz,
-      and Hannes Tschofenig.</t>
-    </section>
 
     <section anchor="Credentials"
              title="Registration Tokens and Client Credentials">
@@ -722,7 +729,7 @@
           <t>The registration access token is used by the client or developer
           at the client configuration endpoint and represents the holder's
           authorization to manage the registration of a client. This is an
-          OAuth 2.0 bearer token that is issued from the client registration
+          OAuth 2.0 Bearer Token that is issued from the client registration
           endpoint in response to a client registration request and is
           returned in a client information response. The registration access
           token is uniquely bound to the client identifier and is required to
@@ -762,10 +769,10 @@
         information response.</t>
 
         <t>The registration access token SHOULD be rotated only in response to
-        a read or update request to the client configuration endpoint, at
-        which point the new registration access token is returned to the
-        client and the old registration access token MUST be discarded by the
-        client and SHOULD be discarded by the server, if possible. If instead
+        a read or update request to the client configuration endpoint. At
+        this point, the new registration access token is returned to the
+        client, the old registration access token MUST be discarded by the
+        client, and it SHOULD be discarded by the server, if possible. If, instead,
         the registration access token were to expire or be invalidated outside
         of such requests, the client or developer might be locked out of
         managing the client's configuration.</t>
@@ -790,13 +797,12 @@
       <t>Depending on deployment characteristics, the client configuration
       endpoint URL may take any number of forms. It is RECOMMENDED that this
       endpoint URL be formed through the use of a server-constructed URL
-      string which combines the client registration endpoint's URL and the
+      string that combines the client registration endpoint's URL and the
       issued <spanx style="verb">client_id</spanx> for this client, with the
       latter as either a path parameter or a query parameter. For example, a
       client with the client identifier <spanx style="verb">s6BhdRkqt3</spanx>
-      could be given a client configuration endpoint URL of <spanx
-      style="verb">https://server.example.com/register/s6BhdRkqt3</spanx>
-      (path parameter) or of <spanx style="verb">https://server.example.com/register?client_id=s6BhdRkqt3</spanx>
+      could be given a client configuration endpoint URL of "https://server.example.com/register/s6BhdRkqt3"
+      (path parameter) or of "https://server.example.com/register?client_id=s6BhdRkqt3"
       (query parameter). In both of these cases, the client simply uses the
       URL as given by the authorization server.</t>
 
@@ -809,119 +815,17 @@
       token.</t>
     </section>
 
-    <section anchor="History" title="Document History">
-      <t>[[ to be removed by the RFC editor before publication as an RFC
-      ]]</t>
-
-      <t>-15</t>
-
-      <t><list style="symbols">
-          <t>Added RFC 7525/BCP 195 reference to replace draft reference.</t>
-        </list></t>
-
-      <t>-14</t>
-
-      <t><list style="symbols">
-          <t>Clarified all client metadata as JSON arrays, strings, or
-          numbers.</t>
-
-          <t>Clarified experimental nature of the draft.</t>
-        </list></t>
-
-      <t>-13</t>
-
-      <t><list style="symbols">
-          <t>Changed rate-limiting suggestion to a complexity requirement.</t>
-        </list></t>
-
-      <t>-12</t>
-
-      <t><list style="symbols">
-          <t>Used consistent registry name.</t>
-        </list></t>
-
-      <t>-11</t>
-
-      <t><list style="symbols">
-          <t>Fixed a series of nits from Peter Yee's Gen-ART review.</t>
-        </list></t>
-
-      <t>-10</t>
-
-      <t><list style="symbols">
-          <t>Updated author information.</t>
-
-          <t>Updated TLS information, imported from Dynamic Registration
-          core.</t>
-
-          <t>Expanded introduction.</t>
-
-          <t>Reformatted diagram text.</t>
-
-          <t>Added privacy considerations section.</t>
-        </list></t>
-
-      <t>-09</t>
-
-      <t><list style="symbols">
-          <t>Updated author information.</t>
-        </list></t>
-
-      <t>-08</t>
-
-      <t><list style="symbols">
-          <t>Updated HTTP RFC reference.</t>
-        </list></t>
-
-      <t>-07</t>
-
-      <t><list style="symbols">
-          <t>Editorial clarifications due to document shepherd feedback.</t>
-        </list></t>
-
-      <t>-06</t>
-
-      <t><list style="symbols">
-          <t>Removed TLS 1.0.</t>
-
-          <t>Moved several explanatory sections to the appendix.</t>
-
-          <t>Clarified read operations.</t>
-
-          <t>Added IANA request.</t>
-        </list></t>
-
-      <t>-05<list style="symbols">
-          <t>Removed Phil Hunt from authors list, per request.</t>
-
-          <t>Applied various minor editorial changes from working group
-          comments.</t>
-        </list></t>
-
-      <t>-04</t>
-
-      <t><list style="symbols">
-          <t>Incorrect XML uploaded for -03</t>
-        </list></t>
-
-      <t>-03</t>
-
-      <t><list style="symbols">
-          <t>Changed draft to be Experimental instead of Standards Track.</t>
-        </list></t>
-
-      <t>-02 <list style="symbols">
-          <t>Added more context information to the abstract.</t>
-        </list></t>
-
-      <t>-01 <list style="symbols">
-          <t>Addressed issues that arose from last call comments on
-          draft-ietf-oauth-dyn-reg and draft-ietf-oauth-dyn-reg-metadata.</t>
-        </list></t>
-
-      <t>-00 <list style="symbols">
-          <t>Created from draft-jones-oauth-dyn-reg-management-00.</t>
-        </list></t>
+    <section anchor="Acknowledgments" title="Acknowledgments" numbered="no">
+      <t>The authors thank the OAuth Working Group, the User-Managed Access
+      Working Group, and the OpenID Connect Working Group participants for
+      their input to this document. In particular, the following individuals
+      have been instrumental in their review and contribution to various
+      draft versions of this document: Amanda Anganes, Derek Atkins, Tim Bray,
+      Domenico Catalano, Donald Coffin, Vladimir Dzhuvinov, George Fletcher,
+      Thomas Hardjono, Phil Hunt, William Kim, Torsten Lodderstedt, Eve Maler,
+      Josh Mandel, Nov Matake, Tony Nadalin, Nat Sakimura, Christian Scholz,
+      and Hannes Tschofenig.</t>
     </section>
+ 
   </back>
 </rfc>

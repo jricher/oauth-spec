@@ -1,24 +1,17 @@
 <?xml version="1.0" encoding="US-ASCII"?>
-<!DOCTYPE rfc PUBLIC "-//IETF//DTD RFC 2629//EN"
-"http://xml2rfc.tools.ietf.org/authoring/rfc2629.dtd">
-<rfc category="std" docName="draft-ietf-oauth-dyn-reg-30" ipr="trust200902">
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+
+<rfc submissionType="IETF" category="std" consensus="yes" number="7591" ipr="trust200902">
+
   <?xml-stylesheet type='text/xsl' href='rfc2629.xslt' ?>
 
   <?rfc toc='yes' ?>
-
   <?rfc tocdepth='3' ?>
-
   <?rfc symrefs='yes' ?>
-
   <?rfc sortrefs='yes' ?>
-
   <?rfc compact='yes' ?>
-
   <?rfc subcompact='no' ?>
-
-  <?rfc strict='yes' ?>
-
-  <?rfc notedraftinprogress='yes' ?>
+  <?rfc rfcedstyle="yes"?>
 
   <front>
     <title abbrev="OAuth 2.0 Dynamic Registration">OAuth 2.0 Dynamic Client
@@ -67,11 +60,15 @@
       </address>
     </author>
 
-    <date day="28" month="May" year="2015"/>
+    <date month="July" year="2015"/>
 
     <area>Security</area>
 
     <workgroup>OAuth Working Group</workgroup>
+
+
+<keyword>OpenID Connect</keyword>
+<keyword>OpenID Connect Dynamic Client Registration</keyword>
 
     <abstract>
       <t>This specification defines mechanisms for dynamically registering
@@ -95,12 +92,14 @@
       OAuth 2.0 client can be dynamically registered with an authorization
       server to obtain this information.</t>
 
+
       <t>As part of the registration process, this specification also defines
       a mechanism for the client to present the authorization server with a
-      set of metadata, such as a set of valid redirection URIs. This metadata
-      can either be communicated in a self-asserted fashion or as a set of
-      metadata called a software statement, which is digitally signed or
-      MACed; in the case of a software statement, the issuer is vouching for
+      set of metadata, such as a set of valid redirection URIs. 
+
+   This metadata can either be communicated in a self-asserted fashion or as
+   a set of metadata called a software statement, which is digitally
+   signed or protected with a Message Authentication Code (MAC); in the case of a software statement, the issuer is vouching for
       the validity of the data about the client.</t>
 
       <t>Traditionally, registration of a client with an authorization server
@@ -110,10 +109,10 @@
       register the client with authorization servers. Multiple applications
       using OAuth 2.0 have previously developed mechanisms for accomplishing
       such registrations. This specification generalizes the registration
-      mechanisms defined by the <xref target="OpenID.Registration">OpenID
-      Connect Dynamic Client Registration 1.0</xref> specification and used by
-      the <xref target="I-D.hardjono-oauth-umacore">User Managed Access (UMA)
-      Profile of OAuth 2.0</xref> specification in a way that is compatible
+      mechanisms defined by <xref target="OpenID.Registration">"OpenID
+      Connect Dynamic Client Registration 1.0"</xref> and used by
+      <xref target="UMA-Core">"User Managed Access (UMA)
+      Profile of OAuth 2.0"</xref> in a way that is compatible
       with both, while being applicable to a wider set of OAuth 2.0 use
       cases.</t>
 
@@ -148,7 +147,7 @@
 
             <t hangText="Client Developer"><vspace/>The person or organization
             that builds a client software package and prepares it for
-            distribution. At the time of building the client, the developer is
+            distribution. At the time the client is built, the developer is
             often not aware of who the deploying service provider
             organizations will be. Client developers will need to use dynamic
             registration when they are unable to predict aspects of the
@@ -165,7 +164,7 @@
             optionally issued by an authorization server to a developer or
             client and used to authorize calls to the client registration
             endpoint. The type and format of this token are likely
-            service-specific and are out of scope for this specification. The
+            service specific and are out of scope for this specification. The
             means by which the authorization server issues this token as well
             as the means by which the registration endpoint validates this
             token are out of scope for this specification. Use of an initial
@@ -195,22 +194,22 @@
             this specification.</t>
 
             <t hangText="Software API Publisher"><vspace/>The organization
-            that defines a particular web accessible API that may be deployed
+            that defines a particular web-accessible API that may be deployed
             in one or more deployment environments. A publisher may be any
             standards body, commercial, public, private, or open source
             organization that is responsible for publishing and distributing
             software and API specifications that may be protected via OAuth
             2.0. In some cases, a software API publisher and a client
             developer may be the same organization. At the time of publication
-            of a web accessible API, the software publisher often does not
+            of a web-accessible API, the software publisher often does not
             have a prior relationship with the deploying organizations.</t>
 
-            <t hangText="Software Statement"><vspace/>Digitally signed or
+            <t hangText="Software Statement"><vspace/>A digitally signed or
             MACed JSON Web Token (JWT) <xref target="RFC7519"/> that asserts
             metadata values about the client software. In some cases, a
             software statement will be issued directly by the client
             developer. In other cases, a software statement will be issued by
-            a third party organization for use by the client developer. In
+            a third-party organization for use by the client developer. In
             both cases, the trust relationship the authorization server has
             with the issuer of the software statement is intended to be used
             as an input to the evaluation of whether the registration request
@@ -248,7 +247,7 @@
         demonstrate error conditions. This flow includes the following
         steps:</t>
 
-        <t><list style="hanging">
+        <t><list style="hanging" hangIndent="6">
             <t hangText="(A)">Optionally, the client or developer is issued an
             initial access token giving access to the client registration
             endpoint. The method by which the initial access token is issued
@@ -314,55 +313,58 @@
           of the requested authentication method for the token endpoint.
           Values defined by this specification are: <list style="symbols">
               <t><spanx style="verb">none</spanx>: The client is a public
-              client as defined in OAuth 2.0 and does not have a client
+              client as defined in OAuth 2.0, Section 2.1, and does not have a client
               secret.</t>
 
               <t><spanx style="verb">client_secret_post</spanx>: The client
-              uses the HTTP POST parameters defined in OAuth 2.0 section
+              uses the HTTP POST parameters defined in OAuth 2.0, Section
               2.3.1.</t>
 
-              <t><spanx style="verb">client_secret_basic</spanx>: the client
-              uses HTTP Basic defined in OAuth 2.0 section 2.3.1</t>
+              <t><spanx style="verb">client_secret_basic</spanx>: The client
+              uses HTTP Basic defined in OAuth 2.0, Section 2.3.1.</t>
+
             </list>Additional values can be defined via the IANA OAuth Token
           Endpoint Authentication Methods Registry established in <xref
           target="TEAMRegistry"/>. Absolute URIs can also be used as values
           for this parameter without being registered. If unspecified or
           omitted, the default is <spanx style="verb">client_secret_basic</spanx>,
-          denoting HTTP Basic Authentication Scheme as specified in Section
+          denoting the HTTP Basic authentication scheme as specified in Section
           2.3.1 of OAuth 2.0.</t>
 
           <t hangText="grant_types"><vspace/>Array of OAuth 2.0 grant type
           strings that the client can use at the token endpoint. These grant
           types are defined as follows: <list style="symbols">
+
               <t><spanx style="verb">authorization_code</spanx>: The
-              Authorization Code Grant described in OAuth 2.0 Section 4.1</t>
+              authorization code grant type described in OAuth 2.0, Section 4.1.</t>
 
-              <t><spanx style="verb">implicit</spanx>: The Implicit Grant
-              described in OAuth 2.0 Section 4.2</t>
+              <t><spanx style="verb">implicit</spanx>: The implicit grant type
+              described in OAuth 2.0, Section 4.2.</t>
 
-              <t><spanx style="verb">password</spanx>: The Resource Owner
-              Password Credentials Grant described in OAuth 2.0 Section
-              4.3</t>
+              <t><spanx style="verb">password</spanx>: The resource owner
+              password credentials grant type described in OAuth 2.0, Section
+              4.3.</t>
 
-              <t><spanx style="verb">client_credentials</spanx>: The Client
-              Credentials Grant described in OAuth 2.0 Section 4.4</t>
+              <t><spanx style="verb">client_credentials</spanx>: The client
+              credentials grant type described in OAuth 2.0, Section 4.4.</t>
 
-              <t><spanx style="verb">refresh_token</spanx>: The Refresh Token
-              Grant described in OAuth 2.0 Section 6.</t>
+              <t><spanx style="verb">refresh_token</spanx>: The refresh token
+              grant type described in OAuth 2.0, Section 6.</t>
 
               <t><spanx style="verb">urn:ietf:params:oauth:grant-type:jwt-bearer</spanx>:
-              The JWT Bearer Grant defined in <xref target="RFC7523">OAuth JWT
+              The JWT Bearer Token Grant Type defined in <xref target="RFC7523">OAuth JWT
               Bearer Token Profiles</xref>.</t>
 
               <t><spanx style="verb">urn:ietf:params:oauth:grant-type:saml2-bearer</spanx>:
-              The SAML 2 Bearer Grant defined in <xref target="RFC7522">OAuth
+              The SAML 2.0 Bearer Assertion Grant defined in <xref target="RFC7522">OAuth
               SAML 2 Bearer Token Profiles</xref>.</t>
+
             </list>If the token endpoint is used in the grant type, the value
           of this parameter MUST be the same as the value of the <spanx
           style="verb">grant_type</spanx> parameter passed to the token
           endpoint defined in the grant type definition. Authorization servers
           MAY allow for other values as defined in the grant type extension
-          process described in OAuth 2.0 Section 2.5. If omitted, the default
+          process described in OAuth 2.0, Section 4.5. If omitted, the default
           behavior is that the client will use only the <spanx style="verb">authorization_code</spanx>
           Grant Type.</t>
 
@@ -371,16 +373,16 @@
           endpoint. These response types are defined as follows: <list
               style="symbols">
               <t><spanx style="verb">code</spanx>: The authorization code
-              response described in OAuth 2.0 Section 4.1.</t>
+              response described in OAuth 2.0, Section 4.1.</t>
 
               <t><spanx style="verb">token</spanx>: The implicit response
-              described in OAuth 2.0 Section 4.2.</t>
+              described in OAuth 2.0, Section 4.2.</t>
             </list>If the authorization endpoint is used by the grant type,
           the value of this parameter MUST be the same as the value of the
           <spanx style="verb">response_type</spanx> parameter passed to the
           authorization endpoint defined in the grant type definition.
           Authorization servers MAY allow for other values as defined in the
-          grant type extension process is described in OAuth 2.0 Section 2.5.
+          grant type extension process is described in OAuth 2.0, Section 4.5.
           If omitted, the default is that the client will use only the <spanx
           style="verb">code</spanx> response type.</t>
 
@@ -407,10 +409,10 @@
           internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="scope"><vspace/>String containing a space separated
+          <t hangText="scope"><vspace/>String containing a space-separated
           list of scope values (as described in Section 3.3 of <xref
           target="RFC6749">OAuth 2.0</xref>) that the client can use when
-          requesting access tokens. The semantics of values in this list is
+          requesting access tokens. The semantics of values in this list are
           service specific. If omitted, an authorization server MAY register a
           client with a default set of scopes.</t>
 
@@ -440,9 +442,9 @@
           target="HumanReadableClientMetadata"/>.</t>
 
           <t hangText="jwks_uri"><vspace/>URL string referencing the client's
-          JSON Web Key Set <xref target="RFC7517"/> document, which contains
+          JSON Web Key (JWK) Set <xref target="RFC7517"/> document, which contains
           the client's public keys. The value of this field MUST point to a
-          valid JWK Set document. These keys can be used by higher level
+          valid JWK Set document. These keys can be used by higher-level
           protocols that use signing or encryption. For instance, these keys
           might be used by some applications for validating signed requests
           made to the token endpoint when using JWTs for client authentication
@@ -455,7 +457,7 @@
           <t hangText="jwks"><vspace/>Client's JSON Web Key Set <xref
           target="RFC7517"/> document value, which contains the client's
           public keys. The value of this field MUST be a JSON object
-          containing a valid JWK Set. These keys can be used by higher level
+          containing a valid JWK Set.&nbsp;These keys can be used by higher-level
           protocols that use signing or encryption. This parameter is intended
           to be used by clients that cannot use the <spanx style="verb">jwks_uri</spanx>
           parameter, such as native clients that cannot host public URLs. The
@@ -463,17 +465,20 @@
           parameters MUST NOT both be present in the same request or
           response.</t>
 
-          <t hangText="software_id"><vspace/>A unique identifier string (e.g.
-          a UUID) assigned by the client developer or software publisher used
-          by registration endpoints to identify the client software to be
-          dynamically registered. Unlike <spanx style="verb">client_id</spanx>,
-          which is issued by the authorization server and SHOULD vary between
-          instances, the <spanx style="verb">software_id</spanx> SHOULD remain
-          the same for all instances of the client software. The <spanx
-          style="verb">software_id</spanx> SHOULD remain the same across
-          multiple updates or versions of the same piece of software. The
-          value of this field is not intended to be human-readable and is
-          usually opaque to the client and authorization server.</t>
+          <t hangText="software_id"><vspace/>A unique identifier
+          string (e.g., a Universally Unique Identifier (UUID)) assigned by the client developer or
+          software publisher used by registration endpoints to
+          identify the client software to be dynamically
+          registered. Unlike <spanx style="verb">client_id</spanx>,
+          which is issued by the authorization server and SHOULD vary
+          between instances, the <spanx
+          style="verb">software_id</spanx> SHOULD remain the same for
+          all instances of the client software. The <spanx
+          style="verb">software_id</spanx> SHOULD remain the same
+          across multiple updates or versions of the same piece of
+          software. The value of this field is not intended to be
+          human readable and is usually opaque to the client and
+          authorization server.</t>
 
           <t hangText="software_version"><vspace/>A version identifier string
           for the client software identified by <spanx style="verb">software_id</spanx>.
@@ -482,7 +487,7 @@
           <spanx style="verb">software_id</spanx>. The value of this field is
           intended to be compared using string equality matching and no other
           comparison semantics are defined by this specification. The value of
-          this field is outside the scope of this speicification, but it is
+          this field is outside the scope of this specification, but it is
           not intended to be human readable and is usually opaque to the
           client and authorization server. The definition of what constitutes
           an update to client software that would trigger a change to this
@@ -501,11 +506,11 @@
       target="ClientInfoResponse"/> or by returning an error response as
       described in <xref target="ClientRegistrationError"/>.</t>
 
-      <t>Client metadata values can either be communicated directly in the
+      <t>Client metadata values can be either communicated directly in the
       body of a registration request, as described in <xref
       target="RegistrationRequest"/>, or included as claims in a software
-      statement, as described in <xref target="SoftwareStatement"/>, or a
-      mixture of both. If the same client metadata name is present in both
+      statement, as described in <xref target="SoftwareStatement"/>;  a
+      mixture of both is also possible. If the same client metadata name is present in both
       locations and the software statement is trusted by the authorization
       server, the value of a claim in the software statement MUST take
       precedence.</t>
@@ -525,7 +530,7 @@
         are defined as part of the OAuth 2.0 authorization code grant. As
         such, a server supporting these fields SHOULD take steps to ensure
         that a client cannot register itself into an inconsistent state, for
-        example by returning an <spanx style="verb">invalid_client_metadata</spanx>
+        example, by returning an <spanx style="verb">invalid_client_metadata</spanx>
         error response to an inconsistent registration request.</t>
 
         <t>The correlation between the two fields is listed in the table
@@ -583,18 +588,18 @@
         in different locations.</t>
 
         <t>To specify the languages and scripts, <xref
-        target="RFC5646">BCP47</xref> language tags are added to client
-        metadata member names, delimited by a # character. Since <xref
+        target="RFC5646">BCP 47</xref> language tags are added to client
+        metadata member names, delimited by a <spanx style="verb">#</spanx> character. Since <xref
         target="RFC7159">JSON</xref> member names are case sensitive, it is
         RECOMMENDED that language tag values used in Claim Names be spelled
         using the character case with which they are registered in the <xref
         target="IANA.Language">IANA Language Subtag Registry</xref>. In
         particular, normally language names are spelled with lowercase
         characters, region names are spelled with uppercase characters, and
-        languages are spelled with mixed case characters. However, since BCP47
-        language tag values are case insensitive, implementations SHOULD
+        languages are spelled with mixed-case characters. However, since BCP 47
+        language tag values are case-insensitive, implementations SHOULD
         interpret the language tag values supplied in a case insensitive
-        manner. Per the recommendations in BCP47, language tag values used in
+        manner. Per the recommendations in BCP 47, language tag values used in
         metadata member names should only be as specific as necessary. For
         instance, using <spanx style="verb">fr</spanx> might be sufficient in
         many contexts, rather than <spanx style="verb">fr-CA</spanx> or <spanx
@@ -611,7 +616,7 @@
         <t>If any human-readable field is sent without a language tag, parties
         using it MUST NOT make any assumptions about the language, character
         set, or script of the string value, and the string value MUST be used
-        as-is wherever it is presented in a user interface. To facilitate
+        as is wherever it is presented in a user interface. To facilitate
         interoperability, it is RECOMMENDED that clients and servers use a
         human-readable field without any language tags in addition to any
         language-specific fields, and it is RECOMMENDED that any
@@ -638,7 +643,7 @@
         statement are defined in <xref target="ClientMetadata"/>. When
         presented to the authorization server as part of a client registration
         request, the software statement MUST be digitally signed or MACed
-        using <xref target="RFC7515">JWS</xref> and MUST contain an <spanx
+        using <xref target="RFC7515">JSON Web Signature (JWS)</xref> and MUST contain an <spanx
         style="verb">iss</spanx> (issuer) claim denoting the party attesting
         to the claims in the software statement. It is RECOMMENDED that
         software statements be digitally signed using the <spanx style="verb">RS256</spanx>
@@ -710,15 +715,14 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       the authorization server. The client registration endpoint MUST accept
       HTTP POST messages with request parameters encoded in the entity body
       using the <spanx style="verb">application/json</spanx> format. The
-      client registration endpoint MUST be protected by a transport-layer
-      security mechanism, as described in <xref target="Security"/>.</t>
+      client registration endpoint MUST be protected by a tranport-layer security mechanism, as described in <xref target="Security"/>.</t>
 
-      <t>The client registration endpoint MAY be an OAuth 2.0 protected
-      resource and accept an initial access token in the form of an <xref
-      target="RFC6749">OAuth 2.0</xref> access token to limit registration to
+      <t>The client registration endpoint MAY be an <xref
+      target="RFC6749">OAuth 2.0</xref> protected
+      resource and it MAY accept an initial access token in the form of an OAuth 2.0 access token to limit registration to
       only previously authorized parties. The method by which the initial
       access token is obtained by the client or developer is generally
-      out-of-band and is out of scope for this specification. The method by
+      out of band and is out of scope for this specification. The method by
       which the initial access token is verified and validated by the client
       registration endpoint is out of scope for this specification.</t>
 
@@ -788,7 +792,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
 
         <figure>
           <preamble>The following is a non-normative example request using an
-          initial access token and registering a JWK set by value (with line
+          initial access token and registering a JWK Set by value (with line
           wraps within values for display purposes only):</preamble>
 
           <artwork><![CDATA[
@@ -878,8 +882,9 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <section anchor="Responses" title="Responses">
         <t>Upon a successful registration request, the authorization server
         returns a client identifier for the client. The server responds with
-        an HTTP 201 Created code and a body of type <spanx style="verb">application/json</spanx>
+        an HTTP 201 Created status code and a body of type <spanx style="verb">application/json</spanx>
         with content as described in <xref target="ClientInfoResponse"/>.</t>
+
 
         <t>Upon an unsuccessful registration request, the authorization server
         responds with an error, as described in <xref
@@ -905,7 +910,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
               instances of a client using the same <spanx style="verb">client_id</spanx>.
               This value is used by confidential clients to authenticate to
               the token endpoint as described in <xref target="RFC6749">OAuth
-              2.0</xref> Section 2.3.1.</t>
+              2.0</xref>, Section 2.3.1.</t>
 
               <t hangText="client_id_issued_at"><vspace/> OPTIONAL. Time at
               which the client identifier was issued. The time is represented
@@ -935,10 +940,10 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           server provider, attempted re-registration with different metadata
           values, or various other methods. For instance, if the server also
           supports a registration management mechanism such as that defined in
-          <xref target="OAuth.Registration.Management"/>, the client or
+          <xref target="RFC7592"/>, the client or
           developer could attempt to update the registration with different
           metadata values. This process could also be aided by a service
-          discovery protocol such as <xref target="OpenID.Discovery"/> which
+          discovery protocol, such as <xref target="OpenID.Discovery"/>, which
           can list a server's capabilities, allowing a client to make a more
           informed registration request. The use of any such management or
           discovery system is optional and outside the scope of this
@@ -959,7 +964,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           differ).</t>
 
           <figure>
-            <preamble>Following is a non-normative example response of a
+            <preamble>The following is a non-normative example response of a
             successful registration:</preamble>
 
             <artwork><![CDATA[
@@ -1011,8 +1016,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
               <t hangText="error_description"><vspace/> OPTIONAL.
               Human-readable ASCII text description of the error used for
               debugging.</t>
-            </list> Other members MAY also be included, and if not understood,
-          MUST be ignored.</t>
+            </list> Other members MAY also be included and, if they are not understood,
+          they MUST be ignored.</t>
 
           <t>This specification defines the following error codes:</t>
 
@@ -1035,7 +1040,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </list></t>
 
           <figure>
-            <preamble>Following is a non-normative example of an error
+            <preamble>The following is a non-normative example of an error
             response resulting from a redirection URI that has been
             blacklisted by the authorization server (with line wraps within
             values for display purposes only):</preamble>
@@ -1079,18 +1084,23 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       </section>
     </section>
 
+<!--[rfced] We recall that M. Jones had a preference for using Designated
+Experts (plural) in previous documents in this cluster.  We have updated
+the IANA section accordingly: please let us know any objections.
+-->
+
     <section anchor="IANA" title="IANA Considerations">
       <section anchor="MetadataRegistry"
                title="OAuth Dynamic Client Registration Metadata Registry">
         <t>This specification establishes the OAuth Dynamic Client
-        Registration Metadata registry.</t>
+        Registration Metadata Registry.</t>
 
         <t>OAuth registration client metadata names and descriptions are
         registered with a Specification Required (<xref target="RFC5226"/>)
         after a two-week review period on the oauth-ext-review@ietf.org
         mailing list, on the advice of one or more Designated Experts.
         However, to allow for the allocation of names prior to publication,
-        the Designated Expert(s) may approve registration once they are
+        the Designated Experts may approve registration once they are
         satisfied that such a specification will be published, per <xref
         target="RFC7120"/>.</t>
 
@@ -1098,43 +1108,77 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         use an appropriate subject (e.g., "Request to register OAuth Dynamic
         Client Registration Metadata name: example").</t>
 
-        <t>Within the review period, the Designated Expert(s) will either
+        <t>Within the review period, the Designated Experts will either
         approve or deny the registration request, communicating this decision
         to the review list and IANA. Denials should include an explanation
         and, if applicable, suggestions as to how to make the request
         successful.</t>
 
+<!--[rfced] We note that the text in the OAuth Dynamic Client Registration
+Metadata Registry section (and the OAuth Token Endpoint Authentication
+Methods Registry section) is very similar to the text in the IANA
+Considerations section of RFC 7518.  However, the following text appears
+in RFC 7518 and not in this document.  Please consider if similar text
+would be beneficial to the reader.
+
+
+From RFC 7518:
+   Registration requests that are undetermined for a period longer than
+   21 days can be brought to the IESG's attention (using the
+   iesg@ietf.org mailing list) for resolution.
+
+   Criteria that should be applied by the Designated Experts include
+   determining whether the proposed registration duplicates existing
+   functionality, whether it is likely to be of general applicability or
+   useful only for a single application, and whether the registration
+   description is clear.
+
+...
+
+   It is suggested that multiple Designated Experts be appointed who are
+   able to represent the perspectives of different applications using
+   this specification, in order to enable broadly informed review of
+   registration decisions.  In cases where a registration decision could
+   be perceived as creating a conflict of interest for a particular
+   Expert, that Expert should defer to the judgment of the other
+   Experts.
+-->
+
         <t>IANA must only accept registry updates from the Designated
-        Expert(s) and should direct all requests for registration to the
+        Experts and should direct all requests for registration to the
         review mailing list.</t>
 
         <section anchor="MetadataTemplate" title="Registration Template">
           <t><list style="hanging">
               <t hangText="Client Metadata Name:"><vspace/> The name requested
               (e.g., "example"). This name is case sensitive. Names that match
-              other registered names in a case insensitive manner SHOULD NOT
+              other registered names in a case-insensitive manner SHOULD NOT
               be accepted.</t>
 
               <t hangText="Client Metadata Description:"><vspace/> Brief
               description of the metadata value (e.g., "Example
               description").</t>
 
-              <t hangText="Change controller:"><vspace/> For Standards Track
-              RFCs, state "IESG". For others, give the name of the responsible
+              <t hangText="Change Controller:"><vspace/> For Standards Track
+              RFCs, list "IESG". For others, give the name of the responsible
               party. Other details (e.g., postal address, email address, home
               page URI) may also be included.</t>
 
-              <t hangText="Specification document(s):"><vspace/> Reference to
-              the document(s) that specify the token endpoint authorization
+              <t hangText="Specification Document(s):"><vspace/> Reference to
+              the document or documents that specify the token endpoint authorization
               method, preferably including a URI that can be used to retrieve
-              a copy of the document(s). An indication of the relevant
+              a copy of the documents. An indication of the relevant
               sections may also be included but is not required.</t>
             </list></t>
         </section>
 
         <section anchor="MetadataContents" title="Initial Registry Contents">
           <t>The initial contents of the OAuth Dynamic Client Registration
-          Metadata registry are:</t>
+          Metadata Registry are:</t>
+
+<!-- [rfced] FYI, we will send a request to IANA to update the registry 
+to match the minor changes made in the descriptions below. 
+-->
 
           <t><?rfc subcompact="yes"?> <list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">redirect_uris</spanx></t>
@@ -1142,9 +1186,9 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
               <t>Client Metadata Description: Array of redirection URIs for
               use in redirect-based flows</t>
 
-              <t>Change controller: IESG</t>
+              <t>Change Controller: IESG</t>
 
-              <t>Specification document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1153,9 +1197,9 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
               <t>Client Metadata Description: Requested authentication method
               for the token endpoint</t>
 
-              <t>Change controller: IESG</t>
+              <t>Change Controller: IESG</t>
 
-              <t>Specification document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1164,9 +1208,9 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
               <t>Client Metadata Description: Array of OAuth 2.0 grant types
               that the client may use</t>
 
-              <t>Change controller: IESG</t>
+              <t>Change Controller: IESG</t>
 
-              <t>Specification document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1175,9 +1219,9 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
               <t>Client Metadata Description: Array of the OAuth 2.0 response
               types that the client may use</t>
 
-              <t>Change controller: IESG</t>
+              <t>Change Controller: IESG</t>
 
-              <t>Specification document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1188,18 +1232,18 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">client_uri</spanx></t>
 
-              <t>Client Metadata Description: URL of a Web page providing
+              <t>Client Metadata Description: URL of a web page providing
               information about the client</t>
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1210,18 +1254,18 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">scope</spanx></t>
 
-              <t>Client Metadata Description: Space separated list of OAuth
+              <t>Client Metadata Description: Space-separated list of OAuth
               2.0 scope values</t>
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1233,29 +1277,29 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">tos_uri</spanx></t>
 
               <t>Client Metadata Description: URL that points to a
-              human-readable Terms of Service document for the client</t>
+              human-readable terms of service document for the client</t>
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
               <t>Client Metadata Name: <spanx style="verb">policy_uri</spanx></t>
 
               <t>Client Metadata Description: URL that points to a
-              human-readable Policy document for the client</t>
+              human-readable policy document for the client</t>
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1267,7 +1311,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1279,7 +1323,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1290,7 +1334,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1301,7 +1345,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1311,7 +1355,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1321,7 +1365,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1332,7 +1376,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1343,7 +1387,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
         </section>
 
@@ -1353,14 +1397,14 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <section anchor="TEAMRegistry"
                title="OAuth Token Endpoint Authentication Methods Registry">
         <t>This specification establishes the OAuth Token Endpoint
-        Authentication Methods registry.</t>
+        Authentication Methods Registry.</t>
 
         <t>Additional values for use as <spanx style="verb">token_endpoint_auth_method</spanx>
         values are registered with a Specification Required (<xref
         target="RFC5226"/>) after a two-week review period on the
         oauth-ext-review@ietf.org mailing list, on the advice of one or more
         Designated Experts. However, to allow for the allocation of values
-        prior to publication, the Designated Expert(s) may approve
+        prior to publication, the Designated Experts may approve
         registration once they are satisfied that such a specification will be
         published, per <xref target="RFC7120"/>.</t>
 
@@ -1369,14 +1413,14 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         (e.g., "Request to register token_endpoint_auth_method value:
         example").</t>
 
-        <t>Within the review period, the Designated Expert(s) will either
+        <t>Within the review period, the Designated Experts will either
         approve or deny the registration request, communicating this decision
         to the review list and IANA. Denials should include an explanation
         and, if applicable, suggestions as to how to make the request
         successful.</t>
 
         <t>IANA must only accept registry updates from the Designated
-        Expert(s) and should direct all requests for registration to the
+        Experts and should direct all requests for registration to the
         review mailing list.</t>
 
         <section anchor="TEAMTemplate" title="Registration Template">
@@ -1384,51 +1428,50 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
               <t
               hangText="Token Endpoint Authorization Method Name:"><vspace/>
               The name requested (e.g., "example"). This name is case
-              sensitive. Names that match other registered names in a case
-              insensitive manner SHOULD NOT be accepted.</t>
+              sensitive. Names that match other registered names in a case-insensitive manner SHOULD NOT be accepted.</t>
 
-              <t hangText="Change controller:"><vspace/> For Standards Track
-              RFCs, state "IESG". For others, give the name of the responsible
+              <t hangText="Change Controller:"><vspace/> For Standards Track
+              RFCs, list "IESG". For others, give the name of the responsible
               party. Other details (e.g., postal address, email address, home
               page URI) may also be included.</t>
 
-              <t hangText="Specification document(s):"><vspace/> Reference to
-              the document(s) that specify the token endpoint authorization
+              <t hangText="Specification Document(s):"><vspace/> Reference to
+              the document or documents that specify the token endpoint authorization
               method, preferably including a URI that can be used to retrieve
-              a copy of the document(s). An indication of the relevant
+              a copy of the document or documents. An indication of the relevant
               sections may also be included but is not required.</t>
             </list></t>
         </section>
 
         <section anchor="TEAMContents" title="Initial Registry Contents">
           <t>The initial contents of the OAuth Token Endpoint Authentication
-          Methods registry are:</t>
+          Methods Registry are:</t>
 
           <t><?rfc subcompact="yes"?> <list style="symbols">
               <t>Token Endpoint Authorization Method Name: <spanx
               style="verb">none</spanx></t>
 
-              <t>Change controller: IESG</t>
+              <t>Change Controller: IESG</t>
 
-              <t>Specification document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
               <t>Token Endpoint Authorization Method Name: <spanx
               style="verb">client_secret_post</spanx></t>
 
-              <t>Change controller: IESG</t>
+              <t>Change Controller: IESG</t>
 
-              <t>Specification document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
 
           <t><list style="symbols">
               <t>Token Endpoint Authorization Method Name: <spanx
               style="verb">client_secret_basic</spanx></t>
 
-              <t>Change controller: IESG</t>
+              <t>Change Controller: IESG</t>
 
-              <t>Specification document(s): [[ this document ]]</t>
+              <t>Specification Document(s): this document (RFC 7591)</t>
             </list></t>
         </section>
 
@@ -1442,7 +1485,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       response), the authorization server MUST require the use of a
       transport-layer security mechanism when sending requests to the
       registration endpoint. The server MUST support TLS 1.2 <xref
-      target="RFC5246">RFC 5246</xref> and MAY support additional
+      target="RFC5246"></xref> and MAY support additional
       transport-layer mechanisms meeting its security requirements. When using
       TLS, the client MUST perform a TLS/SSL server certificate check, per
       <xref target="RFC6125">RFC 6125</xref>. Implementation security
@@ -1483,17 +1526,17 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       server MAY decide to expire registrations for existing clients meeting
       certain criteria after a period of time has elapsed. Alternatively, such
       clients could be registered on the server where the in-browser
-      application's code is served from, and the client's configuration pushed
-      to the browser along side the code.</t>
+      application's code is served from, and the client's configuration could be pushed
+      to the browser alongside the code.</t>
 
       <t>Since different OAuth 2.0 grant types have different security and
       usage parameters, an authorization server MAY require separate
       registrations for a piece of software to support multiple grant types.
       For instance, an authorization server might require that all clients
       using the <spanx style="verb">authorization_code</spanx> grant type make
-      use of a client secret for the <spanx style="verb">token_endpoint_auth_method</spanx>,
+      use of a client secret for the <spanx style="verb">token_endpoint_auth_method</spanx>
       but any clients using the <spanx style="verb">implicit</spanx> grant
-      type do not use any authentication at the token endpoint. In such a
+      type not use any authentication at the token endpoint. In such a
       situation, a server MAY disallow clients from registering for both the
       <spanx style="verb">authorization_code</spanx> and <spanx style="verb">implicit</spanx>
       grant types simultaneously. Similarly, the <spanx style="verb">authorization_code</spanx>
@@ -1501,7 +1544,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <spanx style="verb">client_credentials</spanx> grant type represents
       access on behalf of the client itself. For security reasons, an
       authorization server could require that different scopes be used for
-      these different use cases, and as a consequence it MAY disallow these
+      these different use cases, and, as a consequence, it MAY disallow these
       two grant types from being registered together by the same client. In
       all of these cases, the authorization server would respond with an
       <spanx style="verb">invalid_client_metadata</spanx> error response.</t>
@@ -1526,7 +1569,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
       <t>In a situation where the authorization server is supporting open
       client registration, it must be extremely careful with any URL provided
-      by the client that will be displayed to the user (e.g. <spanx
+      by the client that will be displayed to the user (e.g., <spanx
       style="verb">logo_uri</spanx>, <spanx style="verb">tos_uri</spanx>,
       <spanx style="verb">client_uri</spanx>, and <spanx style="verb">policy_uri</spanx>).
       For instance, a rogue client could specify a registration request with a
@@ -1606,7 +1649,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
     <section anchor="Privacy" title="Privacy Considerations">
       <t>As the protocol described in this specification deals almost
-      exclusively with information about software and not about people, there
+      exclusively with information about software and not people, there
       are very few privacy concerns for its use. The notable exception is the
       <spanx style="verb">contacts</spanx> field as defined in <xref
       target="ClientMetadata">Client Metadata</xref>, which contains contact
@@ -1652,44 +1695,46 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
   <back>
     <references title="Normative References">
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml'?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5226.xml'?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5246.xml'?>
+<?rfc include="reference.RFC.2119.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.5646.xml'?>
+<?rfc include="reference.RFC.5226.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6125.xml'?>
+<?rfc include="reference.RFC.5246.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6749.xml'?>
+<?rfc include="reference.RFC.5646.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.6750.xml'?>
+<?rfc include="reference.RFC.6125.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7120.xml'?>
+<?rfc include="reference.RFC.6749.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7159.xml'?>
+<?rfc include="reference.RFC.6750.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7515.xml'?>
+<?rfc include="reference.RFC.7120.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7517.xml'?>
+<?rfc include="reference.RFC.7159.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7519.xml'?>
+<?rfc include="reference.RFC.7515.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7522.xml'?>
+<?rfc include="reference.RFC.7517.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7523.xml'?>
+<?rfc include="reference.RFC.7519.xml"?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml/reference.RFC.7525.xml'?>
+<?rfc include="reference.RFC.7522.xml"?>
+
+<?rfc include="reference.RFC.7523.xml"?>
+
+<?rfc include="reference.RFC.7525.xml"?>
 
       <reference anchor="IANA.Language"
+
                  target="http://www.iana.org/assignments/language-subtag-registry">
         <front>
           <title>Language Subtag Registry</title>
 
           <author>
-            <organization>Internet Assigned Numbers Authority
-            (IANA)</organization>
+            <organization>IANA</organization>
           </author>
 
           <date/>
@@ -1701,7 +1746,11 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
     </references>
 
     <references title="Informative References">
-      <reference anchor="OAuth.Registration.Management">
+
+
+<!--draft-ietf-oauth-dyn-reg-management; Companion document -->
+
+      <reference anchor="RFC7592" target="http://www.rfc-editor.org/info/rfc7592">
         <front>
           <title abbrev="OAuth 2.0 Dynamic Registration Management">OAuth 2.0
           Dynamic Client Registration Management Protocol</title>
@@ -1740,17 +1789,17 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
             </address>
           </author>
 
-          <date day="5" month="May" year="2015"/>
+          <date month="July" year="2015"/>
         </front>
 
-        <seriesInfo name="Internet-Draft"
-                    value="draft-ietf-oauth-dyn-reg-management"/>
+        <seriesInfo name="RFC"
+                    value="7592"/>
 
-        <format target="http://tools.ietf.org/html/draft-ietf-oauth-dyn-reg-management"
-                type="HTML"/>
+<seriesInfo name="DOI" value="10.17487/RFC7592"/>
+
       </reference>
 
-      <reference anchor="OpenID.Registration">
+      <reference anchor="OpenID.Registration" target="http://openid.net/specs/openid-connect-registration-1_0.html">
         <front>
           <title>OpenID Connect Dynamic Client Registration 1.0</title>
 
@@ -1770,11 +1819,11 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           <date day="8" month="November" year="2014"/>
         </front>
 
-        <format target="http://openid.net/specs/openid-connect-registration-1_0.html"
-                type="HTML"/>
       </reference>
 
-      <reference anchor="OpenID.Discovery">
+
+
+      <reference anchor="OpenID.Discovery" target="http://openid.net/specs/openid-connect-registration-1_0.html">
         <front>
           <title>OpenID Connect Discovery 1.0</title>
 
@@ -1798,11 +1847,41 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           <date day="8" month="November" year="2014"/>
         </front>
 
-        <format target="http://openid.net/specs/openid-connect-registration-1_0.html"
-                type="HTML"/>
       </reference>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-hardjono-oauth-umacore-13.xml' ?>
+<!--draft-hardjono-oauth-umacore-13; I-D Exists -->
+
+
+<reference anchor='UMA-Core'>
+<front>
+<title>User-Managed Access (UMA) Profile of OAuth 2.0</title>
+
+<author initials='T' surname='Hardjono' fullname='Thomas Hardjono'>
+    <organization />
+</author>
+
+<author initials='E' surname='Maler' fullname='Eve Maler'>
+    <organization />
+</author>
+
+<author initials='M' surname='Machulak' fullname='Maciej Machulak'>
+    <organization />
+</author>
+
+<author initials='D' surname='Catalano' fullname='Domenico Catalano'>
+    <organization />
+</author>
+
+<date month='April' day='4' year='2015' />
+
+<abstract><t>User-Managed Access (UMA) is a profile of OAuth 2.0.  UMA defines how resource owners can control protected-resource access by clients operated by arbitrary requesting parties, where the resources reside on any number of resource servers, and where a centralized authorization server governs access based on resource owner policies.</t></abstract>
+
+</front>
+
+<seriesInfo name='Work in Progress,' value='draft-hardjono-oauth-umacore-13' />
+
+</reference>
+
     </references>
 
     <section anchor="UseCases" title="Use Cases">
@@ -1828,15 +1907,15 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           this initial access token and the method by which the authorization
           server validates this initial access token are out of scope for this
           specification, a common approach is for the developer to use a
-          manual pre-registration portal at the authorization server that
+          manual preregistration portal at the authorization server that
           issues an initial access token to the developer.</t>
         </section>
       </section>
 
       <section anchor="SoftwareStatementUses"
-               title="Registration Without or With Software Statements">
+               title="Registration without or with Software Statements">
         <section anchor="NoSoftwareStatement"
-                 title="Registration Without a Software Statement">
+                 title="Registration without a Software Statement">
           <t>When a software statement is not used in the registration
           request, the authorization server must be willing to use client
           metadata values without them being digitally signed or MACed (and
@@ -1846,7 +1925,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         </section>
 
         <section anchor="WithSoftwareStatement"
-                 title="Registration With a Software Statement">
+                 title="Registration with a Software Statement">
           <t>A software statement can be used in a registration request to
           provide attestation by an authority for a set of client metadata
           values. This can be useful when the authorization server wants to
@@ -1868,7 +1947,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
         <section anchor="ByDeveloper" title="Registration by the Developer">
           <t>In some cases, the developer (or development software being used
-          by the developer) will pre-register the client software with the
+          by the developer) will preregister the client software with the
           authorization server or a set of authorization servers. In this
           case, the client identifier value(s) for the authorization server(s)
           can be packaged with the client software.</t>
@@ -1890,7 +1969,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         </section>
 
         <section anchor="SharedID"
-                 title="Client ID Shared Among All Instances of Client Software">
+                 title="Client ID Shared among All Instances of Client Software">
           <t>In some cases, each deployed instance of a piece of client
           software will share a common client identifier value. For instance,
           this is often the case for in-browser clients using the implicit
@@ -1916,8 +1995,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           implementation. When stateful registration is used, operations to
           support retrieving and/or updating this state may be supported. One
           possible set of operations upon stateful registrations is described
-          in the <xref target="OAuth.Registration.Management"/>
-          specification.</t>
+          in <xref target="RFC7592"/>.</t>
         </section>
 
         <section anchor="Stateless" title="Stateless Client Registration">
@@ -1931,517 +2009,18 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       </section>
     </section>
 
-    <section anchor="Acknowledgments" title="Acknowledgments">
+    <section anchor="Acknowledgments" title="Acknowledgments" numbered="no">
       <t>The authors thank the OAuth Working Group, the User-Managed Access
       Working Group, and the OpenID Connect Working Group participants for
       their input to this document. In particular, the following individuals
       have been instrumental in their review and contribution to various
-      versions of this document: Amanda Anganes, Derek Atkins, Tim Bray,
+      draft versions of this document: Amanda Anganes, Derek Atkins, Tim Bray,
       Domenico Catalano, Donald Coffin, Vladimir Dzhuvinov, George Fletcher,
       Thomas Hardjono, Phil Hunt, William Kim, Torsten Lodderstedt, Eve Maler,
       Josh Mandel, Nov Matake, Tony Nadalin, Nat Sakimura, Christian Scholz,
       and Hannes Tschofenig.</t>
     </section>
 
-    <section anchor="History" title="Document History">
-      <t>[[ to be removed by the RFC editor before publication as an RFC
-      ]]</t>
 
-      <t>-30</t>
-
-      <t><list style="symbols">
-          <t>Updated JOSE, JWT, and OAuth Assertion draft references to final
-          RFC numbers.</t>
-        </list></t>
-
-      <t>-29</t>
-
-      <t><list style="symbols">
-          <t>Descrbed more possible client responses to the metadata fields
-          returned by the server being different than those requested.</t>
-
-          <t>Added RFC 7120/BCP 100 references.</t>
-
-          <t>Added RFC 7525/BCP 195 reference to replace draft reference.</t>
-        </list></t>
-
-      <t>-28</t>
-
-      <t><list style="symbols">
-          <t>Clarified all client metadata as JSON arrays, strings, or
-          numbers.</t>
-
-          <t>Expanded security considerations advice around external URLs.</t>
-
-          <t>Added text to say what happens if the client doesn't get back the
-          registration it expected in the response.</t>
-
-          <t>Added more explicit references to HTTP 201 response from
-          registration.</t>
-
-          <t>Clarified client version definition.</t>
-
-          <t>Removed spurious reference to "delete action".</t>
-
-          <t>Fixed intended normative and non-normative language in several
-          sections.</t>
-
-          <t>Stated what a server should do if a suspected duplicate client
-          tries to register.</t>
-        </list></t>
-
-      <t>-27</t>
-
-      <t><list style="symbols">
-          <t>Changed a registry name missed in -26.</t>
-        </list></t>
-
-      <t>-26</t>
-
-      <t><list style="symbols">
-          <t>Used consistent registry name.</t>
-        </list></t>
-
-      <t>-25</t>
-
-      <t><list style="symbols">
-          <t>Updated author information.</t>
-
-          <t>Clarified registry contents.</t>
-
-          <t>Added forward pointer to IANA from metadata section.</t>
-
-          <t>Clarified how to silently ignore errors.</t>
-
-          <t>Reformatted diagram text.</t>
-        </list></t>
-
-      <t>-24</t>
-
-      <t><list style="symbols">
-          <t>Clarified some party definitions.</t>
-
-          <t>Clarified the opaqueness of software_id and
-          software_statement.</t>
-
-          <t>Created a forward pointer to the Security Considerations section
-          for TLS requirements on the registration endpoint.</t>
-
-          <t>Added a forward pointer to the Privacy Considerations section for
-          the contacts field.</t>
-
-          <t>Wrote privacy considerations about client_id tracking.</t>
-        </list></t>
-
-      <t>-23</t>
-
-      <t><list style="symbols">
-          <t>Updated author information.</t>
-        </list></t>
-
-      <t>-22</t>
-
-      <t><list style="symbols">
-          <t>Reorganized registration response sections.</t>
-
-          <t>Addressed shepherd comments.</t>
-
-          <t>Added concrete JWK set to example.</t>
-        </list></t>
-
-      <t>-21</t>
-
-      <t><list style="symbols">
-          <t>Applied minor editorial fixes.</t>
-
-          <t>Added software statement examples.</t>
-
-          <t>Moved software statement request details to sub-section.</t>
-
-          <t>Clarified that a server MAY ignore the software statement (just
-          as it MAY ignore other metadata values).</t>
-
-          <t>Removed TLS 1.0.</t>
-
-          <t>Added privacy considerations around "contacts" field.</t>
-
-          <t>Marked software_id as RECOMMENDED inside of a software
-          statement.</t>
-        </list></t>
-
-      <t>-20</t>
-
-      <t><list style="symbols">
-          <t>Applied minor editorial fixes from working group comments.</t>
-        </list></t>
-
-      <t>-19</t>
-
-      <t><list style="symbols">
-          <t>Added informative references to the OpenID Connect Dynamic Client
-          Registration and UMA specifications in the introduction.</t>
-
-          <t>Clarified the <spanx style="verb">jwks</spanx> and <spanx
-          style="verb">jwks_uri</spanx> descriptions and included an example
-          situation in which they might be used.</t>
-
-          <t>Removed <spanx style="verb">application_type</spanx>.</t>
-
-          <t>Added redirection URI usage restrictions to the Security
-          Considerations section, based on the client type.</t>
-
-          <t>Expanded the <spanx style="verb">tos_uri</spanx> and <spanx
-          style="verb">policy_uri</spanx> descriptions.</t>
-        </list></t>
-
-      <t>-18 <list style="symbols">
-          <t>Corrected an example HTTP response status code to be 201
-          Created.</t>
-
-          <t>Said more about who issues and uses initial access tokens and
-          software statements.</t>
-
-          <t>Stated that the use of an initial access token is required when
-          the authorization server limits the parties that can register a
-          client.</t>
-
-          <t>Stated that the implementation and use of all client metadata
-          fields is OPTIONAL, other than <spanx style="verb">redirect_uris</spanx>,
-          which MUST be used for redirect-based flows and implemented to
-          fulfill the requirement in Section 2 of OAuth 2.0.</t>
-
-          <t>Added the <spanx style="verb">application_type</spanx> metadata
-          value, which had somehow been omitted.</t>
-
-          <t>Added missing default metadata values, which had somehow been
-          omitted.</t>
-
-          <t>Clarified that the <spanx style="verb">software_id</spanx> is
-          ultimately asserted by the client developer.</t>
-
-          <t>Clarified that the <spanx style="verb">error</spanx> member is
-          required in error responses, <spanx style="verb">error_description</spanx>
-          member is optional, and other members may be present.</t>
-
-          <t>Added security consideration about registrations with duplicate
-          <spanx style="verb">software_id</spanx> and <spanx style="verb">software_version</spanx>
-          values.</t>
-        </list></t>
-
-      <t>-17 <list style="symbols">
-          <t>Merged draft-ietf-oauth-dyn-reg-metadata back into this
-          document.</t>
-
-          <t>Removed "Core" from the document title.</t>
-
-          <t>Explicitly state that all metadata members are optional.</t>
-
-          <t>Clarified language around software statements for use in
-          registration context.</t>
-
-          <t>Clarified that software statements need to be digitally signed or
-          MACed.</t>
-
-          <t>Added a <spanx style="verb">jwks</spanx> metadata parameter to
-          parallel the <spanx style="verb">jwks_uri</spanx> parameter.</t>
-
-          <t>Removed normative language from terminology.</t>
-
-          <t>Expanded abstract and introduction.</t>
-
-          <t>Addressed review comments from several working group members.</t>
-        </list></t>
-
-      <t>-16 <list style="symbols">
-          <t>Replaced references to draft-jones-oauth-dyn-reg-metadata and
-          draft-jones-oauth-dyn-reg-management with
-          draft-ietf-oauth-dyn-reg-metadata and
-          draft-ietf-oauth-dyn-reg-management.</t>
-
-          <t>Addressed review comments by Phil Hunt and Tony Nadalin.</t>
-        </list></t>
-
-      <t>-15 <list style="symbols">
-          <t>Partitioned the Dynamic Client Registration specification into
-          core, metadata, and management specifications. This built on work
-          first published as draft-richer-oauth-dyn-reg-core-00 and
-          draft-richer-oauth-dyn-reg-management-00.</t>
-
-          <t>Added the ability to use Software Statements. This built on work
-          first published as draft-hunt-oauth-software-statement-00 and
-          draft-hunt-oauth-client-association-00.</t>
-
-          <t>Created the IANA OAuth Registration Client Metadata registry for
-          registering Client Metadata values.</t>
-
-          <t>Defined Client Instance term and stated that multiple instances
-          can use the same client identifier value under certain
-          circumstances.</t>
-
-          <t>Rewrote the introduction.</t>
-
-          <t>Rewrote the Use Cases appendix.</t>
-        </list></t>
-
-      <t>-14</t>
-
-      <t><list style="symbols">
-          <t>Added software_id and software_version metadata fields</t>
-
-          <t>Added direct references to RFC6750 errors in read/update/delete
-          methods</t>
-        </list></t>
-
-      <t>-13</t>
-
-      <t><list style="symbols">
-          <t>Fixed broken example text in registration request and in delete
-          request</t>
-
-          <t>Added security discussion of separating clients of different
-          grant types</t>
-
-          <t>Fixed error reference to point to RFC6750 instead of RFC6749</t>
-
-          <t>Clarified that servers must respond to all requests to
-          configuration endpoint, even if it's just an error code</t>
-
-          <t>Lowercased all Terms to conform to style used in RFC6750</t>
-        </list></t>
-
-      <t>-12</t>
-
-      <t><list style="symbols">
-          <t>Improved definition of Initial Access Token</t>
-
-          <t>Changed developer registration scenario to have the Initial
-          Access Token gotten through a normal OAuth 2.0 flow</t>
-
-          <t>Moved non-normative client lifecycle examples to appendix</t>
-
-          <t>Marked differentiating between auth servers as out of scope</t>
-
-          <t>Added protocol flow diagram</t>
-
-          <t>Added credential rotation discussion</t>
-
-          <t>Called out Client Registration Endpoint as an OAuth 2.0 Protected
-          Resource</t>
-
-          <t>Cleaned up several pieces of text</t>
-        </list></t>
-
-      <t>-11</t>
-
-      <t><list style="symbols">
-          <t>Added localized text to registration request and response
-          examples.</t>
-
-          <t>Removed <spanx style="verb">client_secret_jwt</spanx> and <spanx
-          style="verb">private_key_jwt</spanx>.</t>
-
-          <t>Clarified <spanx style="verb">tos_uri</spanx> and <spanx
-          style="verb">policy_uri</spanx> definitions.</t>
-
-          <t>Added the OAuth Token Endpoint Authentication Methods registry
-          for registering <spanx style="verb">token_endpoint_auth_method</spanx>
-          metadata values.</t>
-
-          <t>Removed uses of non-ASCII characters, per RFC formatting
-          rules.</t>
-
-          <t>Changed <spanx style="verb">expires_at</spanx> to <spanx
-          style="verb">client_secret_expires_at</spanx> and <spanx
-          style="verb">issued_at</spanx> to <spanx style="verb">client_id_issued_at</spanx>
-          for greater clarity.</t>
-
-          <t>Added explanatory text for different credentials (Initial Access
-          Token, Registration Access Token, Client Credentials) and what
-          they're used for.</t>
-
-          <t>Added Client Lifecycle discussion and examples.</t>
-
-          <t>Defined Initial Access Token in Terminology section.</t>
-        </list></t>
-
-      <t>-10</t>
-
-      <t><list style="symbols">
-          <t>Added language to point out that scope values are
-          service-specific</t>
-
-          <t>Clarified normative language around client metadata</t>
-
-          <t>Added extensibility to token_endpoint_auth_method using absolute
-          URIs</t>
-
-          <t>Added security consideration about registering redirect URIs</t>
-
-          <t>Changed erroneous 403 responses to 401's with notes about token
-          handling</t>
-
-          <t>Added example for initial registration credential</t>
-        </list></t>
-
-      <t>-09</t>
-
-      <t><list style="symbols">
-          <t>Added method of internationalization for Client Metadata
-          values</t>
-
-          <t>Fixed SAML reference</t>
-        </list></t>
-
-      <t>-08</t>
-
-      <t><list style="symbols">
-          <t>Collapsed jwk_uri, jwk_encryption_uri, x509_uri, and
-          x509_encryption_uri into a single jwks_uri parameter</t>
-
-          <t>Renamed grant_type to grant_types since it's a plural value</t>
-
-          <t>Formalized name of "OAuth 2.0" throughout document</t>
-
-          <t>Added JWT Bearer Assertion and SAML 2 Bearer Assertion to example
-          grant types</t>
-
-          <t>Added response_types parameter and explanatory text on its use
-          with and relationship to grant_types</t>
-        </list></t>
-
-      <t>-07</t>
-
-      <t><list style="symbols">
-          <t>Changed registration_access_url to registration_client_uri</t>
-
-          <t>Fixed missing text in 5.1</t>
-
-          <t>Added Pragma: no-cache to examples</t>
-
-          <t>Changed "no such client" error to 403</t>
-
-          <t>Renamed Client Registration Access Endpoint to Client
-          Configuration Endpoint</t>
-
-          <t>Changed all the parameter names containing "_url" to instead use
-          "_uri"</t>
-
-          <t>Updated example text for forming Client Configuration Endpoint
-          URL</t>
-        </list></t>
-
-      <t>-06</t>
-
-      <t><list style="symbols">
-          <t>Removed secret_rotation as a client-initiated action, including
-          removing client secret rotation endpoint and parameters.</t>
-
-          <t>Changed _links structure to single value
-          registration_access_url.</t>
-
-          <t>Collapsed create/update/read responses into client info
-          response.</t>
-
-          <t>Changed return code of create action to 201.</t>
-
-          <t>Added section to describe suggested generation and composition of
-          Client Registration Access URL.</t>
-
-          <t>Added clarifying text to PUT and POST requests to specify JSON in
-          the body.</t>
-
-          <t>Added Editor's Note to DELETE operation about its inclusion.</t>
-
-          <t>Added Editor's Note to registration_access_url about alternate
-          syntax proposals.</t>
-        </list></t>
-
-      <t>-05</t>
-
-      <t><list style="symbols">
-          <t>changed redirect_uri and contact to lists instead of space
-          delimited strings</t>
-
-          <t>removed operation parameter</t>
-
-          <t>added _links structure</t>
-
-          <t>made client update management more RESTful</t>
-
-          <t>split endpoint into three parts</t>
-
-          <t>changed input to JSON from form-encoded</t>
-
-          <t>added READ and DELETE operations</t>
-
-          <t>removed Requirements section</t>
-
-          <t>changed token_endpoint_auth_type back to
-          token_endpoint_auth_method to match OIDC who changed to match us</t>
-        </list></t>
-
-      <t>-04</t>
-
-      <t><list style="symbols">
-          <t>removed default_acr, too undefined in the general OAuth2 case</t>
-
-          <t>removed default_max_auth_age, since there's no mechanism for
-          supplying a non-default max_auth_age in OAuth2</t>
-
-          <t>clarified signing and encryption URLs</t>
-
-          <t>changed token_endpoint_auth_method to token_endpoint_auth_type to
-          match OIDC</t>
-        </list></t>
-
-      <t>-03</t>
-
-      <t><list style="symbols">
-          <t>added scope and grant_type claims</t>
-
-          <t>fixed various typos and changed wording for better clarity</t>
-
-          <t>endpoint now returns the full set of client information</t>
-
-          <t>operations on client_update allow for three actions on metadata:
-          leave existing value, clear existing value, replace existing value
-          with new value</t>
-        </list></t>
-
-      <t>-02</t>
-
-      <t><list style="symbols">
-          <t>Reorganized contributors and references</t>
-
-          <t>Moved OAuth references to RFC</t>
-
-          <t>Reorganized model/protocol sections for clarity</t>
-
-          <t>Changed terminology to "client register" instead of "client
-          associate"</t>
-
-          <t>Specified that client_id must match across all subsequent
-          requests</t>
-
-          <t>Fixed RFC2XML formatting, especially on lists</t>
-        </list></t>
-
-      <t>-01</t>
-
-      <t><list style="symbols">
-          <t>Merged UMA and OpenID Connect registrations into a single
-          document</t>
-
-          <t>Changed to form-parameter inputs to endpoint</t>
-
-          <t>Removed pull-based registration</t>
-        </list></t>
-
-      <t>-00</t>
-
-      <t><list style="symbols">
-          <t>Imported original UMA draft specification</t>
-        </list></t>
-    </section>
   </back>
 </rfc>
