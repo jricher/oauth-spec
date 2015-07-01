@@ -64,15 +64,11 @@ the title) for use on http://www.rfc-editor.org/search.
 
 <keyword>example</keyword>
 
-<!--[rfced] We note that RFC 6750 uses "bearer token" and RFC 7523 uses
-"Bearer Token".  We went with initial caps to match RFC 7523 as it is
-another document in this cluster.  Please let us know if you prefer 
-otherwise.
--->
+
 
     <abstract>
-      <t>This specification defines methods for management of dynamic OAuth
-      2.0 client registrations for use cases in which the properties of a
+      <t>This specification defines methods for management of OAuth
+      2.0 dynamic client registrations for use cases in which the properties of a
       registered client may need to be changed during the lifetime of the
       client. Not all authorization servers supporting dynamic client
       registration will support these management methods.</t>
@@ -283,7 +279,7 @@ otherwise.
         <t>Upon successful read of the information for a currently active
         client, the authorization server responds with an HTTP 200 OK with
         content type of <spanx style="verb">application/json</spanx> and a
-        payload, as described in <xref target="ClientInfoResponse"/>. Some
+        payload as described in <xref target="ClientInfoResponse"/>. Some
         values in the response, including the <spanx style="verb">client_secret</spanx>
         and <spanx style="verb">registration_access_token</spanx>, MAY be
         different from those in the initial registration response. If the
@@ -306,7 +302,7 @@ otherwise.
       </section>
 
       <section anchor="UpdateRequest" title="Client Update Request">
-        <t>To update previously registered client's registration with an
+        <t>To update a previously registered client's registration with an
         authorization server, the client makes an HTTP PUT request to the
         client configuration endpoint with a content type of <spanx
         style="verb">application/json</spanx>. The HTTP entity payload is a
@@ -357,18 +353,18 @@ otherwise.
   Authorization: Bearer reg-23410913-abewfq.123483
 
   {
-   "client_id":"s6BhdRkqt3",
+   "client_id": "s6BhdRkqt3",
    "client_secret": "cf136dc3c1fc93f31185e5885805d",
-   "redirect_uris":[
+   "redirect_uris": [
      "https://client.example.org/callback",
      "https://client.example.org/alt"],
    "grant_types": ["authorization_code", "refresh_token"],
    "token_endpoint_auth_method": "client_secret_basic",
    "jwks_uri": "https://client.example.org/my_public_keys.jwks",
-   "client_name":"My New Example",
-   "client_name#fr":"Mon Nouvel Exemple",
-   "logo_uri":"https://client.example.org/newlogo.png",
-   "logo_uri#fr":"https://client.example.org/fr/newlogo.png"
+   "client_name": "My New Example",
+   "client_name#fr": "Mon Nouvel Exemple",
+   "logo_uri": "https://client.example.org/newlogo.png",
+   "logo_uri#fr": "https://client.example.org/fr/newlogo.png"
   }
 ]]></artwork>
 
@@ -380,7 +376,7 @@ otherwise.
 
         <t>Upon successful update, the authorization server responds with an
         HTTP 200 OK message with content type <spanx style="verb">application/json</spanx>
-        and a payload, as described in <xref target="ClientInfoResponse"/>.
+        and a payload as described in <xref target="ClientInfoResponse"/>.
         Some values in the response, including the <spanx style="verb">client_secret</spanx>
         and <spanx style="verb">registration_access_token</spanx>, MAY be
         different from those in the initial registration response. If the
@@ -411,7 +407,7 @@ otherwise.
         <t>To deprovision itself on the authorization server, the client makes
         an HTTP DELETE request to the client configuration endpoint. This
         request is authenticated by the registration access token issued to
-        the client as described in <xref target="RFC6749"/>.</t>
+        the client.</t>
 
         <figure>
           <preamble>The following is a non-normative example request (with line
@@ -479,13 +475,14 @@ otherwise.
       subsequent operations at the client configuration endpoint.</t>
 
       <t><list style="hanging">
-          <t hangText="registration_access_token"><vspace/> REQUIRED. Access
-          token string used at the client configuration endpoint to perform
-          subsequent operations upon the client registration.</t>
 
           <t hangText="registration_client_uri"><vspace/> REQUIRED. Fully
           qualified URL string of the client configuration endpoint for this
           client.</t>
+
+          <t hangText="registration_access_token"><vspace/> REQUIRED. Access
+          token string used at the client configuration endpoint to perform
+          subsequent operations upon the client registration.</t>
         </list></t>
 
       <t>Additionally, the authorization server MUST return all registered
@@ -512,14 +509,14 @@ otherwise.
    "registration_access_token": "reg-23410913-abewfq.123483",
    "registration_client_uri": 
       "https://server.example.com/register/s6BhdRkqt3",
-   "client_id":"s6BhdRkqt3",
+   "client_id": "s6BhdRkqt3",
    "client_secret": "cf136dc3c1fc93f31185e5885805d",
-   "client_id_issued_at":2893256800,
-   "client_secret_expires_at":2893276800,
-   "client_name":"My Example Client",
+   "client_id_issued_at": 2893256800,
+   "client_secret_expires_at": 2893276800,
+   "client_name": "My Example Client",
    "client_name#ja-Jpan-JP":
       "\u30AF\u30E9\u30A4\u30A2\u30F3\u30C8\u540D",
-   "redirect_uris":[
+   "redirect_uris": [
      "https://client.example.org/callback",
      "https://client.example.org/callback2"],
    "grant_types": ["authorization_code", "refresh_token"],
@@ -536,10 +533,7 @@ otherwise.
       descriptions in the OAuth Dynamic Client Registration Metadata Registry
       established by <xref target="RFC7591"/>:</t>
 
-<!-- [rfced] FYI, we will send a request to IANA to update the registry
-to match the minor change made in the description below. (Text was updated 
-to 'Bearer Token' as mentioned above.)
--->
+
 
       <t><list style="symbols">
           <t>Client Metadata Name: <spanx style="verb">registration_access_token</spanx></t>
@@ -583,7 +577,7 @@ to 'Bearer Token' as mentioned above.)
       transmission of clear-text credentials (in the HTTP request and
       response), the authorization server MUST require the use of a
       transport-layer security  mechanism when sending requests to the
-      endpoint. The server MUST support TLS 1.2 <xref target="RFC5246"></xref> and MAY support additional transport-layer mechanisms
+      endpoint. The server MUST support TLS 1.2 <xref target="RFC5246"></xref> and MAY support additional transport-layer security mechanisms
       meeting its security requirements. When using TLS, the client MUST
       perform a TLS/SSL server certificate check, per <xref
       target="RFC6125">RFC 6125</xref>. Implementation security considerations
