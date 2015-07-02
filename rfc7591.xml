@@ -70,6 +70,9 @@
 <keyword>Dynamic Client Registration</keyword>
 <keyword>OpenID Connect</keyword>
 <keyword>OpenID Connect Dynamic Client Registration</keyword>
+<keyword>OIDC</keyword>
+<keyword>User Managed Access</keyword>
+<keyword>UMA</keyword>
 
     <abstract>
       <t>This specification defines mechanisms for dynamically registering

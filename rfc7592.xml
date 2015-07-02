@@ -62,6 +62,9 @@
 <keyword>Dynamic Client Registration</keyword>
 <keyword>OpenID Connect</keyword>
 <keyword>OpenID Connect Dynamic Client Registration</keyword>
+<keyword>OIDC</keyword>
+<keyword>User Managed Access</keyword>
+<keyword>UMA</keyword>
 
     <abstract>
       <t>This specification defines methods for management of OAuth
@@ -465,11 +468,11 @@
       <t><list style="hanging">
 
           <t hangText="registration_client_uri"><vspace/> REQUIRED. Fully
-          qualified URL string of the client configuration endpoint for this
+          qualified URL of the client configuration endpoint for this
           client.</t>
 
           <t hangText="registration_access_token"><vspace/> REQUIRED. Access
-          token string used at the client configuration endpoint to perform
+          token used at the client configuration endpoint to perform
           subsequent operations upon the client registration.</t>
         </list></t>
 
@@ -518,7 +521,7 @@
 
     <section anchor="IANA" title="IANA Considerations">
       <t>This specification registers the following client metadata names and
-      descriptions in the OAuth Dynamic Client Registration Metadata Registry
+      descriptions in the OAuth Dynamic Client Registration Metadata registry
       established by <xref target="RFC7591"/>:</t>
 
 
