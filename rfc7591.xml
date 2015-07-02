@@ -66,9 +66,13 @@
 
     <workgroup>OAuth Working Group</workgroup>
 
-
+<keyword>Dynamic Registration</keyword>
+<keyword>Dynamic Client Registration</keyword>
 <keyword>OpenID Connect</keyword>
 <keyword>OpenID Connect Dynamic Client Registration</keyword>
+<keyword>OIDC</keyword>
+<keyword>User Managed Access</keyword>
+<keyword>UMA</keyword>
 
     <abstract>
       <t>This specification defines mechanisms for dynamically registering
@@ -232,14 +236,11 @@
  | Developer |<-(D)- Client Information Response ---|   Endpoint    |
  |           |        or Client Error Response      +---------------+
  +-----------+
-
 ]]></artwork>
 
           <postamble>Figure 1: Abstract Dynamic Client Registration
           Flow</postamble>
         </figure>
-
-        <t/>
 
         <t>The abstract OAuth 2.0 client dynamic registration flow illustrated
         in Figure 1 describes the interaction between the client or developer
@@ -323,8 +324,8 @@
               <t><spanx style="verb">client_secret_basic</spanx>: The client
               uses HTTP Basic as defined in OAuth 2.0, Section 2.3.1.</t>
 
-            </list>Additional values can be defined via the IANA OAuth Token
-          Endpoint Authentication Methods Registry established in <xref
+            </list>Additional values can be defined via the IANA "OAuth Token
+          Endpoint Authentication Methods" registry established in <xref
           target="TEAMRegistry"/>. Absolute URIs can also be used as values
           for this parameter without being registered. If unspecified or
           omitted, the default is <spanx style="verb">client_secret_basic</spanx>,
@@ -336,20 +337,20 @@
           types are defined as follows: <list style="symbols">
 
               <t><spanx style="verb">authorization_code</spanx>: The
-              authorization code grant type described in OAuth 2.0, Section 4.1.</t>
+              authorization code grant type defined in OAuth 2.0, Section 4.1.</t>
 
               <t><spanx style="verb">implicit</spanx>: The implicit grant type
-              described in OAuth 2.0, Section 4.2.</t>
+              defined in OAuth 2.0, Section 4.2.</t>
 
               <t><spanx style="verb">password</spanx>: The resource owner
-              password credentials grant type described in OAuth 2.0, Section
+              password credentials grant type defined in OAuth 2.0, Section
               4.3.</t>
 
               <t><spanx style="verb">client_credentials</spanx>: The client
-              credentials grant type described in OAuth 2.0, Section 4.4.</t>
+              credentials grant type defined in OAuth 2.0, Section 4.4.</t>
 
               <t><spanx style="verb">refresh_token</spanx>: The refresh token
-              grant type described in OAuth 2.0, Section 6.</t>
+              grant type defined in OAuth 2.0, Section 6.</t>
 
               <t><spanx style="verb">urn:ietf:params:oauth:grant-type:jwt-bearer</spanx>:
               The JWT Bearer Token Grant Type defined in <xref target="RFC7523">OAuth JWT
@@ -373,10 +374,10 @@
           endpoint. These response types are defined as follows: <list
               style="symbols">
               <t><spanx style="verb">code</spanx>: The authorization code
-              response described in OAuth 2.0, Section 4.1.</t>
+              response type defined in OAuth 2.0, Section 4.1.</t>
 
-              <t><spanx style="verb">token</spanx>: The implicit response
-              described in OAuth 2.0, Section 4.2.</t>
+              <t><spanx style="verb">token</spanx>: The implicit response type
+              defined in OAuth 2.0, Section 4.2.</t>
             </list>If the authorization endpoint is used by the grant type,
           the value of this parameter MUST be the same as the value of the
           <spanx style="verb">response_type</spanx> parameter passed to the
@@ -457,7 +458,7 @@
           <t hangText="jwks"><vspace/>Client's JSON Web Key Set <xref
           target="RFC7517"/> document value, which contains the client's
           public keys. The value of this field MUST be a JSON object
-          containing a valid JWK Set.&nbsp;These keys can be used by higher-level
+          containing a valid JWK Set. These keys can be used by higher-level
           protocols that use signing or encryption. This parameter is intended
           to be used by clients that cannot use the <spanx style="verb">jwks_uri</spanx>
           parameter, such as native clients that cannot host public URLs. The
@@ -593,7 +594,7 @@
         target="RFC7159">JSON</xref> member names are case sensitive, it is
         RECOMMENDED that language tag values used in Claim Names be spelled
         using the character case with which they are registered in the <xref
-        target="IANA.Language">IANA Language Subtag Registry</xref>. In
+        target="IANA.Language">"IANA Language Subtag" registry</xref>. In
         particular, normally language names are spelled with lowercase
         characters, region names are spelled with uppercase characters, and
         languages are spelled with mixed-case characters. However, since BCP 47
@@ -677,35 +678,33 @@ NEW:
         claims:</t>
 
         <figure>
-          <artwork><![CDATA[{
- "software_id": "4NRB1-0XZABZI9E6-5SM3R",
- "client_name": "Example Statement-based Client",
- "client_uri": "https://client.example.net/"
-}]]></artwork>
-        </figure>
-
-        <t/>
-
-        <t>The following non-normative example JWT includes these claims and
-        has been asymmetrically signed using RS256:</t>
-
-        <figure>
-          <preamble>(Line breaks are for display purposes only)</preamble>
-
-          <artwork><![CDATA[eyJhbGciOiJSUzI1NiJ9.
-eyJzb2Z0d2FyZV9pZCI6IjROUkIxLTBYWkFCWkk5RTYtNVNNM1IiLCJjbGll
-bnRfbmFtZSI6IkV4YW1wbGUgU3RhdGVtZW50LWJhc2VkIENsaWVudCIsImNs
-aWVudF91cmkiOiJodHRwczovL2NsaWVudC5leGFtcGxlLm5ldC8ifQ.
-GHfL4QNIrQwL18BSRdE595T9jbzqa06R9BT8w409x9oIcKaZo_mt15riEXHa
-zdISUvDIZhtiyNrSHQ8K4TvqWxH6uJgcmoodZdPwmWRIEYbQDLqPNxREtYn0
-5X3AR7ia4FRjQ2ojZjk5fJqJdQ-JcfxyhK-P8BAWBd6I2LLA77IG32xtbhxY
-fHX7VhuU5ProJO8uvu3Ayv4XRhLZJY4yKfmyjiiKiPNe-Ia4SMy_d_QSWxsk
-U5XIQl5Sa2YRPMbDRXttm2TfnZM1xx70DoYi8g6czz-CPGRi4SW_S2RKHIJf
-IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
+          <artwork><![CDATA[
+  {
+   "software_id": "4NRB1-0XZABZI9E6-5SM3R",
+   "client_name": "Example Statement-based Client",
+   "client_uri": "https://client.example.net/"
+  }
 ]]></artwork>
         </figure>
 
-        <t/>
+        <figure>
+          <preamble>The following non-normative example JWT includes these claims and
+	  has been asymmetrically signed using <spanx style="verb">RS256</spanx>
+	  (with line breaks for display purposes only):</preamble>
+
+          <artwork><![CDATA[
+  eyJhbGciOiJSUzI1NiJ9.
+  eyJzb2Z0d2FyZV9pZCI6IjROUkIxLTBYWkFCWkk5RTYtNVNNM1IiLCJjbGll
+  bnRfbmFtZSI6IkV4YW1wbGUgU3RhdGVtZW50LWJhc2VkIENsaWVudCIsImNs
+  aWVudF91cmkiOiJodHRwczovL2NsaWVudC5leGFtcGxlLm5ldC8ifQ.
+  GHfL4QNIrQwL18BSRdE595T9jbzqa06R9BT8w409x9oIcKaZo_mt15riEXHa
+  zdISUvDIZhtiyNrSHQ8K4TvqWxH6uJgcmoodZdPwmWRIEYbQDLqPNxREtYn0
+  5X3AR7ia4FRjQ2ojZjk5fJqJdQ-JcfxyhK-P8BAWBd6I2LLA77IG32xtbhxY
+  fHX7VhuU5ProJO8uvu3Ayv4XRhLZJY4yKfmyjiiKiPNe-Ia4SMy_d_QSWxsk
+  U5XIQl5Sa2YRPMbDRXttm2TfnZM1xx70DoYi8g6czz-CPGRi4SW_S2RKHIJf
+  IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
+]]></artwork>
+        </figure>
 
         <t>The software statement is typically distributed with all instances 
    of a client application. The means by which a client or developer 
@@ -734,7 +733,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
       the authorization server. The client registration endpoint MUST accept
       HTTP POST messages with request parameters encoded in the entity body
       using the <spanx style="verb">application/json</spanx> format. The
-      client registration endpoint MUST be protected by a tranport-layer security mechanism, as described in <xref target="Security"/>.</t>
+      client registration endpoint MUST be protected by a transport-layer
+      security mechanism, as described in <xref target="Security"/>.</t>
 
       <t>The client registration endpoint MAY be an <xref
       target="RFC6749">OAuth 2.0</xref> protected
@@ -776,8 +776,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
 
         <figure>
           <preamble>The following is a non-normative example request not using
-          an initial access token (with line wraps within values for display
-          purposes only):</preamble>
+          an initial access token:</preamble>
 
           <artwork><![CDATA[
   POST /register HTTP/1.1
@@ -812,7 +811,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA
         <figure>
           <preamble>The following is a non-normative example request using an
           initial access token and registering a JWK Set by value (with line
-          wraps within values for display purposes only):</preamble>
+          breaks within values for display purposes only):</preamble>
 
           <artwork><![CDATA[
   POST /register HTTP/1.1
@@ -867,7 +866,7 @@ qXC_jpLUt22OC6GUG63p-REw-ZOr3r845z50wMuzifQrMI9bQ",
             are conveyed as claims in a software statement from the example in
             <xref target="SoftwareStatement"/>, while some values specific to
             the client instance are conveyed as regular parameters (with line
-            wraps within values for display purposes only):</preamble>
+            breaks within values for display purposes only):</preamble>
 
             <artwork><![CDATA[
   POST /register HTTP/1.1
@@ -928,7 +927,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
               style="verb">client_id</spanx> and SHOULD be unique for multiple
               instances of a client using the same <spanx style="verb">client_id</spanx>.
               This value is used by confidential clients to authenticate to
-              the token endpoint as described in <xref target="RFC6749">OAuth
+              the token endpoint, as described in <xref target="RFC6749">OAuth
               2.0</xref>, Section 2.3.1.</t>
 
               <t hangText="client_id_issued_at"><vspace/> OPTIONAL.  Time at which the client identifier was issued.  The
@@ -1060,7 +1059,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           <figure>
             <preamble>The following is a non-normative example of an error
             response resulting from a redirection URI that has been
-            blacklisted by the authorization server (with line wraps within
+            blacklisted by the authorization server (with line breaks within
             values for display purposes only):</preamble>
 
             <artwork><![CDATA[
@@ -1078,10 +1077,10 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
           </figure>
 
           <figure>
-            <preamble>Following is a non-normative example of an error
+            <preamble>The following is a non-normative example of an error
             response resulting from an inconsistent combination of <spanx
             style="verb">response_types</spanx> and <spanx style="verb">grant_types</spanx>
-            values (with line wraps within values for display purposes
+            values (with line breaks within values for display purposes
             only):</preamble>
 
             <artwork><![CDATA[
@@ -1106,8 +1105,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
     <section anchor="IANA" title="IANA Considerations">
       <section anchor="MetadataRegistry"
                title="OAuth Dynamic Client Registration Metadata Registry">
-        <t>This specification establishes the OAuth Dynamic Client
-        Registration Metadata Registry.</t>
+        <t>This specification establishes the "OAuth Dynamic Client
+        Registration Metadata" registry.</t>
 
         <t>OAuth registration client metadata names and descriptions are
         registered with a Specification Required (<xref target="RFC5226"/>)
@@ -1157,8 +1156,8 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
         </section>
 
         <section anchor="MetadataContents" title="Initial Registry Contents">
-          <t>The initial contents of the OAuth Dynamic Client Registration
-          Metadata Registry are:</t>
+          <t>The initial contents of the "OAuth Dynamic Client Registration
+          Metadata" registry are:</t>
 
 <!-- [rfced] FYI, we will send a request to IANA to update the registry 
 to match the minor changes made in the descriptions below. 
@@ -1172,7 +1171,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1183,7 +1182,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1194,7 +1193,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1205,7 +1204,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1216,7 +1215,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1227,7 +1226,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1238,7 +1237,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1249,7 +1248,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1261,7 +1260,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1272,7 +1271,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1283,7 +1282,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1295,7 +1294,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1307,7 +1306,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1318,7 +1317,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1329,7 +1328,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1339,7 +1338,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1349,7 +1348,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1360,7 +1359,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1371,7 +1370,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
         </section>
 
@@ -1380,8 +1379,8 @@ to match the minor changes made in the descriptions below.
 
       <section anchor="TEAMRegistry"
                title="OAuth Token Endpoint Authentication Methods Registry">
-        <t>This specification establishes the OAuth Token Endpoint
-        Authentication Methods Registry.</t>
+        <t>This specification establishes the "OAuth Token Endpoint
+        Authentication Methods" registry.</t>
 
         <t>Additional values for use as <spanx style="verb">token_endpoint_auth_method</spanx>
         values are registered with a Specification Required (<xref
@@ -1432,8 +1431,8 @@ to match the minor changes made in the descriptions below.
         </section>
 
         <section anchor="TEAMContents" title="Initial Registry Contents">
-          <t>The initial contents of the OAuth Token Endpoint Authentication
-          Methods Registry are:</t>
+          <t>The initial contents of the "OAuth Token Endpoint Authentication
+          Methods" registry are:</t>
 
           <t><?rfc subcompact="yes"?> <list style="symbols">
               <t>Token Endpoint Authentication Method Name: <spanx
@@ -1441,7 +1440,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1450,7 +1449,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
 
           <t><list style="symbols">
@@ -1459,7 +1458,7 @@ to match the minor changes made in the descriptions below.
 
               <t>Change Controller: IESG</t>
 
-              <t>Specification Document(s): this document (RFC 7591)</t>
+              <t>Specification Document(s): RFC 7591</t>
             </list></t>
         </section>
 
@@ -1661,7 +1660,7 @@ NEW:
       exclusively with information about software and not people, there
       are very few privacy concerns for its use. The notable exception is the
       <spanx style="verb">contacts</spanx> field as defined in <xref
-      target="ClientMetadata">Client Metadata</xref>, which contains contact
+      target="ClientMetadata"/>, which contains contact
       information for the developers or other parties responsible for the
       client software. These values are intended to be displayed to end-users
       and will be available to the administrators of the authorization server.
@@ -1849,7 +1848,7 @@ NEW:
 
 
 
-      <reference anchor="OpenID.Discovery" target="http://openid.net/specs/openid-connect-registration-1_0.html">
+      <reference anchor="OpenID.Discovery" target="http://openid.net/specs/openid-connect-discovery-1_0.html">
         <front>
           <title>OpenID Connect Discovery 1.0</title>
 
