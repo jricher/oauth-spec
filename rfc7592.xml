@@ -467,12 +467,14 @@
 
       <t><list style="hanging">
 
-          <t hangText="registration_client_uri"><vspace/> REQUIRED. Fully
+          <t hangText="registration_client_uri"><vspace/> REQUIRED. 
+		  String containing the fully
           qualified URL of the client configuration endpoint for this
           client.</t>
 
-          <t hangText="registration_access_token"><vspace/> REQUIRED. Access
-          token used at the client configuration endpoint to perform
+          <t hangText="registration_access_token"><vspace/> REQUIRED. 
+		  String containing the access token to be
+          used at the client configuration endpoint to perform
           subsequent operations upon the client registration.</t>
         </list></t>
 
