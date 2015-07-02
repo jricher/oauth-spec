@@ -455,8 +455,8 @@
       Registration"</xref>, which states that the response contains the client
       identifier (as well as the client secret if the client is a confidential
       client). When used with this specification, the client information
-      response also contains the fully qualified URL of the
-      client configuration endpoint for
+      response also contains the fully qualified URL of the <xref
+      target="ClientConfigEndpoint">client configuration endpoint</xref> for
       this specific client that the client or developer may use to manage the
       client's registration configuration, as well as a registration access
       token that is to be used by the client or developer to perform
@@ -465,11 +465,11 @@
       <t><list style="hanging">
 
           <t hangText="registration_client_uri"><vspace/> REQUIRED. Fully
-          qualified URL of the client configuration endpoint for this
+          qualified URL string of the client configuration endpoint for this
           client.</t>
 
           <t hangText="registration_access_token"><vspace/> REQUIRED. Access
-          token used at the client configuration endpoint to perform
+          token string used at the client configuration endpoint to perform
           subsequent operations upon the client registration.</t>
         </list></t>
 
@@ -518,7 +518,7 @@
 
     <section anchor="IANA" title="IANA Considerations">
       <t>This specification registers the following client metadata names and
-      descriptions in the OAuth Dynamic Client Registration Metadata registry
+      descriptions in the OAuth Dynamic Client Registration Metadata Registry
       established by <xref target="RFC7591"/>:</t>
 
 

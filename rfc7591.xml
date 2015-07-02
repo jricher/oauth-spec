@@ -322,7 +322,7 @@
               uses HTTP Basic as defined in OAuth 2.0, Section 2.3.1.</t>
 
             </list>Additional values can be defined via the IANA OAuth Token
-          Endpoint Authentication Methods registry established in <xref
+          Endpoint Authentication Methods Registry established in <xref
           target="TEAMRegistry"/>. Absolute URIs can also be used as values
           for this parameter without being registered. If unspecified or
           omitted, the default is <spanx style="verb">client_secret_basic</spanx>,
@@ -392,7 +392,7 @@
           field MAY be internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="client_uri"><vspace/>URL of a web page providing
+          <t hangText="client_uri"><vspace/>URL string of a web page providing
           information about the client. If present, the server SHOULD display
           this URL to the end-user in a clickable fashion. It is RECOMMENDED
           that clients always send this field. The value of this field MUST
@@ -400,7 +400,7 @@
           internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="logo_uri"><vspace/>URL that references a logo
+          <t hangText="logo_uri"><vspace/>URL string that references a logo
           for the client. If present, the server SHOULD display this image to
           the end-user during approval. The value of this field MUST point to
           a valid image file. The value of this field MAY be
@@ -421,7 +421,7 @@
           <xref target="Privacy"/> for information on Privacy
           Considerations.</t>
 
-          <t hangText="tos_uri"><vspace/>URL that points to a
+          <t hangText="tos_uri"><vspace/>URL string that points to a
           human-readable terms of service document for the client that
           describes a contractual relationship between the end-user and the
           client that the end-user accepts when authorizing the client. The
@@ -430,7 +430,7 @@
           The value of this field MAY be internationalized, as described in
           <xref target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="policy_uri"><vspace/>URL that points to a
+          <t hangText="policy_uri"><vspace/>URL string that points to a
           human-readable privacy policy document that describes how the
           deployment organization collects, uses, retains, and discloses
           personal data. The authorization server SHOULD display this URL to
@@ -439,7 +439,7 @@
           internationalized, as described in <xref
           target="HumanReadableClientMetadata"/>.</t>
 
-          <t hangText="jwks_uri"><vspace/>URL referencing the client's
+          <t hangText="jwks_uri"><vspace/>URL string referencing the client's
           JSON Web Key (JWK) Set <xref target="RFC7517"/> document, which contains
           the client's public keys. The value of this field MUST point to a
           valid JWK Set document. These keys can be used by higher-level
@@ -591,7 +591,7 @@
         target="RFC7159">JSON</xref> member names are case sensitive, it is
         RECOMMENDED that language tag values used in Claim Names be spelled
         using the character case with which they are registered in the <xref
-        target="IANA.Language">IANA Language Subtag registry</xref>. In
+        target="IANA.Language">IANA Language Subtag Registry</xref>. In
         particular, normally language names are spelled with lowercase
         characters, region names are spelled with uppercase characters, and
         languages are spelled with mixed-case characters. However, since BCP 47
@@ -1103,7 +1103,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
       <section anchor="MetadataRegistry"
                title="OAuth Dynamic Client Registration Metadata Registry">
         <t>This specification establishes the OAuth Dynamic Client
-        Registration Metadata registry.</t>
+        Registration Metadata Registry.</t>
 
         <t>OAuth registration client metadata names and descriptions are
         registered with a Specification Required (<xref target="RFC5226"/>)
@@ -1154,7 +1154,7 @@ IjoI3zTJ0Y2oe0_EJAiXbL6OyF9S5tKxDXV8JIndSA",
 
         <section anchor="MetadataContents" title="Initial Registry Contents">
           <t>The initial contents of the OAuth Dynamic Client Registration
-          Metadata registry are:</t>
+          Metadata Registry are:</t>
 
 <!-- [rfced] FYI, we will send a request to IANA to update the registry 
 to match the minor changes made in the descriptions below. 
@@ -1377,7 +1377,7 @@ to match the minor changes made in the descriptions below.
       <section anchor="TEAMRegistry"
                title="OAuth Token Endpoint Authentication Methods Registry">
         <t>This specification establishes the OAuth Token Endpoint
-        Authentication Methods registry.</t>
+        Authentication Methods Registry.</t>
 
         <t>Additional values for use as <spanx style="verb">token_endpoint_auth_method</spanx>
         values are registered with a Specification Required (<xref
@@ -1429,7 +1429,7 @@ to match the minor changes made in the descriptions below.
 
         <section anchor="TEAMContents" title="Initial Registry Contents">
           <t>The initial contents of the OAuth Token Endpoint Authentication
-          Methods registry are:</t>
+          Methods Registry are:</t>
 
           <t><?rfc subcompact="yes"?> <list style="symbols">
               <t>Token Endpoint Authentication Method Name: <spanx
