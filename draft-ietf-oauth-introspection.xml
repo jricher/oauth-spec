@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-introspection-10"
+<rfc category="std" docName="draft-ietf-oauth-introspection-11"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth 2.0 Token Introspection</title>
@@ -24,7 +24,7 @@
       </address>
     </author>
 
-    <date day="22" month="June" year="2015"/>
+    <date day="3" month="July" year="2015"/>
 
     <area>Security</area>
 
@@ -172,12 +172,12 @@
         instance, an authorization server may desire to know the IP address of
         the client accessing the protected resource to determine if the
         correct client is likely to be presenting the token. The definition of
-        any other parameters are outside the scope of this specification, to
-        be defined by service documentation or extensions to this
-        specification. If the authorization server is unable to determine the
-        state of the token without additional information, it SHOULD return an
-        introspection response indicating the token is not active as described
-        in <xref target="IntrospectionResponse"/>.</t>
+        this or any other parameters are outside the scope of this
+        specification, to be defined by service documentation or extensions to
+        this specification. If the authorization server is unable to determine
+        the state of the token without additional information, it SHOULD
+        return an introspection response indicating the token is not active as
+        described in <xref target="IntrospectionResponse"/>.</t>
 
         <t hangText="instance_name">To prevent token scanning attacks, the
         endpoint MUST also require some form of authorization to access this
@@ -693,9 +693,9 @@
       <t>If the protected resource sends additional information about the
       client's request to the authorization server (such as the client's IP
       address) using an extension of this specification, such information
-      could have additional privacy considerations. However, the nature and
-      implications of such extensions are outside the scope of this
-      specification.</t>
+      could have additional privacy considerations that the extension should
+      detail. However, the nature and implications of such extensions are
+      outside the scope of this specification.</t>
 
       <t>Omitting privacy-sensitive information from an introspection response
       is the simplest way of minimizing privacy issues.</t>
@@ -816,6 +816,12 @@
 
     <section title="Document History">
       <t>[[ To be removed by the RFC Editor. ]]</t>
+
+      <t>-11</t>
+
+      <t><list style="symbols">
+          <t>Minor wording tweaks from IESG review.</t>
+        </list></t>
 
       <t>-10</t>
 
