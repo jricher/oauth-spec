@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-introspection-11"
+<rfc category="std" docName="draft-ietf-oauth-introspection-12"
      ipr="trust200902">
   <front>
     <title abbrev="oauth-introspection">OAuth 2.0 Token Introspection</title>
@@ -249,8 +249,8 @@
 
             <t hangText="scope"><vspace/>OPTIONAL. A JSON string containing a
             space-separated list of scopes associated with this token, in the
-            format described in section 3.3 of <xref target="RFC6749">OAuth
-            2.0</xref>.</t>
+            format described in <xref target="RFC6749">OAuth 2.0</xref>
+            Section 3.3.</t>
 
             <t hangText="client_id"><vspace/>OPTIONAL. Client identifier for
             the OAuth 2.0 client that requested this token.</t>
@@ -259,8 +259,8 @@
             identifier for the resource owner who authorized this token.</t>
 
             <t hangText="token_type"><vspace/>OPTIONAL. Type of the token as
-            defined in section 5.1 of <xref target="RFC6749">OAuth
-            2.0</xref>.</t>
+            defined in <xref target="RFC6749">OAuth 2.0</xref> Section
+            7.1.</t>
 
             <t hangText="exp"><vspace/>OPTIONAL. Integer timestamp, measured
             in the number of seconds since January 1 1970 UTC, indicating when
@@ -372,15 +372,15 @@
         <t>If the protected resource uses OAuth 2.0 client credentials to
         authenticate to the introspection endpoint and its credentials are
         invalid, the authorization server responds with an HTTP 401
-        (Unauthorized) as described in section 5.2 of <xref
-        target="RFC6749">OAuth 2.0 </xref>.</t>
+        (Unauthorized) as described in <xref target="RFC6749">OAuth 2.0
+        </xref> Section 5.2.</t>
 
         <t>If the protected resource uses an OAuth 2.0 bearer token to
         authorize its call to the introspection endpoint and the token used
         for authorization does not contain sufficient privileges or is
         otherwise invalid for this request, the authorization server responds
-        with an HTTP 401 code as described in section 3 of <xref
-        target="RFC6750">OAuth 2.0 Bearer Token Usage</xref>.</t>
+        with an HTTP 401 code as described in <xref target="RFC6750">OAuth 2.0
+        Bearer Token Usage</xref> Section 3.</t>
 
         <t>Note that a properly formed and authorized query for an inactive or
         otherwise invalid token (or a token the protected resource is not
@@ -816,6 +816,12 @@
 
     <section title="Document History">
       <t>[[ To be removed by the RFC Editor. ]]</t>
+
+      <t>-12</t>
+
+      <t><list style="symbols">
+          <t>Updated references to fix IETF tools wonkiness.</t>
+        </list></t>
 
       <t>-11</t>
 
