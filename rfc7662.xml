@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="US-ASCII"?>
 <!DOCTYPE rfc SYSTEM "rfc2629.dtd">
-
 <?rfc toc="yes"?>
 <?rfc tocompact="yes"?>
 <?rfc tocdepth="3"?>
@@ -11,11 +10,8 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-
-
-<rfc number="7662" category="std" submissionType="IETF" consensus="yes"
-     ipr="trust200902">
-
+<rfc category="std" consensus="yes" ipr="trust200902" number="7662"
+     submissionType="IETF">
   <front>
     <title abbrev="OAuth Introspection">OAuth 2.0 Token Introspection</title>
 
@@ -34,11 +30,25 @@
 
     <workgroup>OAuth Working Group</workgroup>
 
-<!-- [rfced] Please insert any keywords (beyond those that appear in 
+    <!-- [rfced] Please insert any keywords (beyond those that appear in 
 the title) for use on http://www.rfc-editor.org/search.
--->
 
-<keyword>example</keyword>
+
+[justin] done.-->
+
+    <keyword>token validation</keyword>
+
+    <keyword>oauth token validation</keyword>
+
+    <keyword>active token</keyword>
+
+    <keyword>inactive token</keyword>
+
+    <keyword>token metadata</keyword>
+
+    <keyword>token status</keyword>
+
+    <keyword>token status check</keyword>
 
     <abstract>
       <t>This specification defines a method for a protected resource to query
@@ -48,19 +58,18 @@ the title) for use on http://www.rfc-editor.org/search.
       the authorization context of the token from the authorization server to
       the protected resource.</t>
     </abstract>
-
   </front>
 
   <middle>
     <section anchor="introduction" title="Introduction">
-      <t>In <xref target="RFC6749"> OAuth 2.0</xref>, the contents of tokens are opaque to clients. This
-      means that the client does not need to know anything about the content
-      or structure of the token itself, if there is any. However, there is
-      still a large amount of metadata that may be attached to a token, such
-      as its current validity, approved scopes, and information about the
-      context in which the token was issued. These pieces of information are
-      often vital to protected resources making authorization decisions based
-      on the tokens being presented. Since OAuth
+      <t>In <xref target="RFC6749"> OAuth 2.0</xref>, the contents of tokens
+      are opaque to clients. This means that the client does not need to know
+      anything about the content or structure of the token itself, if there is
+      any. However, there is still a large amount of metadata that may be
+      attached to a token, such as its current validity, approved scopes, and
+      information about the context in which the token was issued. These
+      pieces of information are often vital to protected resources making
+      authorization decisions based on the tokens being presented. Since OAuth
       2.0 does not define a protocol for the resource server to learn
       meta-information about a token that it has received from an
       authorization server, several different approaches have been developed
@@ -110,7 +119,8 @@ the title) for use on http://www.rfc-editor.org/search.
 
         <t>This specification defines the following terms:</t>
 
-        <t><list style="hanging">
+        <t>
+          <list style="hanging">
             <t hangText="Token Introspection"><vspace/>The act of inquiring
             about the current state of an OAuth 2.0 token through use of the
             network protocol defined in this document.</t>
@@ -118,7 +128,8 @@ the title) for use on http://www.rfc-editor.org/search.
             <t hangText="Introspection Endpoint"><vspace/>The OAuth 2.0
             endpoint through which the token introspection operation is
             accomplished.</t>
-          </list></t>
+          </list>
+        </t>
       </section>
     </section>
 
@@ -142,34 +153,38 @@ the title) for use on http://www.rfc-editor.org/search.
       <section anchor="IntrospectionRequest" title="Introspection Request">
         <t hangText="instance_name">The protected resource calls the
         introspection endpoint using an <xref target="RFC7231">HTTP
-        POST</xref> request with parameters sent as <spanx style="verb">application/x-www-form-urlencoded</spanx>
-        data as defined in <xref target="W3C.REC-html5-20141028"/>. The
-        protected resource sends a parameter representing the token along with
-        optional parameters representing additional context that is known by
-        the protected resource to aid the authorization server in its
+        POST</xref> request with parameters sent as <spanx
+        style="verb">application/x-www-form-urlencoded</spanx> data as defined
+        in <xref target="W3C.REC-html5-20141028"/>. The protected resource
+        sends a parameter representing the token along with optional
+        parameters representing additional context that is known by the
+        protected resource to aid the authorization server in its
         response.</t>
 
-        <t hangText="instance_name"><list style="hanging">
-            <t hangText="token"><vspace/>REQUIRED. The string value of the token. For
-            access tokens, this is the <spanx style="verb">access_token</spanx>
-            value returned from the token endpoint defined in <xref
-            target="RFC6749">OAuth 2.0</xref>, Section 5.1. For refresh tokens,
-            this is the <spanx style="verb">refresh_token</spanx> value
-            returned from the token endpoint as defined in <xref
-            target="RFC6749">OAuth 2.0</xref>, Section 5.1. Other token types
-            are outside the scope of this specification.</t>
+        <t hangText="instance_name">
+          <list style="hanging">
+            <t hangText="token"><vspace/>REQUIRED. The string value of the
+            token. For access tokens, this is the <spanx
+            style="verb">access_token</spanx> value returned from the token
+            endpoint defined in <xref target="RFC6749">OAuth 2.0</xref>,
+            Section 5.1. For refresh tokens, this is the <spanx
+            style="verb">refresh_token</spanx> value returned from the token
+            endpoint as defined in <xref target="RFC6749">OAuth 2.0</xref>,
+            Section 5.1. Other token types are outside the scope of this
+            specification.</t>
 
-            <t hangText="token_type_hint"><vspace/>OPTIONAL. A hint about the type of
-            the token submitted for introspection. The protected resource MAY
-            pass this parameter to help the authorization server optimize
-            the token lookup. If the server is unable to locate the token
-            using the given hint, it MUST extend its search across all of its
-            supported token types. An authorization server MAY ignore this
-            parameter, particularly if it is able to detect the token type
-            automatically. Values for this field are defined in the "OAuth
-            Token Type Hints" registry defined in <xref target="RFC7009">OAuth
-            Token Revocation</xref>.</t>
-          </list></t>
+            <t hangText="token_type_hint"><vspace/>OPTIONAL. A hint about the
+            type of the token submitted for introspection. The protected
+            resource MAY pass this parameter to help the authorization server
+            optimize the token lookup. If the server is unable to locate the
+            token using the given hint, it MUST extend its search across all
+            of its supported token types. An authorization server MAY ignore
+            this parameter, particularly if it is able to detect the token
+            type automatically. Values for this field are defined in the
+            "OAuth Token Type Hints" registry defined in <xref
+            target="RFC7009">OAuth Token Revocation</xref>.</t>
+          </list>
+        </t>
 
         <t hangText="instance_name">The introspection endpoint MAY accept
         other OPTIONAL parameters to provide further context to the query. For
@@ -192,13 +207,14 @@ the title) for use on http://www.rfc-editor.org/search.
         these authentication credentials are out of scope of this
         specification.</t>
 
-        <t>For example, the following shows a protected resource
-        calling the token introspection endpoint to query about an OAuth 2.0
-        bearer token. The protected resource is using a separate OAuth 2.0
-        bearer token to authorize this call.</t>
+        <t>For example, the following shows a protected resource calling the
+        token introspection endpoint to query about an OAuth 2.0 bearer token.
+        The protected resource is using a separate OAuth 2.0 bearer token to
+        authorize this call.</t>
 
         <figure>
-          <preamble>The following is a non-normative example request:</preamble>
+          <preamble>The following is a non-normative example
+          request:</preamble>
 
           <artwork><![CDATA[
   POST /introspect HTTP/1.1
@@ -217,7 +233,8 @@ the title) for use on http://www.rfc-editor.org/search.
         as well as send a token type hint.</t>
 
         <figure>
-          <preamble>The following is a non-normative example request:</preamble>
+          <preamble>The following is a non-normative example
+          request:</preamble>
 
           <artwork><![CDATA[
   POST /introspect HTTP/1.1
@@ -237,7 +254,8 @@ the title) for use on http://www.rfc-editor.org/search.
         object</xref> in <spanx style="verb">application/json</spanx> format
         with the following top-level members.</t>
 
-        <t><list style="hanging">
+        <t>
+          <list style="hanging">
             <t hangText="active"><vspace/>REQUIRED. Boolean indicator of
             whether or not the presented token is currently active. The
             specifics of a token&rsquo;s <spanx style="verb">active</spanx>
@@ -297,13 +315,14 @@ the title) for use on http://www.rfc-editor.org/search.
 
             <t hangText="jti"><vspace/>OPTIONAL. String identifier for the
             token, as defined in <xref target="RFC7519">JWT</xref>.</t>
-          </list></t>
+          </list>
+        </t>
 
         <t>Specific implementations MAY extend this structure with their own
         service-specific response names as top-level members of this JSON
         object. Response names intended to be used across domains MUST be
-        registered in the "OAuth Token Introspection Response" registry defined
-        in <xref target="IntrospectionResponseRegistry"/>.</t>
+        registered in the "OAuth Token Introspection Response" registry
+        defined in <xref target="IntrospectionResponseRegistry"/>.</t>
 
         <t>The authorization server MAY respond differently to different
         protected resources making the same request. For instance, an
@@ -322,7 +341,8 @@ the title) for use on http://www.rfc-editor.org/search.
         about an active token:</t>
 
         <figure>
-          <preamble>The following is a non-normative example response:</preamble>
+          <preamble>The following is a non-normative example
+          response:</preamble>
 
           <artwork><![CDATA[
   HTTP/1.1 200 OK
@@ -348,17 +368,18 @@ the title) for use on http://www.rfc-editor.org/search.
 
         <t>If the introspection call is properly authorized but the token is
         not active, does not exist on this server, or the protected resource
-        is not allowed to introspect this particular token, then the authorization
-        server MUST return an introspection response with the active field set
-        to false. Note that to avoid disclosing too much of the authorization
-        server's state to a third party, the authorization server SHOULD NOT
-        include any additional information about an inactive token, including
-        why the token is inactive. For example, the response for a token that
-        has been revoked or is otherwise invalid would look like the
-        following:</t>
+        is not allowed to introspect this particular token, then the
+        authorization server MUST return an introspection response with the
+        active field set to false. Note that to avoid disclosing too much of
+        the authorization server's state to a third party, the authorization
+        server SHOULD NOT include any additional information about an inactive
+        token, including why the token is inactive. For example, the response
+        for a token that has been revoked or is otherwise invalid would look
+        like the following:</t>
 
         <figure>
-          <preamble>The following is a non-normative example response:</preamble>
+          <preamble>The following is a non-normative example
+          response:</preamble>
 
           <artwork><![CDATA[
   HTTP/1.1 200 OK
@@ -390,8 +411,9 @@ the title) for use on http://www.rfc-editor.org/search.
         otherwise invalid token (or a token the protected resource is not
         allowed to know about) is not considered an error response by this
         specification. In these cases, the authorization server MUST instead
-        respond with an introspection response with the <spanx style="verb">active</spanx>
-        field set to <spanx style="verb">false</spanx> as described in <xref
+        respond with an introspection response with the <spanx
+        style="verb">active</spanx> field set to <spanx
+        style="verb">false</spanx> as described in <xref
         target="IntrospectionResponse"/>.</t>
       </section>
     </section>
@@ -400,15 +422,15 @@ the title) for use on http://www.rfc-editor.org/search.
       <section anchor="IntrospectionResponseRegistry"
                title="OAuth Token Introspection Response Registry">
         <t>This specification establishes the "OAuth Token Introspection
-	Response" registry.</t> 
+        Response" registry.</t>
 
         <t>OAuth registration client metadata names and descriptions are
-        registered by Specification Required <xref target="RFC5226"/>
-        after a two-week review period on the oauth-ext-review@ietf.org
-        mailing list, on the advice of one or more Designated Experts.
-        However, to allow for the allocation of names prior to publication,
-        the Designated Expert(s) may approve registration once they are
-        satisfied that such a specification will be published.</t>
+        registered by Specification Required <xref target="RFC5226"/> after a
+        two-week review period on the oauth-ext-review@ietf.org mailing list,
+        on the advice of one or more Designated Experts. However, to allow for
+        the allocation of names prior to publication, the Designated Expert(s)
+        may approve registration once they are satisfied that such a
+        specification will be published.</t>
 
         <t>Registration requests sent to the mailing list for review should
         use an appropriate subject (e.g., "Request to register OAuth Token
@@ -425,7 +447,8 @@ the title) for use on http://www.rfc-editor.org/search.
         review mailing list.</t>
 
         <section anchor="MetadataTemplate" title="Registration Template">
-          <t><list style="hanging">
+          <t>
+            <list style="hanging">
               <t hangText="Name:"><vspace/> The name requested (e.g.,
               "example"). This name is case sensitive. Names that match other
               registered names in a case insensitive manner SHOULD NOT be
@@ -437,23 +460,27 @@ the title) for use on http://www.rfc-editor.org/search.
               metadata value (e.g., "Example description").</t>
 
               <t hangText="Change controller:"><vspace/> For Standards Track
-              RFCs, state "IESG". For other documents, give the name of the responsible
-              party. Other details (e.g., postal address, email address, home
-              page URI) may also be included.</t>
+              RFCs, state "IESG". For other documents, give the name of the
+              responsible party. Other details (e.g., postal address, email
+              address, home page URI) may also be included.</t>
 
               <t hangText="Specification document(s):"><vspace/> Reference to
               the document(s) that specify the token endpoint authorization
               method, preferably including a URI that can be used to retrieve
               a copy of the document(s). An indication of the relevant
               sections may also be included but is not required.</t>
-            </list></t>
+            </list>
+          </t>
         </section>
 
         <section anchor="MetadataContents" title="Initial Registry Contents">
           <t>The initial contents of the "OAuth Token Introspection Response"
           registry are as follows:</t>
 
-          <t><?rfc subcompact="yes"?><list style="symbols">
+          <t>
+            <?rfc subcompact="yes"?>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">active</spanx></t>
 
               <t>Description: Token active status</t>
@@ -461,8 +488,11 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list><list style="symbols">
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">username</spanx></t>
 
               <t>Description: User identifier of the resource owner</t>
@@ -470,8 +500,11 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list><list style="symbols">
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">client_id</spanx></t>
 
               <t>Description: Client identifier of the client</t>
@@ -479,8 +512,11 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list><list style="symbols">
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">scope</spanx></t>
 
               <t>Description: Authorized scopes of the token</t>
@@ -488,8 +524,11 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list><list style="symbols">
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">token_type</spanx></t>
 
               <t>Description: Type of the token</t>
@@ -497,10 +536,13 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list></t>
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+          </t>
 
-          <t><list style="symbols">
+          <t>
+            <list style="symbols">
               <t>Name: <spanx style="verb">exp</spanx></t>
 
               <t>Description: Expiration timestamp of the token</t>
@@ -508,8 +550,11 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list><list style="symbols">
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">iat</spanx></t>
 
               <t>Description: Issuance timestamp of the token</t>
@@ -517,17 +562,24 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list><list style="symbols">
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">nbf</spanx></t>
 
-              <t>Description: Timestamp before which the token is not valid</t>
+              <t>Description: Timestamp before which the token is not
+              valid</t>
 
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list><list style="symbols">
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">sub</spanx></t>
 
               <t>Description: Subject of the token</t>
@@ -535,8 +587,11 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list><list style="symbols">
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">aud</spanx></t>
 
               <t>Description: Audience of the token</t>
@@ -544,8 +599,11 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list><list style="symbols">
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">iss</spanx></t>
 
               <t>Description: Issuer of the token</t>
@@ -553,8 +611,11 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list><list style="symbols">
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+
+            <list style="symbols">
               <t>Name: <spanx style="verb">jti</spanx></t>
 
               <t>Description: Unique identifier of the token</t>
@@ -562,8 +623,10 @@ the title) for use on http://www.rfc-editor.org/search.
               <t>Change Controller: IESG</t>
 
               <t>Specification Document(s): <xref
-              target="IntrospectionResponse"/> of RFC 7662 (this document).</t>
-            </list></t>
+              target="IntrospectionResponse"/> of RFC 7662 (this
+              document).</t>
+            </list>
+          </t>
         </section>
 
         <?rfc subcompact="no"?>
@@ -574,11 +637,10 @@ the title) for use on http://www.rfc-editor.org/search.
       <t>Since there are many different and valid ways to implement an OAuth
       2.0 system, there are consequently many ways for an authorization server
       to determine whether or not a token is currently <spanx
-      style="verb">active</spanx>. 
-    However, since resource servers using token introspection rely
-      on the authorization server to determine the state of a token, the
-      authorization server MUST perform all applicable checks against a
-      token's state. For instance: <list style="symbols">
+      style="verb">active</spanx>. However, since resource servers using token
+      introspection rely on the authorization server to determine the state of
+      a token, the authorization server MUST perform all applicable checks
+      against a token's state. For instance: <list style="symbols">
           <t>If the token can expire, the authorization server MUST determine
           whether or not the token has expired.</t>
 
@@ -624,13 +686,12 @@ the title) for use on http://www.rfc-editor.org/search.
       <t>Since the introspection endpoint takes in OAuth 2.0 tokens as
       parameters and responds with information used to make authorization
       decisions, the server MUST support Transport Layer Security (TLS) 1.2
-      <xref target="RFC5246" /> and MAY support additional transport-layer mechanisms
-      meeting its security requirements. When using TLS, the client or
-      protected resource MUST perform a TLS/SSL server certificate check, as
-      specified in <xref target="RFC6125" />. Implementation
-      security considerations can be found in <xref
-      target="RFC7525">Recommendations for Secure Use of TLS and
-      DTLS</xref>.</t>
+      <xref target="RFC5246"/> and MAY support additional transport-layer
+      mechanisms meeting its security requirements. When using TLS, the client
+      or protected resource MUST perform a TLS/SSL server certificate check,
+      as specified in <xref target="RFC6125"/>. Implementation security
+      considerations can be found in <xref target="BCP195">Recommendations for
+      Secure Use of TLS and DTLS</xref>.</t>
 
       <t>To prevent the values of access tokens from leaking into server-side
       logs via query parameters, an authorization server offering token
@@ -638,39 +699,39 @@ the title) for use on http://www.rfc-editor.org/search.
       endpoint and instead require the HTTP POST method to be used at the
       introspection endpoint.</t>
 
-      <t>To avoid disclosing the internal server state, an introspection response
-      for an inactive token SHOULD NOT contain any additional claims beyond
-      the required <spanx style="verb">active</spanx> claim (with its value
-      set to <spanx style="verb">false</spanx>).</t>
+      <t>To avoid disclosing the internal server state, an introspection
+      response for an inactive token SHOULD NOT contain any additional claims
+      beyond the required <spanx style="verb">active</spanx> claim (with its
+      value set to <spanx style="verb">false</spanx>).</t>
 
       <t>Since a protected resource MAY cache the response of the
       introspection endpoint, designers of an OAuth 2.0 system using this
       protocol MUST consider the performance and security trade-offs inherent
       in caching security information such as this. A less aggressive cache
       with a short timeout will provide the protected resource with more
-      up-to-date information (due to it needing to query the introspection endpoint
-      more often) at the cost of increased network traffic and load on the
-      introspection endpoint. A more aggressive cache with a longer duration
-      will minimize network traffic and load on the introspection endpoint,
-      but at the risk of stale information about the token. For example, the
-      token may be revoked while the protected resource is relying on the
-      value of the cached response to make authorization decisions. This
-      creates a window during which a revoked token could be used at the
-      protected resource. Consequently, an acceptable cache validity duration
-      needs to be carefully considered given the concerns and sensitivities of
-      the protected resource being accessed and the likelihood of a token
-      being revoked or invalidated in the interim period. Highly sensitive
-      environments can opt to disable caching entirely on the protected
-      resource to eliminate the risk of stale cached information entirely,
-      again at the cost of increased network traffic and server load. If the
-      response contains the <spanx style="verb">exp</spanx> parameter
-      (expiration), the response MUST NOT be cached beyond the time indicated
-      therein.</t>
+      up-to-date information (due to it needing to query the introspection
+      endpoint more often) at the cost of increased network traffic and load
+      on the introspection endpoint. A more aggressive cache with a longer
+      duration will minimize network traffic and load on the introspection
+      endpoint, but at the risk of stale information about the token. For
+      example, the token may be revoked while the protected resource is
+      relying on the value of the cached response to make authorization
+      decisions. This creates a window during which a revoked token could be
+      used at the protected resource. Consequently, an acceptable cache
+      validity duration needs to be carefully considered given the concerns
+      and sensitivities of the protected resource being accessed and the
+      likelihood of a token being revoked or invalidated in the interim
+      period. Highly sensitive environments can opt to disable caching
+      entirely on the protected resource to eliminate the risk of stale cached
+      information entirely, again at the cost of increased network traffic and
+      server load. If the response contains the <spanx
+      style="verb">exp</spanx> parameter (expiration), the response MUST NOT
+      be cached beyond the time indicated therein.</t>
 
       <t>An authorization server offering token introspection must be able to
       understand the token values being presented to it during this call. The
-      exact means by which this happens is an implementation detail and
-      is outside the scope of this specification. For unstructured tokens, this
+      exact means by which this happens is an implementation detail and is
+      outside the scope of this specification. For unstructured tokens, this
       could take the form of a simple server-side database query against a
       data store containing the context information for the token. For
       structured tokens, this could take the form of the server parsing the
@@ -704,46 +765,83 @@ the title) for use on http://www.rfc-editor.org/search.
       <t>Omitting privacy-sensitive information from an introspection response
       is the simplest way of minimizing privacy issues.</t>
     </section>
-
   </middle>
 
   <back>
     <references title="Normative References">
+      <?rfc include="reference.RFC.2119"?>
 
-<?rfc include="reference.RFC.2119"?>
-<?rfc include="reference.RFC.5226"?>
-<?rfc include="reference.RFC.5246"?>
-<?rfc include="reference.RFC.6125"?>
-<?rfc include="reference.RFC.6749"?>
-<?rfc include="reference.RFC.6750"?>
-<?rfc include="reference.RFC.7009"?>
-<?rfc include="reference.RFC.7159"?>
-<?rfc include="reference.RFC.7231"?>
-<?rfc include="reference.RFC.7519"?>
+      <?rfc include="reference.RFC.5226"?>
+
+      <?rfc include="reference.RFC.5246"?>
+
+      <?rfc include="reference.RFC.6125"?>
+
+      <?rfc include="reference.RFC.6749"?>
+
+      <?rfc include="reference.RFC.6750"?>
+
+      <?rfc include="reference.RFC.7009"?>
+
+      <?rfc include="reference.RFC.7159"?>
+
+      <?rfc include="reference.RFC.7231"?>
+
+      <?rfc include="reference.RFC.7519"?>
+
       <?rfc include='http://xml2rfc.ietf.org/public/rfc/bibxml4/reference.W3C.REC-html5-20141028.xml'?>
-
     </references>
 
     <references title="Informative References">
-
-<!-- [rfced] [TLS-BCP] has been published as RFC 7525.  The reference entry
+      <!-- [rfced] [TLS-BCP] has been published as RFC 7525.  The reference entry
 has been updated accordignly.  Please let us know any objections. 
 
-Original:
-   [TLS.BCP]  Sheffer, Y., Holz, R., and P. Saint-Andre,
-              "Recommendations for Secure Use of TLS and DTLS", November
-              2014.
-
-Current:
-   [RFC7525]  Sheffer, Y., Holz, R., and P. Saint-Andre,
-              "Recommendations for Secure Use of Transport Layer
-              Security (TLS) and Datagram Transport Layer Security
-              (DTLS)", BCP 195, RFC 7525, DOI 10.17487/RFC7525, May
-              2015, <http://www.rfc-editor.org/info/rfc7525>.
+[ Justin ] I've replaced the reference with the final BCP reference instead of the RFC.
 
 -->
-<?rfc include="reference.RFC.7525"?>
 
+      <reference anchor="BCP195"
+                 target="http://www.rfc-editor.org/info/bcp195">
+        <front>
+          <title>Recommendations for Secure Use of Transport Layer Security
+          (TLS) and Datagram Transport Layer Security (DTLS)</title>
+
+          <author fullname="Y. Sheffer" initials="Y." surname="Sheffer">
+            <organization/>
+          </author>
+
+          <author fullname="R. Holz" initials="R." surname="Holz">
+            <organization/>
+          </author>
+
+          <author fullname="P. Saint-Andre" initials="P."
+                  surname="Saint-Andre">
+            <organization/>
+          </author>
+
+          <date month="May" year="2015"/>
+
+          <abstract>
+            <t>Transport Layer Security (TLS) and Datagram Transport Layer
+            Security (DTLS) are widely used to protect data exchanged over
+            application protocols such as HTTP, SMTP, IMAP, POP, SIP, and
+            XMPP. Over the last few years, several serious attacks on TLS have
+            emerged, including attacks on its most commonly used cipher suites
+            and their modes of operation. This document provides
+            recommendations for improving the security of deployed services
+            that use TLS and DTLS. The recommendations are applicable to the
+            majority of use cases.</t>
+          </abstract>
+        </front>
+
+        <seriesInfo name="BCP" value="195"/>
+
+        <seriesInfo name="RFC" value="7525"/>
+
+        <seriesInfo name="DOI" value="10.17487/RFC7525"/>
+
+        <format octets="60283" type="ASCII"/>
+      </reference>
     </references>
 
     <section anchor="PoP" title="Use with Proof-of-Possession Tokens">
@@ -761,7 +859,6 @@ Current:
       specification.</t>
     </section>
 
-
     <section numbered="no" title="Acknowledgements">
       <t>Thanks to the OAuth Working Group and the User Managed Access Working
       Group for feedback and review of this document, and to the various
@@ -772,7 +869,5 @@ Current:
       Mike Schwartz, Prabath Siriwardena, Sarah Squire, and Hannes
       Tschofennig.</t>
     </section>
-
-
   </back>
 </rfc>
