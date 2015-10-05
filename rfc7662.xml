@@ -229,8 +229,9 @@ the title) for use on http://www.rfc-editor.org/search.
         </figure>
 
         <t>In this example, the protected resource uses a client identifier
-        and client secret to authenticate itself to the introspection endpoint
-        as well as send a token type hint.</t>
+        and client secret to authenticate itself to the introspection
+        endpoint. The protected resource also sends a token type hint
+        indicating that it is inquiring about an access token.</t>
 
         <figure>
           <preamble>The following is a non-normative example
@@ -333,9 +334,9 @@ the title) for use on http://www.rfc-editor.org/search.
 
         <t>The response MAY be cached by the protected resource to improve
         performance and reduce load on the introspection endpoint, but at the
-        cost of liveness of the information used by the protected resource.
-        See <xref target="Security"/> for more information regarding the trade
-        off when the response is cached.</t>
+        cost of liveness of the information used by the protected resource to
+        make authorization decisions. See <xref target="Security"/> for more
+        information regarding the trade off when the response is cached.</t>
 
         <t>For example, the following response contains a set of information
         about an active token:</t>
@@ -374,13 +375,11 @@ the title) for use on http://www.rfc-editor.org/search.
         style="verb">false</spanx>. Note that to avoid disclosing too much of
         the authorization server's state to a third party, the authorization
         server SHOULD NOT include any additional information about an inactive
-        token, including why the token is inactive. For example, the response
-        for a token that has been revoked or is otherwise invalid would look
-        like the following:</t>
+        token, including why the token is inactive.</t>
 
         <figure>
-          <preamble>The following is a non-normative example
-          response:</preamble>
+          <preamble>The following is a non-normative example response for a
+          token that has been revoked or is otherwise invalid:</preamble>
 
           <artwork><![CDATA[
   HTTP/1.1 200 OK
@@ -641,7 +640,8 @@ the title) for use on http://www.rfc-editor.org/search.
       style="verb">active</spanx>. However, since resource servers using token
       introspection rely on the authorization server to determine the state of
       a token, the authorization server MUST perform all applicable checks
-      against a token's state. For instance: <list style="symbols">
+      against a token's state. For instance, these tests include the
+      following: <list style="symbols">
           <t>If the token can expire, the authorization server MUST determine
           whether or not the token has expired.</t>
 
@@ -700,10 +700,10 @@ the title) for use on http://www.rfc-editor.org/search.
       endpoint and instead require the HTTP POST method to be used at the
       introspection endpoint.</t>
 
-      <t>To avoid disclosing the internal server state, an introspection
-      response for an inactive token SHOULD NOT contain any additional claims
-      beyond the required <spanx style="verb">active</spanx> claim (with its
-      value set to <spanx style="verb">false</spanx>).</t>
+      <t>To avoid disclosing the internal state of the authorization server,
+      an introspection response for an inactive token SHOULD NOT contain any
+      additional claims beyond the required <spanx style="verb">active</spanx>
+      claim (with its value set to <spanx style="verb">false</spanx>).</t>
 
       <t>Since a protected resource MAY cache the response of the
       introspection endpoint, designers of an OAuth 2.0 system using this
@@ -852,12 +852,13 @@ has been updated accordignly.  Please let us know any objections.
       token for submission to the introspection service. However, for
       proof-of-possession style tokens, the protected resource will have only
       a token identifier used during the request, along with the cryptographic
-      signature on the request. The protected resource would be able to submit
-      the token identifier to the authorization server's token endpoint to
-      obtain the necessary key information needed to validate the signature on
-      the request. The details of this usage are outside the scope of this
-      specification and will be defined in an extension to this
-      specification.</t>
+      signature on the request. To validate the signature on the request, the
+      protected resource could be able to submit the token identifier to the
+      authorization server's introspection endpoint to obtain the necessary
+      key information needed for that token. The details of this usage are
+      outside the scope of this specification and will be defined in an
+      extension to this specification in concert with the definition of
+      proof-of-posession tokens.</t>
     </section>
 
     <section numbered="no" title="Acknowledgements">
