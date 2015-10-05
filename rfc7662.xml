@@ -96,9 +96,9 @@ the title) for use on http://www.rfc-editor.org/search.
 
       <section anchor="Notation" title="Notational Conventions">
         <t>The key words 'MUST', 'MUST NOT', 'REQUIRED', 'SHALL', 'SHALL NOT',
-        'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'MAY', and 'OPTIONAL' in this
-        document are to be interpreted as described in <xref
-        target="RFC2119"/>.</t>
+        'SHOULD', 'SHOULD NOT', 'RECOMMENDED', 'NOT RECOMMENDED', 'MAY', and
+        'OPTIONAL' in this document are to be interpreted as described in
+        <xref target="RFC2119"/>.</t>
 
         <t>Unless otherwise noted, all the protocol parameter names and values
         are case sensitive.</t>
