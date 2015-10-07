@@ -673,7 +673,7 @@ the title) for use on http://www.rfc-editor.org/search.
       server MUST require authentication of protected resources that need to
       access the introspection endpoint and SHOULD require protected resources
       to be specifically authorized to call the introspection endpoint. The
-      specifics of this authentication credentials are out of scope of this
+      specifics of such authentication credentials are out of scope of this
       specification, but commonly these credentials could take the form of any
       valid client authentication mechanism used with the token endpoint, an
       OAuth 2.0 access token, or other HTTP authorization or authentication
