@@ -1,0 +1,564 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="3"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+<rfc category="std" docName="draft-ietf-oauth-signed-http-request-01.txt"
+     ipr="trust200902">
+  <front>
+    <title abbrev="HTTP Signed Messages">A Method for Signing an HTTP Requests
+    for OAuth</title>
+
+    <author fullname="Justin Richer" initials="J." role="editor"
+            surname="Richer">
+      <address>
+        <email>ietf@justin.richer.org</email>
+      </address>
+    </author>
+
+    <author fullname="John Bradley" initials="J." surname="Bradley">
+      <organization abbrev="Ping Identity">Ping Identity</organization>
+
+      <address>
+        <email>ve7jtb@ve7jtb.com</email>
+
+        <uri>http://www.thread-safe.com/</uri>
+      </address>
+    </author>
+
+    <author fullname="Hannes Tschofenig" initials="H." surname="Tschofenig">
+      <organization>ARM Limited</organization>
+
+      <address>
+        <postal>
+          <street/>
+
+          <city/>
+
+          <code/>
+
+          <country>Austria</country>
+        </postal>
+
+        <phone/>
+
+        <email>Hannes.Tschofenig@gmx.net</email>
+
+        <uri>http://www.tschofenig.priv.at</uri>
+      </address>
+    </author>
+
+    <date day="03" month="February" year="2016"/>
+
+    <area>Security</area>
+
+    <workgroup>OAuth Working Group</workgroup>
+
+    <abstract>
+      <t>This document a method for offering data origin authentication and
+      integrity protection of HTTP requests. To convey the relevant data items
+      in the request a JSON-based encapsulation is used and the JSON Web
+      Signature (JWS) technique is re-used. JWS offers integrity protection
+      using symmetric as well as asymmetric cryptography.</t>
+    </abstract>
+  </front>
+
+  <middle>
+    <section title="Introduction">
+      <t>In order to prove possession of an access token and its associated
+      key, an OAuth 2.0 client needs to compute some cryptographic function
+      and present the results to the protected resource. The protected
+      resource then needs to verify the cryptographic function and compare
+      that to the expected keys associated with the access token. This is in
+      addition to the normal token protections provided by a <xref
+      target="RFC6750">bearer token</xref> and transport layer security
+      (TLS).</t>
+
+      <t>Furthermore, it is desirable to bind the signature to the HTTP
+      request. Ideally, this should be done without replicating the
+      information already present in the HTTP request more than required.
+      However, many HTTP application frameworks insert extra headers, query
+      parameters, and otherwise manipulate the HTTP request on its way from
+      the web server into the application code itself. It is the goal of this
+      draft to have a signature protection mechanism that is sufficiently
+      robust against such deployment constraints while still providing
+      sufficient security benefits.</t>
+
+      <t>The keying material required for this signature calculation is
+      distributed via mechanisms described in companion documents (see <xref
+      target="I-D.ietf-oauth-pop-key-distribution"/> and <xref
+      target="I-D.ietf-oauth-pop-architecture"/>). The JSON Web Signature
+      (JWS) specification <xref target="RFC7515"/> is used for computing a
+      digital signature (which uses asymmetric cryptography) or a keyed
+      message digest (in case of symmetric cryptography).</t>
+
+      <t>The mechanism described in this document assumes that a client is in
+      possession of keying material that is tied to the access token creates a
+      JSON object, signs it using JWS, and issues an request to a resource
+      server for access to a protected resource.</t>
+    </section>
+
+    <section title="Terminology">
+      <t>The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+      "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+      "OPTIONAL" in this document are to be interpreted as described in <xref
+      target="RFC2119">RFC 2119</xref>.</t>
+
+      <t>Other terms such as "client", "authorization server", "access token",
+      and "protected resource" are inherited from <xref target="RFC6749">OAuth
+      2.0</xref>.</t>
+
+      <t>We use the term 'sign' (or 'signature') to denote both a keyed
+      message digest and a digital signature operation.</t>
+    </section>
+
+    <section title="Generating a JSON Object from an HTTP Request">
+      <t>This specification uses JSON Web Signatures <xref target="RFC7515"/>
+      to protect the access token and, optionally, parts of the request.</t>
+
+      <t>This section describes how to generate a <xref
+      target="RFC7159">JSON</xref> object from the HTTP request. Each value
+      below is included as a member of the JSON object at the top level.</t>
+
+      <t><list style="hanging">
+          <t hangText="at">REQUIRED. The access token value. This string is
+          assumed to have no particular format or structure and remains opaque
+          to the client.</t>
+
+          <t hangText="ts">RECOMMENDED. The timestamp, provides replay
+          protection of the signed JSON object. Its value MUST be a number
+          containing an integer value representing number of whole integer
+          seconds from midnight, January 1, 1970 GMT.</t>
+
+          <t hangText="m">OPTIONAL. The HTTP Method used to make this request.
+          This MUST be the uppercase HTTP verb as a JSON string.</t>
+
+          <t hangText="u">OPTIONAL. The HTTP URL host component as a JSON
+          string. This MAY include the port separated from the host by a colon
+          in host:port format.</t>
+
+          <t hangText="p">OPTIONAL. The HTTP URL path component of the request
+          as an HTTP string.</t>
+
+          <t hangText="q">OPTIONAL. The hashed HTTP URL query parameter map of
+          the request as a two-part JSON array. The first part of this array
+          is a JSON array listing all query parameters that were used in the
+          calculation of the hash in the order that they were added to the
+          hashed value as described below. The second part of this array is a
+          JSON string containing the Base64URL encoded hash itself, calculated
+          as described below.</t>
+
+          <t hangText="h">OPTIONAL. The hashed HTTP request headers as a
+          two-part JSON array. The first part of this array is a JSON array
+          listing all headers that were used in the calculation of the hash in
+          the order that they were added to the hashed value as described
+          below. The second part of this array is a JSON string containing the
+          Base64URL encoded hash itself, calculated as described below.</t>
+
+          <t hangText="b">OPTIONAL. The base64URL encoded hash of the HTTP
+          Request body, calculated as the SHA256 of the byte array of the
+          body</t>
+        </list></t>
+
+      <t>All hashes SHALL be calculated using the SHA256 algorithm. [[ Note to
+      WG: do we want crypto agility here? If so how do we signal this ]]</t>
+
+      <t>The JSON object is signed using the algorithm appropriate to the
+      associated access token key, usually communicated as part of <xref
+      target="I-D.ietf-oauth-pop-key-distribution">key
+      distribution</xref>.</t>
+
+      <section title="Calculating the query parameter list and hash">
+        <t>To generate the query parameter list and hash, the client creates
+        two data objects: an ordered list of strings to hold the query
+        parameter names and a string buffer to hold the data to be hashed.</t>
+
+        <t>The client iterates through all query parameters in whatever order
+        it chooses and for each query parameter it does the following:</t>
+
+        <t><list style="numbers">
+            <t>Adds the name of the query parameter to the end of the
+            list.</t>
+
+            <t>Encodes the name and value of the query parameter as
+            "name=value" and appends it to the string buffer separated by the
+            ampersand <spanx style="verb">&amp;</spanx> character.</t>
+          </list>Repeated parameter names are processed separately with no
+        special handling. Parameters MAY be skipped by the client if they are
+        not required (or desired) to be covered by the signature.</t>
+
+        <t>The client then calculates the hash over the resulting string
+        buffer. The list and the hash result are added to a list as the value
+        of the "p" member.</t>
+
+        <t>For example, the query parameter set of "b=bar", "a=foo", "c=duck"
+        is concatenated into the string:</t>
+
+        <figure>
+          <artwork><![CDATA[b=bar&a=foo&c=duck]]></artwork>
+        </figure>
+
+        <t>When added to the JSON structure using this process, the results
+        are:</t>
+
+        <figure>
+          <artwork><![CDATA["p": [["b", "a", "c"], "u4LgkGUWhP9MsKrEjA4dizIllDXluDku6ZqCeyuR-JY"]]]></artwork>
+        </figure>
+      </section>
+
+      <section title="Calculating the header list and hash">
+        <t>To generate the header list and hash, the client creates two data
+        objects: an ordered list of strings to hold the header names and a
+        string buffer to hold the data to be hashed.</t>
+
+        <t>The client iterates through all query parameters in whatever order
+        it chooses and for each query parameter it does the following:</t>
+
+        <t><list style="numbers">
+            <t>Lowercases the header name.</t>
+
+            <t>Adds the name of the header to the end of the list.</t>
+
+            <t>Encodes the name and value of the header as "name: value" and
+            appends it to the string buffer separated by a newline <spanx
+            style="verb">\n</spanx> character.</t>
+          </list>Repeated header names are processed separately with no
+        special handling. Headers MAY be skipped by the client if they are not
+        required (or desired) to be covered by the signature.</t>
+
+        <t>The client then calculates the hash over the resulting string
+        buffer. The list and the hash result are added to a list as the value
+        of the "h" member.</t>
+
+        <t>For example, the headers "Content-Type: application/json" and
+        "Etag: 742-3u8f34-3r2nvv3" are concatenated into the string:</t>
+
+        <figure>
+          <artwork><![CDATA[content-type: application/json
+etag: 742-3u8f34-3r2nvv3]]></artwork>
+        </figure>
+
+        <figure>
+          <artwork><![CDATA["h": [["content-type", "etag"], "bZA981YJBrPlIzOvplbu3e7ueREXXr38vSkxIBYOaxI"]]]></artwork>
+        </figure>
+      </section>
+    </section>
+
+    <section title="Sending the signed object">
+      <t>In order to send the signed object to the protected resource, the
+      client includes it in one of the following three places.</t>
+
+      <section title="HTTP Authorization header">
+        <t>The client SHOULD send the signed object to the protected resource
+        in the Authorization header. The value of the signed object in JWS
+        compact form is appended to the Authorization header as a PoP value.
+        This is the preferred method. Note that if this method is used, the
+        Authorization header MUST NOT be included in the protected elements of
+        the signed object.</t>
+
+        <figure>
+          <artwork><![CDATA[GET /resource/foo
+Authorization: PoP eyJ....]]></artwork>
+        </figure>
+      </section>
+
+      <section title="HTTP Form body">
+        <t>If the client is sending the request as a form-encoded HTTP message
+        with parameters in the body, the client MAY send the signed object as
+        part of that form body. The value of the signed object in JWS compact
+        form is sent as the form parameter pop_access_token. Note that if this
+        method is used, the body hash cannot be included in the protected
+        elements of the signed object.</t>
+
+        <figure>
+          <artwork><![CDATA[POST /resource
+Content-type: application/www-form-encoded
+
+pop_access_token=eyJ....]]></artwork>
+        </figure>
+      </section>
+
+      <section title="HTTP Query parameter">
+        <t>If neither the Authorization header nor the form-encoded body
+        parameter are available to the client, the client MAY send the signed
+        object as a query parameter. The value of the signed object in JWS
+        compact form is sent as the query parameter pop_access_token. Note
+        that if this method is used, the pop_access_token parameter MUST NOT
+        be included in the protected elements of the signed object.</t>
+
+        <figure>
+          <artwork><![CDATA[GET /resource?pop_access_token=eyJ....]]></artwork>
+        </figure>
+      </section>
+    </section>
+
+    <section title="Validating the request">
+      <t>Just like with a <xref target="RFC6750">bearer token</xref>, while
+      the access token value included in the signed object is opaque to the
+      client, it MUST be understood by the protected resource in order to
+      fulfill the request. Also like a bearer token, the protected resource
+      traditionally has several methods at its disposal for understanding the
+      access token. It can look up the token locally (such as in a database),
+      it can parse a structured token (such as <xref
+      target="RFC7519">JWT</xref>), or it can use a service to look up token
+      information (such as <xref target="RFC7662">introspection</xref>).
+      However token information is looked up, the protected resource MUST have
+      access to the keying material required to validate the signature of the
+      incoming request. Validation of the signature is done using normal JWS
+      validation for the signature and key type. </t>
+
+      <t>Additionally, in order to trust any of the hashed components of the
+      HTTP request, the protected resource MUST re-create and verify a hash
+      for each component as described below. This process is a mirror of the
+      process used to create the hashes in the first place, with a mind toward
+      the fact that order may have changed and that elements may have been
+      added or deleted. The protected resource MUST similarly compare the
+      replicated values included in various JSON fields with the corresponding
+      actual values from the request. Failure to-do so will allow an attacker
+      to modify the underlying request while at the same time having the
+      application layer verify the signature correctly.</t>
+
+      <section title="Validating the query parameter list and hash">
+        <t>The client has at its disposal a map that indexes the query
+        parameter names to the values given. The client creates a string
+        buffer for calculating the hash. The client then iterates through the
+        "list" portion of the "p" parameter. For each item in the list (in the
+        order of the list) it does the following:</t>
+
+        <t><list style="numbers">
+            <t>Fetch the value of the parameter from the HTTP request query
+            parameter map. If a parameter is found in the list of signed
+            parameters but not in the map, the validation fails.</t>
+
+            <t>Encode the parameter as "name=value" and concatenate it to the
+            end of the string buffer, separated by an ampersand character.</t>
+          </list></t>
+
+        <t>The client calculates the hash of the string buffer and base64url
+        encodes it. The protected resource compares that string to the string
+        passed in as the hash. If the two match, the hash validates, and all
+        named parameters and their values are considered covered by the
+        signature.</t>
+
+        <t>There MAY be additional query parameters that are not listed in the
+        list and are therefore not covered by the signature. The client MUST
+        decide whether or not to accept a request with these uncovered
+        parameters.</t>
+      </section>
+
+      <section title="Validating the header list and hash">
+        <t>The client has at its disposal a map that indexes the header names
+        to the values given. The client creates a string buffer for
+        calculating the hash. The client then iterates through the "list"
+        portion of the "h" parameter. For each item in the list (in the order
+        of the list) it does the following:</t>
+
+        <t><list style="numbers">
+            <t>Fetch the value of the header from the HTTP request header map.
+            If a header is found in the list of signed parameters but not in
+            the map, the validation fails.</t>
+
+            <t>Encode the parameter as "name: value" and concatenate it to the
+            end of the string buffer, separated by a newline character.</t>
+          </list></t>
+
+        <t>The client calculates the hash of the string buffer and base64url
+        encodes it. The protected resource compares that string to the string
+        passed in as the hash. If the two match, the hash validates, and all
+        named headers and their values are considered covered by the
+        signature.</t>
+
+        <t>There MAY be additional headers that are not listed in the list and
+        are therefore not covered by the signature. The client MUST decide
+        whether or not to accept a request with these uncovered headers.</t>
+      </section>
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+      <section title="The 'pop' OAuth Access Token Type">
+        <t>Section 11.1 of <xref target="RFC6749"/> defines the OAuth Access
+        Token Type Registry and this document adds another token type to this
+        registry.</t>
+
+        <t><list style="hanging">
+            <t hangText="Type name:">pop</t>
+
+            <t
+            hangText="Additional Token Endpoint Response Parameters:">(none)</t>
+
+            <t hangText="HTTP Authentication Scheme(s):">Proof-of-possession
+            access token for use with OAuth 2.0</t>
+
+            <t hangText="Change controller:">IETF</t>
+
+            <t hangText="Specification document(s):">[[ this document ]]</t>
+          </list></t>
+      </section>
+
+      <section title="JSON Web Signature and Encryption Type Values Registration">
+        <t>This specification registers the <spanx style="verb">pop</spanx>
+        type value in the IANA JSON Web Signature and Encryption Type Values
+        registry <xref target="RFC7515"/>: <list style="symbols">
+            <t>"typ" Header Parameter Value: <spanx style="verb">pop</spanx></t>
+
+            <t>Abbreviation for MIME Type: None</t>
+
+            <t>Change Controller: IETF</t>
+
+            <t>Specification Document(s): [[ this document ]]</t>
+          </list></t>
+      </section>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <section title="Offering Confidentiality Protection for Access to Protected       Resources">
+        <t>This specification can be used with and without Transport Layer
+        Security (TLS).</t>
+
+        <t>Without TLS this protocol provides a mechanism for verifying the
+        integrity of requests, it provides no confidentiality protection.
+        Consequently, eavesdroppers will have full access to communication
+        content and any further messages exchanged between the client and the
+        resource server. This could be problematic when data is exchanged that
+        requires care, such as personal data.</t>
+
+        <t>When TLS is used then confidentiality of the transmission can be
+        ensured between endpoints, including both the request and the
+        response. The use of TLS in combination with the signed HTTP request
+        mechanism is highly recommended to ensure the confidentiality of the
+        data returned from the protected resource.</t>
+      </section>
+
+      <section title="Plaintext Storage of Credentials">
+        <t>The mechanism described in this document works similar to many
+        three party authentication and key exchange mechanisms. In order to
+        compute the signature over the HTTP request, the client must have
+        access to a key bound to the access token in plaintext form. If an
+        attacker were to gain access to these stored secrets at the client or
+        (in case of symmetric keys) at the resource server they would be able
+        to perform any action on behalf of any client just as if they had
+        stolen a bearer token.</t>
+
+        <t>It is therefore paramount to the security of the protocol that the
+        private keys associated with the access tokens are protected from
+        unauthorized access.</t>
+      </section>
+
+      <section title="Entropy of Keys">
+        <t>Unless TLS is used between the client and the resource server,
+        eavesdroppers will have full access to requests sent by the client.
+        They will thus be able to mount off-line brute-force attacks to
+        attempt recovery of the session key or private key used to compute the
+        keyed message digest or digital signature, respectively.</t>
+
+        <t>This specification assumes that the keying material for use with
+        the described HTTP signing mechanism has been distributed via other
+        mechanisms, such as <xref
+        target="I-D.ietf-oauth-pop-key-distribution"/>. Hence, it is the
+        responsibility of the authorization server and or the client to be
+        careful when generating fresh and unique keys with sufficient entropy
+        to resist such attacks for at least the length of time that the
+        session keys (and the access tokens) are valid.</t>
+
+        <t>For example, if the key bound to the access token is valid for one
+        day, authorization servers must ensure that it is not possible to
+        mount a brute force attack that recovers that key in less than one
+        day. Of course, servers are urged to err on the side of caution, and
+        use the longest key length reasonable.</t>
+      </section>
+
+      <section title="Denial of Service">
+        <t>This specification includes a number of features which may make
+        resource exhaustion attacks against resource servers possible. For
+        example, a resource server may need to need to the resource server has
+        to process the incoming request, verify the access token, perform
+        signature verification, and might have (in certain circumstances)
+        consult back-end databases or the authorization server before granting
+        access to the protected resource. Many of these actions are shared
+        with bearer tokens, but the additional cryptographic overhead of
+        validating the signed request needs to be taken into consideration
+        with deployment of this specification.</t>
+
+        <t>An attacker may exploit this to perform a denial of service attack
+        by sending a large number of invalid requests to the server. The
+        computational overhead of verifying the keyed message digest alone is
+        not likely sufficient to mount a denial of service attack. To help
+        combat this, it is RECOMMENDED that the protected resource validate
+        the access token (contained in the <spanx style="verb">at</spanx>
+        member of the signed structure) before performing any cryptographic
+        verification calculations.</t>
+      </section>
+
+      <section title="Protecting HTTP Headers and Query Parameters">
+        <t>This specification provides flexibility for selectively protecting
+        header fields and even the body of the message. Since all components
+        of the HTTP request are only optionally protected by this method, and
+        even some components may be protected only in part (e.g., some headers
+        but not others) it is up to protected resource developers to verify
+        that any vital parameters in a request are actually covered by the
+        signature.</t>
+
+        <t>The application verifying this signature MUST NOT assume that any
+        particular parameter is appropriately covered by the signature unless
+        it is included in the signed structure and the hash is verified. Any
+        applications that are sensitive of header or query parameter order
+        MUST verify the order of the parameters on their own. The application
+        MUST also compare the values in the JSON container with the actual
+        parameters received with the HTTP request (using a direct comparison
+        or a hash calculation, as appropriate). Failure to make this
+        comparison will render the signature mechanism useless for protecting
+        these elements.</t>
+
+        <t>The behavior of repeated query parameters or repeated HTTP headers
+        is undefined by this specification. If a header or query parameter is
+        repeated on either the outgoing request from the client or the
+        incoming request to the protected resource, that query parameter or
+        header name MUST NOT be covered by the hash and signature. [[ Note to
+        the WG: is this something we need to cover? ]]</t>
+
+        <t>This specification records the order in which query parameters and
+        headers are hashed, but it does not guarantee that order is preserved
+        between the client and protected resource.</t>
+      </section>
+    </section>
+
+    <section title="Privacy Considerations">
+      <t>This specification addresses machine to machine communications and
+      raises no privacy considerations beyond existing OAuth transactions.</t>
+    </section>
+
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>The authors thank the OAuth Working Group for input into this
+      work.</t>
+    </section>
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include="reference.RFC.2119"?>
+
+      <?rfc include="reference.RFC.7519"?>
+
+      <?rfc include="reference.RFC.7515"?>
+
+      <?rfc include="reference.RFC.7159"?>
+
+      <?rfc include="reference.RFC.7662"?>
+
+      <?rfc include="reference.RFC.6750"?>
+
+      <?rfc include="reference.RFC.6749"?>
+
+      <?rfc include="reference.I-D.ietf-oauth-pop-key-distribution"?>
+
+      <?rfc include="reference.I-D.ietf-oauth-pop-architecture"?>
+    </references>
+  </back>
+</rfc>
