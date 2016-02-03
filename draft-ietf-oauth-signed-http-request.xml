@@ -13,7 +13,7 @@
 <rfc category="std" docName="draft-ietf-oauth-signed-http-request-01.txt"
      ipr="trust200902">
   <front>
-    <title abbrev="HTTP Signed Messages">A Method for Signing an HTTP Requests
+    <title abbrev="HTTP Signed Messages">A Method for Signing HTTP Requests
     for OAuth</title>
 
     <author fullname="Justin Richer" initials="J." role="editor"
@@ -74,9 +74,9 @@
     <section title="Introduction">
       <t>In order to prove possession of an access token and its associated
       key, an OAuth 2.0 client needs to compute some cryptographic function
-      and present the results to the protected resource. The protected
-      resource then needs to verify the cryptographic function and compare
-      that to the expected keys associated with the access token. This is in
+      and present the results to the protected resource as a signature. The
+      protected resource then needs to verify the signature and compare that
+      to the expected keys associated with the access token. This is in
       addition to the normal token protections provided by a <xref
       target="RFC6750">bearer token</xref> and transport layer security
       (TLS).</t>
@@ -91,8 +91,8 @@
       robust against such deployment constraints while still providing
       sufficient security benefits.</t>
 
-      <t>The keying material required for this signature calculation is
-      distributed via mechanisms described in companion documents (see <xref
+      <t>The key required for this signature calculation is distributed via
+      mechanisms described in companion documents (see <xref
       target="I-D.ietf-oauth-pop-key-distribution"/> and <xref
       target="I-D.ietf-oauth-pop-architecture"/>). The JSON Web Signature
       (JWS) specification <xref target="RFC7515"/> is used for computing a
@@ -100,9 +100,10 @@
       message digest (in case of symmetric cryptography).</t>
 
       <t>The mechanism described in this document assumes that a client is in
-      possession of keying material that is tied to the access token creates a
-      JSON object, signs it using JWS, and issues an request to a resource
-      server for access to a protected resource.</t>
+      possession of an access token and asociated key. That client then
+      creates a JSON object including the access token, signs the JSON object
+      using JWS, and issues an request to a resource server for access to a
+      protected resource using the signed object as its authorization.</t>
     </section>
 
     <section title="Terminology">
@@ -132,10 +133,10 @@
           assumed to have no particular format or structure and remains opaque
           to the client.</t>
 
-          <t hangText="ts">RECOMMENDED. The timestamp, provides replay
-          protection of the signed JSON object. Its value MUST be a number
-          containing an integer value representing number of whole integer
-          seconds from midnight, January 1, 1970 GMT.</t>
+          <t hangText="ts">RECOMMENDED. The timestamp. This integer provides
+          replay protection of the signed JSON object. Its value MUST be a
+          number containing an integer value representing number of whole
+          integer seconds from midnight, January 1, 1970 GMT.</t>
 
           <t hangText="m">OPTIONAL. The HTTP Method used to make this request.
           This MUST be the uppercase HTTP verb as a JSON string.</t>
@@ -310,9 +311,10 @@ pop_access_token=eyJ....]]></artwork>
       target="RFC7519">JWT</xref>), or it can use a service to look up token
       information (such as <xref target="RFC7662">introspection</xref>).
       However token information is looked up, the protected resource MUST have
-      access to the keying material required to validate the signature of the
-      incoming request. Validation of the signature is done using normal JWS
-      validation for the signature and key type. </t>
+      access to the key associated with the access token, which is required to
+      validate the signature of the incoming request. Validation of the
+      signature is done using normal JWS validation for the signature and key
+      type.</t>
 
       <t>Additionally, in order to trust any of the hashed components of the
       HTTP request, the protected resource MUST re-create and verify a hash
@@ -321,7 +323,7 @@ pop_access_token=eyJ....]]></artwork>
       the fact that order may have changed and that elements may have been
       added or deleted. The protected resource MUST similarly compare the
       replicated values included in various JSON fields with the corresponding
-      actual values from the request. Failure to-do so will allow an attacker
+      actual values from the request. Failure to do so will allow an attacker
       to modify the underlying request while at the same time having the
       application layer verify the signature correctly.</t>
 
@@ -437,9 +439,9 @@ pop_access_token=eyJ....]]></artwork>
       </section>
 
       <section title="Plaintext Storage of Credentials">
-        <t>The mechanism described in this document works similar to many
-        three party authentication and key exchange mechanisms. In order to
-        compute the signature over the HTTP request, the client must have
+        <t>The mechanism described in this document works in a similar way to
+        many three-party authentication and key exchange mechanisms. In order
+        to compute the signature over the HTTP request, the client must have
         access to a key bound to the access token in plaintext form. If an
         attacker were to gain access to these stored secrets at the client or
         (in case of symmetric keys) at the resource server they would be able
@@ -458,9 +460,8 @@ pop_access_token=eyJ....]]></artwork>
         attempt recovery of the session key or private key used to compute the
         keyed message digest or digital signature, respectively.</t>
 
-        <t>This specification assumes that the keying material for use with
-        the described HTTP signing mechanism has been distributed via other
-        mechanisms, such as <xref
+        <t>This specification assumes that the key used herein has been
+        distributed via other mechanisms, such as <xref
         target="I-D.ietf-oauth-pop-key-distribution"/>. Hence, it is the
         responsibility of the authorization server and or the client to be
         careful when generating fresh and unique keys with sufficient entropy
@@ -471,20 +472,20 @@ pop_access_token=eyJ....]]></artwork>
         day, authorization servers must ensure that it is not possible to
         mount a brute force attack that recovers that key in less than one
         day. Of course, servers are urged to err on the side of caution, and
-        use the longest key length reasonable.</t>
+        use the longest key length possible within reason.</t>
       </section>
 
       <section title="Denial of Service">
         <t>This specification includes a number of features which may make
         resource exhaustion attacks against resource servers possible. For
-        example, a resource server may need to need to the resource server has
-        to process the incoming request, verify the access token, perform
-        signature verification, and might have (in certain circumstances)
-        consult back-end databases or the authorization server before granting
-        access to the protected resource. Many of these actions are shared
-        with bearer tokens, but the additional cryptographic overhead of
-        validating the signed request needs to be taken into consideration
-        with deployment of this specification.</t>
+        example, a resource server may need to process the incoming request,
+        verify the access token, perform signature verification, and might (in
+        certain circumstances) have to consult back-end databases or the
+        authorization server before granting access to the protected resource.
+        Many of these actions are shared with bearer tokens, but the
+        additional cryptographic overhead of validating the signed request
+        needs to be taken into consideration with deployment of this
+        specification.</t>
 
         <t>An attacker may exploit this to perform a denial of service attack
         by sending a large number of invalid requests to the server. The
@@ -496,14 +497,14 @@ pop_access_token=eyJ....]]></artwork>
         verification calculations.</t>
       </section>
 
-      <section title="Protecting HTTP Headers and Query Parameters">
-        <t>This specification provides flexibility for selectively protecting
-        header fields and even the body of the message. Since all components
-        of the HTTP request are only optionally protected by this method, and
-        even some components may be protected only in part (e.g., some headers
-        but not others) it is up to protected resource developers to verify
-        that any vital parameters in a request are actually covered by the
-        signature.</t>
+      <section title="Validating the integrity of HTTP Headers and Query Parameters">
+        <t>This specification provides flexibility for selectively validating
+        the integrity of header fields and message bodies. Since all
+        components of the HTTP request are only optionally validated by this
+        method, and even some components may be validated only in part (e.g.,
+        some headers but not others) it is up to protected resource developers
+        to verify that any vital parameters in a request are actually covered
+        by the signature.</t>
 
         <t>The application verifying this signature MUST NOT assume that any
         particular parameter is appropriately covered by the signature unless
