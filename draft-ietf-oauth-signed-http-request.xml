@@ -197,7 +197,7 @@
 
         <t>The client then calculates the hash over the resulting string
         buffer. The list and the hash result are added to a list as the value
-        of the "p" member.</t>
+        of the "q" member.</t>
 
         <t>For example, the query parameter set of "b=bar", "a=foo", "c=duck"
         is concatenated into the string:</t>
@@ -210,7 +210,7 @@
         are:</t>
 
         <figure>
-          <artwork><![CDATA["p": [["b", "a", "c"], "u4LgkGUWhP9MsKrEjA4dizIllDXluDku6ZqCeyuR-JY"]]]></artwork>
+          <artwork><![CDATA["q": [["b", "a", "c"], "u4LgkGUWhP9MsKrEjA4dizIllDXluDku6ZqCeyuR-JY"]]]></artwork>
         </figure>
       </section>
 
