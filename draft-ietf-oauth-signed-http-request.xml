@@ -10,7 +10,7 @@
 <?rfc inline="yes"?>
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
-<rfc category="std" docName="draft-ietf-oauth-signed-http-request-02"
+<rfc category="std" docName="draft-ietf-oauth-signed-http-request-03"
      ipr="trust200902">
   <front>
     <title abbrev="HTTP Signed Messages">A Method for Signing HTTP Requests
@@ -55,7 +55,7 @@
       </address>
     </author>
 
-    <date day="03" month="February" year="2016"/>
+    <date day="08" month="August" year="2016"/>
 
     <area>Security</area>
 
@@ -103,7 +103,9 @@
       possession of an access token and asociated key. That client then
       creates a JSON object including the access token, signs the JSON object
       using JWS, and issues an request to a resource server for access to a
-      protected resource using the signed object as its authorization.</t>
+      protected resource using the signed object as its authorization. The
+      protected resource validates the JWS signature and parses the JSON
+      object to obtain token information.</t>
     </section>
 
     <section title="Terminology">
@@ -188,6 +190,11 @@
             <t>Adds the name of the query parameter to the end of the
             list.</t>
 
+            <t>Percent-encodes the name and value of the parameter as
+            specified in <xref target="RFC3986"/>. Note that if the name and
+            value have already been percent-encoded for transit, they are not
+            re-encoded for this step.</t>
+
             <t>Encodes the name and value of the query parameter as
             "name=value" and appends it to the string buffer separated by the
             ampersand <spanx style="verb">&amp;</spanx> character.</t>
@@ -247,7 +254,8 @@ etag: 742-3u8f34-3r2nvv3]]></artwork>
         </figure>
 
         <figure>
-          <artwork><![CDATA["h": [["content-type", "etag"], "bZA981YJBrPlIzOvplbu3e7ueREXXr38vSkxIBYOaxI"]]]></artwork>
+          <artwork><![CDATA["h": [["content-type", "etag"], 
+  "bZA981YJBrPlIzOvplbu3e7ueREXXr38vSkxIBYOaxI"]]]></artwork>
         </figure>
       </section>
     </section>
@@ -266,7 +274,7 @@ etag: 742-3u8f34-3r2nvv3]]></artwork>
 
         <figure>
           <artwork><![CDATA[GET /resource/foo
-Authorization: PoP eyJ....]]></artwork>
+Authorization: PoP eyJ....omitted for brevity...]]></artwork>
         </figure>
       </section>
 
@@ -282,7 +290,7 @@ Authorization: PoP eyJ....]]></artwork>
           <artwork><![CDATA[POST /resource
 Content-type: application/www-form-encoded
 
-pop_access_token=eyJ....]]></artwork>
+pop_access_token=eyJ....omitted for brevity...]]></artwork>
         </figure>
       </section>
 
@@ -310,11 +318,11 @@ pop_access_token=eyJ....]]></artwork>
       it can parse a structured token (such as <xref
       target="RFC7519">JWT</xref>), or it can use a service to look up token
       information (such as <xref target="RFC7662">introspection</xref>).
-      However token information is looked up, the protected resource MUST have
-      access to the key associated with the access token, which is required to
-      validate the signature of the incoming request. Validation of the
-      signature is done using normal JWS validation for the signature and key
-      type.</t>
+      Whatever method is used to look up token information, the protected
+      resource MUST have access to the key associated with the access token,
+      as this key is required to validate the signature of the incoming
+      request. Validation of the signature is done using normal JWS validation
+      for the signature and key type.</t>
 
       <t>Additionally, in order to trust any of the hashed components of the
       HTTP request, the protected resource MUST re-create and verify a hash
@@ -338,6 +346,11 @@ pop_access_token=eyJ....]]></artwork>
             <t>Fetch the value of the parameter from the HTTP request query
             parameter map. If a parameter is found in the list of signed
             parameters but not in the map, the validation fails.</t>
+
+            <t>Percent-encodes the name and value of the parameter as
+            specified in <xref target="RFC3986"/>. Note that if the name and
+            value have already been percent-encoded for transit, they are not
+            re-encoded for this step.</t>
 
             <t>Encode the parameter as "name=value" and concatenate it to the
             end of the string buffer, separated by an ampersand character.</t>
@@ -497,14 +510,17 @@ pop_access_token=eyJ....]]></artwork>
         verification calculations.</t>
       </section>
 
-      <section title="Validating the integrity of HTTP Headers and Query Parameters">
+      <section title="Validating the integrity of HTTP message">
         <t>This specification provides flexibility for selectively validating
-        the integrity of header fields and message bodies. Since all
-        components of the HTTP request are only optionally validated by this
-        method, and even some components may be validated only in part (e.g.,
-        some headers but not others) it is up to protected resource developers
-        to verify that any vital parameters in a request are actually covered
-        by the signature.</t>
+        the integrity of the HTTP request, including header fields, query
+        parameters, and message bodies. Since all components of the HTTP
+        request are only optionally validated by this method, and even some
+        components may be validated only in part (e.g., some headers but not
+        others) it is up to protected resource developers to verify that any
+        vital parameters in a request are actually covered by the signature.
+        Failure to do so could allow an attacker to inject vital parameters or
+        headers into the request, ouside of the protection of the
+        signature.</t>
 
         <t>The application verifying this signature MUST NOT assume that any
         particular parameter is appropriately covered by the signature unless
@@ -521,12 +537,14 @@ pop_access_token=eyJ....]]></artwork>
         is undefined by this specification. If a header or query parameter is
         repeated on either the outgoing request from the client or the
         incoming request to the protected resource, that query parameter or
-        header name MUST NOT be covered by the hash and signature. [[ Note to
-        the WG: is this something we need to cover? ]]</t>
+        header name MUST NOT be covered by the hash and signature.</t>
 
         <t>This specification records the order in which query parameters and
         headers are hashed, but it does not guarantee that order is preserved
-        between the client and protected resource.</t>
+        between the client and protected resource. If the order of parameters
+        or headers are significant to the underlying application, it MUST
+        confirm their order on its own, apart from the signature and HTTP
+        message validation.</t>
       </section>
     </section>
 
@@ -546,6 +564,8 @@ pop_access_token=eyJ....]]></artwork>
       <?rfc include="reference.RFC.2119"?>
 
       <?rfc include="reference.RFC.7519"?>
+
+      <?rfc include="reference.RFC.3986"?>
 
       <?rfc include="reference.RFC.7515"?>
 
